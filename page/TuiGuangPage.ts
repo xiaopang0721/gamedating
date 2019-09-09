@@ -1,7 +1,7 @@
 /**
 * name 全面代理
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class TuiGuangPage extends game.gui.base.Page {
 		static readonly TYPE_WUXIAN_DAILI = 1;//无限代理
 		static readonly TYPE_QUANMIN_DAILI = 2;//全民代理

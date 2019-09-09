@@ -1,7 +1,7 @@
 /**
 * name 客服
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class QuKuanBindYHKPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.QuKuan_yhkUI;
 

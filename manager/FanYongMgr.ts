@@ -1,7 +1,7 @@
 /**
 * name 返佣
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class FanYongMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "FanYongMgr.changge";
 		static readonly PAGE_MAX: number = 100;

@@ -1,7 +1,7 @@
 /**
 * name 首充
 */
-module gamedatingnqp.page {
+module gamedating.page {
     export class FirstRechargePage extends game.gui.base.Page {
         private _viewUI: ui.nqp.dating.ShouChongUI;
         constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

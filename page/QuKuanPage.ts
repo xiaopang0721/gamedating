@@ -1,7 +1,7 @@
 /**
 * name 保险
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class QuKuanPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.QuKuanUI;
 		private _inputMoney: MyTextInput;

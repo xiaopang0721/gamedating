@@ -1,7 +1,7 @@
 /**
 * 大厅页面定义枚举
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class DatingPageDef extends game.gui.page.PageDef {
 		static GAME_NAME: string = "dating";
 		//登录界面

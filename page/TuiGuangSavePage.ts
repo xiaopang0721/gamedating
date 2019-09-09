@@ -1,7 +1,7 @@
 /**
 * name 保存二维码
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class TuiGuangSavePage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.TuiGuangSaveUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class YuEBaoPage extends game.gui.base.Page {
 
 		private static readonly SUB_PAGE_XINXI: number = 0;	// 信息

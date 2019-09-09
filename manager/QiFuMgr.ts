@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class QiFuMgr extends gamecomponent.managers.BaseMgr {
 		static readonly QIFU_CHANGE: string = "QiFuMgr.changge";
 

@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class TipGongGaoPage extends game.gui.base.Page {
 		protected _viewUI: ui.nqp.dating.TipsGongGaoUI;
 		private _story: gamecomponent.story.StoryNormalBase;

@@ -1,4 +1,4 @@
-module gamedatingnqp.page {
+module gamedating.page {
     /**
      * 登录绑定注册界面
      */
@@ -795,7 +795,7 @@ module gamedatingnqp.page {
                 }
                 //只要绑定送金大于0，关闭就弹出奖励界面
                 if (this._bingMoney > 0) {
-                    this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: gamedatingnqp.page.RewardPage) => {
+                    this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: gamedating.page.RewardPage) => {
                         page.setData(this._bingMoney, DatingPath.ui_dating + "/qiandao/jl_4.png");
                     })
                 }

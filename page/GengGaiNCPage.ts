@@ -1,7 +1,7 @@
 /**
 * name 更改昵称
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class GengGaiNCPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.GeRenNCUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

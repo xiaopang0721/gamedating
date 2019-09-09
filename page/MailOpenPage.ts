@@ -1,7 +1,7 @@
 /**
 * name 邮件打开界面
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class MailOpenPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.XinXi1UI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

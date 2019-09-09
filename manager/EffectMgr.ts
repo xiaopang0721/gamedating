@@ -1,7 +1,7 @@
 /**
 * UI效果
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
     export class EffectMgr {
         //------------动画配置--------------
        

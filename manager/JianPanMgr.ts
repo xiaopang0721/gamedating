@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class JianPanMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "JianPanMgr.changge";
 		static readonly EVENT_CHANGE_TYPE: string = "JianPanMgr.changgeType";

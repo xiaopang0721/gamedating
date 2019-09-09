@@ -1,7 +1,7 @@
 /**
 * name 安卓游戏退出提示
 */
-module gamedatingnqp.page {
+module gamedating.page {
     export class TipsQuit extends game.gui.base.Page {
         private _viewUI: ui.nqp.dating.TiShiUI;
         constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

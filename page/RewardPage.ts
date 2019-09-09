@@ -1,7 +1,7 @@
 /**
 * name 获得奖励
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class RewardPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.HuoDeUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

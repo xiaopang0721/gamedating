@@ -1,7 +1,7 @@
 /**
 * name 修改头像
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class HeadChangePage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.TouXiangUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

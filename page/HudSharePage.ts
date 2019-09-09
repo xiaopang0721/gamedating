@@ -1,7 +1,7 @@
 /**
 * name 推广
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class HudSharePage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.FenXiangUI;
 		private _avatar: AvatarUIShow;

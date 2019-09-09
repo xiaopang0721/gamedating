@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class BattleXiangQingMgr extends gamecomponent.managers.BaseMgr {
 		static readonly RECORD_CHANGE: string = "BattleXiangQingMgr.changge";
 

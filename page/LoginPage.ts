@@ -1,4 +1,4 @@
-module gamedatingnqp.page {
+module gamedating.page {
     /**
      * 登陆界面
      */

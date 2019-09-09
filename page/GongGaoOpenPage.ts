@@ -1,7 +1,7 @@
 /**
 * name 公告打开界面
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class GongGaoOpenPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.XinXi3UI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

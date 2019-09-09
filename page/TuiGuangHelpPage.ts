@@ -1,7 +1,7 @@
 /**
 * name 推广帮助
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class TuiGuangHelpPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.TuiGuangHelpUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

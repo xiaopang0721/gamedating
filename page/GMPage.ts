@@ -1,7 +1,7 @@
 /**
 * name GM命令
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class GMPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.GMPageUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

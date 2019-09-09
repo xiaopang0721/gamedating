@@ -1,7 +1,7 @@
 /**
 * name 提示
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class GuestTipPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DengLuYKUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

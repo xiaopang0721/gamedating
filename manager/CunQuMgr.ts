@@ -1,7 +1,7 @@
 /**
 * name 提现记录
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class CunQuMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "CunQuMgr.changge";
 		static readonly PAGE_MAX: number = 100;

@@ -1,4 +1,4 @@
-module gamedatingnqp.page {
+module gamedating.page {
 	/**
 	 * 下拉提示
 	 * name 

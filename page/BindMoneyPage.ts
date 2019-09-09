@@ -1,7 +1,7 @@
 /**
 * name 绑定送钱
 */
-module gamedatingnqp.page {
+module gamedating.page {
     export class BindMoneyPage extends game.gui.base.Page {
         private _viewUI: ui.nqp.dating.BangDingUI;
         private _bindSendMoney: number = 0;

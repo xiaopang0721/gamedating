@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class JianPanPage extends game.gui.base.Page {
 		static readonly TYPE_INPUT_NUMBER = 1; //纯数字类型
 		static readonly TYPE_INPUT_ENGLISH = 2; //英文类型

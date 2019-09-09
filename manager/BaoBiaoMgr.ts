@@ -1,7 +1,7 @@
 /**
 * name 报表管理器
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class BaoBiaoMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "BaoBiaoMgr.changge";
 		static readonly PAGE_MAX: number = 100;

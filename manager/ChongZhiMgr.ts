@@ -1,7 +1,7 @@
 /**
 * name 充值记录
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class ChongZhiMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "ChongZhiMgr.EVENT_CHANGE";
 		static readonly EVENT_CHANGE_RANDOM_NAME: string = "ChongZhiMgr.EVENT_CHANGE_RANDOM_NAME";

@@ -1,7 +1,7 @@
 /**
 * name 排行榜
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class TopMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "TopMgr.changge";
 		static readonly PAGE_MAX: number = 100;

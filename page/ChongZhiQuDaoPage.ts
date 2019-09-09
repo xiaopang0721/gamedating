@@ -1,7 +1,7 @@
 // /**
 // * name 充值渠道
 // */
-// module gamedatingnqp.page {
+// module gamedating.page {
 // 	export class ChongZhiQuDaoPage extends game.gui.base.Page {
 // 		private _viewUI: ui.nqp.dating.ChongZhi_1UI;
 // 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

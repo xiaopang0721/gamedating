@@ -1,7 +1,7 @@
 /**
 * 设置取款密码
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class QuKuanSetPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.QuKuan_shezhiMMUI;
 		private _inputKey: MyTextInput;

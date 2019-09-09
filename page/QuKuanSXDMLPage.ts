@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.page{
+module gamedating.page{
 	export class QuKuanSXDMLPage extends game.gui.base.Page{
 		private _viewUI: ui.nqp.dating.Qukuan_sxdmlUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

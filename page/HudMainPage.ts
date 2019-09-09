@@ -1,7 +1,7 @@
 /**
 * name 主界面
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DaTingUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

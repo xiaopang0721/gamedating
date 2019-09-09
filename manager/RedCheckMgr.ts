@@ -1,7 +1,7 @@
 /**
 * name 小红点检查管理器
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class RedCheckMgr {
 		private _game: Game;
 		private _event: Laya.EventDispatcher;

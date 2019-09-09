@@ -1,7 +1,7 @@
 /**
 * name 公告管理器
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	const MAX_GLOD_NUM = 100;
 	export class FlyGlodMgr extends gamecomponent.managers.BaseMgr {
 		constructor(game: Game) {

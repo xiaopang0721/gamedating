@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp {
+module gamedating {
 	export class DatingGame {
 		private static _ins: DatingGame;
 		public static get ins() {
@@ -422,7 +422,7 @@ module gamedatingnqp {
 						}
 						break;
 					case Operation_Fields.OPRATE_GAME_DAILY_SHARE_SUCCESS:            //每日分享成功
-						this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: gamedatingnqp.page.RewardPage) => {
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: gamedating.page.RewardPage) => {
 							page.setData(msg.data, DatingPath.ui_dating + "/qiandao/jl_4.png");
 						})
 						break;

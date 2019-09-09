@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class VipMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_VIP_CHANGE: string = "VipMgr.change";
 

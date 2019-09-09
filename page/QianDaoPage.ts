@@ -1,7 +1,7 @@
 /**
 * name 签到
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class QianDaoPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.QianDaoUI;
 		private _qiandaos: ui.nqp.dating.component.Effect_qdUI[] = [];

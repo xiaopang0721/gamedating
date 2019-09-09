@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class CodeMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CODE_CHANGE: string = "CodeMgr.change";
 		static readonly GET_CODE_TYPE_LOGIN: number = 1;//手机登录验证码类型

@@ -1,7 +1,7 @@
 /**
 * name 转盘帮助
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class ZhuanPanHelpPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.ZhuanPan_bzUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

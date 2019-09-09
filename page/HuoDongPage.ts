@@ -1,7 +1,7 @@
 /**
 * name 活动
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class HuoDongPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.HuoDongUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

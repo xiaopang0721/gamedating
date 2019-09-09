@@ -1,7 +1,7 @@
 /**
 * name 提取记录
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class TiQuJiLvPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.TuiGuangJiLuUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

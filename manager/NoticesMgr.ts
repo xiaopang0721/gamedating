@@ -1,7 +1,7 @@
 /**
 * name 公告管理器
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class NoticesMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "NoticesMgr.changge";
 		constructor(game: Game) {
@@ -23,7 +23,7 @@ module gamedatingnqp.managers {
 			if (this._game.uiRoot.top.isOpened(DatingPageDef.PAGE_GONGGAO)) {
 				this.event(NoticesMgr.EVENT_CHANGE);
 			} else {
-				this._game.uiRoot.top.open(DatingPageDef.PAGE_GONGGAO, (page: gamedatingnqp.page.GongGaoPage) => {
+				this._game.uiRoot.top.open(DatingPageDef.PAGE_GONGGAO, (page: gamedating.page.GongGaoPage) => {
 					page.setSpeed(this._notices.length);
 				})
 			}
@@ -47,7 +47,7 @@ module gamedatingnqp.managers {
 			if (this._game.uiRoot.top.isOpened(DatingPageDef.PAGE_GONGGAO)) {
 				this.event(NoticesMgr.EVENT_CHANGE);
 			} else {
-				this._game.uiRoot.top.open(DatingPageDef.PAGE_GONGGAO, (page: gamedatingnqp.page.GongGaoPage) => {
+				this._game.uiRoot.top.open(DatingPageDef.PAGE_GONGGAO, (page: gamedating.page.GongGaoPage) => {
 					page.setSpeed(this._notices.length);
 				})
 			}
@@ -58,7 +58,7 @@ module gamedatingnqp.managers {
 			if (this._game.uiRoot.top.isOpened(DatingPageDef.PAGE_GONGGAO)) {
 				this.event(NoticesMgr.EVENT_CHANGE);
 			} else {
-				this._game.uiRoot.top.open(DatingPageDef.PAGE_GONGGAO, (page: gamedatingnqp.page.GongGaoPage) => {
+				this._game.uiRoot.top.open(DatingPageDef.PAGE_GONGGAO, (page: gamedating.page.GongGaoPage) => {
 					page.setSpeed(this._notices.length);
 				})
 			}

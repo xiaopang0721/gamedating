@@ -1,7 +1,7 @@
 /**
 * 路径配置
 */
-module gamedatingnqp.data {
+module gamedating.data {
 	export class Path {
 		static ui_dating: string = "datingnqp_ui/";
 		static ui_dating_tongyong: string = "datingnqp_ui/tongyong/";

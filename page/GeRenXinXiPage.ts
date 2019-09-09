@@ -1,7 +1,7 @@
 /**
 * name 个人信息
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class GeRenXinXiPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.GeRenUI;
 		private _inputOldKey: MyTextInput;

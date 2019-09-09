@@ -1,7 +1,7 @@
 /**
 * name vip
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class VipUpPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.VipUpUI;
 		private _avatar: AvatarUIShow;

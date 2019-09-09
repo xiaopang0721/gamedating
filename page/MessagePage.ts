@@ -1,7 +1,7 @@
 /**
 * name 活动公告
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class MessagePage extends game.gui.base.Page {
 		static readonly TYPE_GONGGAO = 1; //公告类型
 		static readonly TYPE_MAIL = 2; //邮件类型
@@ -142,7 +142,7 @@ module gamedatingnqp.page {
 			if (!this._data.isread) {
 				this._game.datingGame.mailMgr.readMail(this._data.mail_orderid);
 			}
-			this._game.uiRoot.general.open(DatingPageDef.PAGE_NEW_OPEN, (page: gamedatingnqp.page.MailOpenPage) => {
+			this._game.uiRoot.general.open(DatingPageDef.PAGE_NEW_OPEN, (page: gamedating.page.MailOpenPage) => {
 				page.setData(this._data);
 			})
 		}

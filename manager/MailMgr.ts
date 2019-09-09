@@ -1,7 +1,7 @@
 /**
 * name 邮件管理器
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class MailMgr extends gamecomponent.managers.BaseMgr {
 		static readonly EVENT_CHANGE: string = "MailMgr.changge"
 		constructor(game: Game) {

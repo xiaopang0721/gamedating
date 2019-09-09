@@ -1,7 +1,7 @@
 /** 
  * 小红点检测管理器
 */
-module gamedatingnqp.managers {
+module gamedating.managers {
 	export class RedPointCheckMgr {
 		private static MIN_CHECKTIME: number = 1000;//最小检测时间间隔(毫秒)
 		private _game: Game;

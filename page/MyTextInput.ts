@@ -1,7 +1,7 @@
 /**
 * 输入文本组件
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class MyTextInput extends ui.nqp.dating.component.TextInputUI {
 		static readonly TYPE_INPUT_NUMBER = 1; //纯数字类型
 		static readonly TYPE_INPUT_ENGLISH = 2; //英文类型

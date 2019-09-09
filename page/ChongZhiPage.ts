@@ -1,7 +1,7 @@
 /**
 * name 充值
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class ChongZhiPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.ChongZhiUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

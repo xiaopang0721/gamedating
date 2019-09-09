@@ -1,7 +1,7 @@
 /**
 * name 客服
 */
-module gamedatingnqp.page {
+module gamedating.page {
 	export class KeFuPage extends game.gui.base.Page {
 		static readonly TYPE_CHANGJIAN_WENTI = 0;//常见问题
 		static readonly TYPE_WEIXIN_KEFU = 1;//微信/QQ客服
