@@ -371,7 +371,7 @@ module ui.nqp.dating.component {
 		public box_btn:Laya.Box;
 		public img_back:Laya.Image;
 
-        public static  uiView:any ={"type":"View","props":{"width":1560,"height":475},"child":[{"type":"Image","props":{"y":40,"x":217,"width":648,"var":"img","skin":"dating_ui/dating/tu_beijing.png","height":413}},{"type":"List","props":{"y":30,"width":1287,"var":"list","spaceY":8,"spaceX":-10,"repeatY":2,"left":322,"height":418},"child":[{"type":"HudOne_T","props":{"y":24,"x":17,"renderType":"render","runtime":"ui.nqp.dating.component.HudOne_TUI"}}]},{"type":"Box","props":{"y":234,"x":197,"width":296,"var":"box","height":475,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Box","props":{"y":237.5,"x":148,"width":296,"var":"btn","stateNum":1,"skin":"datingnqp_ui/datingsk/btn_qipaiduizhan.png","height":475,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"y":9,"x":10,"skin":"dating_ui/datingsk/zhezhao.png","renderType":"mask"}}]},{"type":"Box","props":{"y":4,"x":1,"width":263,"var":"box_btn","height":474}},{"type":"Image","props":{"y":231,"x":147,"var":"img_back","skin":"dating_ui/datingsk/daili.png","scaleX":1,"anchorY":0.5,"anchorX":0.5}}]}]};
+        public static  uiView:any ={"type":"View","props":{"width":1560,"height":475},"child":[{"type":"Image","props":{"y":40,"x":217,"width":648,"var":"img","skin":"dating_ui/dating/tu_beijing.png","height":413}},{"type":"List","props":{"y":30,"width":1287,"var":"list","spaceY":8,"spaceX":-10,"repeatY":2,"left":322,"height":418},"child":[{"type":"HudOne_T","props":{"y":24,"x":17,"renderType":"render","runtime":"ui.nqp.dating.component.HudOne_TUI"}}]},{"type":"Box","props":{"y":234,"x":197,"width":296,"var":"box","height":475,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Box","props":{"y":237.5,"x":148,"width":296,"var":"btn","stateNum":1,"height":475,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"y":9,"x":10,"skin":"dating_ui/datingsk/zhezhao.png","renderType":"mask"}}]},{"type":"Box","props":{"y":4,"x":1,"width":263,"var":"box_btn","height":474}},{"type":"Image","props":{"y":231,"x":147,"var":"img_back","skin":"dating_ui/datingsk/daili.png","scaleX":1,"anchorY":0.5,"anchorX":0.5}}]}]};
         constructor(){ super()}
         createChildren():void {
         			View.regComponent("ui.nqp.dating.component.HudOne_TUI",ui.nqp.dating.component.HudOne_TUI);
@@ -386,7 +386,7 @@ module ui.nqp.dating.component {
     export class HudOne_TUI extends View {
 		public btn:Laya.Box;
 
-        public static  uiView:any ={"type":"View","props":{"width":245,"height":192},"child":[{"type":"Box","props":{"y":117,"x":130,"width":275,"var":"btn","stateNum":1,"skin":"datingnqp_ui/datingsk/btn_baijiale.png","height":235,"anchorY":0.5,"anchorX":0.5}}]};
+        public static  uiView:any ={"type":"View","props":{"width":245,"height":192},"child":[{"type":"Box","props":{"y":117,"x":130,"width":275,"var":"btn","height":235,"anchorY":0.5,"anchorX":0.5}}]};
         constructor(){ super()}
         createChildren():void {
         
