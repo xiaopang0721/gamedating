@@ -858,9 +858,8 @@ module gamedating.page {
 		private _data: string;
 		private _index: number;
 		private _isOpen: boolean;
-		private _avatar: AvatarUIShow;
 		private _tweens: Laya.Tween[];
-		private _btnEffect: AnimationFrame;
+		private _effBTN: ui.nqp.dating.component.Effect_qipaiduizhanUI;
 
 		private pushTweens(t: Laya.Tween): void {
 			if (!this._tweens) this._tweens = [];
@@ -906,15 +905,6 @@ module gamedating.page {
 		destroy() {
 			this.btn.off(LEvent.CLICK, this, this.doList);
 			this.list.dataSource = [];
-			if (this._avatar) {
-				this._avatar.clear();
-				this._avatar.destroy();
-				this._avatar = null;
-			}
-			if (this._btnEffect) {
-				this._btnEffect.destroy();
-				this._btnEffect = null;
-			}
 			Laya.timer.clearAll(this);
 			this.clearTweens();
 			Laya.Tween.clearAll(this);
@@ -923,12 +913,6 @@ module gamedating.page {
 
 		update(): void {
 			if (!this._data) return;
-			if (this._avatar) {
-				this._avatar.onDraw();
-			}
-			if (this._btnEffect) {
-				this._btnEffect.onDraw();
-			}
 			if (this.list.dataSource) {
 				this.list.cells.forEach(element => {
 					let item = element as GameSubItemRender;
@@ -952,31 +936,15 @@ module gamedating.page {
 			}
 			this.img_back.skin = DatingPath.ui_dating + 'dating/tu_dtgg' + this._index + '.png';
 			this.img_back.visible = false;
-			if (!this._avatar) {
-				this._avatar = new AvatarUIShow();
-				this.btn.addChild(this._avatar);
-			}
 			this.box.scaleX = 1;
 			this.img.width = 622;
-			this._avatar.visible = true;
-			let sk_url = DatingPath.sk_dating + "DZ_" + b_btn;
-			this._avatar.loadSkeleton(sk_url, 152, 241);
-			if (!this._btnEffect) {
-				this._btnEffect = new AnimationFrame({
-					source: b_btn,
-					fileName: '',
-					interval: 6,
-					frameCount: 12,
-					start: 10000
-				});
+
+			if (!this._effBTN) {
+				this._effBTN = new ui.nqp.dating.component.Effect_qipaiduizhanUI();
 			}
-			this.box_btn.addChild(this._btnEffect);
-			if (b_btn == 'qipaiduizhan')
-				this._btnEffect.x = -74;
-			else
-				this._btnEffect.x = 3;
-			this._btnEffect.y = -1;
-			this._btnEffect.play(true);
+			this.box_btn.addChild(this._effBTN);
+			this._effBTN[b_btn].visible = true;
+			this._effBTN['ani_' + b_btn].play(0, true);
 
 			this.btn.on(LEvent.CLICK, this, this.doList);
 			// 渲染子列表
@@ -1019,7 +987,7 @@ module gamedating.page {
 				// 翻轉中途替換圖片
 				Laya.timer.once(100, this, () => {
 					this.img_back.visible = this._isOpen;
-					this.box_btn.visible = this._avatar.visible = !this._isOpen;
+					this.box_btn.visible = !this._isOpen;
 				});
 			}
 
@@ -1038,7 +1006,7 @@ module gamedating.page {
 					// 翻轉中途替換圖片
 					Laya.timer.once(100, this, () => {
 						this.img_back.visible = this._isOpen;
-						this.box_btn.visible = this._avatar.visible = !this._isOpen;
+						this.box_btn.visible = !this._isOpen;
 					});
 				}
 			});
