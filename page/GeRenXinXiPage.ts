@@ -296,6 +296,7 @@ module gamedating.page {
 		}
 
 		private onChange0(value: number) {
+			value = parseFloat(value.toFixed(2));
 			if (value > 0) {
 				this._viewUI.btn_sound.selected = true;
 			} else {
@@ -305,6 +306,7 @@ module gamedating.page {
 			localSetItem("soundVolume", value.toString());
 		}
 		private onChange1(value: number) {
+			value = parseFloat(value.toFixed(2));
 			if (value > 0) {
 				this._viewUI.btn_music.selected = true;
 			} else {
