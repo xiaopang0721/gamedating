@@ -386,7 +386,7 @@ module gamedating.page {
 					break;
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
-					localRemoveItem("session_key");
+					// localRemoveItem("session_key");
 					DatingGame.ins.openLoginPage();
 					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN]);
 					break;
