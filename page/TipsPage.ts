@@ -23,18 +23,6 @@ module gamedating.page {
 
 		private _offsetTime: number = 0;
 		update(diff: number) {
-			if (this._viewTips && this._viewTips.length > 0) {
-				for (let i = 0; i < this._viewTips.length; i++) {
-					let element: ViewTip = this._viewTips[i] as ViewTip;
-					if (element) {
-						if (element.isDispose) {
-							element.removeSelf();
-							this._viewTips.splice(i, 1);
-							i --;
-						}
-					}
-				}
-			}
 			//间隔一秒检测一次
 			if (this._offsetTime > 0) {
 				this._offsetTime -= diff;
@@ -46,6 +34,13 @@ module gamedating.page {
 			}
 		}
 
+		removeTip(viewTip) {
+			if (!viewTip) return;
+			let idx = this._viewTips.indexOf(viewTip);
+			if (idx == -1) return;
+			this._viewTips.splice(idx, 1);
+		}
+
 		protected init(): void {
 			this._viewUI = this._view = this.createView("dating.TipsXiaLaUI");
 			this._viewUI.mouseEnabled = false;
@@ -55,21 +50,21 @@ module gamedating.page {
 		}
 		// 页面初始化函数
 		private initUI(): void {
-			let viewTip: ViewTip = ViewTip.create(this._dataSource) as ViewTip;
+			//仅限显示3条
+			if (this._viewTips.length >= 3) {				
+				ObjectPools.free(this._viewTips.pop());
+			}
+			let viewTip: ViewTip = ViewTip.create(this._dataSource, this) as ViewTip;
 			//插进来，要进行排序
 			if (this._viewTips.length > 0) {
 				for (let i = 0; i < this._viewTips.length; i++) {
-					let element = this._viewTips[i];
-					if (element) {
-						element.centerY = -88 - (i + 1) * 44;
+					let tip = this._viewTips[i];
+					if (tip) {
+						tip.centerY = -88 - (i + 1) * 44;
 					}
 				}
 			}
 			this._viewTips.unshift(viewTip);
-			//仅限显示3条
-			if (this._viewTips.length > 3) {
-				this._viewTips[3].isDispose = true;
-			}
 			this._viewUI.addChild(viewTip);
 		}
 		// 页面打开时执行函数
@@ -94,7 +89,6 @@ module gamedating.page {
 		}
 	}
 	class ViewTip extends Laya.Box implements IPoolsObject {
-		public isDispose: boolean;  //是否释放
 		private _boxTip: Box;	//整体box
 		private _imgBg: LImage;	//背景图
 		private _boxTxtTip: Box;	//包裹文本的box
@@ -102,6 +96,7 @@ module gamedating.page {
 		private _index: number;
 		private _frames: any = [{ scaleX: 0.9, scaleY: 0.9, alpha: 0, centerX: -440 }, { scaleX: 1, scaleY: 1, alpha: 1, centerX: 0 }, { alpha: 1 }, { alpha: 0 }];
 		private _times: any = [0, 0.2, 1.2, 0.5];
+		private _page:TipsPage;
 		poolName: string = "ViewTip";
         /**
          * 进池 （相当于对象dispose函数）
@@ -116,9 +111,9 @@ module gamedating.page {
 			this.init();
 		}
 
-		static create(message: string): ViewTip {
+		static create(message: string, page:TipsPage): ViewTip {
 			let obj: ViewTip = ObjectPools.malloc(ViewTip) as ViewTip;
-			obj.create(message);
+			obj.create(message, page);
 			return obj;
 		}
 		private init(): void {
@@ -128,7 +123,6 @@ module gamedating.page {
 			this.anchorY = 0.5;
 			this.centerX = 0;
 			this.visible = false;
-			this.isDispose = false;
 		}
 
 		private initBox() {
@@ -163,7 +157,8 @@ module gamedating.page {
 			this._boxTip.addChild(this._boxTxtTip);
 		}
 
-		private create(message: string) {
+		private create(message: string, page:TipsPage) {
+			this._page = page;
 			this.initBox();
 			this.initImgBg();
 			this.initLabel(message);
@@ -184,7 +179,7 @@ module gamedating.page {
 		private updateTween(): void {
 			if (this._index < 0 || this._index >= this._frames.length) {
 				//结束了
-				this.dispose();
+				ObjectPools.free(this);
 				return;
 			}
 			let frame: any = this._frames[this._index];
@@ -200,7 +195,7 @@ module gamedating.page {
 				this.updateTween();
 				return;
 			}
-			Laya.Tween.to(this._boxTip, frame, time, Laya.Ease.linearNone, Handler.create(this, this.updateTween));
+			Laya.Tween.to(this._boxTip, frame, time, Laya.Ease.linearNone, Handler.create(this, ()=>{this.updateTween()}));
 		}
 
 		private clearAll(): void {
@@ -210,7 +205,6 @@ module gamedating.page {
 
 		private dispose() {
 			this.clearAll();
-			this.isDispose = true;
 			this._txtTip.removeSelf();
 			this._txtTip = null;
 			this._imgBg.removeSelf();
@@ -219,6 +213,7 @@ module gamedating.page {
 			this._boxTip = null;
 			this._index = 0;
 			this.removeSelf();
+			this._page.removeTip(this);
 		}
 	}
 }
