@@ -243,7 +243,7 @@ module gamedating.page {
 			let value = DatingGame.ins.baobiaoMgr.getDataInfo(this._timeSelectIndex);
 			let count: number = 0;
 			//日期图标显隐,不必重复做
-			if (DatingGame.ins.baobiaoMgr.timeTotalNumArr && DatingGame.ins.baobiaoMgr.timeTotalNumArr.length > 0) {
+			if (DatingGame.ins.baobiaoMgr.timeTotalNumArr) {
 				if (!this._isInitDaysUI) {
 					this._isInitDaysUI = true;
 					for (let i = 0; i < 7; i++) {
@@ -251,7 +251,6 @@ module gamedating.page {
 						this._viewUI["btn_day" + i].visible = DatingGame.ins.baobiaoMgr.isCurDayHaveNum(curTimeStr) ? true : false;
 					}
 				}
-
 			}
 
 			for (let key in value) {

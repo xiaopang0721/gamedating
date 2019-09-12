@@ -19,15 +19,15 @@ module gamedating.managers {
 		}
 
 		private _timeTotalNumArr: Array<Object>;
-		get timeTotalNumArr(){
+		get timeTotalNumArr() {
 			return this._timeTotalNumArr;
 		}
-		isCurDayHaveNum(strDay:string): number {
-			if(this._timeTotalNumArr&&this._timeTotalNumArr.length>0){
-				for(let i=0;i<this._timeTotalNumArr.length;i++){
-					let curDayObj:any = this._timeTotalNumArr[i];
-					if(curDayObj){
-						if(strDay == curDayObj.days){
+		isCurDayHaveNum(strDay: string): number {
+			if (this._timeTotalNumArr && this._timeTotalNumArr.length > 0) {
+				for (let i = 0; i < this._timeTotalNumArr.length; i++) {
+					let curDayObj: any = this._timeTotalNumArr[i];
+					if (curDayObj) {
+						if (strDay == curDayObj.days) {
 							return Number(curDayObj.num);
 						}
 					}
@@ -42,6 +42,9 @@ module gamedating.managers {
 					if (!data.msg) return;
 					if (data.msg.tjlist)
 						this._timeTotalNumArr = data.msg.tjlist;
+					else {
+						this._timeTotalNumArr = [];
+					}
 					if (!this._dataInfoList[index]) this._dataInfoList[index] = {}
 					if (!this._totalList[index]) this._totalList[index] = 0
 					if (data.msg.list && data.msg.list.length) {
