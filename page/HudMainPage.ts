@@ -750,6 +750,15 @@ module gamedating.page {
 			if (this._tweens.indexOf(t) == -1)
 				this._tweens.push(t);
 		}
+		private delTweens(t: Laya.Tween):void {
+			let tweens = this._tweens;
+			if (!tweens || !tweens.length)
+				return;			
+			let idx = tweens.indexOf(t);
+			if (idx == -1)
+				return;
+			tweens.splice(idx, 1);
+		}
 
 		private clearTweens(): void {
 			if (!this._tweens) return;
@@ -759,6 +768,18 @@ module gamedating.page {
 			}
 			this._tweens.length = 0;
 			this._tweens = null;
+		}
+
+		private createTween(target, props, duration, ease = null, cb = null, type = 'to'):void {
+			let complate;
+			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, ()=>{
+				cb && cb();
+				complate();
+			}));								
+			this.pushTweens(t);
+			complate = ()=> {
+				this.delTweens(t);
+			}
 		}
 
 		/**
@@ -793,7 +814,7 @@ module gamedating.page {
 								offset_X = 1560 - myCell.x;
 								offset_X = cell.x + offset_X;
 								this._beforeArr.push([i, cell.x]);	// 存下来，复位用
-								this.pushTweens(Laya.Tween.to(cell, { x: offset_X }, 500, Laya.Ease.circIn));
+								this.createTween(cell, { x: offset_X }, 500, Laya.Ease.circIn);
 								b = true;
 							}
 						}
@@ -809,20 +830,19 @@ module gamedating.page {
 						let i = cell.dataSource[0];
 						for (let o = 0; o < this._beforeArr.length; o++) {
 							let c = this._beforeArr[o];
-							if (c[0] == i)
-								this.pushTweens(Laya.Tween.to(cell, { x: c[1] }, 500, Laya.Ease.circOut));
+							if (c[0] == i) {
+								this.createTween(cell, { x: c[1] }, 500, Laya.Ease.circOut);
+							}
 						}
 					}
 				});
 				this._beforeArr.length = 0;
 				// 復位
 				if (this._viewUI.list_btns.scrollBar.value > this._listBarMax) {
-					// Laya.timer.once(600, this, () => {
-					this.pushTweens(Laya.Tween.to(this._viewUI.list_btns.scrollBar, { value: this._listBarMax }, 500, null, Handler.create(this, () => {
+					this.createTween(this._viewUI.list_btns.scrollBar, { value: this._listBarMax }, 500, null, () => {
 						this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 						this._viewUI.list_btns.scrollBar.touchScrollEnable = !isOpen;
-					})));
-					// })
+					});
 				} else {
 					this._viewUI.list_btns.scrollBar.touchScrollEnable = !isOpen;
 					this._viewUI.list_btns.scrollBar.max = this._listBarMax;
@@ -866,6 +886,28 @@ module gamedating.page {
 			if (!this._tweens) this._tweens = [];
 			if (this._tweens.indexOf(t) == -1)
 				this._tweens.push(t);
+		}
+
+		private delTweens(t: Laya.Tween):void {
+			let tweens = this._tweens;
+			if (!tweens || !tweens.length)
+				return;			
+			let idx = tweens.indexOf(t);
+			if (idx == -1)
+				return;
+			tweens.splice(idx, 1);
+		}
+
+		private createTween(target, props, duration, ease = null, cb = null, type = 'to'):void {
+			let complate;
+			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, ()=>{
+				cb && cb();
+				complate();
+			}));								
+			this.pushTweens(t);
+			complate = ()=> {
+				this.delTweens(t);
+			}
 		}
 
 		private clearTweens(): void {
@@ -1015,7 +1057,7 @@ module gamedating.page {
 			this.list.scrollBar.touchScrollEnable = this._isOpen;
 			if (this._isOpen) {
 				// 翻轉
-				this.pushTweens(Laya.Tween.to(this.box, { scaleX: -1 }, 200));
+				this.createTween(this.box, { scaleX: -1 }, 200);
 				// 翻轉中途替換圖片
 				Laya.timer.once(100, this, () => {
 					this.img_back.visible = this._isOpen;
@@ -1028,13 +1070,11 @@ module gamedating.page {
 				this.doSubList();
 				// 白色底图是否展开
 				if (this._isOpen) {
-					// this.width = 1280;
-					this.pushTweens(Laya.Tween.to(this.img, { width: 1540 }, 100));
+					this.createTween(this.img, { width: 1540 }, 100);
 				} else {
-					// this.width = 533;
-					this.pushTweens(Laya.Tween.to(this.img, { width: 648 }, 100));
+					this.createTween(this.img, { width: 648 }, 100);
 					// 翻轉
-					this.pushTweens(Laya.Tween.to(this.box, { scaleX: 1 }, 200));
+					this.createTween(this.box, { scaleX: 1 }, 200);
 					// 翻轉中途替換圖片
 					Laya.timer.once(100, this, () => {
 						this.img_back.visible = this._isOpen;
@@ -1063,14 +1103,14 @@ module gamedating.page {
 					} else {
 						cell.x += 200;
 						Laya.timer.once(100 * i, this, () => {
-							this.pushTweens(Laya.Tween.to(cell, { setAlpha: 1, x: cell.x - 200 }, 500));
+							this.createTween(cell, { setAlpha: 1, x: cell.x - 200 }, 500);
 						});
 						i++;
 					}
 					cell.mouseEnabled = true;
 					// 波浪
 					let scale: number = Math.random() > 0.5 ? 1.05 : 0.95;
-					this.pushTweens(Laya.Tween.from(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut));
+					this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');
 				});
 			} else {// 離場
 				this.list.cells.forEach(element => {
@@ -1080,11 +1120,11 @@ module gamedating.page {
 						cell.mouseEnabled = true;
 					} else {
 						cell.mouseEnabled = false;
-						this.pushTweens(Laya.Tween.to(cell, { setAlpha: 0 }, 200));
+						this.createTween(cell, { setAlpha: 0 }, 200);
 					}
 					// 不管有哪个cell看不见，这边先 波浪 了~
 					let scale: number = Math.random() > 0.5 ? 1.05 : 0.95;
-					this.pushTweens(Laya.Tween.from(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut));
+					this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');
 				});
 				// 虽然很恶心~~但是因为离场时的tween控制的cell，运动过程中，因为离开了画布，可能被回收并拿来填充其他数据了，不这么做会有可能某些视图看不见
 				Laya.timer.once(210, this, () => {
