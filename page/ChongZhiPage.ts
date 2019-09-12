@@ -11,7 +11,6 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "kehu.atlas",
 			];
 			this._isNeedBlack = true;
-			this._delta = MathU.randomRange(3000, 10000);
 		}
 
 		// 页面初始化函数
@@ -257,14 +256,6 @@ module gamedating.page {
 					this._viewUI.box_smsk.visible = false;
 					break;
 			}
-		}
-
-		/**
-		  * 帧间隔心跳
-		  */
-		deltaUpdate() {
-			this._game.network.call_get_ramdon_name(13, this._delta * 0.001)
-			this._delta = MathU.randomRange(3000, 10000);
 		}
 
 		// 页面打开时执行函数
