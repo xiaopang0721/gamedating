@@ -15,7 +15,7 @@ module gamedating.managers {
 
 		private onNoticesUpdate(code: number, s2c: any) {
 			if (WebConfig.server_close) return;//更新期间拒收其他公告
-			if (!s2c || !s2c.content || s2c.content.length > 100) return;
+			if (!s2c || !s2c.content || s2c.content.length > 500) return;
 			if (this._notices.length > 100) {
 				this._notices.length = 0;
 			}
