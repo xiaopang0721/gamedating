@@ -19,15 +19,15 @@ module gamedating.managers {
 		}
 
 		private _timeTotalNumArr: Array<Object>;
-		get timeTotalNumArr(){
+		get timeTotalNumArr() {
 			return this._timeTotalNumArr;
 		}
-		isCurDayHaveNum(strDay:string): number {
-			if(this._timeTotalNumArr&&this._timeTotalNumArr.length>0){
-				for(let i=0;i<this._timeTotalNumArr.length;i++){
-					let curDayObj:any = this._timeTotalNumArr[i];
-					if(curDayObj){
-						if(strDay == curDayObj.days){
+		isCurDayHaveNum(strDay: string): number {
+			if (this._timeTotalNumArr && this._timeTotalNumArr.length > 0) {
+				for (let i = 0; i < this._timeTotalNumArr.length; i++) {
+					let curDayObj: any = this._timeTotalNumArr[i];
+					if (curDayObj) {
+						if (strDay == curDayObj.days) {
 							return Number(curDayObj.num);
 						}
 					}
@@ -39,14 +39,18 @@ module gamedating.managers {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_GETMONEYLOG) {
 				if (data && data.success == 0) {
 					let index = data.msg.index;
+					if (!data.msg) return;
+					if (data.msg.tjlist)
+						this._timeTotalNumArr = data.msg.tjlist;
+					else {
+						this._timeTotalNumArr = [];
+					}
 					if (!this._dataInfoList[index]) this._dataInfoList[index] = {}
 					if (!this._totalList[index]) this._totalList[index] = 0
-					if (!data.msg || !data.msg.list || !data.msg.list.length) {
-						return;
+					if (data.msg.list && data.msg.list.length) {
+						this._dataInfoList[index][data.msg.page] = data.msg.list;
+						this._totalList[index] = data.msg.all;
 					}
-					this._dataInfoList[index][data.msg.page] = data.msg.list;
-					this._totalList[index] = data.msg.all;
-					this._timeTotalNumArr = data.msg.tjlist;
 					this.event(BaoBiaoMgr.EVENT_CHANGE, 1);
 				}
 			}

@@ -243,7 +243,7 @@ module gamedating.page {
 			let value = DatingGame.ins.baobiaoMgr.getDataInfo(this._timeSelectIndex);
 			let count: number = 0;
 			//日期图标显隐,不必重复做
-			if (DatingGame.ins.baobiaoMgr.timeTotalNumArr && DatingGame.ins.baobiaoMgr.timeTotalNumArr.length > 0) {
+			if (DatingGame.ins.baobiaoMgr.timeTotalNumArr) {
 				if (!this._isInitDaysUI) {
 					this._isInitDaysUI = true;
 					for (let i = 0; i < 7; i++) {
@@ -251,7 +251,6 @@ module gamedating.page {
 						this._viewUI["btn_day" + i].visible = DatingGame.ins.baobiaoMgr.isCurDayHaveNum(curTimeStr) ? true : false;
 					}
 				}
-
 			}
 
 			for (let key in value) {
@@ -297,6 +296,7 @@ module gamedating.page {
 		}
 
 		private onChange0(value: number) {
+			value = parseFloat(value.toFixed(2));
 			if (value > 0) {
 				this._viewUI.btn_sound.selected = true;
 			} else {
@@ -306,6 +306,7 @@ module gamedating.page {
 			localSetItem("soundVolume", value.toString());
 		}
 		private onChange1(value: number) {
+			value = parseFloat(value.toFixed(2));
 			if (value > 0) {
 				this._viewUI.btn_music.selected = true;
 			} else {
