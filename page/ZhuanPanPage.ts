@@ -61,7 +61,8 @@ module gamedating.page {
 			this._viewUI.ani1.addLabel(ZhuanPanPage.LABEL_CHANGE1, 75);
 			this._viewUI.ani1.addLabel(ZhuanPanPage.LABEL_CHANGE2, 30);
 			this._viewUI.ani1.on(LEvent.LABEL, this, this.updateLunBo);
-
+			this._viewUI.lb_underline1.y = 25;
+			this._viewUI.lb_underline2.y = 25;
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
 			this._game.network.call_get_turntablelist();
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
@@ -262,16 +263,22 @@ module gamedating.page {
 			if (index == 75 || isFirst) {
 				this._viewUI.lb_name1.text = StringU.substitute("「{0}」", name);
 				this._clipNum1.setText(curReward.award_value, true);
-				this._viewUI.lb_underline1.width = 267 + this._clipNum1.width;
+				//左对齐
+				this._viewUI.lb_name1.x = this._viewUI.lb_one_1.x + this._viewUI.lb_one_1.width;
+				this._viewUI.lb_one_2.x = this._viewUI.lb_name1.x + this._viewUI.lb_name1.width;
+				this._clipNum1.x = this._viewUI.lb_one_2.x + this._viewUI.lb_one_2.width;
+				this._viewUI.lb_underline1.width = this._clipNum1.x + this._clipNum1.width - 40;
 			} else if (index == 30) {
 				randomIndex = isFirst ? 1 : MathU.randomRange(0, curOtherReward.length - 1);
 				curReward = curOtherReward[randomIndex];
 				name = EnumToString.getLimitStr(curReward.account, 4);
 				this._viewUI.lb_name2.text = StringU.substitute("「{0}」", name);
 				this._clipNum2.setText(curReward.award_value, true);
-				this._viewUI.lb_underline2.width = 267 + this._clipNum2.width;
+				this._viewUI.lb_name2.x = this._viewUI.lb_two_1.x + this._viewUI.lb_two_1.width;
+				this._viewUI.lb_two_2.x = this._viewUI.lb_name2.x + this._viewUI.lb_name2.width;
+				this._clipNum2.x = this._viewUI.lb_two_2.x + this._viewUI.lb_two_2.width;
+				this._viewUI.lb_underline2.width = this._clipNum2.x + this._clipNum2.width - 40;
 			}
-
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
