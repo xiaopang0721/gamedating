@@ -41,7 +41,7 @@ module gamedating.page {
 
 		private renderHandler(cell: any, index: number) {
 			if (cell) {
-				cell.setData(this._game, cell.dataSource,index);
+				cell.setData(this._game, cell.dataSource, index);
 			}
 		}
 
@@ -106,13 +106,13 @@ module gamedating.page {
 		private _game: Game;
 		private _data: any;//"ddz","niuniu","zjh"
 		private _isTween: boolean;
-		setData(game: Game, data: any,index:number) {
+		setData(game: Game, data: any, index: number) {
 			this._game = game;
 			this._data = data;
 			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", index % 2 == 0 ? "" : 0);
 			this.txt_username.text = data.account;
 			this.txt_time.text = Sync.getTimeStr(data.turn_time * 1000);
-			this.txt_type.text = data.turn_name;
+			this.txt_type.text = (data.turn_name as string).substring(0,2);
 			this.txt_money.text = data.award_value;
 		}
 	}

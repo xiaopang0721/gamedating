@@ -167,8 +167,8 @@ module gamedating.page {
 				this._timeList[i] = this._selectTime - 86400 * (6 - i);
 				let curTimeStr = Sync.getTimeStr3(this._timeList[i]);
 				this._viewUI["lb_" + i].text = curTimeStr;
-				if (curSelectedTimeStr == curTimeStr) this._viewUI["btn_select" + i].selected = true;
-				else this._viewUI["btn_select" + i].selected = false;
+				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
+				this._viewUI["lb_" + i].color = (i == 6) ? TeaStyle.COLOR_YELLOW : "#89d4ff";
 				this._viewUI["btn_" + i].on(LEvent.CLICK, this, this.onMouseHandle, [i]);
 
 			}
@@ -219,8 +219,8 @@ module gamedating.page {
 			this._viewUI.lb_time.text = curSelectedTimeStr;
 			for (let i = 0; i < 7; i++) {
 				let curTimeStr = this._viewUI["lb_" + i].text;
-				if (curSelectedTimeStr == curTimeStr) this._viewUI["btn_select" + i].selected = true;
-				else this._viewUI["btn_select" + i].selected = false;
+				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
+				this._viewUI["lb_" + i].color = (i == index) ? TeaStyle.COLOR_YELLOW : "#89d4ff";
 			}
 			//当天的话，数据重新获取
 			if (this._timeSelectIndex == 6) DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
@@ -243,7 +243,7 @@ module gamedating.page {
 			let value = DatingGame.ins.baobiaoMgr.getDataInfo(this._timeSelectIndex);
 			let count: number = 0;
 			//日期图标显隐,不必重复做
-			if (DatingGame.ins.baobiaoMgr.timeTotalNumArr && DatingGame.ins.baobiaoMgr.timeTotalNumArr.length > 0) {
+			if (DatingGame.ins.baobiaoMgr.timeTotalNumArr) {
 				if (!this._isInitDaysUI) {
 					this._isInitDaysUI = true;
 					for (let i = 0; i < 7; i++) {
@@ -251,7 +251,6 @@ module gamedating.page {
 						this._viewUI["btn_day" + i].visible = DatingGame.ins.baobiaoMgr.isCurDayHaveNum(curTimeStr) ? true : false;
 					}
 				}
-
 			}
 
 			for (let key in value) {
@@ -297,6 +296,7 @@ module gamedating.page {
 		}
 
 		private onChange0(value: number) {
+			value = parseFloat(value.toFixed(2));
 			if (value > 0) {
 				this._viewUI.btn_sound.selected = true;
 			} else {
@@ -306,6 +306,7 @@ module gamedating.page {
 			localSetItem("soundVolume", value.toString());
 		}
 		private onChange1(value: number) {
+			value = parseFloat(value.toFixed(2));
 			if (value > 0) {
 				this._viewUI.btn_music.selected = true;
 			} else {
@@ -386,7 +387,7 @@ module gamedating.page {
 					break;
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
-					localRemoveItem("session_key");
+					// localRemoveItem("session_key");
 					DatingGame.ins.openLoginPage();
 					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN]);
 					break;

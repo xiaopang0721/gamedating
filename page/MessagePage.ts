@@ -65,6 +65,7 @@ module gamedating.page {
 						}
 						this._viewUI.list_gonggao.visible = this._activeList && this._activeList.length > 0;
 						this._viewUI.txt_no_gonggao.visible = !this._viewUI.list_gonggao.visible;
+						this._game.network.call_read_bulletin();
 					}
 				}
 			}
