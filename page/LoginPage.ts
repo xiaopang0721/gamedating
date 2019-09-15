@@ -36,6 +36,19 @@ module gamedating.page {
             this._viewUI.btn_denglu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
             this._viewUI.btn_youke.on(LEvent.CLICK, this, this.onBtnClickWithTween);
             this._viewUI.btn_wx.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+
+            //初始化音量大小
+            let soundVolume = localGetItem("soundVolume");
+            let value = 0.15;
+            if (soundVolume == null || soundVolume == undefined) {
+                localSetItem("soundVolume", value.toString());
+                Laya.SoundManager.setSoundVolume(value);
+            }
+            let musicVolume = localGetItem("musicVolume");
+            if (musicVolume == null || soundVolume == undefined) {
+                Laya.SoundManager.setMusicVolume(value);
+                localSetItem("musicVolume", value.toString());
+            }
         }
 
         protected onBtnTweenEnd(e: any, target: any) {
