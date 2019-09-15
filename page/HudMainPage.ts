@@ -378,11 +378,7 @@ module gamedating.page {
 		private _box_btn_top: { [key: number]: Button } = {};
 		private _box_btn_bottom: { [key: number]: Button } = {};
 		private updatePos() {
-			// logd('********************', this._clientRealWidth, this._clientRealHeight, this._clientRealWidth / this._clientRealHeight);
-			// 判断是否全面屏
-			let rate: number = this._clientRealWidth / this._clientRealHeight;
-			let isFull: boolean = rate >= 1.8;
-			if (isFull) {
+			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
 				this._viewUI.box_btn_top.right = 25;
 				this._viewUI.box_bottomLeft.left = 56;
