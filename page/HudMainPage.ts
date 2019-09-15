@@ -673,11 +673,15 @@ module gamedating.page {
 
 		private onUpdateGameList(index?: boolean) {
 			if (!index) return;
-			// let listData = this._game.datingGame.hudTabScrollData;
-			// if (this.isBtnListOpen){
-			// 	Laya.timer.once(2000, this, this.onUpdateGameList);
-			// 	return;
-			// }
+			if (this.openIndex != -1) {
+				// 万一如果是数据更新呢，所以先关掉再说
+				this._viewUI.list_btns.cells.forEach(element => {
+					let cell = element as GameItemRender;
+					if (cell.dataSource && cell.dataSource[0] == this.openIndex) {
+						cell.doList();
+					}
+				});
+			}
 			let data: any = [];
 			for (var i = 0; i < DatingPageDef.GAME_SORT_LIST.length; i++) {
 				let element = DatingPageDef.GAME_SORT_LIST[i];
