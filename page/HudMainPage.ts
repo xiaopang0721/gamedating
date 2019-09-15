@@ -250,7 +250,7 @@ module gamedating.page {
 		}
 		//========================按钮特效 end================
 		public close(): void {
-			if (this._viewUI) {				
+			if (this._viewUI) {
 				this._viewUI.list_btns.dataSource = [];
 				this._game.stopMusic()
 				Laya.Tween.clearAll(this);
@@ -326,6 +326,7 @@ module gamedating.page {
 				this.onUpdateGameList(true);
 			if (!this._clip_money) {
 				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);
+				this._clip_money.scale(0.9, 0.9);
 				this._clip_money.x = this._viewUI.clip_money.x;
 				this._clip_money.y = this._viewUI.clip_money.y;
 				this._viewUI.clip_money.parent && this._viewUI.clip_money.parent.addChild(this._clip_money);
@@ -750,10 +751,10 @@ module gamedating.page {
 			if (this._tweens.indexOf(t) == -1)
 				this._tweens.push(t);
 		}
-		private delTweens(t: Laya.Tween):void {
+		private delTweens(t: Laya.Tween): void {
 			let tweens = this._tweens;
 			if (!tweens || !tweens.length)
-				return;			
+				return;
 			let idx = tweens.indexOf(t);
 			if (idx == -1)
 				return;
@@ -770,14 +771,14 @@ module gamedating.page {
 			this._tweens = null;
 		}
 
-		private createTween(target, props, duration, ease = null, cb = null, type = 'to'):void {
+		private createTween(target, props, duration, ease = null, cb = null, type = 'to'): void {
 			let complate;
-			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, ()=>{
+			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, () => {
 				cb && cb();
 				complate();
-			}));								
+			}));
 			this.pushTweens(t);
-			complate = ()=> {
+			complate = () => {
 				this.delTweens(t);
 			}
 		}
@@ -887,24 +888,24 @@ module gamedating.page {
 				this._tweens.push(t);
 		}
 
-		private delTweens(t: Laya.Tween):void {
+		private delTweens(t: Laya.Tween): void {
 			let tweens = this._tweens;
 			if (!tweens || !tweens.length)
-				return;			
+				return;
 			let idx = tweens.indexOf(t);
 			if (idx == -1)
 				return;
 			tweens.splice(idx, 1);
 		}
 
-		private createTween(target, props, duration, ease = null, cb = null, type = 'to'):void {
+		private createTween(target, props, duration, ease = null, cb = null, type = 'to'): void {
 			let complate;
-			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, ()=>{
+			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, () => {
 				cb && cb();
 				complate();
-			}));								
+			}));
 			this.pushTweens(t);
-			complate = ()=> {
+			complate = () => {
 				this.delTweens(t);
 			}
 		}
@@ -1345,7 +1346,7 @@ module gamedating.page {
 			} else {
 				this._game.showTips("开发中,敬请期待!");
 			}
-		}		
+		}
 	}
 
 	class HudLoadingTip extends ui.nqp.dating.component.LoadingTipTUI {

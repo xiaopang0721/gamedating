@@ -172,6 +172,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + 'yuebao.atlas',
 				DatingPath.atlas_dating_ui + "shouchong.atlas",
 				DatingPath.atlas_dating_ui + "baoxianxiang.atlas",
+				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 				//龙骨相关添加
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_baijiale.sk",
@@ -246,6 +247,17 @@ module gamedating.page {
 				Path.ui_atlas_effect + "shuzi.atlas",
 				Path.ui_atlas_effect + "update.atlas",
 
+				PathGameTongyong.atlas_game_ui_tongyong + "dating.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "general.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "hud.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "jiaru.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "logo.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "pai.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "qifu.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "qz.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "touxiang.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "tuichu.atlas",
+				PathGameTongyong.atlas_game_ui_tongyong + "yq.atlas",
 			];
 
 
