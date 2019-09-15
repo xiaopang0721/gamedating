@@ -247,17 +247,17 @@ module gamedating.page {
 				Path.ui_atlas_effect + "shuzi.atlas",
 				Path.ui_atlas_effect + "update.atlas",
 
-				PathGameTongyong.atlas_game_ui_tongyong + "dating.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "general.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "hud.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "jiaru.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "logo.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "pai.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "qifu.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "qz.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "touxiang.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "tuichu.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "yq.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/dating.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/general.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/hud.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/jiaru.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/logo.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/pai.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/qifu.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/qz.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/touxiang.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/tuichu.atlas",
+				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/yq.atlas",
 			];
 
 
