@@ -1227,6 +1227,62 @@ module ui.nqp.dating {
 }
 
 module ui.nqp.dating {
+    export class QiFuUI extends View {
+		public btn_close:Laya.Button;
+		public box_qifu0:Laya.Box;
+		public img_type0:Laya.Image;
+		public txt_money0:Laya.Label;
+		public txt_name0:Laya.Label;
+		public box_qifu1:Laya.Box;
+		public img_type1:Laya.Image;
+		public txt_money1:Laya.Label;
+		public txt_name1:Laya.Label;
+		public box_qifu2:Laya.Box;
+		public img_type2:Laya.Image;
+		public txt_money2:Laya.Label;
+		public txt_name2:Laya.Label;
+		public box_qifu3:Laya.Box;
+		public img_type3:Laya.Image;
+		public txt_money3:Laya.Label;
+		public txt_name3:Laya.Label;
+		public box_qifu4:Laya.Box;
+		public img_type4:Laya.Image;
+		public txt_name4:Laya.Label;
+		public txt_money4:Laya.Label;
+		public box_qifu5:Laya.Box;
+		public img_type5:Laya.Image;
+		public txt_name5:Laya.Label;
+		public txt_money5:Laya.Label;
+
+        public static  uiView:any ={"type":"View","props":{"width":1280,"height":720},"child":[{"type":"Box","props":{"y":360,"x":640,"width":1280,"height":720,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"x":-208,"skin":"dating_ui/qifu/game_popout_qfbg.png","sizeGrid":"0,0,0,0","centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"y":35,"x":432,"skin":"dating_ui/qifu/tu_qf.png","anchorY":0.5,"anchorX":0.5}}]},{"type":"Button","props":{"y":98,"x":1047,"var":"btn_close","stateNum":1,"skin":"dating_ui/tongyong/btn_fanhui.png","anchorY":0.5,"anchorX":0.5}},{"type":"Box","props":{"y":273,"x":392,"width":227,"var":"box_qifu0","height":215,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"skin":"dating_ui/qifu/tu_k.png","sizeGrid":"59,0,34,0"}},{"type":"Image","props":{"y":-14,"x":-22,"skin":"dating_ui/qifu/tu_gx.png"}},{"type":"Image","props":{"y":25,"x":28,"var":"img_type0","skin":"dating_ui/qifu/f_xs2.png"}},{"type":"Image","props":{"y":148,"x":1,"skin":"dating_ui/qifu/tu_dk1.png"}},{"type":"Image","props":{"y":162,"x":23,"skin":"dating_ui/tongyong/icon_money1.png","anchorY":0,"anchorX":0}},{"type":"Label","props":{"y":176,"x":86,"width":88,"var":"txt_money0","text":"1/次","height":31,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Label","props":{"y":138,"x":85,"width":50,"var":"txt_name0","text":"洗手","height":30,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":false}}]},{"type":"Box","props":{"y":273,"x":640,"width":226,"var":"box_qifu1","height":215,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"skin":"dating_ui/qifu/tu_k.png","sizeGrid":"59,0,34,0"}},{"type":"Image","props":{"y":-24,"x":-26,"skin":"dating_ui/qifu/tu_gx.png"}},{"type":"Image","props":{"y":148,"x":1,"skin":"dating_ui/qifu/tu_dk1.png"}},{"type":"Image","props":{"y":104,"x":113,"var":"img_type1","skin":"dating_ui/qifu/f_px2.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":160,"x":48,"skin":"dating_ui/tongyong/icon_money1.png","anchorY":0,"anchorX":0}},{"type":"Label","props":{"y":178,"x":87,"width":88,"var":"txt_money1","text":"10/天","height":28,"fontSize":24,"font":"Microsoft YaHei","color":"#005095","bold":true,"align":"center"}},{"type":"Label","props":{"y":132,"x":88,"width":50,"var":"txt_name1","text":"貔貅","height":30,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":false}}]},{"type":"Box","props":{"y":273,"x":887,"width":227,"var":"box_qifu2","height":215,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"skin":"dating_ui/qifu/tu_k.png","sizeGrid":"59,0,34,0"}},{"type":"Image","props":{"y":-4,"x":-27,"skin":"dating_ui/qifu/tu_gx.png"}},{"type":"Image","props":{"y":13,"x":53,"var":"img_type2","skin":"dating_ui/qifu/f_gsy2.png"}},{"type":"Image","props":{"y":149,"x":0,"skin":"dating_ui/qifu/tu_dk1.png"}},{"type":"Image","props":{"y":160,"x":48,"skin":"dating_ui/tongyong/icon_money1.png"}},{"type":"Label","props":{"y":178,"x":87,"width":88,"var":"txt_money2","text":"10/天","height":28,"fontSize":24,"font":"Microsoft YaHei","color":"#005095","bold":true,"align":"center"}},{"type":"Label","props":{"y":132,"x":77,"width":73,"var":"txt_name2","text":"观世音","height":30,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":false}}]},{"type":"Box","props":{"y":495,"x":392,"var":"box_qifu3","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"y":-2,"x":0,"skin":"dating_ui/qifu/tu_k.png","sizeGrid":"59,0,34,0"}},{"type":"Image","props":{"y":-4,"x":-1,"width":223,"skin":"dating_ui/qifu/tu_gx.png","height":216}},{"type":"Image","props":{"y":1,"var":"img_type3","skin":"dating_ui/qifu/f_gg2.png","centerX":0}},{"type":"Image","props":{"y":146,"x":1,"skin":"dating_ui/qifu/tu_dk1.png"}},{"type":"Image","props":{"y":160,"x":48,"skin":"dating_ui/tongyong/icon_money1.png"}},{"type":"Label","props":{"y":178,"x":87,"width":88,"var":"txt_money3","text":"10/天","height":28,"fontSize":24,"font":"Microsoft YaHei","color":"#005095","bold":true,"align":"center"}},{"type":"Label","props":{"y":132,"x":89,"width":50,"var":"txt_name3","text":"关公","height":30,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":false}}]},{"type":"Box","props":{"y":495,"x":640,"var":"box_qifu4","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"skin":"dating_ui/qifu/tu_k.png","sizeGrid":"59,0,34,0"}},{"type":"Image","props":{"y":-6,"x":-8,"width":227,"skin":"dating_ui/qifu/tu_gx.png","height":222}},{"type":"Image","props":{"y":23,"x":50,"var":"img_type4","skin":"dating_ui/qifu/f_cs2.png"}},{"type":"Image","props":{"y":148,"x":1,"skin":"dating_ui/qifu/tu_dk1.png"}},{"type":"Label","props":{"y":132,"x":89,"width":50,"var":"txt_name4","text":"财神","height":30,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":false}},{"type":"Label","props":{"y":178,"x":87,"width":88,"var":"txt_money4","text":"10/天","height":28,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":true,"align":"center"}},{"type":"Image","props":{"y":160,"x":48,"skin":"dating_ui/tongyong/icon_money1.png","anchorY":0,"anchorX":0}}]},{"type":"Box","props":{"y":495,"x":887,"var":"box_qifu5","anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"skin":"dating_ui/qifu/tu_k.png"}},{"type":"Image","props":{"y":0,"x":-20,"width":242,"skin":"dating_ui/qifu/tu_gx.png","height":216}},{"type":"Image","props":{"y":147,"x":2,"skin":"dating_ui/qifu/tu_dk1.png"}},{"type":"Image","props":{"y":11,"x":43,"var":"img_type5","skin":"dating_ui/qifu/f_tdg2.png"}},{"type":"Label","props":{"y":132,"x":77,"width":73,"var":"txt_name5","text":"土地公","height":33,"fontSize":24,"font":"Microsoft YaHei","color":"#ffffff","bold":false}},{"type":"Label","props":{"y":178,"x":87,"width":88,"var":"txt_money5","text":"10/天","height":28,"fontSize":24,"font":"Microsoft YaHei","color":"#005095","bold":true,"align":"center"}},{"type":"Image","props":{"y":160,"x":48,"skin":"dating_ui/tongyong/icon_money1.png","anchorY":0,"anchorX":0}}]}]}]};
+        constructor(){ super()}
+        createChildren():void {
+        
+            super.createChildren();
+            this.createView(ui.nqp.dating.QiFuUI.uiView);
+        }
+    }
+}
+
+module ui.nqp.dating {
+    export class QiFuSuccessUI extends View {
+		public ani3:Laya.FrameAnimation;
+		public ani4:Laya.FrameAnimation;
+		public ani5:Laya.FrameAnimation;
+		public img0:Laya.Image;
+		public img1:Laya.Image;
+
+        public static  uiView:any ={"type":"View","props":{"width":1280,"height":720},"child":[{"type":"Box","props":{"width":611,"height":620,"centerY":-4,"centerX":14,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Box","props":{"width":854,"height":376,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":175.5,"x":439,"skin":"dating_ui/qifu/tu_d.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":151.5,"x":441,"skin":"dating_ui/qifu/tu_hyl.png","anchorY":0.5,"anchorX":0.5},"compId":5},{"type":"Image","props":{"y":217.5,"x":154,"var":"img0","skin":"dating_ui/qifu/f_gg1.png","anchorY":0.5,"anchorX":0.5},"compId":3,"child":[{"type":"Image","props":{"y":146,"x":178,"var":"img1","skin":"dating_ui/qifu/f_gg1.png","anchorY":0.5,"anchorX":0.5},"compId":9}]}]}]},{"type":"Label","props":{"y":435,"x":566,"width":60,"text":"恭喜","height":29,"fontSize":21,"font":"Microsoft YaHei","color":"#ffffff","bold":true}},{"type":"Label","props":{"y":435,"x":617,"width":100,"text":"喵喵妖娆","height":30,"fontSize":21,"font":"Microsoft YaHei","color":"#41fe69","bold":true}},{"type":"Label","props":{"y":435,"x":734,"width":185,"text":"获得               好运","height":30,"fontSize":21,"font":"Microsoft YaHei","color":"#ffffff","bold":true}},{"type":"Label","props":{"width":86,"text":"拜土地公","height":30,"fontSize":21,"font":"Microsoft YaHei","color":"#ae00ff","centerY":90,"centerX":184,"bold":true,"anchorY":0.5,"anchorX":0.5}},{"type":"Button","props":{"y":203,"x":965,"stateNum":1,"skin":"dating_ui/tongyong/btn_fanhui.png","anchorY":0.5,"anchorX":0.5}}],"animations":[{"nodes":[],"name":"ani2","id":2,"frameRate":24,"action":2},{"nodes":[{"target":9,"keyframes":{"scaleY":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":9,"key":"scaleY","index":0},{"value":1.2,"tweenMethod":"linearNone","tween":true,"target":9,"key":"scaleY","index":20}],"scaleX":[{"value":1,"tweenMethod":"linearNone","tween":true,"target":9,"key":"scaleX","index":0},{"value":1.2,"tweenMethod":"linearNone","tween":true,"target":9,"key":"scaleX","index":20}],"blendMode":[{"value":"lighter","tweenMethod":"linearNone","tween":false,"target":9,"key":"blendMode","index":0}],"alpha":[{"value":0.2,"tweenMethod":"linearNone","tween":true,"target":9,"key":"alpha","index":0},{"value":0,"tweenMethod":"linearNone","tween":true,"target":9,"key":"alpha","index":20}]}}],"name":"ani3","id":3,"frameRate":24,"action":2},{"nodes":[{"target":5,"keyframes":{"scaleY":[{"value":2,"tweenMethod":"backOut","tween":true,"target":5,"key":"scaleY","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":5,"key":"scaleY","index":10}],"scaleX":[{"value":2,"tweenMethod":"backOut","tween":true,"target":5,"key":"scaleX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":5,"key":"scaleX","index":10}]}}],"name":"ani4","id":4,"frameRate":24,"action":1},{"nodes":[{"target":3,"keyframes":{"y":[{"value":301,"tweenMethod":"linearNone","tween":true,"target":3,"key":"y","index":0}],"x":[{"value":306,"tweenMethod":"linearNone","tween":true,"target":3,"key":"x","index":0}],"scaleY":[{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":3,"key":"scaleY","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":3,"key":"scaleY","index":10}],"scaleX":[{"value":0.5,"tweenMethod":"linearNone","tween":true,"target":3,"key":"scaleX","index":0},{"value":1,"tweenMethod":"linearNone","tween":true,"target":3,"key":"scaleX","index":10}]}}],"name":"ani5","id":5,"frameRate":24,"action":1}]};
+        constructor(){ super()}
+        createChildren():void {
+        
+            super.createChildren();
+            this.createView(ui.nqp.dating.QiFuSuccessUI.uiView);
+        }
+    }
+}
+
+module ui.nqp.dating {
     export class QuKuanUI extends View {
 		public box:Laya.Box;
 		public btn_close:Laya.Button;
