@@ -246,18 +246,20 @@ module gamedating.page {
 				Path.ui_atlas_effect + "qipaiduizhan.atlas",
 				Path.ui_atlas_effect + "shuzi.atlas",
 				Path.ui_atlas_effect + "update.atlas",
-
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/dating.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/general.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/hud.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/jiaru.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/logo.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/pai.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/qifu.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/qz.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/touxiang.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/tuichu.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/yq.atlas",
+				//通用预加载
+				Path.atlas_game_ui_tongyong + "dating.atlas",
+				Path.atlas_game_ui_tongyong + "general.atlas",
+				Path.atlas_game_ui_tongyong + "hud.atlas",
+				Path.atlas_game_ui_tongyong + "jiaru.atlas",
+				Path.atlas_game_ui_tongyong + "logo.atlas",
+				Path.atlas_game_ui_tongyong + "pai.atlas",
+				Path.atlas_game_ui_tongyong + "qifu.atlas",
+				Path.atlas_game_ui_tongyong + "qz.atlas",
+				Path.atlas_game_ui_tongyong + "touxiang.atlas",
+				Path.atlas_game_ui_tongyong + "tuichu.atlas",
+				Path.atlas_game_ui_tongyong + "yq.atlas",
+				Path.ui_tongyong_sk + "HeGuan.sk",
+				Path.ui_tongyong_sk + "HeGuan.png",
 			];
 
 
