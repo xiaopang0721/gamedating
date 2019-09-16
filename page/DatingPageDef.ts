@@ -46,6 +46,10 @@ module gamedating.page {
 		static PAGE_ZHUANPAN_HELP: string = "23";
 		//签到
 		static PAGE_QIANDAO: string = "24";
+		//祈福动画
+		static PAGE_QIFU_ANI: string = "25";
+		//祈福界面
+		static PAGE_QIFU: string = "26";
 
 
 		//修改头像
@@ -147,7 +151,8 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_MIMA_TISHI] = QuKuanTishiPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_SHURU_MIMA] = QuKuanMimaPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUKUANSXDML] = QuKuanSXDMLPage;
-
+			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU_ANI] = QiFuPlayAniPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU] = QiFuPage;
 
 			this["__needLoadAsset"] = [
 				DatingPath.atlas_dating_ui + 'bangding.atlas',

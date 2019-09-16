@@ -1,7 +1,7 @@
 /**
 * name 
 */
-module gametongyong.page {
+module gamedating.page {
 	export class QiFuPage extends game.gui.base.Page {
 		protected _viewUI: ui.nqp.dating.QiFuUI;
 		private _boxQifuUI: Box[];
@@ -12,9 +12,9 @@ module gametongyong.page {
 			this._isNeedBlack = true;
 			this._isClickBlack = true;
 			this._asset = [
-				PathGameTongyong.atlas_game_ui_tongyong + "qifu.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "dating.atlas",
-				PathGameTongyong.atlas_game_ui_tongyong + "hud.atlas",
+				DatingPath.atlas_dating_ui + "qifu.atlas",
+				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "hud.atlas",
 			];
 		}
 

@@ -1,14 +1,14 @@
 /**
 * name 
 */
-module gametongyong.page {
+module gamedating.page {
 	export class QiFuPlayAniPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.QiFuSuccessUI;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
-				PathGameTongyong.atlas_game_ui_tongyong + "qifu.atlas",
+				DatingPath.atlas_dating_ui + "qifu.atlas",
 			];
 		}
 
