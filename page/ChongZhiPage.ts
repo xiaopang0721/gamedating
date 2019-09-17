@@ -92,6 +92,7 @@ module gamedating.page {
 			}
 		}
 
+		private _id: number = 0;
 		private yhSelectHandler() {
 			if (!this._viewUI.list_yh.dataSource) return;
 			let data = this._viewUI.list_yh.dataSource[this._viewUI.list_yh.selectedIndex];
@@ -101,6 +102,7 @@ module gamedating.page {
 			this._viewUI.txt_yh3.text = data.remitaddr;
 			this._viewUI.ingput_yh0.text = "";
 			this._viewUI.ingput_yh1.text = "";
+			this._id = data.id;
 			if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK) {
 				this._viewUI.txt_yh4.text = data.min_limit > 0 ? StringU.substitute("银行卡转账最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
 			} else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK) {
@@ -128,7 +130,7 @@ module gamedating.page {
 				this._viewUI.img_wx_ewm.skin = data.wx_ewm_url;
 				this._viewUI.txt_sm4.text = data.min_limit > 0 ? StringU.substitute("微信最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
 			}
-
+			this._id = data.id;
 			this._viewUI.txt_sm2.text = "";
 			this._viewUI.txt_sm3.text = "";
 		}
@@ -183,7 +185,7 @@ module gamedating.page {
 						return;
 					}
 					let smDataStr: string = this._viewUI.txt_sm1.text + "," + this._viewUI.txt_sm3.text;
-					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.txt_sm2.text) * 100, this._data.type, smDataStr, this._data.id);
+					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.txt_sm2.text) * 100, this._data.type, smDataStr, this._id);
 					break;
 				case this._viewUI.btn_yh_tjcz://银行卡提交充值
 					if (!this._viewUI.ingput_yh0.text) {
@@ -205,7 +207,7 @@ module gamedating.page {
 						return;
 					}
 					let yhDataStr: string = this._viewUI.txt_yh2.text + "," + this._viewUI.ingput_yh1.text;
-					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr, this._data.id)
+					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr, this._id)
 					break;
 				case this._viewUI.btn_pay://支付
 					if (!this._qudao) {
