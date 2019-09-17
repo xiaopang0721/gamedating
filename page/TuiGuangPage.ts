@@ -28,7 +28,7 @@ module gamedating.page {
 			//官网二维码
 			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
 			//官网链接
-			this._viewUI.txt_gw.text = WebConfig.gwUrl;
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl,17);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -208,6 +208,7 @@ module gamedating.page {
 			this._viewUI.btn_lq.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_wxhy.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_fxq.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.box_no_share.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 
 			this._viewUI.tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.tab.selectedIndex = 0;
@@ -221,10 +222,10 @@ module gamedating.page {
 
 		private onUpdatePlayerInfo() {
 			if (!WebConfig.info) return;
-			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
-			this._viewUI.box_share.visible = daysharegivemoney;
-			this._viewUI.box_no_share.visible = !daysharegivemoney;
-			this._viewUI.txt_daysharegivemoney.text = daysharegivemoney;
+			// let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
+			// this._viewUI.box_share.visible = daysharegivemoney;
+			// this._viewUI.box_no_share.visible = !daysharegivemoney;
+			// this._viewUI.txt_daysharegivemoney.text = daysharegivemoney;
 			let agency_sharereward = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_sharereward");
 			this._viewUI.txt_agency_sharereward.text = agency_sharereward || "";
 			let agency_shareminpay = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_shareminpay");
@@ -465,6 +466,10 @@ module gamedating.page {
 				case this._viewUI.btn_fxq://分享朋友圈
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENETIMELINE)
 					break;
+				case this._viewUI.box_no_share:
+					WebConfig.copyTxt(WebConfig.gwUrl.toString());
+					this._game.showTips("复制成功");
+					break
 			}
 		}
 
