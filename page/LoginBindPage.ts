@@ -254,12 +254,6 @@ module gamedating.page {
                         this._game.showTips("验证码不能为空");
                         return;
                     }
-                    if (!this._viewUI.box_send_over.visible) {
-                        this._game.showTips("请先获取验证码");
-                        this._game.datingGame.jianPanMgr.closeJianPan();
-                        this._inputCode.clearInput();
-                        return;
-                    }
                     if (this._type == LoginBindPage.TYPE_BIND_PHONE) {//手机绑定
                         if (WebConfig.info) {
                             this._game.network.call_bind(WebConfig.account, Web_operation_fields.ACCOUNT_TYPE_MOBILE, "", "", "", "", inputPhoneInputText, this._inputCode.input.text, WebConfig.device, WebConfig.info.invite_code);
