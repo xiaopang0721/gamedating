@@ -110,9 +110,10 @@ module gamedating.managers {
 			qfImg.anchorY = 0.5;
 			qfImg.x = view.width / 2;
 			qfImg.y = view.height / 2;
-			let curPos = headView.localToGlobal(new Point(headView.width / 2, headView.height / 2));
-			let endX = curPos.x + (isAnchor ? 0 : headView.width);
-			let endY = curPos.y+(isAnchor ? 0 : headView.height);
+			let curPos = headView.localToGlobal(new Point(0, 0));
+			let finalPos = view.globalToLocal(curPos)
+			let endX = finalPos.x + (headView.width * 0.5)//(isAnchor ? 0 : qfImg.width * 0.5);
+			let endY = finalPos.y + (headView.height * 0.5)//(isAnchor ? 0 : qfImg.height * 0.5);
 			Laya.Tween.to(qfImg, { x: endX, y: endY, scaleX: 0.1, scaleY: 0.1 }, 1000, Laya.Ease.circOut, Handler.create(this, (qfImg: LImage, callBack: Function) => {
 				qfImg.removeSelf();
 				qfImg.destroy();
