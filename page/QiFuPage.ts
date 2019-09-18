@@ -6,7 +6,7 @@ module gamedating.page {
 		protected _viewUI: ui.nqp.dating.QiFuUI;
 		private _boxQifuUI: Box[];
 		private _txtMoneyUI: Label[];
-
+		private _mainplayer: PlayerData;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._isNeedBlack = true;
@@ -14,7 +14,6 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "qifu.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "hud.atlas",
 			];
 		}
 
@@ -38,6 +37,48 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_CHANGE, this, this.onUpdateDataInfo);
 			this._game.qifuMgr.getData();
 			this.onUpdateDataInfo();
+			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+			this._mainplayer = this._game.sceneObjectMgr.mainPlayer;
+		}
+
+		private _curDiffTime: number;
+		update(diff: number): void {
+			super.update(diff);
+			if (!this._curDiffTime || this._curDiffTime < 0) {
+				for (let i = 0; i < this._dataInfo.length; i++) {
+					let qfid: number = this._dataInfo[i].qf_id;
+					if (!this._mainplayer) return;
+					let qfendTime: number = this._mainplayer.GetQiFuEndTime(qfid - 1);
+					if (!qfendTime) {
+						this._viewUI["box_time" + i].visible = false;
+						continue;
+					}
+					let curTime = this._game.sync.serverTimeBys;
+					let diffNum = qfendTime - curTime;
+					let isShowTime = diffNum > 0 ? true : false;
+					this._viewUI["box_time" + i].visible = isShowTime;
+					if (isShowTime)
+						this._viewUI["lb_time" + i].text = Sync.getTimeShortStr2(diffNum);
+				}
+				this._curDiffTime = 1000;
+			} else {
+				this._curDiffTime -= diff;
+			}
+		}
+
+		protected onOptHandler(optcode: number, msg: any) {
+			if (msg.type == Operation_Fields.OPRATE_GAME) {
+				switch (msg.reason) {
+					case Operation_Fields.OPRATE_GAME_QIFU_SUCCESS_RESULT:
+						let dataInfo = JSON.parse(msg.data);
+						//打开祈福动画界面
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU_ANI, (page) => {
+							page.dataSource = dataInfo;
+						});
+						this.close();
+						break;
+				}
+			}
 		}
 
 		private _dataInfo: any[];
@@ -55,8 +96,8 @@ module gamedating.page {
 			if (!count) return;
 			this._dataInfo = value;
 			for (let i = 0; i < this._dataInfo.length; i++) {
-				let type: string = value[i].qf_type == 1 ? "/天" : "/次";
-				this._txtMoneyUI[i].text = value[i].qf_money + type;
+				let type: string = this._dataInfo[i].qf_type == 1 ? "/天" : "/次";
+				this._txtMoneyUI[i].text = this._dataInfo[i].qf_money + type;
 			}
 		}
 
@@ -71,34 +112,42 @@ module gamedating.page {
 				return;
 			}
 			let idx = this._boxQifuUI.indexOf(target);
-			let mainplayer = this._game.sceneObjectMgr.mainPlayer;
-			if (!mainplayer) return;
+
 			if (!this._dataInfo || !this._dataInfo.length) return;
 			if (idx != -1) {
 				let qftype: number = this._dataInfo[idx].qf_type;
 				let qfid: number = this._dataInfo[idx].qf_id;
-				let qfendTime: number = this._game.sceneObjectMgr.mainPlayer.GetQiFuEndTime(qfid - 1);
+				if (!this._mainplayer) return;
+				let qfendTime: number = this._mainplayer.GetQiFuEndTime(qfid - 1);
 				let qfname: string = this._nameInfo[idx];
-				if (mainplayer.playerInfo.money - this._game.qifuMgr.roomPay < this._dataInfo[idx].qf_money) {
+				if (this._mainplayer.playerInfo.money - this._game.qifuMgr.roomPay < this._dataInfo[idx].qf_money) {
 					this._game.uiRoot.topUnder.showTips("老板，您的金币不够祈福哦~")
 					return;
 				}
 				let curTime = this._game.sync.serverTimeBys;
-				if (curTime < qfendTime) {
-					this._game.uiRoot.topUnder.showTips(StringU.substitute("老板，距离下一次祈福还要{0}哦~", Sync.getTimeShortStr6(qfendTime - curTime)));
-					return;
-				}
 
-				TongyongPageDef.ins.alertRecharge("老板，您是否确定要祈福？", () => {
+				//是否祈福过
+				let strTip = "";
+				let addStr = qfid == 1 ? "洗" : "拜";
+				if (curTime < qfendTime) {
+					//祈福过
+					let strTime = Sync.getTimeShortStr2(qfendTime - curTime);
+					strTip = StringU.substitute("老板，当前效果还剩余<span color='{0}'>{1}</span>，诚心<span color='{2}'>{4}{3}</span>可能带来好运气哦~", TeaStyle.COLOR_RED, strTime, TeaStyle.COLOR_GREEN, qfname, addStr);
+				} else {
+					//没祈福过
+					strTip = StringU.substitute("老板，诚心<span color='{0}'>{2}{1}</span>可能带来好运气哦~", TeaStyle.COLOR_GREEN, qfname, addStr);
+				}
+				this._game.alert(strTip, () => {
 					this._game.network.call_player_qifu_new(qftype, qfid, qfname);
-					this.close();
 				}, () => {
-				}, true, TongyongPageDef.TIPS_SKIN_STR["qd"], TongyongPageDef.TIPS_SKIN_STR["title_qf"]);
+				}, true, Tips.TIPS_SKIN_STR["wyqf"], null,Tips.TIPS_SKIN_STR["title_qf"]);
+
 			}
 		}
 
 		public close(): void {
 			if (this._viewUI) {
+				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				this._game.qifuMgr.off(QiFuMgr.QIFU_CHANGE, this, this.onUpdateDataInfo);
 				this._game.qifuMgr.clear();
 			}

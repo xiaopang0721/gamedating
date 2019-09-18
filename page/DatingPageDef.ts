@@ -251,6 +251,7 @@ module gamedating.page {
 				Path.ui_atlas_effect + "qipaiduizhan.atlas",
 				Path.ui_atlas_effect + "shuzi.atlas",
 				Path.ui_atlas_effect + "update.atlas",
+				Path.ui_atlas_effect + "btn_qf.atlas",
 				//通用预加载
 				Path.atlas_game_ui_tongyong + "dating.atlas",
 				Path.atlas_game_ui_tongyong + "general.atlas",
@@ -258,7 +259,6 @@ module gamedating.page {
 				Path.atlas_game_ui_tongyong + "jiaru.atlas",
 				Path.atlas_game_ui_tongyong + "logo.atlas",
 				Path.atlas_game_ui_tongyong + "pai.atlas",
-				Path.atlas_game_ui_tongyong + "qifu.atlas",
 				Path.atlas_game_ui_tongyong + "qz.atlas",
 				Path.atlas_game_ui_tongyong + "touxiang.atlas",
 				Path.atlas_game_ui_tongyong + "tuichu.atlas",

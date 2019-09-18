@@ -42,6 +42,7 @@ module gamedating.page {
 				Path.ui_atlas_effect + "btn_tuiguang.atlas",
 				Path.ui_atlas_effect + "btn_yeb.atlas",
 				Path.ui_atlas_effect + "btn_zhuanpan.atlas",
+				Path.ui_atlas_effect + "btn_qf.atlas",
 				Path.ui_atlas_effect + "coin.atlas",
 				Path.ui_atlas_effect + "flycoin.atlas",
 				Path.ui_atlas_effect + "jj.atlas",
@@ -78,6 +79,8 @@ module gamedating.page {
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
+			//分享动态
+			this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang);
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -90,7 +93,7 @@ module gamedating.page {
 			this._viewUI.btn_daili.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_chongzhi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_fenxiang.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.btn_fenxiang1.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_qifu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_zhuanpan.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_qiandao.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_vip.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -115,12 +118,26 @@ module gamedating.page {
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_daili]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(100, -15), 1, null, [this._viewUI.btn_vip]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(80, -15), 1, null, [this._viewUI.btn_shouchong]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang1, this, this.checkout, new Point(95, -15), 1, null, [this._viewUI.btn_fenxiang1]);
 			//hud弹窗逻辑
 			this.alertPage();
 			//气泡框逻辑
 			this.showQiPaoKuang();
+			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
+
+		private qifuFly(dataSource: any): void {
+			if (!dataSource) return;
+			this._game.qifuMgr.showFlayAni(this._viewUI.btn_gren, this._viewUI, dataSource, (dataSource) => {
+				let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+				if (!mainPlayer) return;
+				let playerInfo = mainPlayer.playerInfo;
+				if (!playerInfo) return;
+				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
+					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+				}
+			},true);
+		}
+
 
 		//========================按钮特效 start================
 		private _isShowBtnEffect: boolean = true;
@@ -140,7 +157,7 @@ module gamedating.page {
 		//转盘
 		private _btnZPEffect: AnimationFrame;
 		//分享
-		private _btnFXEffect: AnimationFrame;
+		private _btnQFEffect: AnimationFrame;
 		//初始化按钮特效
 		private initBtnAnimationFrame(): void {
 			//首充
@@ -179,9 +196,9 @@ module gamedating.page {
 			if (!this._btnZPEffect) {
 				this._btnZPEffect = this.initBtnAnimationFrameTool(this._btnZPEffect, "btn_zhuanpan", 8, this._viewUI.btn_zhuanpan);
 			}
-			//分享
-			if (!this._btnFXEffect) {
-				this._btnFXEffect = this.initBtnAnimationFrameTool(this._btnFXEffect, "btn_fx", 6, this._viewUI.btn_fenxiang1);
+			//祈福
+			if (!this._btnQFEffect) {
+				this._btnQFEffect = this.initBtnAnimationFrameTool(this._btnQFEffect, "btn_qf", 12, this._viewUI.btn_qifu);
 			}
 
 		}
@@ -194,7 +211,7 @@ module gamedating.page {
 			this.updateBtnAnimationFrameTool(this._btnQDEffect);
 			this.updateBtnAnimationFrameTool(this._btnTGEffect);
 			this.updateBtnAnimationFrameTool(this._btnZPEffect);
-			this.updateBtnAnimationFrameTool(this._btnFXEffect);
+			this.updateBtnAnimationFrameTool(this._btnQFEffect);
 			this.updateBtnAnimationFrameTool(this._btnTGEffectQiPao);
 			this.updateBtnAnimationFrameTool(this._btnHDEffectQiPao);
 			this.updateBtnAnimationFrameTool(this._btnYEBEffectQiPao);
@@ -207,7 +224,7 @@ module gamedating.page {
 			this.clearBtnAnimationFrameTool(this._btnQDEffect);
 			this.clearBtnAnimationFrameTool(this._btnTGEffect);
 			this.clearBtnAnimationFrameTool(this._btnZPEffect);
-			this.clearBtnAnimationFrameTool(this._btnFXEffect);
+			this.clearBtnAnimationFrameTool(this._btnQFEffect);
 			this.clearBtnAnimationFrameTool(this._btnTGEffectQiPao);
 			this.clearBtnAnimationFrameTool(this._btnHDEffectQiPao);
 			this.clearBtnAnimationFrameTool(this._btnYEBEffectQiPao);
@@ -225,8 +242,6 @@ module gamedating.page {
 				btnUI.addChild(btnEffect);
 				if (source == "btn_shouchong") {
 					btnEffect.pos(0, -11);
-				} else if (source == "btn_fx") {
-					btnEffect.pos(0, -7);
 				}
 				else {
 					btnEffect.pos(0, 0);
@@ -256,6 +271,7 @@ module gamedating.page {
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
 				this._viewUI.list_btns.dataSource = [];
+				this._game.qifuMgr.off(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 				if (this._clip_money) {
@@ -269,7 +285,7 @@ module gamedating.page {
 					this._clip_vip = null;
 				}
 				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_fenxiang);
-				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_fenxiang1);
+				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
 				this._box_btn_top = null;
 				this._box_btn_bottom = null;
 				this._isShowBtnEffect && this.clearBtnAnimationFrame();
@@ -308,14 +324,12 @@ module gamedating.page {
 					return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
 				case this._viewUI.btn_shouchong:
 					return WebConfig.info.is_can_first_get;
-				case this._viewUI.btn_fenxiang1:
-					return !WebConfig.info.is_shared;
 			}
 		}
 
 		private _clip_money: ClipUtil;
 		private _clip_vip: ClipUtil;
-		// private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
+		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
 		private onUpdatePlayerInfo(first: boolean = false) {
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
@@ -347,9 +361,6 @@ module gamedating.page {
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
 			// if (playerInfo.vip_level > 0) {
 			// 	this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_v" + playerInfo.vip_level + ".png";
-			// }
-			// if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
-			// 	this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
 			// }
 
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
@@ -419,29 +430,21 @@ module gamedating.page {
 			let isOpenFirst = Number(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "isopen"));
 			if (isOpenFirst && !is_get_fitst_pay) {
 				this._viewUI.btn_shouchong.visible = true;
-				this._viewUI.btn_fenxiang.visible = true;
-				this._viewUI.btn_fenxiang1.visible = false;
+				this._viewUI.btn_qifu.visible = false;
 			} else {
 				this._viewUI.btn_shouchong.visible = false;
-				this._viewUI.btn_fenxiang1.visible = true;
-				this._viewUI.btn_fenxiang.visible = false;
+				this._viewUI.btn_qifu.visible = true;
 			}
 		}
 
 		//重设分享的位置
 		private updateFenXiangPos(): void {
 			//分享位置重设
-			this._viewUI.btn_fenxiang1.x = this._viewUI.btn_shouchong.x;
-			//分享动态
-			if (this._viewUI.btn_fenxiang.visible) {
-				this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang);
+			this._viewUI.btn_qifu.x = this._viewUI.btn_shouchong.x;
+			if (this._viewUI.btn_qifu.visible) {
+				this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_qifu);
 			} else {
-				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_fenxiang);
-			}
-			if (this._viewUI.btn_fenxiang1.visible) {
-				this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang1);
-			} else {
-				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_fenxiang1);
+				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
 			}
 		}
 
@@ -494,7 +497,9 @@ module gamedating.page {
 				case this._viewUI.btn_chongzhi://充值
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 					break;
-				case this._viewUI.btn_fenxiang1:
+				case this._viewUI.btn_qifu://祈福
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU);
+					break;
 				case this._viewUI.btn_fenxiang://分享
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_HUD_SHARE);
 					break;
