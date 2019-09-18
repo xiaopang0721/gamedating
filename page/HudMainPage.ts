@@ -252,10 +252,11 @@ module gamedating.page {
 		public close(): void {
 			if (this._viewUI) {
 				this._viewUI.list_btns.dataSource = [];
+				this._viewUI.list_btns.renderHandler.recover();
+				this._viewUI.list_btns.renderHandler = null;
 				this._game.stopMusic()
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
-				this._viewUI.list_btns.dataSource = [];
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 				if (this._clip_money) {
@@ -922,6 +923,10 @@ module gamedating.page {
 
 		constructor() {
 			super();
+			this.list.hScrollBarSkin = "";
+			this.list.scrollBar.elasticDistance = 100;
+			this.list.itemRender = GameSubItemRender;
+			this.list.renderHandler = new Handler(this, this.renderHandler);
 		}
 
 		private _datastr: string;
@@ -959,6 +964,8 @@ module gamedating.page {
 		destroy() {
 			this.btn.off(LEvent.CLICK, this, this.doList);
 			this.list.dataSource = [];
+			this.list.renderHandler.recover();
+			this.list.renderHandler = null;
 			this.clearEff();
 			Laya.timer.clearAll(this);
 			this.clearTweens();
@@ -997,10 +1004,7 @@ module gamedating.page {
 
 			this.btn.on(LEvent.CLICK, this, this.doList);
 			// 渲染子列表
-			this.list.hScrollBarSkin = "";
-			this.list.scrollBar.elasticDistance = 100;
-			this.list.itemRender = GameSubItemRender;
-			this.list.renderHandler = new Handler(this, this.renderHandler);
+
 			this.list.scrollTo(WebConfig.scrollBarValue || 0);
 			this.list.scrollBar.touchScrollEnable = false;
 			this.list.dataSource = this._data;
@@ -1152,7 +1156,7 @@ module gamedating.page {
 
 		destroy() {
 			if (this._avatar) {
-				this._avatar.clear(true);
+				this._avatar.clear();
 				this._avatar.destroy();
 				this._avatar = null;
 			}
