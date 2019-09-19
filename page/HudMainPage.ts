@@ -135,7 +135,7 @@ module gamedating.page {
 				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
 				}
-			},true);
+			}, true);
 		}
 
 
@@ -296,7 +296,7 @@ module gamedating.page {
 		protected layout(): void {
 			super.layout();
 			if (this._viewUI) {
-				this._viewUI.img_mask.width = this._clientRealWidth + 5;
+				// this._viewUI.img_mask.width = this._clientRealWidth + 5;
 				this._viewUI.list_btns.width = this._clientRealWidth;
 				if (this._viewUI.list_btns.dataSource)
 					Laya.timer.once(1, this, () => {
@@ -359,6 +359,9 @@ module gamedating.page {
 
 			this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
+			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
+				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+			}
 			// if (playerInfo.vip_level > 0) {
 			// 	this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_v" + playerInfo.vip_level + ".png";
 			// }
@@ -733,13 +736,13 @@ module gamedating.page {
 						element && element.update()
 					}
 				}
-				if (this._viewUI.list_btns.scrollBar.value == 0) {
-					this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_1.png';
-				} else if (this._viewUI.list_btns.scrollBar.value == this._viewUI.list_btns.scrollBar.max) {
-					this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_2.png';
-				} else {
-					this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_0.png';
-				}
+				// if (this._viewUI.list_btns.scrollBar.value == 0) {
+				// 	this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_1.png';
+				// } else if (this._viewUI.list_btns.scrollBar.value == this._viewUI.list_btns.scrollBar.max) {
+				// 	this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_2.png';
+				// } else {
+				// 	this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_0.png';
+				// }
 			}
 			this._isShowBtnEffect && this.updateBtnAnimationFrame();
 		}
