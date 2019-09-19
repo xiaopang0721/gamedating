@@ -36,14 +36,13 @@ module gamedating.page {
 
 		// 页面打开时执行函数
 		protected onOpen(): void {
-			if (!this._game_id || this._game_id == "" || !this._round_count || this._round_count.length <= 0 ||
-				!this._pay_money || this._pay_money.length <= 0)
-				throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
+			// if (!this._game_id || this._game_id == "" || !this._round_count || this._round_count.length <= 0 ||
+			// 	!this._pay_money || this._pay_money.length <= 0)
+			// 	throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
 			super.onOpen();
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this.setRoundCheckboxEvent(true);
-			this.setPaytypeCheckboxEvent(true);
 			this._viewUI.cb_round0.selected = true;
 			// this._viewUI.cb_pay0.selected = true;
 			this._viewUI.txt_money.text = this._pay_money[0].toString();
@@ -75,11 +74,6 @@ module gamedating.page {
 			this._viewUI.txt_money.text = this._pay_money[i].toString();
 		}
 
-		private onPayCheckboxClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onCheckboxClick(name, i, max_num);
-			this._game.cardRoomMgr.PayType = i + 1;
-		}
-
 		private setRoundCheckboxEvent(isOn) {
 			let name: string = "box_round";
 			let name1: string = "cb_round";
@@ -91,21 +85,6 @@ module gamedating.page {
 			} else {
 				for (let index = 0; index < max_num; index++) {
 					this._viewUI[name + index].off(LEvent.CLICK, this, this.onRoundCheckboxClick, [name1, index, max_num]);
-				}
-			}
-		}
-
-		private setPaytypeCheckboxEvent(isOn) {
-			let name: string = "box_pay";
-			let name1: string = "cb_pay";
-			let max_num: number = 2;
-			if (isOn) {
-				for (let index = 0; index < max_num; index++) {
-					this._viewUI[name + index].on(LEvent.CLICK, this, this.onPayCheckboxClick, [name1, index, max_num]);
-				}
-			} else {
-				for (let index = 0; index < max_num; index++) {
-					this._viewUI[name + index].off(LEvent.CLICK, this, this.onPayCheckboxClick, [name1, index, max_num]);
 				}
 			}
 		}
@@ -189,7 +168,6 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				this.setRoundCheckboxEvent(false);
-				this.setPaytypeCheckboxEvent(false);
 			}
 			super.close();
 		}

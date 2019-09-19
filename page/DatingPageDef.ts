@@ -60,6 +60,8 @@ module gamedating.page {
 		static PAGE_GONGGAO: string = "30";
 		//通用领取
 		static PAGE_GET_REWARD: string = "31";
+		//创建房间多种选项
+		static PAGE_CREATE_CARD_ROOM_MORE: string = "32";
 
 
 		//更改昵称
@@ -156,6 +158,8 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU] = QiFuPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_CREATE_CARD_ROOM] = CreateCardRoomBase;
 			PageDef._pageClassMap[DatingPageDef.PAGE_JOIN_CARD_ROOM] = JoinCardRoomBase;
+			PageDef._pageClassMap[DatingPageDef.PAGE_CREATE_CARD_ROOM_MORE] = CreadRoomMorePage;
+			
 
 			this["__needLoadAsset"] = [
 				DatingPath.atlas_dating_ui + 'bangding.atlas',

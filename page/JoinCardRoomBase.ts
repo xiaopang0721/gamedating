@@ -27,9 +27,9 @@ module gamedating.page {
 
 		// 页面打开时执行函数
 		protected onOpen(): void {
-			if (!this._game_id || this._game_id == "") {
-				throw "加入房间失败,请确认游戏类型及房间信息是否正确!";
-			}
+			// if (!this._game_id || this._game_id == "") {
+			// 	throw "加入房间失败,请确认游戏类型及房间信息是否正确!";
+			// }
 			super.onOpen();
 			this.initClipState();
 			this.setButtonEvent(true);
