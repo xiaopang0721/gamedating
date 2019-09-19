@@ -501,7 +501,9 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 					break;
 				case this._viewUI.btn_qifu://祈福
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU, (page:QiFuPage) => {
+						page.isHudDating = true;
+					});
 					break;
 				case this._viewUI.btn_fenxiang://分享
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_HUD_SHARE);
