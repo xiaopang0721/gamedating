@@ -252,10 +252,11 @@ module gamedating.page {
 		public close(): void {
 			if (this._viewUI) {
 				this._viewUI.list_btns.dataSource = [];
+				this._viewUI.list_btns.renderHandler.recover();
+				this._viewUI.list_btns.renderHandler = null;
 				this._game.stopMusic()
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
-				this._viewUI.list_btns.dataSource = [];
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 				if (this._clip_money) {
@@ -880,7 +881,7 @@ module gamedating.page {
 		private _index: number;
 		private _isOpen: boolean;
 		private _tweens: Laya.Tween[];
-		private _effBTN: ui.nqp.dating.component.Effect_qipaiduizhanUI;
+		private _effBTN: ui.nqp.dating.component.Effect_0UI | ui.nqp.dating.component.Effect_1UI | ui.nqp.dating.component.Effect_2UI | ui.nqp.dating.component.Effect_3UI;
 
 		private pushTweens(t: Laya.Tween): void {
 			if (!this._tweens) this._tweens = [];
@@ -922,6 +923,10 @@ module gamedating.page {
 
 		constructor() {
 			super();
+			this.list.hScrollBarSkin = "";
+			this.list.scrollBar.elasticDistance = 100;
+			this.list.itemRender = GameSubItemRender;
+			this.list.renderHandler = new Handler(this, this.renderHandler);
 		}
 
 		private _datastr: string;
@@ -939,15 +944,29 @@ module gamedating.page {
 			this.datas = data;
 			this._page = arr[0]
 			this._game = arr[1];
+			if (data[0] != this._index) {
+				this.clearEff();
+			}
 			this._index = data[0];
 			this._data = data[1];
 			this._isOpen = false;
 			this.show();
 		}
 
+		private clearEff() {
+			if (this._effBTN) {
+				this._effBTN.removeSelf();
+				this._effBTN.destroy();
+				this._effBTN = null;
+			}
+		}
+
 		destroy() {
 			this.btn.off(LEvent.CLICK, this, this.doList);
 			this.list.dataSource = [];
+			this.list.renderHandler.recover();
+			this.list.renderHandler = null;
+			this.clearEff();
 			Laya.timer.clearAll(this);
 			this.clearTweens();
 			Laya.Tween.clearAll(this);
@@ -956,6 +975,13 @@ module gamedating.page {
 
 		update(): void {
 			if (!this._data) return;
+			if (this._effBTN) {
+				if (this._game.uiRoot.general.numChildren) {
+					this._effBTN.ani1.isPlaying && this._effBTN.ani1.stop();
+				} else {
+					!this._effBTN.ani1.isPlaying && this._effBTN.ani1.play(0, true);
+				}
+			}
 			if (this.list.dataSource) {
 				this.list.cells.forEach(element => {
 					let item = element as GameSubItemRender;
@@ -965,36 +991,20 @@ module gamedating.page {
 		}
 
 		private show(): void {
-			let b_btn = '';
-			switch (this._index) {
-				case DatingPageDef.TYPE_CHESS:
-					b_btn = 'qipaiduizhan';
-					break;
-				case DatingPageDef.TYPE_GAME:
-					b_btn = 'jj';
-					break;
-				case DatingPageDef.TYPE_BAIREN:
-					b_btn = 'bairen';
-					break;
-			}
 			this.img_back.skin = DatingPath.ui_dating + 'dating/tu_dtgg' + this._index + '.png';
 			this.img_back.visible = false;
 			this.box.scaleX = 1;
 			this.img.width = 622;
 
 			if (!this._effBTN) {
-				this._effBTN = new ui.nqp.dating.component.Effect_qipaiduizhanUI();
+				this._effBTN = new ui.nqp.dating.component["Effect_" + this._index + "UI"]();
 			}
 			this.box_btn.addChild(this._effBTN);
-			this._effBTN[b_btn].visible = true;
-			this._effBTN['ani_' + b_btn].play(0, true);
+			this._effBTN.ani1.play(0, true);
 
 			this.btn.on(LEvent.CLICK, this, this.doList);
 			// 渲染子列表
-			this.list.hScrollBarSkin = "";
-			this.list.scrollBar.elasticDistance = 100;
-			this.list.itemRender = GameSubItemRender;
-			this.list.renderHandler = new Handler(this, this.renderHandler);
+
 			this.list.scrollTo(WebConfig.scrollBarValue || 0);
 			this.list.scrollBar.touchScrollEnable = false;
 			this.list.dataSource = this._data;
@@ -1146,7 +1156,7 @@ module gamedating.page {
 
 		destroy() {
 			if (this._avatar) {
-				this._avatar.clear(true);
+				this._avatar.clear();
 				this._avatar.destroy();
 				this._avatar = null;
 			}
@@ -1165,6 +1175,11 @@ module gamedating.page {
 		update(): void {
 			if (!this._data || !this.alpha) return;
 			if (this._avatar) {
+				if (this._game.uiRoot.general.numChildren) {
+					this._avatar.paused();
+				} else {
+					this._avatar.resume();
+				}
 				this._avatar.onDraw();
 			}
 			if (this._updateEffect) {
@@ -1186,6 +1201,7 @@ module gamedating.page {
 
 		set setAlpha(v: number) {
 			this.alpha = v;
+			this.visible = v != 0;
 			if (this._avatar) {
 				this._avatar.visible = v != 0;
 			}
