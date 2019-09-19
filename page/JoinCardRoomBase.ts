@@ -115,11 +115,11 @@ module gamedating.page {
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_JOIN_ROOM_NOT_MONEY:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_JOIN_ROOM_NOT_MONEY");
-						TongyongPageDef.ins.alertRecharge(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
+						this._game.alert(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
 							this._game.sceneObjectMgr.leaveStory(true);
 							this._game.uiRoot.general.open(this._open_id);
 						}, () => {
-						}, true,TongyongPageDef.TIPS_SKIN_STR["cz"]);
+						}, true,Tips.TIPS_SKIN_STR["cz"]);
 						break;
 				}
 			}

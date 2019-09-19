@@ -114,10 +114,10 @@ module gamedating.page {
 		protected chkEnoughMoney() {
 			if (!this._game.sceneObjectMgr.mainPlayer) return false;
 			if (this._game.sceneObjectMgr.mainPlayer.playerInfo.money < parseInt(this._viewUI.txt_money.text)) {
-				TongyongPageDef.ins.alertRecharge(StringU.substitute("老板，您的金币不足开房间哦~\n补充点金币去大杀四方吧~"), () => {
+				this._game.alert(StringU.substitute("老板，您的金币不足开房间哦~\n补充点金币去大杀四方吧~"), () => {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 				}, () => {
-				}, false, TongyongPageDef.TIPS_SKIN_STR["cz"]);
+				}, false, Tips.TIPS_SKIN_STR["cz"]);
 				return false;
 			}
 			return true;
@@ -145,15 +145,15 @@ module gamedating.page {
 			if (msg.type == Operation_Fields.OPRATE_CARDROOM) {
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_CARDROOM_NOT_CARD_ID:
-						TongyongPageDef.ins.alertRecharge(StringU.substitute("创建房间失败,没有多余的房间可用,请确认!"), () => {
+						this._game.alert(StringU.substitute("创建房间失败,没有多余的房间可用,请确认!"), () => {
 						}, () => {
-						}, true, TongyongPageDef.TIPS_SKIN_STR["qd"]);
+						}, true, Tips.TIPS_SKIN_STR["qd"]);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_CREATE_ROOM_NOT_MONEY:
-						TongyongPageDef.ins.alertRecharge(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
+						this._game.alert(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
 							this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 						}, () => {
-						}, true, TongyongPageDef.TIPS_SKIN_STR["cz"]);
+						}, true, Tips.TIPS_SKIN_STR["cz"]);
 						break;
 					case Operation_Fields.OPRATE_TELEPORT_MAP_CREATE_ROOM_SUCCESS:
 						this.close();
@@ -180,9 +180,9 @@ module gamedating.page {
 		}
 
 		private onMapOutSuccess() {
-			TongyongPageDef.ins.alertRecharge("房间已解散!", () => {
+			this._game.alert("房间已解散!", () => {
 			}, () => {
-			}, true, TongyongPageDef.TIPS_SKIN_STR["cz"]);
+			}, true, Tips.TIPS_SKIN_STR["cz"]);
 		}
 
 		public close(): void {
