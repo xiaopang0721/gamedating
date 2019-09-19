@@ -50,11 +50,12 @@ module gamedating.page {
 		static PAGE_QIFU_ANI: string = "25";
 		//祈福界面
 		static PAGE_QIFU: string = "26";
-
-
+		//创建房间
+		static PAGE_CREATE_CARD_ROOM: string = "27";
 		//修改头像
 		static PAGE_CHANGGE_HEAD: string = "28";
-
+		//加入房间
+		static PAGE_JOIN_CARD_ROOM: string = "29";
 		//公告
 		static PAGE_GONGGAO: string = "30";
 		//通用领取
@@ -153,6 +154,8 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUKUANSXDML] = QuKuanSXDMLPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU_ANI] = QiFuPlayAniPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU] = QiFuPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_CREATE_CARD_ROOM] = CreateCardRoomBase;
+			PageDef._pageClassMap[DatingPageDef.PAGE_JOIN_CARD_ROOM] = JoinCardRoomBase;
 
 			this["__needLoadAsset"] = [
 				DatingPath.atlas_dating_ui + 'bangding.atlas',
