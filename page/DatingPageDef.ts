@@ -60,9 +60,10 @@ module gamedating.page {
 		static PAGE_GONGGAO: string = "30";
 		//通用领取
 		static PAGE_GET_REWARD: string = "31";
-		//创建房间多种选项
-		static PAGE_CREATE_CARD_ROOM_MORE: string = "32";
-
+		//创建房间-跑得快
+		static PAGE_PDK_CREATE_CARDROOM: string = "32";
+		//加入房间-跑得快
+		static PAGE_PDK_JOIN_CARDROOM:string = "33";
 
 		//更改昵称
 		static PAGE_GENGGAINC: string = "35";
@@ -158,7 +159,8 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU] = QiFuPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_CREATE_CARD_ROOM] = CreateCardRoomBase;
 			PageDef._pageClassMap[DatingPageDef.PAGE_JOIN_CARD_ROOM] = JoinCardRoomBase;
-			PageDef._pageClassMap[DatingPageDef.PAGE_CREATE_CARD_ROOM_MORE] = CreadRoomMorePage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_CREATE_CARDROOM] = CreadRoomPDKPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
 			
 
 			this["__needLoadAsset"] = [

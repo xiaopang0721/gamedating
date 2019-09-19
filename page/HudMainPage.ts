@@ -454,10 +454,12 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
 				case this._viewUI.btn_xiaoxi://消息
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
+					// this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM)
 					break;
 				case this._viewUI.btn_kefu://客服
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
+					// this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM)
 					break;
 				case this._viewUI.btn_gren://个人信息
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
