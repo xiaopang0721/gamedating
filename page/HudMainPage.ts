@@ -348,32 +348,10 @@ module gamedating.page {
 			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
 			}
-			// if (playerInfo.vip_level > 0) {
-			// 	this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_v" + playerInfo.vip_level + ".png";
-			// }
 
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
-			// if (!WebConfig.info.isqmdl) {
-			// 	this._game.uiRoot.general.close(DatingPageDef.PAGE_QUANMINDAILI)
-			// }
-			// if (!WebConfig.info.islxqd) {
-			// 	this._game.uiRoot.general.close(DatingPageDef.PAGE_QIANDAO)
-			// }
-			// if (!WebConfig.info.isxylp) {
-			// 	this._game.uiRoot.general.close(DatingPageDef.PAGE_ZHUANPAN)
-			// }
-			// if (!FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney")) {
-			// 	this._viewUI.btn_fenxiang.visible = false;
-			// }
-
 
 			this.updatePos();
-
-			//检测vip领取奖励情况
-			// if (!this._game.datingGame..firstAlert && this._game.datingGame.vipMgr.checkVipReceived()) {
-			// 	this._game.uiRoot.general.open(DatingPageDef.PAGE_VIP_UP);
-			// }
-			// this._game.datingGame.firstAlert = true;
 		}
 
 		protected layout(): void {
@@ -769,12 +747,11 @@ module gamedating.page {
 
 		public isOpenPage: boolean;
 		private _listBarMax: number = 0;
-		private _listItemCount: number = 0;
 
 		private onUpdateGameList(gameList) {
 			let data = gameList;
-			this._listItemCount = Math.ceil(data.length / 2);
-			this._listBarMax = 245 * this._listItemCount - (this._clientWidth - 370);
+			let listItemCount = Math.ceil(data.length / 2);
+			this._listBarMax = 245 * listItemCount - (this._clientWidth - 370);
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
