@@ -106,6 +106,8 @@ module gamedating.page {
 			this._viewUI.box_hd.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.box_yeb.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.box_yrbw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_enterRoom.on(LEvent.CLICK, this, this.enTerClick);
+
 
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
@@ -294,7 +296,7 @@ module gamedating.page {
 				this._isShowBtnEffect && this.clearBtnAnimationFrame();
 			}
 			super.close();
-		}		
+		}
 
 		private checkout(btn: any) {
 			switch (btn) {
@@ -428,11 +430,12 @@ module gamedating.page {
 			}
 		}
 
+		private enTerClick(): void {
+			this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM);
+		}
+
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
-				case this._viewUI.btn_enterRoom: //加入房间
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM);
-					break;
 				case this._viewUI.btn_xiaoxi://消息
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
 					break;
@@ -481,7 +484,7 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 					break;
 				case this._viewUI.btn_qifu://祈福
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU, (page:QiFuPage) => {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU, (page: QiFuPage) => {
 						page.isHudDating = true;
 					});
 					break;
@@ -533,9 +536,9 @@ module gamedating.page {
 				this._viewUI.btn_enterRoom.visible = true;
 				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
 				this._viewUI.btn_enterRoom.alpha = 0;
-				this.createTween(this._viewUI.btn_enterRoom, {scaleX: 1, scaleY: 1, alpha: 1}, 500, Laya.Ease.backInOut);
+				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
 			} else {
-				this.createTween(this._viewUI.btn_enterRoom, {scaleX: 0.2, scaleY: 0.2, alpha: 0}, 500, Laya.Ease.backInOut, ()=>{
+				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
 					this._viewUI.btn_enterRoom.visible = false;
 				});
 			}
@@ -689,7 +692,7 @@ module gamedating.page {
 				})
 				if (tabIndex != index) {
 					return;
-				}				
+				}
 			}
 			let game_list: any[] = []
 			let webPower: number = 0;
@@ -703,19 +706,19 @@ module gamedating.page {
 				let str1 = str.replace("r_", "");
 				let times = enterGameInfo[str] ? enterGameInfo[str] : 0;
 				let type = -1;
-				if (str.indexOf("r_") == -1) 
+				if (str.indexOf("r_") == -1)
 					type = DatingPageDef.GAME_TYPE_LIST[str1][0];
-				else 
+				else
 					type = DatingPageDef.GAME_CARD_TYPE_LIST[str1][0];
 				if (type > -1) {
 					//所有游戏 或 对应类型的游戏
-					if (index == 0 || index == type) { 
+					if (index == 0 || index == type) {
 						game_list.push([str.replace('r_', ''), type, webPower, times]);
 						webPower++;
 					}
 				}
 			}
-			if (!game_list.length) 
+			if (!game_list.length)
 				return;
 
 			// 后台 + 玩家操作习惯排序
@@ -771,7 +774,7 @@ module gamedating.page {
 					});
 					i++;
 				});
-				Laya.timer.once(100 * i, this, ()=>{
+				Laya.timer.once(100 * i, this, () => {
 					this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 				})
 			})
@@ -854,7 +857,7 @@ module gamedating.page {
 		}
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
-	}	
+	}
 
 	/**
 	 * 大厅入口 2 级list
@@ -964,7 +967,7 @@ module gamedating.page {
 				this.clearWaiting();
 				return;
 			} else {
-				if (this._image) 
+				if (this._image)
 					this._image.visible = false;
 				if (this._avatar)
 					this._avatar.visible = true;
@@ -1083,7 +1086,7 @@ module gamedating.page {
 		}
 
 		private openPage() {
-			if (this._type == DatingPageDef.TYPE_CARD){
+			if (this._type == DatingPageDef.TYPE_CARD) {
 				this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM);
 				return;
 			}
