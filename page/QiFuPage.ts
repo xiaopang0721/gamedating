@@ -7,6 +7,10 @@ module gamedating.page {
 		private _boxQifuUI: Box[];
 		private _txtMoneyUI: Label[];
 		private _mainplayer: PlayerData;
+		private _isHudDating: boolean = false;
+		set isHudDating(value: boolean) {
+			this._isHudDating = value;
+		}
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._isNeedBlack = true;
@@ -107,12 +111,12 @@ module gamedating.page {
 
 		private _nameInfo: string[] = ["洗手", "貔貅", "观世音", "关公", "财神", "土地公"];
 		protected onBtnTweenEnd(e: any, target: any) {
-			if (!this._game.qifuMgr.isCanQiFu) {
+			if (!this._isHudDating && !this._game.qifuMgr.isCanQiFu) {
+				//仅在游戏中判断
 				this._game.uiRoot.topUnder.showTips("老板，当前不可以祈福哦~")
 				return;
 			}
 			let idx = this._boxQifuUI.indexOf(target);
-
 			if (!this._dataInfo || !this._dataInfo.length) return;
 			if (idx != -1) {
 				let qftype: number = this._dataInfo[idx].qf_type;
@@ -140,7 +144,7 @@ module gamedating.page {
 				this._game.alert(strTip, () => {
 					this._game.network.call_player_qifu_new(qftype, qfid, qfname);
 				}, () => {
-				}, true, Tips.TIPS_SKIN_STR["wyqf"], null,Tips.TIPS_SKIN_STR["title_qf"]);
+				}, true, Tips.TIPS_SKIN_STR["wyqf"], null, Tips.TIPS_SKIN_STR["title_qf"]);
 
 			}
 		}

@@ -38,47 +38,43 @@ module gamedating.managers {
 
 		public get isCanQiFu() {
 			let mapinfo = this._game.sceneGame.sceneObjectMgr.mapInfo;
-			if (!mapinfo) {
-				//大厅祈福
-				return true;
-			} else {
-				//游戏祈福
-				let gameid: string = mapinfo.id;
-				if (!gameid) return false;
-				let story = this._game.sceneGame.sceneObjectMgr.story;
-				if (!story) return false;
-				let main_unit = this._game.sceneGame.sceneObjectMgr.mainUnit;
-				if (!main_unit) return false;
-				if (story instanceof StoryNormalBase) {//单人场
-					let pageDef = getPageDef(gameid);
-					if (pageDef && pageDef["__qifulimit"]) {
-						if (main_unit.IsIsDefeated() || main_unit.IsGiveUp()) {//比输或者弃牌可以祈福
-							return true;
-						}
-						if (mapinfo.GetPlayState() == 1) {//游戏进行中不可以祈福
-							return false;
-						}
+			if (!mapinfo) return false;
+			//游戏祈福
+			let gameid: string = mapinfo.id;
+			if (!gameid) return false;
+			let story = this._game.sceneGame.sceneObjectMgr.story;
+			if (!story) return false;
+			let main_unit = this._game.sceneGame.sceneObjectMgr.mainUnit;
+			if (!main_unit) return false;
+			if (story instanceof StoryNormalBase) {//单人场
+				let pageDef = getPageDef(gameid);
+				if (pageDef && pageDef["__qifulimit"]) {
+					if (main_unit.IsIsDefeated() || main_unit.IsGiveUp()) {//比输或者弃牌可以祈福
+						return true;
 					}
-					else if (mapinfo.GetPlayState() == 1) {//游戏进行中不可以祈福
+					if (mapinfo.GetPlayState() == 1) {//游戏进行中不可以祈福
 						return false;
 					}
 				}
-				else if (story instanceof StoryBaiRenBase) {//百人场
-					if (main_unit.GetIndex() == mapinfo.GetBankerSeat()) {//当庄不可以祈福
-						return false;
-					}
-					if (main_unit.IsBet()) {//下过注不可以祈福
-						return false;
-					}
+				else if (mapinfo.GetPlayState() == 1) {//游戏进行中不可以祈福
+					return false;
 				}
-				else if (story instanceof StoryRoomCardBase) {//房卡
-
-				}
-				else if (story instanceof StoryFishBase) {//捕鱼
-
-				}
-				return true;
 			}
+			else if (story instanceof StoryBaiRenBase) {//百人场
+				if (main_unit.GetIndex() == mapinfo.GetBankerSeat()) {//当庄不可以祈福
+					return false;
+				}
+				if (main_unit.IsBet()) {//下过注不可以祈福
+					return false;
+				}
+			}
+			else if (story instanceof StoryRoomCardBase) {//房卡
+
+			}
+			else if (story instanceof StoryFishBase) {//捕鱼
+
+			}
+			return true;
 		}
 
 		public getData() {
@@ -110,9 +106,10 @@ module gamedating.managers {
 			qfImg.anchorY = 0.5;
 			qfImg.x = view.width / 2;
 			qfImg.y = view.height / 2;
-			let curPos = headView.localToGlobal(new Point(headView.width / 2, headView.height / 2));
-			let endX = curPos.x + (isAnchor ? 0 : headView.width);
-			let endY = curPos.y+(isAnchor ? 0 : headView.height);
+			let curPos = headView.localToGlobal(new Point(0, 0));
+			let finalPos = view.globalToLocal(curPos)
+			let endX = finalPos.x + (headView.width * 0.5)//(isAnchor ? 0 : qfImg.width * 0.5);
+			let endY = finalPos.y + (headView.height * 0.5)//(isAnchor ? 0 : qfImg.height * 0.5);
 			Laya.Tween.to(qfImg, { x: endX, y: endY, scaleX: 0.1, scaleY: 0.1 }, 1000, Laya.Ease.circOut, Handler.create(this, (qfImg: LImage, callBack: Function) => {
 				qfImg.removeSelf();
 				qfImg.destroy();

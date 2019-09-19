@@ -7,7 +7,8 @@ module gamedating.page {
 		static get TIPS_SKIN_STR() {
 			return {
 				"qd": DatingPath.ui_dating_tongyong + "tu_qd.png",		//确定
-				"qx": DatingPath.ui_dating_tongyong + "tu_qx.png",		//确定
+				"qx": DatingPath.ui_dating_tongyong + "tu_qx.png",		//取消
+				"cz": DatingPath.ui_dating + "chongzhi/tu_ch.png",		//充值
 				"wyqf": DatingPath.ui_dating + "qifu/tu_wyqf.png",	//我要祈福
 				"title_qf": DatingPath.ui_dating + "qifu/tu_qf.png",	//祈福标题
 				"title_ts": DatingPath.ui_dating_tongyong + "tit_tishi.png",	//提示标题

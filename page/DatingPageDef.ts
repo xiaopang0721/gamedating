@@ -50,16 +50,20 @@ module gamedating.page {
 		static PAGE_QIFU_ANI: string = "25";
 		//祈福界面
 		static PAGE_QIFU: string = "26";
-
-
+		//创建房间
+		static PAGE_CREATE_CARD_ROOM: string = "27";
 		//修改头像
 		static PAGE_CHANGGE_HEAD: string = "28";
-
+		//加入房间
+		static PAGE_JOIN_CARD_ROOM: string = "29";
 		//公告
 		static PAGE_GONGGAO: string = "30";
 		//通用领取
 		static PAGE_GET_REWARD: string = "31";
-
+		//创建房间-跑得快
+		static PAGE_PDK_CREATE_CARDROOM: string = "32";
+		//加入房间-跑得快
+		static PAGE_PDK_JOIN_CARDROOM:string = "33";
 
 		//更改昵称
 		static PAGE_GENGGAINC: string = "35";
@@ -153,6 +157,11 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUKUANSXDML] = QuKuanSXDMLPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU_ANI] = QiFuPlayAniPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIFU] = QiFuPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_CREATE_CARD_ROOM] = CreateCardRoomBase;
+			PageDef._pageClassMap[DatingPageDef.PAGE_JOIN_CARD_ROOM] = JoinCardRoomBase;
+			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_CREATE_CARDROOM] = CreadRoomPDKPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
+			
 
 			this["__needLoadAsset"] = [
 				DatingPath.atlas_dating_ui + 'bangding.atlas',
@@ -177,6 +186,9 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + 'yuebao.atlas',
 				DatingPath.atlas_dating_ui + "shouchong.atlas",
 				DatingPath.atlas_dating_ui + "baoxianxiang.atlas",
+				DatingPath.atlas_dating_ui + "jiaru.atlas",
+				DatingPath.atlas_dating_ui + "fk.atlas",
+				
 				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 				//龙骨相关添加
 				DatingPath.sk_dating + "DZ_baijiale.png",
@@ -256,7 +268,6 @@ module gamedating.page {
 				Path.atlas_game_ui_tongyong + "dating.atlas",
 				Path.atlas_game_ui_tongyong + "general.atlas",
 				Path.atlas_game_ui_tongyong + "hud.atlas",
-				Path.atlas_game_ui_tongyong + "jiaru.atlas",
 				Path.atlas_game_ui_tongyong + "logo.atlas",
 				Path.atlas_game_ui_tongyong + "pai.atlas",
 				Path.atlas_game_ui_tongyong + "qz.atlas",

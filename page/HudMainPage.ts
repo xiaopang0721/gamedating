@@ -138,7 +138,7 @@ module gamedating.page {
 				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
 				}
-			},true);
+			}, true);
 		}
 
 
@@ -345,6 +345,9 @@ module gamedating.page {
 
 			this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
+			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
+				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+			}
 			// if (playerInfo.vip_level > 0) {
 			// 	this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_v" + playerInfo.vip_level + ".png";
 			// }
@@ -450,10 +453,12 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
 				case this._viewUI.btn_xiaoxi://消息
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
+					// this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM)
 					break;
 				case this._viewUI.btn_kefu://客服
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
+					// this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM)
 					break;
 				case this._viewUI.btn_gren://个人信息
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
@@ -497,7 +502,9 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 					break;
 				case this._viewUI.btn_qifu://祈福
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU, (page:QiFuPage) => {
+						page.isHudDating = true;
+					});
 					break;
 				case this._viewUI.btn_fenxiang://分享
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_HUD_SHARE);
