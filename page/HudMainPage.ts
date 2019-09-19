@@ -79,6 +79,9 @@ module gamedating.page {
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
+			// 标签按钮
+			this._viewUI.tab.selectHandler = new Handler(this, this.onSelectTab);
+			this._viewUI.tab.selectedIndex = 0;
 			//分享动态
 			this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang);
 
@@ -106,7 +109,7 @@ module gamedating.page {
 
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onDealGameData);
 
 			this.onUpdatePlayerInfo(true);
 			this._game.playMusic(Path.music_bg);
@@ -266,14 +269,14 @@ module gamedating.page {
 		//========================按钮特效 end================
 		public close(): void {
 			if (this._viewUI) {
-				this._viewUI.list_btns.dataSource = [];
 				this._game.stopMusic()
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
 				this._viewUI.list_btns.dataSource = [];
+				this._viewUI.tab.selectHandler.clear();
 				this._game.qifuMgr.off(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
+				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onDealGameData);
 				if (this._clip_money) {
 					this._clip_money.removeSelf();
 					this._clip_money.destroy();
@@ -291,22 +294,7 @@ module gamedating.page {
 				this._isShowBtnEffect && this.clearBtnAnimationFrame();
 			}
 			super.close();
-		}
-
-		protected layout(): void {
-			super.layout();
-			if (this._viewUI) {
-				// this._viewUI.img_mask.width = this._clientRealWidth + 5;
-				this._viewUI.list_btns.width = this._clientRealWidth;
-				if (this._viewUI.list_btns.dataSource)
-					Laya.timer.once(1, this, () => {
-						if (this._viewUI.list_btns.dataSource)
-							this._viewUI.list_btns.scrollBar.max = (1515 + 286 * this._listItemCount) - this._clientWidth
-					});
-				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
-				Laya.timer.frameOnce(1, this, this.updatePos);
-			}
-		}
+		}		
 
 		private checkout(btn: any) {
 			switch (btn) {
@@ -336,8 +324,6 @@ module gamedating.page {
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
-			if (first)
-				this.onUpdateGameList(true);
 			if (!this._clip_money) {
 				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);
 				this._clip_money.scale(0.9, 0.9);
@@ -362,37 +348,28 @@ module gamedating.page {
 			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
 			}
-			// if (playerInfo.vip_level > 0) {
-			// 	this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_v" + playerInfo.vip_level + ".png";
-			// }
 
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
-			// if (!WebConfig.info.isqmdl) {
-			// 	this._game.uiRoot.general.close(DatingPageDef.PAGE_QUANMINDAILI)
-			// }
-			// if (!WebConfig.info.islxqd) {
-			// 	this._game.uiRoot.general.close(DatingPageDef.PAGE_QIANDAO)
-			// }
-			// if (!WebConfig.info.isxylp) {
-			// 	this._game.uiRoot.general.close(DatingPageDef.PAGE_ZHUANPAN)
-			// }
-			// if (!FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney")) {
-			// 	this._viewUI.btn_fenxiang.visible = false;
-			// }
-
 
 			this.updatePos();
+		}
 
-			//检测vip领取奖励情况
-			// if (!this._game.datingGame..firstAlert && this._game.datingGame.vipMgr.checkVipReceived()) {
-			// 	this._game.uiRoot.general.open(DatingPageDef.PAGE_VIP_UP);
-			// }
-			// this._game.datingGame.firstAlert = true;
+		protected layout(): void {
+			super.layout();
+			if (this._viewUI) {
+				this._viewUI.list_btns.width = this._clientRealWidth;
+				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
+				Laya.timer.frameOnce(1, this, this.updatePos);
+			}
 		}
 
 		private _box_btn_top: { [key: number]: Button } = {};
 		private _box_btn_bottom: { [key: number]: Button } = {};
 		private updatePos() {
+			if (this._viewUI.list_btns.dataSource)
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
+			this._viewUI.list_btns.width = this._clientWidth - 370;
+			this._viewUI.box_tabs.x = this._clientWidth;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
 				this._viewUI.box_btn_top.right = 25;
@@ -453,13 +430,14 @@ module gamedating.page {
 
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
+				case this._viewUI.btn_enterRoom: //加入房间
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM);
+					break;
 				case this._viewUI.btn_xiaoxi://消息
-					// this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM)
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
 					break;
 				case this._viewUI.btn_kefu://客服
-					// this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM)
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
 					break;
 				case this._viewUI.btn_gren://个人信息
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
@@ -545,6 +523,23 @@ module gamedating.page {
 				default:
 					break;
 			}
+		}
+
+		private onSelectTab(index) {
+			Laya.timer.clearAll(this);
+			this.clearTweens();
+			this.resetList();
+			if (index == DatingPageDef.TYPE_CARD) {
+				this._viewUI.btn_enterRoom.visible = true;
+				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
+				this._viewUI.btn_enterRoom.alpha = 0;
+				this.createTween(this._viewUI.btn_enterRoom, {scaleX: 1, scaleY: 1, alpha: 1}, 500, Laya.Ease.backInOut);
+			} else {
+				this.createTween(this._viewUI.btn_enterRoom, {scaleX: 0.2, scaleY: 0.2, alpha: 0}, 500, Laya.Ease.backInOut, ()=>{
+					this._viewUI.btn_enterRoom.visible = false;
+				});
+			}
+			this.onDealGameData(index);
 		}
 
 		//====================弹窗气泡相关=start======================================
@@ -675,60 +670,124 @@ module gamedating.page {
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
 
-		public openIndex: number = -1;
+		private onDealGameData(index: number = -1) {
+			if (!this._game.sceneObjectMgr.mainPlayer || !WebConfig.gamelist)
+				return;
+			if (index == -1) {
+				this._viewUI.tab.selectedIndex = 0;
+				return;
+			}
+			// 如果有值，说明该干活了
+			let listData = this._game.datingGame.hudTabScrollData;
+			if (listData) {
+				let value: number = listData.value;
+				let tabIndex: number = listData.tabIndex;
+				this._game.datingGame.clearHudTabScrollData();
+				this._viewUI.tab.selectedIndex = tabIndex;
+				Laya.timer.once(100, this, () => {
+					this._viewUI.list_btns.scrollBar.value = value;
+				})
+				if (tabIndex != index) {
+					return;
+				}				
+			}
+			let game_list: any[] = []
+			let webPower: number = 0;
+			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo();
+			// 先筛选有用信息
+			for (let i = 0; i < WebConfig.gamelist.length; i++) {
+				let dz_str: any = WebConfig.gamelist[i];
+				if (typeof dz_str === "number") continue;
+				if (!dz_str) continue;
+				let str: string = dz_str.replace("DZ_", "");
+				let str1 = str.replace("r_", "");
+				let times = enterGameInfo[str] ? enterGameInfo[str] : 0;
+				let type = -1;
+				if (str.indexOf("r_") == -1) 
+					type = DatingPageDef.GAME_TYPE_LIST[str1][0];
+				else 
+					type = DatingPageDef.GAME_CARD_TYPE_LIST[str1][0];
+				if (type > -1) {
+					//所有游戏 或 对应类型的游戏
+					if (index == 0 || index == type) { 
+						game_list.push([str.replace('r_', ''), type, webPower, times]);
+						webPower++;
+					}
+				}
+			}
+			if (!game_list.length) 
+				return;
+
+			// 后台 + 玩家操作习惯排序
+			game_list.sort(this.onSortList);
+
+			// 按类整理
+			let gl = [];
+			for (let index = 0; index < game_list.length; index++) {
+				let arr = game_list[index];
+				gl.push([arr[0], arr[1]]);
+			}
+
+			this.onUpdateGameList(gl);
+		}
+
+		/**
+	   * 初始化排序列表
+	   */
+		private onSortList(a, b): number {
+			let v1: number = 0;
+			let v2: number = 0;
+			let a_power: number = 10000 - a[2];
+			let b_power: number = 10000 - b[2];
+			let a_times: number = a[3];
+			let b_times: number = b[3];
+			v1 = a_power + (a_times > 5 ? a_times + 100000 : 0);
+			v2 = b_power + (b_times > 5 ? b_times + 100000 : 0);
+			return v2 - v1;
+		}
+
 		public isOpenPage: boolean;
 		private _listBarMax: number = 0;
-		private _listItemCount: number = 0;
 
-		private onUpdateGameList(index?: boolean) {
-			if (!index) return;
-			if (this.openIndex != -1) {
-				// 万一如果是数据更新呢，所以先关掉再说
-				this._viewUI.list_btns.cells.forEach(element => {
-					let cell = element as GameItemRender;
-					if (cell.dataSource && cell.dataSource[0] == this.openIndex) {
-						cell.doList();
-					}
-				});
-			}
-			let data: any = [];
-			for (var i = 0; i < DatingPageDef.GAME_SORT_LIST.length; i++) {
-				let element = DatingPageDef.GAME_SORT_LIST[i];
-				data[i] = [i, element];
-			}
-			this._listItemCount = i;
-			this._listBarMax = (1515 + 286 * this._listItemCount) - this._clientWidth;
-			this.openIndex = -1;
+		private onUpdateGameList(gameList) {
+			let data = gameList;
+			let listItemCount = Math.ceil(data.length / 2);
+			this._listBarMax = 245 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
-			Laya.timer.once(1, this, () => {
+			Laya.timer.frameOnce(1, this, () => {
+				let i = 0;
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
-			})
-			// 如果有值，说明该干活了
-			let listData = this._game.datingGame.hudTabScrollData;
-			if (!listData)
-				return;
-			let value: number = listData.value;
-			let tabIndex: number = listData.tabIndex;
-			let subValue: number = listData.subValue;
-			listData = null;
-			Laya.timer.once(20, this, () => {
-				if (tabIndex > -1) {
-					// 子项被打开了
-					this._viewUI.list_btns.cells.forEach(element => {
-						let cell = element as GameItemRender;
-						if (cell.dataSource && cell.dataSource[0] == tabIndex) {
-							cell.doList();
-							Laya.timer.once(1300, this, () => {
-								cell.list.scrollBar.value = subValue;
-							})
-						}
+				this._viewUI.list_btns.cells.forEach(element => {
+					let cell = element as GameItemRender;
+					cell.setAlpha = 0;
+					cell.x += 200;
+					let scale: number = Math.random() > 0.5 ? 1.1 : 0.9;
+					Laya.timer.once(100 * i, this, () => {
+						this.createTween(cell, { setAlpha: 1, x: cell.x - 200 }, 200);
+						this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');// 波浪
 					});
-				} else {
-					this._viewUI.list_btns.scrollBar.value = value;
-				}
+					i++;
+				});
+				Laya.timer.once(100 * i, this, ()=>{
+					this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
+				})
 			})
+			// 出现期间不让滑动
+			this._viewUI.list_btns.scrollBar.touchScrollEnable = false;
+		}
+
+		private resetList() {
+			if (this._viewUI.list_btns.dataSource) {
+				this._viewUI.list_btns.cells.forEach(element => {
+					let cell = element as GameItemRender;
+					cell.setAlpha = 1;
+					cell.scale(1, 1);
+				});
+			}
+			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 		}
 
 		deltaUpdate() {
@@ -737,23 +796,11 @@ module gamedating.page {
 					let cells = this._viewUI.list_btns.cells;
 					for (let index = 0; index < cells.length; index++) {
 						let element = cells[index] as GameItemRender;
-						element && element.update()
+						element && element.update();
 					}
 				}
-				// if (this._viewUI.list_btns.scrollBar.value == 0) {
-				// 	this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_1.png';
-				// } else if (this._viewUI.list_btns.scrollBar.value == this._viewUI.list_btns.scrollBar.max) {
-				// 	this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_2.png';
-				// } else {
-				// 	this._viewUI.img_mask.skin = DatingPath.ui_dating + 'dating/mask_0.png';
-				// }
 			}
 			this._isShowBtnEffect && this.updateBtnAnimationFrame();
-		}
-
-		private renderHandler(cell: GameItemRender, index: number) {
-			if (!cell) return;
-			cell.setData([this, this._game], cell.dataSource);
 		}
 
 		private _beforeArr = [];
@@ -795,343 +842,29 @@ module gamedating.page {
 			}
 		}
 
-		/**
-		 * 点击列表中大按钮，控制视图动效
-		 * @param index 
-		 * @param isOpen 
-		 */
-		public onClickBigBtn(index: number, isOpen: boolean, complateFun: Function): void {
-			let cells = this._viewUI.list_btns.cells;
-			if (isOpen) {
-				this._viewUI.list_btns.scrollBar.max = this._listBarMax + 1280;
-				this._viewUI.list_btns.scrollBar.touchScrollEnable = !isOpen;
-				this._viewUI.list_btns.tweenTo(index, 200, Handler.create(this, () => {
-					let myCell;
-					// 先找到自己
-					cells.forEach(element => {
-						let cell = element as GameItemRender;
-						if (cell.dataSource) {
-							let i = cell.dataSource[0];
-							if (i == index)
-								myCell = cell;
-						}
-					});
-					let b: boolean = false;
-					// 移開其他
-					cells.forEach(element => {
-						let cell = element as GameItemRender;
-						if (cell.dataSource) {
-							let i = cell.dataSource[0];
-							if (i > index) {
-								let offset_X: number = 0;
-								offset_X = 1560 - myCell.x;
-								offset_X = cell.x + offset_X;
-								this._beforeArr.push([i, cell.x]);	// 存下来，复位用
-								this.createTween(cell, { x: offset_X }, 500, Laya.Ease.circIn);
-								b = true;
-							}
-						}
-					});
-					complateFun();
-				}));
-			} else {
-				complateFun();
-				// 其他的回來
-				cells.forEach(element => {
-					let cell = element as GameItemRender;
-					if (cell.dataSource) {
-						let i = cell.dataSource[0];
-						for (let o = 0; o < this._beforeArr.length; o++) {
-							let c = this._beforeArr[o];
-							if (c[0] == i) {
-								this.createTween(cell, { x: c[1] }, 500, Laya.Ease.circOut);
-							}
-						}
-					}
-				});
-				this._beforeArr.length = 0;
-				// 復位
-				if (this._viewUI.list_btns.scrollBar.value > this._listBarMax) {
-					this.createTween(this._viewUI.list_btns.scrollBar, { value: this._listBarMax }, 500, null, () => {
-						this._viewUI.list_btns.scrollBar.max = this._listBarMax;
-						this._viewUI.list_btns.scrollBar.touchScrollEnable = !isOpen;
-					});
-				} else {
-					this._viewUI.list_btns.scrollBar.touchScrollEnable = !isOpen;
-					this._viewUI.list_btns.scrollBar.max = this._listBarMax;
-				}
-			}
-		}
-
 		saveListStatus() {
 			let listData = this._game.datingGame.createHudTabScrollData();
+			listData.tabIndex = this._viewUI.tab.selectedIndex;
 			listData.value = this._viewUI.list_btns.scrollBar.value;
-			listData.tabIndex = this.openIndex;
-			listData.subValue = 0;
-			if (this.openIndex != -1) {
-				this._viewUI.list_btns.cells.forEach(element => {
-					let cell = element as GameItemRender;
-					if (cell.dataSource && cell.dataSource[0] == this.openIndex) {
-						listData.subValue = cell.list.scrollBar.value;
-					}
-				});
-			}
-		}
-		//--------------------游戏入口按钮列表相关---end------------------------------
-
-	}
-
-	/**
-	 * 大厅入口 1 级list
-	 */
-	class GameItemRender extends ui.nqp.dating.component.HudBtn_TUI {
-		public datas;
-		private _game: Game;
-		private _page: HudMainPage;
-		private _data: string;
-		private _index: number;
-		private _isOpen: boolean;
-		private _tweens: Laya.Tween[];
-		private _effBTN: ui.nqp.dating.component.Effect_qipaiduizhanUI;
-
-		private pushTweens(t: Laya.Tween): void {
-			if (!this._tweens) this._tweens = [];
-			if (this._tweens.indexOf(t) == -1)
-				this._tweens.push(t);
 		}
 
-		private delTweens(t: Laya.Tween): void {
-			let tweens = this._tweens;
-			if (!tweens || !tweens.length)
-				return;
-			let idx = tweens.indexOf(t);
-			if (idx == -1)
-				return;
-			tweens.splice(idx, 1);
-		}
-
-		private createTween(target, props, duration, ease = null, cb = null, type = 'to'): void {
-			let complate;
-			let t = Laya.Tween[type](target, props, duration, ease, Handler.create(this, () => {
-				cb && cb();
-				complate();
-			}));
-			this.pushTweens(t);
-			complate = () => {
-				this.delTweens(t);
-			}
-		}
-
-		private clearTweens(): void {
-			if (!this._tweens) return;
-			for (var i = 0; i < this._tweens.length; i++) {
-				var t = this._tweens[i];
-				Laya.Tween.clear(t);
-			}
-			this._tweens.length = 0;
-			this._tweens = null;
-		}
-
-		constructor() {
-			super();
-		}
-
-		private _datastr: string;
-		setData(arr: any, data: any) {
-			if (!data) {
-				this.visible = false;
-				Laya.timer.clearAll(this);
-				this.clearTweens();
-				this.list.dataSource = [];
-				return;
-			}
-
-			if (data && data.toString() == this._datastr) return;
-			this._datastr = data.toString();
-			this.datas = data;
-			this._page = arr[0]
-			this._game = arr[1];
-			this._index = data[0];
-			this._data = data[1];
-			this._isOpen = false;
-			this.show();
-		}
-
-		destroy() {
-			this.btn.off(LEvent.CLICK, this, this.doList);
-			this.list.dataSource = [];
-			Laya.timer.clearAll(this);
-			this.clearTweens();
-			Laya.Tween.clearAll(this);
-			super.destroy();
-		}
-
-		update(): void {
-			if (!this._data) return;
-			if (this.list.dataSource) {
-				this.list.cells.forEach(element => {
-					let item = element as GameSubItemRender;
-					item && item.update();
-				});
-			}
-		}
-
-		private show(): void {
-			let b_btn = '';
-			switch (this._index) {
-				case DatingPageDef.TYPE_CHESS:
-					b_btn = 'qipaiduizhan';
-					break;
-				case DatingPageDef.TYPE_GAME:
-					b_btn = 'jj';
-					break;
-				case DatingPageDef.TYPE_BAIREN:
-					b_btn = 'bairen';
-					break;
-			}
-			this.img_back.skin = DatingPath.ui_dating + 'dating/tu_dtgg' + this._index + '.png';
-			this.img_back.visible = false;
-			this.box.scaleX = 1;
-			this.img.width = 622;
-
-			if (!this._effBTN) {
-				this._effBTN = new ui.nqp.dating.component.Effect_qipaiduizhanUI();
-			}
-			this.box_btn.addChild(this._effBTN);
-			this._effBTN[b_btn].visible = true;
-			this._effBTN['ani_' + b_btn].play(0, true);
-
-			this.btn.on(LEvent.CLICK, this, this.doList);
-			// 渲染子列表
-			this.list.hScrollBarSkin = "";
-			this.list.scrollBar.elasticDistance = 100;
-			this.list.itemRender = GameSubItemRender;
-			this.list.renderHandler = new Handler(this, this.renderHandler);
-			this.list.scrollTo(WebConfig.scrollBarValue || 0);
-			this.list.scrollBar.touchScrollEnable = false;
-			this.list.dataSource = this._data;
-		}
-
-		private renderHandler(cell: GameSubItemRender, index: number) {
+		private renderHandler(cell: GameItemRender, index: number) {
 			if (!cell) return;
-			cell.setData(this._page, this._game, cell.dataSource, this._index, index);
-			if (!this._isOpen && index > 3) {
-				cell.setAlpha = 0;
-				cell.mouseEnabled = false;
-			}
+			cell.setData(this, this._game, cell.dataSource[0], cell.dataSource[1], index);
 		}
 
-		private _isCanDo: boolean = true;
-		/**
-		 * 点击事件
-		 */
-		doList(e: LEvent = null): void {
-			if (!this._isCanDo)
-				return;
-			if (this._page.openIndex != -1 && !this._isOpen)
-				return;
-			this._isCanDo = false;
-			Laya.timer.once(1200, this, () => { this._isCanDo = true });
-			this._isOpen = !this._isOpen;
-			this._page.openIndex = this._isOpen ? this._index : -1;
-			// 关闭的时候，子列表不让移动
-			this.list.scrollBar.touchScrollEnable = this._isOpen;
-			if (this._isOpen) {
-				// 翻轉
-				this.createTween(this.box, { scaleX: -1 }, 200);
-				// 翻轉中途替換圖片
-				Laya.timer.once(100, this, () => {
-					this.img_back.visible = this._isOpen;
-					this.box_btn.visible = !this._isOpen;
-				});
-			}
-
-			this._page.onClickBigBtn(this._index, this._isOpen, () => {
-				// 控制子列表显示与隐藏
-				this.doSubList();
-				// 白色底图是否展开
-				if (this._isOpen) {
-					this.createTween(this.img, { width: 1540 }, 100);
-				} else {
-					this.createTween(this.img, { width: 648 }, 100);
-					// 翻轉
-					this.createTween(this.box, { scaleX: 1 }, 200);
-					// 翻轉中途替換圖片
-					Laya.timer.once(100, this, () => {
-						this.img_back.visible = this._isOpen;
-						this.box_btn.visible = !this._isOpen;
-					});
-				}
-			});
-		}
-
-		/**
-		 * 控制子列表显示与隐藏
-		 */
-		private doSubList(): void {
-			if (!this.list || !this.list.cells)
-				return;
-			let cells = this.list.cells;
-			if (!this._isOpen) {
-				this.list.tweenTo(0, 500);
-			}
-			let i = 0;
-			if (this._isOpen) {// 進場
-				this.list.cells.forEach(element => {
-					let cell = element as GameSubItemRender;
-					if (cell.thisIndex < 4) {
-						cell.setAlpha = 1;
-					} else {
-						cell.x += 200;
-						Laya.timer.once(100 * i, this, () => {
-							this.createTween(cell, { setAlpha: 1, x: cell.x - 200 }, 500);
-						});
-						i++;
-					}
-					cell.mouseEnabled = true;
-					// 波浪
-					let scale: number = Math.random() > 0.5 ? 1.05 : 0.95;
-					this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');
-				});
-			} else {// 離場
-				this.list.cells.forEach(element => {
-					let cell = element as GameSubItemRender;
-					if (cell.thisIndex < 4) {
-						cell.setAlpha = 1;
-						cell.mouseEnabled = true;
-					} else {
-						cell.mouseEnabled = false;
-						this.createTween(cell, { setAlpha: 0 }, 200);
-					}
-					// 不管有哪个cell看不见，这边先 波浪 了~
-					let scale: number = Math.random() > 0.5 ? 1.05 : 0.95;
-					this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');
-				});
-				// 虽然很恶心~~但是因为离场时的tween控制的cell，运动过程中，因为离开了画布，可能被回收并拿来填充其他数据了，不这么做会有可能某些视图看不见
-				Laya.timer.once(210, this, () => {
-					this.list.cells.forEach(element => {
-						let cell = element as GameSubItemRender;
-						if (cell.thisIndex < 4) {
-							cell.setAlpha = 1;
-							cell.mouseEnabled = true;
-						}
-						else
-							cell.mouseEnabled = false;
-					});
-				})
-			}
-		}
-	}
+		//--------------------游戏入口按钮列表相关---end------------------------------
+	}	
 
 	/**
 	 * 大厅入口 2 级list
 	 */
-	class GameSubItemRender extends ui.nqp.dating.component.HudOne_TUI {
-		public thisIndex: number;
+	class GameItemRender extends ui.nqp.dating.component.HudOne_TUI {
+		public index: number;
 		private _page: HudMainPage;
 		private _game: Game;
-		private _data: string;
-		private _index: number;
+		private _gameStr: string;
+		private _type: number;
 		private _avatar: AvatarUIShow;
 		private _updateEffect: AnimationFrame;
 		private _image: LImage;
@@ -1141,18 +874,18 @@ module gamedating.page {
 		constructor() {
 			super();
 		}
-		setData(page: HudMainPage, game: Game, data: any, index: number, thisIndex: number) {
-			if (!data) {
+		setData(page: HudMainPage, game: Game, gameStr: any, type: number, index: number) {
+			if (!gameStr) {
 				this.visible = false;
 				return;
 			}
-			if (data && data == this._data) return;
+			if (gameStr == this._gameStr) return;
 			this.visible = true;
 			this._page = page;
 			this._game = game;
-			this._data = data;
-			this._index = index;
-			this.thisIndex = thisIndex;
+			this._gameStr = gameStr;
+			this._type = type;
+			this.index = index;
 			this.show();
 		}
 
@@ -1175,16 +908,16 @@ module gamedating.page {
 		}
 
 		update(): void {
-			if (!this._data || !this.alpha) return;
+			if (!this._gameStr || !this.alpha) return;
 			if (this._avatar) {
 				this._avatar.onDraw();
 			}
 			if (this._updateEffect) {
 				this._updateEffect.onDraw();
 			}
-			if (!LoadingMgr.ins.isLoaded(this._data)) {
-				if (this.getProgress(this._data) > 0.001) {
-					this.showProgress(this.getProgress(this._data));
+			if (!LoadingMgr.ins.isLoaded(this._gameStr)) {
+				if (this.getProgress(this._gameStr) > 0.001) {
+					this.showProgress(this.getProgress(this._gameStr));
 					this.clearUpdate();
 				} else {
 					this.clearProgress();
@@ -1213,29 +946,44 @@ module gamedating.page {
 		}
 
 		private show(): void {
-			let offset_x: number = this.thisIndex % 2 == 0 ? 18 : 0;
+			let offset_x: number = this.index % 2 == 0 ? 18 : 0;
 			this.on(LEvent.CLICK, this, this.onMouseHandle);
-			if (this._data == 'zoo') {
+			if (this._gameStr == 'zoo') {
 				if (!this._image)
 					this._image = new LImage(DatingPath.ui_dating + 'dating/btn_fqzs.png');
+				else
+					this._image.visible = true;
 				this.btn.addChild(this._image);
-				this.btn.x = this.btn.width / 2 - 3 + offset_x;
-				this.btn.y = this.btn.height / 2 + 20;
+				this._image.anchorX = this._image.anchorY = 0.5;
+				this._image.x = this._image.width / 2 + 5 + offset_x;
+				this._image.y = this._image.height / 2 + 20;
+				if (this._avatar)
+					this._avatar.visible = false;
+				this.clearUpdate();
+				this.clearProgress();
+				this.clearWaiting();
 				return;
+			} else {
+				if (this._image) 
+					this._image.visible = false;
+				if (this._avatar)
+					this._avatar.visible = true;
 			}
 			if (!this._avatar) {
 				this._avatar = new AvatarUIShow();
 				this.btn.addChild(this._avatar);
 			}
-			let sk_url = DatingPath.sk_dating + "DZ_" + this._data;
+			let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
 			this._avatar.loadSkeleton(sk_url, this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			// 是否显示更新标签
-			if (!LoadingMgr.ins.isLoaded(this._data) && this.getProgress(this._data) <= 0.001)
+			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
 				this.showUpdate(offset_x);
+			else
+				this.clearUpdate();
 		}
 
 		private getProgress(gameid: string) {
-			return LoadingMgr.ins.getProgress(this._data) || JsLoader.ins.getProgress(this._data);
+			return LoadingMgr.ins.getProgress(this._gameStr) || JsLoader.ins.getProgress(this._gameStr);
 		}
 
 		// 显示等待状态
@@ -1244,7 +992,7 @@ module gamedating.page {
 				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
 				// this._waitingTip.ani1.play(1, true);
 			}
-			let offset_x: number = this.thisIndex % 2 == 0 ? 18 : 0;
+			let offset_x: number = this.index % 2 == 0 ? 18 : 0;
 			this._waitingTip.x = this.width - 55 + offset_x;
 			this.addChild(this._waitingTip);
 			this.clearUpdate();
@@ -1284,7 +1032,7 @@ module gamedating.page {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
 				this.addChild(this._loadingTip);
-				let offset_x: number = this.thisIndex % 2 == 0 ? 18 : 0;
+				let offset_x: number = this.index % 2 == 0 ? 18 : 0;
 				this._loadingTip.x = this.width - 53 + offset_x;
 			}
 			this._loadingTip.progress = value;
@@ -1299,14 +1047,14 @@ module gamedating.page {
 		}
 
 		private onMouseHandle(e: LEvent) {
-			if (!this._data) return;
-			if (this._data == 'zoo') {
-				this._game.uiRoot.btnTween(this, this, () => {
+			if (!this._gameStr) return;
+			if (this._gameStr == 'zoo') {
+				this._game.uiRoot.btnTween(this._image, this, () => {
 					this._game.showTips("功能开发中，敬请期待...");
 				})
 				return;
 			}
-			if (LoadingMgr.ins.isLoaded(this._data)) {
+			if (LoadingMgr.ins.isLoaded(this._gameStr)) {
 				if (this._page.isOpenPage) {
 					this._game.showTips("正在进游戏，请耐心等待...")
 					return;
@@ -1321,32 +1069,36 @@ module gamedating.page {
 				return;
 			}
 			this._game.uiRoot.btnTween(this._avatar, this, () => {
-				if (LoadingMgr.ins.isLoaded(this._data)) {
-					JsLoader.ins.startLoad(this._data, Handler.create(this, (assets) => {
+				if (LoadingMgr.ins.isLoaded(this._gameStr)) {
+					JsLoader.ins.startLoad(this._gameStr, Handler.create(this, (assets) => {
 						this.openPage();
 					}))
 				} else {
 					this.showWaiting();
-					JsLoader.ins.startLoad(this._data, Handler.create(this, (assets) => {
-						LoadingMgr.ins.load(this._data, assets);
+					JsLoader.ins.startLoad(this._gameStr, Handler.create(this, (assets) => {
+						LoadingMgr.ins.load(this._gameStr, assets);
 					}))
 				}
 			})
 		}
 
 		private openPage() {
-			let pageDef = getPageDef(this._data);
+			if (this._type == DatingPageDef.TYPE_CARD){
+				this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM);
+				return;
+			}
+			let pageDef = getPageDef(this._gameStr);
 			//調試模式
 			let CLOSE_LIST = isDebug ? [] : [];
 			if (pageDef["__enterMapLv"]) {
 				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
 				this._page.saveListStatus();
 			}
-			else if (CLOSE_LIST.indexOf(this._data) == -1) {
+			else if (CLOSE_LIST.indexOf(this._gameStr) == -1) {
 				this._page.saveListStatus();
-				this._game.uiRoot.HUD.open(this._data + 1, (page: Page) => {
-					page.dataSource = WebConfig.hudgametype = this._index;// 等于type
-					this._game.uiRoot.HUD.closeAll([this._data + 1]);
+				this._game.uiRoot.HUD.open(this._gameStr + 1, (page: Page) => {
+					page.dataSource = WebConfig.hudgametype = this._type;// 等于type
+					this._game.uiRoot.HUD.closeAll([this._gameStr + 1]);
 				}, (page: Page) => {
 					// 场次返回大厅回调
 					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
