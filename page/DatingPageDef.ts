@@ -271,26 +271,25 @@ module gamedating.page {
 		}
 
 		/**
+		 * 热门
+		 */
+		static TYPE_HOT: string | number = 0;
+		/**
 		 * 棋牌
 		 */
-		static TYPE_CHESS: string | number = 0;
+		static TYPE_CHESS: string | number = 1;
 		/**
 		 *	百人
 		 */
-		static TYPE_BAIREN: string | number = 1;
+		static TYPE_BAIREN: string | number = 2;
 		/**
 		 * 电玩
 		 */
-		static TYPE_GAME: string | number = 2;
+		static TYPE_GAME: string | number = 3;
 		/**
 		 * 房卡
 		 */
-		static TYPE_CARD: string | number = 3;
-
-		/**
-		 * 游戏筛选列表
-		 */
-		static GAME_SORT_LIST: any = [];
+		static TYPE_CARD: string | number = 4;
 
 		/**
 		 * 登录弹窗界面列表
@@ -341,23 +340,18 @@ module gamedating.page {
 		};
 
 		static GAME_CARD_TYPE_LIST = {
-			// "ddz": [DatingPageDef.TYPE_CARD],
-			// "majiang": [DatingPageDef.TYPE_CARD],
-			// "niuniu": [
-			// 	DatingPageDef.TYPE_CARD,
-			// ],
-			// "paodekuai": [
-			// 	DatingPageDef.TYPE_CARD,
-			// ],
-			// "shisanshui": [
-			// 	DatingPageDef.TYPE_CARD,
-			// ],
-			// "tbniuniu": [
-			// 	DatingPageDef.TYPE_CARD,
-			// ],
-			// "zjh": [
-			// 	DatingPageDef.TYPE_CARD,
-			// ],
+			"ddz": [
+				DatingPageDef.TYPE_CARD
+			],
+			"niuniu": [
+				DatingPageDef.TYPE_CARD,
+			],
+			"paodekuai": [
+				DatingPageDef.TYPE_CARD,
+			],
+			"shisanshui": [
+				DatingPageDef.TYPE_CARD,
+			],
 		}
 
 		static GAME_TYPE_LIST = {
@@ -385,9 +379,6 @@ module gamedating.page {
 			"ebgang": [
 				DatingPageDef.TYPE_CHESS,
 			],
-			// "elslp": [
-			// 	DatingPageDef.TYPE_GAME,
-			// ],
 			"honghei": [
 				DatingPageDef.TYPE_BAIREN,
 			],
@@ -403,9 +394,6 @@ module gamedating.page {
 			"sangong": [
 				DatingPageDef.TYPE_CHESS,
 			],
-			// "saolei": [
-			// 	DatingPageDef.TYPE_GAME,
-			// ],
 			"shuiguoji": [
 				DatingPageDef.TYPE_GAME,
 			],
