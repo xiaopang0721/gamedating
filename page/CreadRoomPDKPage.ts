@@ -31,7 +31,7 @@ module gamedating.page {
 
 		// 页面初始化函数
 		protected init(): void {
-			this._viewUI = this.createView("game_ui.paodekuai.FangKa_ChuangJianUI");
+			this._viewUI = this.createView("dating.ChuangJianUI");
 			this.addChild(this._viewUI);
 			this._game.cardRoomMgr.clear();
 			this.setCardConfig();
@@ -58,7 +58,7 @@ module gamedating.page {
 		private onClick(name: string, i: number, max_num: number) {
 			//显示下拉框
 			this._viewUI["tab_" + name].visible = !this._viewUI["tab_" + name].visible;
-			this._viewUI["btn_" + name].rptation = this._viewUI["tab_" + name].visible ? -180 : 0;
+			this._viewUI["btn_" + name].rotation = this._viewUI["tab_" + name].visible ? -180 : 0;
 		}
 
 		private onRoundClick(name: string, i: number, max_num: number, e: LEvent) {
@@ -137,16 +137,17 @@ module gamedating.page {
 			this._zhaDanA = this._viewUI.btn_4.selected == true ? 1 : 0;
 		}
 
-		private selectHandler(name: string, index: number): void {
+		private selectHandler(name: string, index: number,e:LEvent): void {
 			// switch()
 		}
 
 		private initEventListen(name, isOn): void {
 			if (isOn) {
 				this._viewUI["box_" + name].on(LEvent.CLICK, this, this.onClick, [name]);
-				this._viewUI["tab" + name].selectHandler = Handler.create(this, this.selectHandler, [name], false);
+				this._viewUI["tab_" + name].selectHandler = Handler.create(this, this.selectHandler, [name], false);
+				this._viewUI["tab_" + name].visible = false;
 			} else {
-				this._viewUI["box" + name].off(LEvent.CLICK, this, this.onClick);
+				this._viewUI["box_" + name].off(LEvent.CLICK, this, this.onClick);
 			}
 		}
 
@@ -205,10 +206,10 @@ module gamedating.page {
 		protected chkEnoughMoney() {
 			if (!this._game.sceneObjectMgr.mainPlayer) return false;
 			if (this._game.sceneObjectMgr.mainPlayer.playerInfo.money < parseInt(this._viewUI.txt_money.text)) {
-				TongyongPageDef.ins.alertRecharge(StringU.substitute("老板，您的金币不足开房间哦~\n补充点金币去大杀四方吧~"), () => {
+				this._game.alert(StringU.substitute("老板，您的金币不足开房间哦~\n补充点金币去大杀四方吧~"), () => {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 				}, () => {
-				}, false, PathGameTongyong.ui_tongyong_general + "btn_cz.png");
+				}, false, Tips.TIPS_SKIN_STR["cz"]);
 				return false;
 			}
 			return true;
@@ -269,15 +270,15 @@ module gamedating.page {
 			if (msg.type == Operation_Fields.OPRATE_CARDROOM)
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_CARDROOM_NOT_CARD_ID:
-						TongyongPageDef.ins.alertRecharge(StringU.substitute("创建房间失败,没有多余的房间可用,请确认!"), () => {
+						this._game.alert(StringU.substitute("创建房间失败,没有多余的房间可用,请确认!"), () => {
 						}, () => {
-						}, true, PathGameTongyong.ui_tongyong_general + "btn_qd.png");
+						}, true, Tips.TIPS_SKIN_STR["qd"]);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_CREATE_ROOM_NOT_MONEY:
-						TongyongPageDef.ins.alertRecharge(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
+						this._game.alert(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
 							this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 						}, () => {
-						}, false, PathGameTongyong.ui_tongyong_general + "btn_cz.png");
+						}, false, Tips.TIPS_SKIN_STR["cz"]);
 						break;
 					default:
 						break;
@@ -341,9 +342,9 @@ module gamedating.page {
 		}
 
 		private onMapOutSuccess() {
-			TongyongPageDef.ins.alertRecharge("房间已解散!", () => {
+			this._game.alert("房间已解散!", () => {
 			}, () => {
-			}, true, PathGameTongyong.ui_tongyong_general + "btn_cz.png");
+			}, true, Tips.TIPS_SKIN_STR["cz"]);
 		}
 
 		public close(): void {
