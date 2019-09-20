@@ -79,6 +79,16 @@ module gamedating.page {
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
+
+			this._viewUI.list_ad.hScrollBarSkin = '';
+			this._viewUI.list_ad.itemRender = AdItemRender;
+			this._viewUI.list_ad.renderHandler = new Handler(this, this.adRenderHandler);
+			this._viewUI.list_ad.scrollBar.rollRatio = 0;
+			this._viewUI.list_ad.on(LEvent.MOUSE_DOWN, this, this.onAdMouseHandler);
+			this._viewUI.list_ad.on(LEvent.MOUSE_MOVE, this, this.onAdMouseHandler);
+			this._viewUI.list_ad.on(LEvent.MOUSE_UP, this, this.onAdMouseHandler);
+			this._viewUI.on(LEvent.MOUSE_UP, this, this.onViewMouseHandler);
+			this._viewUI.on(LEvent.MOUSE_OUT, this, this.onViewMouseHandler);
 			// 标签按钮
 			this._viewUI.tab.selectHandler = new Handler(this, this.onSelectTab);
 			this._viewUI.tab.selectedIndex = 0;
@@ -112,6 +122,7 @@ module gamedating.page {
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onDealGameData);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 
 			this.onUpdatePlayerInfo(true);
 			this._game.playMusic(Path.music_bg);
@@ -276,9 +287,15 @@ module gamedating.page {
 				this.clearTweens();
 				this._viewUI.list_btns.dataSource = [];
 				this._viewUI.tab.selectHandler.clear();
+				this._viewUI.list_ad.off(LEvent.MOUSE_DOWN, this, this.onAdMouseHandler);
+				this._viewUI.list_ad.off(LEvent.MOUSE_MOVE, this, this.onAdMouseHandler);
+				this._viewUI.list_ad.off(LEvent.MOUSE_UP, this, this.onAdMouseHandler);
+				this._viewUI.off(LEvent.MOUSE_UP, this, this.onViewMouseHandler);
+				this._viewUI.off(LEvent.MOUSE_OUT, this, this.onViewMouseHandler);
 				this._game.qifuMgr.off(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onDealGameData);
+				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 				if (this._clip_money) {
 					this._clip_money.removeSelf();
 					this._clip_money.destroy();
@@ -351,9 +368,15 @@ module gamedating.page {
 				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
 			}
 
-			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
+			if (first)
+				this.onFreeStyle();
 
 			this.updatePos();
+		}
+
+		private onFreeStyle() {
+			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
+			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 		}
 
 		protected layout(): void {
@@ -367,7 +390,7 @@ module gamedating.page {
 
 		private _box_btn_top: { [key: number]: Button } = {};
 		private _box_btn_bottom: { [key: number]: Button } = {};
-		private updatePos() {
+		updatePos() {
 			if (this._viewUI.list_btns.dataSource)
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 			this._viewUI.list_btns.width = this._clientWidth - 370;
@@ -793,6 +816,71 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 		}
 
+		private get adListMax():number {
+			return this._adPerWidth * (this._viewUI.list_ad.dataSource.length - 1);
+		}
+
+		private onViewMouseHandler(e) {
+			if (this._isPlayAd)
+				return;
+			let v = this._viewUI.list_ad.scrollBar.value;
+			this._isPlayAd = true;
+			this._adPlayDelta = 0;
+			this._curAdIndex = Math.round(v / this._adPerWidth);
+			this.playNext();
+		}
+
+		private onAdMouseHandler(e) {
+			let v = this._viewUI.list_ad.scrollBar.value;
+			switch (e.type) {
+				case LEvent.MOUSE_DOWN:
+					this._isPlayAd = false;
+					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
+					break;
+				case LEvent.MOUSE_MOVE:
+					if (v == 0) {
+						this._viewUI.list_ad.scrollBar.value = this.adListMax;
+					} else if (v == this.adListMax) {
+						this._viewUI.list_ad.scrollBar.value = 0;
+					}
+					break;
+				case LEvent.MOUSE_UP:
+					
+					break;
+			}
+		}
+
+		// 播下一个广告图
+		private playNext() {
+			Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
+			Laya.Tween.to(this._viewUI.list_ad.scrollBar, {value: this._adPerWidth * this._curAdIndex}, 200, null, Handler.create(this, ()=>{
+				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
+					this._curAdIndex = 0;
+					this._viewUI.list_ad.scrollTo(this._curAdIndex);
+				}
+			}));
+		}
+		private _isPlayAd:boolean = true;
+		private _adPlayNextTime:number = 5000;
+		private _adPlayDelta:number = 0;
+		private _curAdIndex:number = 0;
+		private _adPerWidth:number = 241;// 一个广告图的宽度
+		update(diff: number) {
+			super.update(diff);
+			// 轮播广告图
+			if (!this._isPlayAd)
+				return;
+			if (this._adPlayDelta >= this._adPlayNextTime) {
+				this._adPlayDelta = 0;
+				if (this._viewUI && this._viewUI.list_ad.dataSource){
+					this._curAdIndex ++;					
+					this.playNext();
+				}
+				return;
+			}
+			this._adPlayDelta += diff;
+		}
+
 		deltaUpdate() {
 			if (this._viewUI.list_btns) {
 				if (this._viewUI.list_btns.dataSource) {
@@ -855,6 +943,11 @@ module gamedating.page {
 			if (!cell) return;
 			cell.setData(this, this._game, cell.dataSource[0], cell.dataSource[1], index);
 		}
+
+		private adRenderHandler(cell: AdItemRender, index: number) {
+			if (!cell) return;
+			cell.setData(this, this._game, cell.dataSource, index);
+		}		
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
 	}
@@ -1113,6 +1206,73 @@ module gamedating.page {
 			} else {
 				this._game.showTips("开发中,敬请期待!");
 			}
+		}
+	}
+
+	class AdItemRender extends ui.nqp.dating.component.HudAd_TUI {
+		public index:number;
+		private _data;
+		private _page:HudMainPage;
+		private _game:Game;
+
+		setData(page: HudMainPage, game: Game, data, index: number) {
+			if (!data) {
+				this.visible = false;
+				return;
+			}
+			if (this._data == data) return;
+			this.visible = true;
+			this._page = page;
+			this._game = game;
+			this.index = index;
+			this._data = data;
+			this.show();
+		}
+
+		destroy() {			
+			super.destroy();
+		}
+
+		private _pageID = "";
+		private show() {
+			let order:number = 1;
+			switch (this._data) {
+				case 'daili':
+					order = 1;
+					this._pageID = DatingPageDef.PAGE_QUANMINDAILI;
+					break;
+				case 'fenxiang':
+					order = 2;
+					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
+					break;
+				case 'guanwang':
+					order = 3;					
+					break;
+				case 'vip':
+					order = 4;
+					this._pageID = DatingPageDef.PAGE_VIP;
+					break;
+				case 'yuebao':
+					order = 5;
+					this._pageID = DatingPageDef.PAGE_YUEBAO;
+					break;
+				case 'zhuanpan':
+					order = 6;
+					this._pageID = DatingPageDef.PAGE_ZHUANPAN;
+					break;
+			}
+			this.img_ad.skin = DatingPath.ui_dating + 'dating/tu_dl' + order + '.png';
+			this.on(LEvent.CLICK, this, this.onClick);
+		}
+
+		private onClick(e) {
+			if (this._data == 'guanwang') {
+				//显示气泡框
+				this._page.updatePos();
+				this._page.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
+				return;
+			}
+			this._game.uiRoot.general.open(this._pageID);
 		}
 	}
 
