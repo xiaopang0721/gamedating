@@ -817,7 +817,7 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 		}
 
-		private get adListMax():number {
+		private get adListMax(): number {
 			return this._adPerWidth * (this._viewUI.list_ad.dataSource.length - 1);
 		}
 
@@ -846,7 +846,7 @@ module gamedating.page {
 					}
 					break;
 				case LEvent.MOUSE_UP:
-					
+
 					break;
 			}
 		}
@@ -854,18 +854,18 @@ module gamedating.page {
 		// 播下一个广告图
 		private playNext() {
 			Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
-			Laya.Tween.to(this._viewUI.list_ad.scrollBar, {value: this._adPerWidth * this._curAdIndex}, 200, null, Handler.create(this, ()=>{
+			Laya.Tween.to(this._viewUI.list_ad.scrollBar, { value: this._adPerWidth * this._curAdIndex }, 200, null, Handler.create(this, () => {
 				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
 					this._viewUI.list_ad.scrollTo(this._curAdIndex);
 				}
 			}));
 		}
-		private _isPlayAd:boolean = true;
-		private _adPlayNextTime:number = 5000;
-		private _adPlayDelta:number = 0;
-		private _curAdIndex:number = 0;
-		private _adPerWidth:number = 241;// 一个广告图的宽度
+		private _isPlayAd: boolean = true;
+		private _adPlayNextTime: number = 5000;
+		private _adPlayDelta: number = 0;
+		private _curAdIndex: number = 0;
+		private _adPerWidth: number = 241;// 一个广告图的宽度
 		update(diff: number) {
 			super.update(diff);
 			// 轮播广告图
@@ -873,8 +873,8 @@ module gamedating.page {
 				return;
 			if (this._adPlayDelta >= this._adPlayNextTime) {
 				this._adPlayDelta = 0;
-				if (this._viewUI && this._viewUI.list_ad.dataSource){
-					this._curAdIndex ++;					
+				if (this._viewUI && this._viewUI.list_ad.dataSource) {
+					this._curAdIndex++;
 					this.playNext();
 				}
 				return;
@@ -948,7 +948,7 @@ module gamedating.page {
 		private adRenderHandler(cell: AdItemRender, index: number) {
 			if (!cell) return;
 			cell.setData(this, this._game, cell.dataSource, index);
-		}		
+		}
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
 	}
@@ -1187,7 +1187,11 @@ module gamedating.page {
 
 		private openPage() {
 			if (this._type == DatingPageDef.TYPE_CARD) {
-				this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM);
+				if (this._gameStr == "paodekuai") {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM);
+				}else{
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM);
+				}
 				return;
 			}
 			let pageDef = getPageDef(this._gameStr);
@@ -1217,10 +1221,10 @@ module gamedating.page {
 	}
 
 	class AdItemRender extends ui.nqp.dating.component.HudAd_TUI {
-		public index:number;
+		public index: number;
 		private _data;
-		private _page:HudMainPage;
-		private _game:Game;
+		private _page: HudMainPage;
+		private _game: Game;
 
 		setData(page: HudMainPage, game: Game, data, index: number) {
 			if (!data) {
@@ -1236,13 +1240,13 @@ module gamedating.page {
 			this.show();
 		}
 
-		destroy() {			
+		destroy() {
 			super.destroy();
 		}
 
 		private _pageID = "";
 		private show() {
-			let order:number = 1;
+			let order: number = 1;
 			switch (this._data) {
 				case 'daili':
 					order = 1;
@@ -1253,7 +1257,7 @@ module gamedating.page {
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
 					break;
 				case 'guanwang':
-					order = 3;					
+					order = 3;
 					break;
 				case 'vip':
 					order = 4;
