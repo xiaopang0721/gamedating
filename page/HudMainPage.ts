@@ -282,10 +282,11 @@ module gamedating.page {
 		//========================按钮特效 end================
 		public close(): void {
 			if (this._viewUI) {
+				this._viewUI.list_btns.renderHandler.recover();
+				this._viewUI.list_btns.renderHandler = null;
 				this._game.stopMusic()
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
-				this._viewUI.list_btns.dataSource = [];
 				this._viewUI.tab.selectHandler.clear();
 				this._viewUI.list_ad.off(LEvent.MOUSE_DOWN, this, this.onAdMouseHandler);
 				this._viewUI.list_ad.off(LEvent.MOUSE_MOVE, this, this.onAdMouseHandler);
@@ -987,7 +988,7 @@ module gamedating.page {
 
 		destroy() {
 			if (this._avatar) {
-				this._avatar.clear(true);
+				this._avatar.clear();
 				this._avatar.destroy();
 				this._avatar = null;
 			}
@@ -1006,6 +1007,11 @@ module gamedating.page {
 		update(): void {
 			if (!this._gameStr || !this.alpha) return;
 			if (this._avatar) {
+				if (this._game.uiRoot.general.numChildren) {
+					this._avatar.paused();
+				} else {
+					this._avatar.resume();
+				}
 				this._avatar.onDraw();
 			}
 			if (this._updateEffect) {
@@ -1027,6 +1033,7 @@ module gamedating.page {
 
 		set setAlpha(v: number) {
 			this.alpha = v;
+			this.visible = v != 0;
 			if (this._avatar) {
 				this._avatar.visible = v != 0;
 			}

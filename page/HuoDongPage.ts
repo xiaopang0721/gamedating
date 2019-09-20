@@ -32,6 +32,7 @@ module gamedating.page {
 
 			this._viewUI.myhd0.vScrollBarSkin = "";
 			this._viewUI.myhd1.vScrollBarSkin = "";
+			this._viewUI.myhd2.vScrollBarSkin = "";
 			this._viewUI.txt.text = "";
 			this._viewUI.txt_myhd.text = "";
 
@@ -65,14 +66,27 @@ module gamedating.page {
 			if (!this._viewUI.list_tab.dataSource || !this._viewUI.list_tab.dataSource.length) return;
 			let selectedItem = this._viewUI.list_tab.dataSource[selectedIndex];
 			if (selectedItem) {
-				this._viewUI.myhd0.visible = !selectedItem.img_url;
-				this._viewUI.myhd1.visible = !this._viewUI.myhd0.visible;
+				this._viewUI.myhd0.visible = false;
+				this._viewUI.myhd1.visible = false;
+				this._viewUI.myhd2.visible = false;
 				if (selectedItem.img_url) {
-					this._viewUI.img_myhd.skin = selectedItem.img_url;
-					this._viewUI.txt_myhd.text = selectedItem.content;
-					this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
-					this._viewUI.myhd1.height = selectedItem.topopup > 1 ? 425 : 510;
+					if (selectedItem.pro_type == 1) {
+						//图文
+						this._viewUI.myhd1.visible = true;
+						this._viewUI.img_myhd.skin = selectedItem.img_url;
+						this._viewUI.txt_myhd.text = selectedItem.content;
+						this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
+						this._viewUI.myhd1.height = selectedItem.topopup > 1 ? 425 : 510;
+					} else {
+						//纯大图
+						this._viewUI.myhd2.visible = true;
+						this._viewUI.img_myhd1.skin = selectedItem.img_url;
+						this._viewUI.img_myhd1.height = selectedItem.topopup > 1 ? 425 : 510;
+						this._viewUI.myhd2.height = selectedItem.topopup > 1 ? 425 : 510;
+					}
 				} else {
+					//纯文本
+					this._viewUI.myhd0.visible = true;
 					this._viewUI.txt.text = selectedItem.content;
 					this._viewUI.txt.height = this._viewUI.txt.textField.textHeight;
 					this._viewUI.myhd0.height = selectedItem.topopup > 1 ? 425 : 510;

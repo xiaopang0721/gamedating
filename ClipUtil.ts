@@ -146,8 +146,8 @@ module gamedating {
             this.DATING_VIP_FONT = {
                 source: DatingPath.atlas_dating_ui + "dating.atlas",
                 url: DatingPath.ui_dating + 'dating/clip_vip.png',
-                clipWidth: 19,
-                clipHeight: 27,
+                clipWidth: 39,
+                clipHeight: 41,
                 clipX: 10,
                 space: 0,
             };

@@ -92,6 +92,7 @@ module gamedating.page {
 			}
 		}
 
+		private _id: number = 0;
 		private yhSelectHandler() {
 			if (!this._viewUI.list_yh.dataSource) return;
 			let data = this._viewUI.list_yh.dataSource[this._viewUI.list_yh.selectedIndex];
@@ -99,9 +100,16 @@ module gamedating.page {
 			this._viewUI.txt_yh1.text = data.remitname;
 			this._viewUI.txt_yh2.text = data.remitnum;
 			this._viewUI.txt_yh3.text = data.remitaddr;
-			this._viewUI.txt_yh4.text = data.min_limit > 0 ? StringU.substitute("银行卡最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
 			this._viewUI.ingput_yh0.text = "";
 			this._viewUI.ingput_yh1.text = "";
+			this._id = data.id;
+			if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK) {
+				this._viewUI.txt_yh4.text = data.min_limit > 0 ? StringU.substitute("银行卡转账最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
+			} else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK) {
+				this._viewUI.txt_yh4.text = data.min_limit > 0 ? StringU.substitute("微信转银行最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
+			} else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK) {
+				this._viewUI.txt_yh4.text = data.min_limit > 0 ? StringU.substitute("支付宝转银行最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
+			}
 		}
 
 		private smSelectHandler() {
@@ -122,7 +130,7 @@ module gamedating.page {
 				this._viewUI.img_wx_ewm.skin = data.wx_ewm_url;
 				this._viewUI.txt_sm4.text = data.min_limit > 0 ? StringU.substitute("微信最低{0}元起充，低于{1}元充值不受理", data.min_limit, data.min_limit) : '';
 			}
-
+			this._id = data.id;
 			this._viewUI.txt_sm2.text = "";
 			this._viewUI.txt_sm3.text = "";
 		}
@@ -177,7 +185,7 @@ module gamedating.page {
 						return;
 					}
 					let smDataStr: string = this._viewUI.txt_sm1.text + "," + this._viewUI.txt_sm3.text;
-					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.txt_sm2.text) * 100, this._data.type, smDataStr);
+					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.txt_sm2.text) * 100, this._data.type, smDataStr, this._id);
 					break;
 				case this._viewUI.btn_yh_tjcz://银行卡提交充值
 					if (!this._viewUI.ingput_yh0.text) {
@@ -199,7 +207,7 @@ module gamedating.page {
 						return;
 					}
 					let yhDataStr: string = this._viewUI.txt_yh2.text + "," + this._viewUI.ingput_yh1.text;
-					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr)
+					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr, this._id)
 					break;
 				case this._viewUI.btn_pay://支付
 					if (!this._qudao) {
@@ -322,13 +330,14 @@ module gamedating.page {
 		private onUpdatePlayerInfo() {
 			if (!WebConfig.info) return;
 			for (let i = 0; i < this._paychannel.length; i++) {
-				if (this._paychannel[i].type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK) {
+				let rechargeType = this._paychannel[i].type;
+				if (rechargeType == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK || rechargeType == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK || rechargeType == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK) {
 					this._paychannel[i].rate = this._bankRate;
-				} else if (this._paychannel[i].type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBHK) {
+				} else if (rechargeType == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBHK) {
 					this._paychannel[i].rate = this._alipayRate;
-				} else if (this._paychannel[i].type == Web_operation_fields.GAME_PAYIMG_TYPE_WXHK) {
+				} else if (rechargeType == Web_operation_fields.GAME_PAYIMG_TYPE_WXHK) {
 					this._paychannel[i].rate = this._wxRate;
-				} else if (this._paychannel[i].type == Web_operation_fields.GAME_PAYIMG_TYPE_YSFSM) {
+				} else if (rechargeType == Web_operation_fields.GAME_PAYIMG_TYPE_YSFSM) {
 					this._paychannel[i].rate = this._ysfRate;
 				}
 			}
@@ -355,7 +364,7 @@ module gamedating.page {
 			}
 			this._viewUI.txt_input.text = "";
 			this._viewUI.box_kj.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_FAST;
-			this._viewUI.box_yh.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK;
+			this._viewUI.box_yh.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK;
 			this._viewUI.box_sm.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_YSFSM;
 			this._viewUI.box_zhuanzhang.visible = !this._viewUI.box_yh.visible && !this._viewUI.box_sm.visible && !this._viewUI.box_kj.visible;
 			if (data.name == "充值记录") {
@@ -366,7 +375,7 @@ module gamedating.page {
 
 				this.onUpdateDataInfo();
 			} else {
-				if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK) {
+				if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK) {
 					this._viewUI.box_yh_fk.visible = false;
 					this._viewUI.box_yh_sk.visible = true;
 					this._viewUI.list_yh.visible = true;
@@ -377,9 +386,15 @@ module gamedating.page {
 					this._viewUI.txt_yh1.text = this._viewUI.list_yh.dataSource[0].remitname;
 					this._viewUI.txt_yh2.text = this._viewUI.list_yh.dataSource[0].remitnum;
 					this._viewUI.txt_yh3.text = this._viewUI.list_yh.dataSource[0].remitaddr;
-					this._viewUI.txt_yh4.text = this._viewUI.list_yh.dataSource[0].min_limit > 0 ? StringU.substitute("银行卡最低{0}元起充，低于{1}元充值不受理", this._viewUI.list_yh.dataSource[0].min_limit, this._viewUI.list_yh.dataSource[0].min_limit) : '';
 					this._viewUI.ingput_yh0.text = "";
 					this._viewUI.ingput_yh1.text = "";
+					if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK) {
+						this._viewUI.txt_yh4.text = this._viewUI.list_yh.dataSource[0].min_limit > 0 ? StringU.substitute("银行卡转账最低{0}元起充，低于{1}元充值不受理", this._viewUI.list_yh.dataSource[0].min_limit, this._viewUI.list_yh.dataSource[0].min_limit) : '';
+					} else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK) {
+						this._viewUI.txt_yh4.text = this._viewUI.list_yh.dataSource[0].min_limit > 0 ? StringU.substitute("微信转银行最低{0}元起充，低于{1}元充值不受理", this._viewUI.list_yh.dataSource[0].min_limit, this._viewUI.list_yh.dataSource[0].min_limit) : '';
+					} else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK) {
+						this._viewUI.txt_yh4.text = this._viewUI.list_yh.dataSource[0].min_limit > 0 ? StringU.substitute("支付宝转银行最低{0}元起充，低于{1}元充值不受理", this._viewUI.list_yh.dataSource[0].min_limit, this._viewUI.list_yh.dataSource[0].min_limit) : '';
+					}
 				}
 				else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBHK) {
 					this._viewUI.box_smfk.visible = false;
@@ -522,7 +537,7 @@ module gamedating.page {
 		private _game: Game;
 		private _data: any;
 		private _posY: number;
-		private _chongzhitype = ["btn_zfb", "btn_zfb", "btn_wx3", "btn_wx2", "btn_qq", "btn_qq", "btn_jd", "btn_yl", "btn_vip", "btn_yhk", "btn_zfbcz", "btn_wx2", "btn_kj", "btn_ysf2", "btn_ysf"];
+		private _chongzhitype = ["btn_zfb", "btn_zfb", "btn_wx3", "btn_wx2", "btn_qq", "btn_qq", "btn_jd", "btn_yl", "btn_vip", "btn_yhk", "btn_zfbcz", "btn_wx2", "btn_kj", "btn_ysf2", "btn_ysf", "btn_wxzyh", "btn_zfbzyh"];
 		/**
 		 * 
 		 * @param game 
