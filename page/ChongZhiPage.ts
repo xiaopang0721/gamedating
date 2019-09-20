@@ -395,7 +395,7 @@ module gamedating.page {
 						this._viewUI.txt_sm4.text = data.list[0].min_limit > 0 ? StringU.substitute("支付宝最低{0}元起充，低于{1}元充值不受理", data.list[0].min_limit, data.list[0].min_limit) : '';
 					}
 					this._viewUI.btn_open_wx.visible = false;
-					this._viewUI.img_sm_zh.skin = DatingPath.ui_dating + "chongzhi/tu_zfbzh.png";
+					this._viewUI.txt_sm_zh.text = "支付宝账号:";
 				}
 				else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXHK) {
 					this._viewUI.box_smfk.visible = false;
@@ -411,7 +411,7 @@ module gamedating.page {
 						this._viewUI.txt_sm4.text = data.list[0].min_limit > 0 ? StringU.substitute("微信最低{0}元起充，低于{1}元充值不受理", data.list[0].min_limit, data.list[0].min_limit) : '';
 					}
 					this._viewUI.btn_open_wx.visible = true;
-					this._viewUI.img_sm_zh.skin = DatingPath.ui_dating + "chongzhi/tu_wxzh.png";
+					this._viewUI.txt_sm_zh.text = "微信账号:";
 				}
 				else if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_YSFSM) {
 					this._viewUI.box_smfk.visible = false;
@@ -427,7 +427,7 @@ module gamedating.page {
 						this._viewUI.txt_sm4.text = data.list[0].min_limit > 0 ? StringU.substitute("云闪付最低{0}元起充，低于{1}元充值不受理", data.list[0].min_limit, data.list[0].min_limit) : '';
 					}
 					this._viewUI.btn_open_wx.visible = false;
-					this._viewUI.img_sm_zh.skin = DatingPath.ui_dating + "chongzhi/tu_ysfzh.png";
+					this._viewUI.txt_sm_zh.text = "云闪付账号:";
 				} else {
 					let isVip: boolean = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_VIP;
 					this._viewUI.box_vip.visible = isVip;
@@ -596,7 +596,7 @@ module gamedating.page {
 			}
 			this.txt_money.text = data.money;
 			this.txt_type.text = data.recharge_type;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0)
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0)
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
