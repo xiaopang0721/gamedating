@@ -1188,9 +1188,13 @@ module gamedating.page {
 		private openPage() {
 			if (this._type == DatingPageDef.TYPE_CARD) {
 				if (this._gameStr == "paodekuai") {
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM,(page:CreateCardRoomBase)=>{
+						page.game_id = this._gameStr;
+					});
 				}else{
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM,(page:CreateCardRoomBase)=>{
+						page.game_id = this._gameStr;
+					});
 				}
 				return;
 			}
