@@ -185,7 +185,7 @@ module gamedating.page {
 						return;
 					}
 					let smDataStr: string = this._viewUI.txt_sm1.text + "," + this._viewUI.txt_sm3.text;
-					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.txt_sm2.text) * 100, this._data.type, smDataStr, this._id);
+					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.txt_sm2.text) * 100, this._data.type, smDataStr);
 					break;
 				case this._viewUI.btn_yh_tjcz://银行卡提交充值
 					if (!this._viewUI.ingput_yh0.text) {
@@ -207,7 +207,7 @@ module gamedating.page {
 						return;
 					}
 					let yhDataStr: string = this._viewUI.txt_yh2.text + "," + this._viewUI.ingput_yh1.text;
-					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr, this._id)
+					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr)
 					break;
 				case this._viewUI.btn_pay://支付
 					if (!this._qudao) {
