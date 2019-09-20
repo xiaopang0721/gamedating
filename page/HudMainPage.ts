@@ -322,7 +322,7 @@ module gamedating.page {
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
-			this._viewUI.txt_id.text = getNameSlice(playerInfo.nickname);
+			this._viewUI.txt_id.text = playerInfo.nickname;
 			if (first)
 				this.onUpdateGameList(true);
 			if (!this._clip_money) {
