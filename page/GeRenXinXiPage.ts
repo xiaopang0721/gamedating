@@ -110,7 +110,7 @@ module gamedating.page {
 		}
 
 		//上面信息
-		// private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
+		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
 		private onUpdatePlayerInfo() {
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
@@ -118,9 +118,9 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._viewUI.img_head.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
-			// if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sceneGame.sync.serverTimeBys) {
-			// 	this._viewUI.img_head.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
-			// }
+			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sceneGame.sync.serverTimeBys) {
+				this._viewUI.img_head.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+			}
 
 			this._viewUI.lb_vip.text = StringU.substitute("vip {0}", playerInfo.vip_level);
 			this._viewUI.txt_id.text = playerInfo.userid;
@@ -142,10 +142,6 @@ module gamedating.page {
 				this._viewUI.txt_phone.text = "未绑定手机号";
 				this._viewUI.btn_bind_phone.visible = true;
 			}
-			// this._viewUI.img_txk.visible = playerInfo.vip_level > 0;
-			// if (playerInfo.vip_level > 0) {
-			// 	this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_v" + playerInfo.vip_level + ".png";
-			// }
 
 			this.updatePos();
 		}

@@ -8,7 +8,7 @@ module gamedating.page {
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数
 		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
-		private _cardsInfo = ["去掉大小王、3个2、1个A", "去掉大小王、3个2、3个A、 1个K", "去掉大小王", "去掉大小王、3个2、1个A"];
+		private _cardsInfo = ["无大小王（3个2）1个A", "无大小王（3个2）3个A、 1个K", "无大小王", "无大小王（3个2）1个A"];
 		private _shunTemp = [5, 6];		//顺子几张起
 		private _playerCount: number = 0;	//人数
 		private _cardCount: number = 0;		//牌数
@@ -38,9 +38,6 @@ module gamedating.page {
 			this._game.cardRoomMgr.RoomRound = this._round_count[0];
 			this._game.cardRoomMgr.PayType = 1;
 			this._game.cardRoomMgr.RoomType = 1;
-			// for (let i = 0; i < this._round_count.length; i++) {
-			// 	this._viewUI["txt_round" + i].text = this._round_count[i] + "局";
-			// }
 		}
 
 		private setCardConfig() {
@@ -55,78 +52,74 @@ module gamedating.page {
 			}
 		}
 
-		private onClick(name: string, i: number, max_num: number) {
+		private onClick(name: string) {
+			this.hideAllTab(name);
 			//显示下拉框
 			this._viewUI["tab_" + name].visible = !this._viewUI["tab_" + name].visible;
 			this._viewUI["btn_" + name].rotation = this._viewUI["tab_" + name].visible ? -180 : 0;
 		}
 
-		private onRoundClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onClick(name, i, max_num);
+		private onRoundClick(i: number, name: string) {
 			this._game.cardRoomMgr.RoomRound = this._round_count[i];
 			this._viewUI.txt_money.text = this._pay_money[i].toString();
+			this._viewUI.lb_jushu.text = this._game.cardRoomMgr.RoomRound + "局";
+			this.onClick(name);
 		}
 
-		private onPlayerClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onClick(name, i, max_num);
+		private onPlayerClick(i: number, name: string) {
 			this._playerCount = this._playersTemp[i];
 			//3人只有15和16张，4人只有12和13张
-			// if (this._playerCount == 3) {
-			// 	this._viewUI.cb_cards0.selected = true;
-			// 	this._viewUI.cb_cards1.selected = false;
-			// 	this._viewUI.cb_cards2.selected = false;
-			// 	this._viewUI.cb_cards3.selected = false;
-			// 	this._viewUI.box_cards0.disabled = false;
-			// 	this._viewUI.box_cards1.disabled = false;
-			// 	this._viewUI.box_cards2.disabled = true;
-			// 	this._viewUI.box_cards3.disabled = true;
-			// 	this._cardCount = this._cardsTemp[0];
-			// 	this._viewUI.txt_info.text = this._cardsInfo[0];
-			// } else if (this._playerCount == 4) {
-			// 	this._viewUI.cb_cards2.selected = true;
-			// 	this._viewUI.cb_cards0.selected = false;
-			// 	this._viewUI.cb_cards1.selected = false;
-			// 	this._viewUI.cb_cards3.selected = false;
-			// 	this._viewUI.box_cards0.disabled = true;
-			// 	this._viewUI.box_cards1.disabled = true;
-			// 	this._viewUI.box_cards2.disabled = false;
-			// 	this._viewUI.box_cards3.disabled = false;
-			// 	this._cardCount = this._cardsTemp[2];
-			// 	this._viewUI.txt_info.text = this._cardsInfo[2];
-			// 	this._viewUI.cb_other3.selected = false;
-			// 	this._viewUI.box_other3.disabled = true;
-			// 	this._zhaDanA = 0;
-			// }
+			if (this._playerCount == 3) {
+				this._viewUI.tab_wanfa.items[0].disabled = false;
+				this._viewUI.tab_wanfa.items[1].disabled = false;
+				this._viewUI.tab_wanfa.items[2].disabled = true;
+				this._viewUI.tab_wanfa.items[3].disabled = true;
+				this._cardCount = this._cardsTemp[0];
+				this._viewUI.lb_info_wanfa.text = this._cardsInfo[0];
+			} else if (this._playerCount == 4) {
+				this._viewUI.tab_wanfa.items[0].disabled = true;
+				this._viewUI.tab_wanfa.items[1].disabled = true;
+				this._viewUI.tab_wanfa.items[2].disabled = false;
+				this._viewUI.tab_wanfa.items[3].disabled = false;
+				this._cardCount = this._cardsTemp[2];
+				this._viewUI.lb_info_wanfa.text = this._cardsInfo[2];
+				this._zhaDanA = 0;
+			}
+			this._viewUI.lb_renshu.text = this._playerCount + "人";
+			this.onClick(name);
 		}
 
-		private onCardsClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onClick(name, i, max_num);
+		private onCardsClick(i: number, name: string) {
 			this._cardCount = this._cardsTemp[i];
-			// this._viewUI.txt_info.text = this._cardsInfo[i];
+			this._viewUI.lb_info_wanfa.text = this._cardsInfo[i];
+			this._viewUI.lb_wanfa.text = this._cardCount + "张";
 			// //牌数不够，要把3A炸弹禁用了
-			// if (this._cardCount == 15 || this._cardCount == 13) {
-			// 	this._viewUI.cb_other3.selected = false;
-			// 	this._viewUI.box_other3.disabled = true;
-			// 	this._zhaDanA = 0;
-			// } else {
-			// 	this._viewUI.box_other3.disabled = false;
-			// 	this._zhaDanA = 0;
-			// }
+			if (this._cardCount == 15 || this._cardCount == 13) {
+				this._viewUI.box_4.disabled = true;
+				this._zhaDanA = 0;
+			} else {
+				this._viewUI.box_4.disabled = false;
+				this._zhaDanA = 0;
+			}
+			this.onClick(name);
 		}
 
-		private onQiangGuanClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onClick(name, i, max_num);
+		private onQiangGuanClick(i: number, name: string) {
 			this._qiangGuan = i == 0 ? 1 : 0;
+			this._viewUI.lb_qiangguan.text = i == 0 ? "抢关" : "不抢";
+			this.onClick(name);
 		}
 
-		private onFirstClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onClick(name, i, max_num);
+		private onFirstClick(i: number, name: string) {
 			this._first = i;
+			this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
+			this.onClick(name);
 		}
 
-		private onShunClick(name: string, i: number, max_num: number, e: LEvent) {
-			this.onClick(name, i, max_num);
+		private onShunClick(i: number, name: string) {
 			this._shunZiCount = this._shunTemp[i];
+			this._viewUI.lb_shunzi.text = this._shunZiCount + "张起顺";
+			this.onClick(name);
 		}
 
 		private onOtherClick(i: number, e: LEvent) {
@@ -137,8 +130,27 @@ module gamedating.page {
 			this._zhaDanA = this._viewUI.btn_4.selected == true ? 1 : 0;
 		}
 
-		private selectHandler(name: string, index: number,e:LEvent): void {
-			// switch()
+		private selectHandler(name: string, index: number, e: LEvent): void {
+			switch (name) {
+				case this._nameJuSu:
+					this.onRoundClick(index, name);
+					break
+				case this._namePlayer:
+					this.onPlayerClick(index, name);
+					break
+				case this._nameQiangGuan:
+					this.onQiangGuanClick(index, name);
+					break
+				case this._nameShunZi:
+					this.onShunClick(index, name);
+					break
+				case this._nameWanFa:
+					this.onCardsClick(index, name);
+					break
+				case this._nameXianChu:
+					this.onFirstClick(index, name);
+					break
+			}
 		}
 
 		private initEventListen(name, isOn): void {
@@ -152,38 +164,44 @@ module gamedating.page {
 		}
 
 		//局数监听
+		private _nameJuSu: string = "jushu";
 		private setRoundEvent(isOn) {
-			let name: string = "jushu";
+			let name: string = this._nameJuSu;
 			this.initEventListen(name, isOn);
 		}
 
 		//人数监听
+		private _namePlayer: string = "renshu";
 		private setPlayerEvent(isOn) {
-			let name: string = "renshu";
+			let name: string = this._namePlayer;
 			this.initEventListen(name, isOn);
 		}
 
 		//玩法监听
-		private setCardsEvent(isOn) {
-			let name: string = "wanfa";
+		private _nameWanFa: string = "wanfa";
+		private setWanFaEvent(isOn) {
+			let name: string = this._nameWanFa;
 			this.initEventListen(name, isOn);
 		}
 
 		//抢关监听
+		private _nameQiangGuan: string = "qiangguan";
 		private setQiangGuanEvent(isOn) {
-			let name: string = "qiangguan";
+			let name: string = this._nameQiangGuan;
 			this.initEventListen(name, isOn);
 		}
 
 		//先出监听
+		private _nameXianChu: string = "xianchu";
 		private setFirstEvent(isOn) {
-			let name: string = "xianchu";
+			let name: string = this._nameXianChu;
 			this.initEventListen(name, isOn);
 		}
 
 		//顺子监听
+		private _nameShunZi: string = "shunzi";
 		private setShunEvent(isOn) {
-			let name: string = "shunzi";
+			let name: string = this._nameShunZi;
 			this.initEventListen(name, isOn);
 		}
 
@@ -291,10 +309,11 @@ module gamedating.page {
 				!this._pay_money || this._pay_money.length <= 0)
 				throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
 			super.onOpen();
+			this._viewUI.box_main.on(LEvent.CLICK, this, this.hideAllTab);
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this.setRoundEvent(true);
 			this.setPlayerEvent(true);
-			this.setCardsEvent(true);
+			this.setWanFaEvent(true);
 			this.setQiangGuanEvent(true);
 			this.setFirstEvent(true);
 			this.setShunEvent(true);
@@ -303,29 +322,52 @@ module gamedating.page {
 			this.updateViewUI();
 		}
 
+		private hideAllTab(name: string): void {
+			if (name != this._nameJuSu) {
+				this._viewUI.tab_jushu.visible = false;
+				this._viewUI.btn_jushu.rotation = 0;
+			}
+			if (name != this._nameQiangGuan) {
+				this._viewUI.tab_qiangguan.visible = false;
+				this._viewUI.btn_qiangguan.rotation = 0;
+			}
+			if (name != this._namePlayer) {
+				this._viewUI.tab_renshu.visible = false;
+				this._viewUI.btn_renshu.rotation = 0;
+			}
+			if (name != this._nameShunZi) {
+				this._viewUI.tab_shunzi.visible = false;
+				this._viewUI.btn_shunzi.rotation = 0;
+			}
+			if (name != this._nameWanFa) {
+				this._viewUI.tab_wanfa.visible = false;
+				this._viewUI.btn_wanfa.rotation = 0;
+			}
+			if (name != this._nameXianChu) {
+				this._viewUI.tab_xianchu.visible = false;
+				this._viewUI.btn_xianchu.rotation = 0;
+			}
+		}
+
 		private updateViewUI(): void {
-			// this._viewUI.cb_round0.selected = true;
-			// this._viewUI.cb_pay0.selected = true;
-			// this._viewUI.cb_player0.selected = true;
-			// this._playerCount = 3;
-			// this._viewUI.cb_cards0.selected = true;
-			// this._cardCount = 16;
-			// this._viewUI.txt_info.text = "去掉大小王、3个2、1个A";
-			// this._viewUI.cb_qiang1.selected = true;
-			// this._qiangGuan = 0;
-			// this._viewUI.cb_first0.selected = true;
-			// this._first = 0;
-			// this._viewUI.cb_shun0.selected = true;
-			// this._shunZiCount = 5;
-			// this._viewUI.cb_other0.selected = true;
-			// this._guanShang = 1;
-			// this._viewUI.cb_other2.selected = true;
-			// this._baoDi = 0;
-			// this._siDaiSan = 1;
-			// this._zhaDanA = 0;
-			// this._viewUI.txt_money.text = this._pay_money[0].toString();
-			// this._viewUI.box_cards2.disabled = true;
-			// this._viewUI.box_cards3.disabled = true;
+			this._viewUI.lb_jushu.text = "5局";
+			this._viewUI.lb_renshu.text = "3人";
+			this._playerCount = 3;
+			this._viewUI.lb_wanfa.text = "16张";
+			this._cardCount = 16;
+			this._viewUI.lb_qiangguan.text = "抢关";
+			this._qiangGuan = 0;
+			this._viewUI.lb_xianchu.text = "黑桃3";
+			this._first = 0;
+			this._viewUI.lb_shunzi.text = "5张起顺";
+			this._shunZiCount = 5;
+			this._viewUI.btn_1.selected = true;
+			this._guanShang = 1;
+			this._baoDi = 0;
+			this._viewUI.btn_3.selected = true;
+			this._siDaiSan = 1;
+			this._zhaDanA = 0;
+			this._viewUI.txt_money.text = this._pay_money[0].toString();
 			//存起来
 			let temp = {
 				unit_count: this._playerCount,
@@ -352,7 +394,7 @@ module gamedating.page {
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				this.setRoundEvent(false);
 				this.setPlayerEvent(false);
-				this.setCardsEvent(false);
+				this.setWanFaEvent(false);
 				this.setQiangGuanEvent(false);
 				this.setFirstEvent(false);
 				this.setShunEvent(false);
