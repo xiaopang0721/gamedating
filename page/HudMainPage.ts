@@ -284,10 +284,11 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._viewUI.list_btns.renderHandler.recover();
 				this._viewUI.list_btns.renderHandler = null;
-				this._game.stopMusic()
+				this._game.stopMusic();
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
-				this._viewUI.tab.selectHandler.clear();
+				this._viewUI.tab.selectHandler.recover();
+				this._viewUI.tab.selectHandler = null;
 				this._viewUI.list_ad.off(LEvent.MOUSE_DOWN, this, this.onAdMouseHandler);
 				this._viewUI.list_ad.off(LEvent.MOUSE_MOVE, this, this.onAdMouseHandler);
 				this._viewUI.list_ad.off(LEvent.MOUSE_UP, this, this.onAdMouseHandler);
@@ -1033,7 +1034,7 @@ module gamedating.page {
 
 		set setAlpha(v: number) {
 			this.alpha = v;
-			this.visible = v != 0;
+			// this.visible = v != 0;
 			if (this._avatar) {
 				this._avatar.visible = v != 0;
 			}
