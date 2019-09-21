@@ -28,7 +28,7 @@ module gamedating.page {
 			//官网二维码
 			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
 			//官网链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl,17);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 17);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -217,7 +217,24 @@ module gamedating.page {
 			this._game.datingGame.dailiyonghuMgr.on(DaiLiYongHuMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 			this.onUpdatePlayerInfo();
+		}
+
+		private onFreeStyle(): void {
+			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			if (!mainPlayer) return;
+			let playerInfo = mainPlayer.playerInfo;
+			if (!playerInfo) return;
+			playerInfo.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl");
+			WebConfig.gwUrl = playerInfo.gwUrl;
+			WebConfig.ewmbaseUrl = WebConfig.gwUrl + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
+			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + playerInfo.invite_code;
+			WebConfig.downLoadUrl = WebConfig.gwUrl + "?invitecode=" + playerInfo.invite_code;
+			//官网二维码
+			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
+			//官网链接
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 17);
 		}
 
 		private onUpdatePlayerInfo() {
@@ -480,6 +497,7 @@ module gamedating.page {
 				this._game.datingGame.dailiyonghuMgr.off(DaiLiYongHuMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
+				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 				this._fanYongBiLiTxt.length = 0;
 				this._fanYongMoneyTxt.length = 0;
 			}
