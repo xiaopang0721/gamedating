@@ -1172,44 +1172,45 @@ module gamedating.page {
 				return;
 			}
 			this._game.uiRoot.btnTween(this._avatar, this, () => {
-				if (LoadingMgr.ins.isLoaded(this._gameStr)) {
-					JsLoader.ins.startLoad(this._gameStr, Handler.create(this, (assets) => {
-						this.openPage();
+				let gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + this._gameStr : this._gameStr;
+				if (LoadingMgr.ins.isLoaded(gameStr)) {
+					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
+						this.openPage(gameStr);
 					}))
 				} else {
 					this.showWaiting();
-					JsLoader.ins.startLoad(this._gameStr, Handler.create(this, (assets) => {
-						LoadingMgr.ins.load(this._gameStr, assets);
+					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
+						LoadingMgr.ins.load(gameStr, assets);
 					}))
 				}
 			})
 		}
 
-		private openPage() {
+		private openPage(gameStr) {
 			if (this._type == DatingPageDef.TYPE_CARD) {
-				if (this._gameStr == "paodekuai") {
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM,(page:CreateCardRoomBase)=>{
-						page.game_id = this._gameStr;
+				if (gameStr == "rpaodekuai") {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreateCardRoomBase) => {
+						page.game_id = gameStr;
 					});
-				}else{
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM,(page:CreateCardRoomBase)=>{
-						page.game_id = this._gameStr;
+				} else {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
+						page.game_id = gameStr;
 					});
 				}
 				return;
 			}
-			let pageDef = getPageDef(this._gameStr);
+			let pageDef = getPageDef(gameStr);
 			//調試模式
 			let CLOSE_LIST = isDebug ? [] : [];
 			if (pageDef["__enterMapLv"]) {
 				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
 				this._page.saveListStatus();
 			}
-			else if (CLOSE_LIST.indexOf(this._gameStr) == -1) {
+			else if (CLOSE_LIST.indexOf(gameStr) == -1) {
 				this._page.saveListStatus();
-				this._game.uiRoot.HUD.open(this._gameStr + 1, (page: Page) => {
+				this._game.uiRoot.HUD.open(gameStr + 1, (page: Page) => {
 					page.dataSource = WebConfig.hudgametype = this._type;// 等于type
-					this._game.uiRoot.HUD.closeAll([this._gameStr + 1]);
+					this._game.uiRoot.HUD.closeAll([gameStr + 1]);
 				}, (page: Page) => {
 					// 场次返回大厅回调
 					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
