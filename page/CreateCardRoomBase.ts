@@ -40,12 +40,29 @@ module gamedating.page {
 			if (!this._game_id || this._game_id == "" || !this._round_count || this._round_count.length <= 0 ||
 				!this._pay_money || this._pay_money.length <= 0)
 				throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
+			this.initTitle();
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this.setRoundCheckboxEvent(true);
 			this._viewUI.cb_round0.selected = true;
 			// this._viewUI.cb_pay0.selected = true;
 			this._viewUI.txt_money.text = this._pay_money[0].toString();
+		}
+
+		private initTitle() {
+			let titleSkin = "";
+			switch (this._game_id) {
+				case "rddz":
+					titleSkin = DatingPath.ui_dating + "fk/tit_ddz.png";
+					break
+				case "rniuniu":
+					titleSkin = DatingPath.ui_dating + "fk/tu_qznn.png";
+					break
+				case "rshisanshui":
+					titleSkin = DatingPath.ui_dating + "fk/tit_sss.png";
+					break
+			}
+			this._viewUI.img_title.skin = titleSkin;
 		}
 
 		private setCardConfig() {

@@ -282,6 +282,7 @@ module gamedating.page {
 		//========================按钮特效 end================
 		public close(): void {
 			if (this._viewUI) {
+				this._isFromRoom = false;
 				this._viewUI.list_btns.renderHandler.recover();
 				this._viewUI.list_btns.renderHandler = null;
 				this._game.stopMusic();
@@ -708,12 +709,14 @@ module gamedating.page {
 			// 如果有值，说明该干活了
 			let listData = this._game.datingGame.hudTabScrollData;
 			if (listData) {
+				this._isFromRoom = true;
 				let value: number = listData.value;
 				let tabIndex: number = listData.tabIndex;
 				this._game.datingGame.clearHudTabScrollData();
 				this._viewUI.tab.selectedIndex = tabIndex;
 				Laya.timer.once(100, this, () => {
 					this._viewUI.list_btns.scrollBar.value = value;
+					this._isFromRoom = false;
 				})
 				if (tabIndex != index) {
 					return;
@@ -775,6 +778,7 @@ module gamedating.page {
 		}
 
 		public isOpenPage: boolean;
+		private _isFromRoom:boolean;
 		private _listBarMax: number = 0;
 
 		private onUpdateGameList(gameList) {
@@ -784,6 +788,9 @@ module gamedating.page {
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
+			// 如果从房间出来，不播放入场动画
+			if (this._isFromRoom)
+				return;
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(1, this, () => {
 				let i = 0;
@@ -1189,13 +1196,15 @@ module gamedating.page {
 
 		private openPage(gameStr) {
 			if (this._type == DatingPageDef.TYPE_CARD) {
-				if (gameStr == "rpaodekuai") {
+				if (gameStr == "r" + "paodekuai") {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreateCardRoomBase) => {
 						page.game_id = gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
 					});
 				} else {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
 						page.game_id = gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
 					});
 				}
 				return;
