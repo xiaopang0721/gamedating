@@ -1192,10 +1192,12 @@ module gamedating.page {
 				if (gameStr == "rpaodekuai") {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreateCardRoomBase) => {
 						page.game_id = gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
 					});
 				} else {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
 						page.game_id = gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
 					});
 				}
 				return;
