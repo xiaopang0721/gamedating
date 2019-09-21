@@ -16,7 +16,7 @@ module gamedating.page {
 				DatingPath.sk_dating + "DZ_dezhou.png",
 				DatingPath.sk_dating + "DZ_brniuniu.png",
 				DatingPath.sk_dating + "DZ_buyu.png",
-				DatingPath.sk_dating + "DZ_ddz.png",
+				DatingPath.sk_dating + "DZ_rddz.png",
 				DatingPath.sk_dating + "DZ_ebgang.png",
 				DatingPath.sk_dating + "DZ_honghei.png",
 				DatingPath.sk_dating + "DZ_longhu.png",
@@ -24,15 +24,16 @@ module gamedating.page {
 				DatingPath.sk_dating + "DZ_paijiu.png",
 				DatingPath.sk_dating + "DZ_toubao.png",
 				DatingPath.sk_dating + "DZ_sangong.png",
-				DatingPath.sk_dating + "DZ_shisanshui.png",
+				DatingPath.sk_dating + "DZ_rshisanshui.png",
 				DatingPath.sk_dating + "DZ_shuiguoji.png",
 				DatingPath.sk_dating + "DZ_tbniuniu.png",
 				DatingPath.sk_dating + "DZ_zjh.png",
-				DatingPath.sk_dating + "DZ_paodekuai.png",
+				DatingPath.sk_dating + "DZ_rpaodekuai.png",
 				DatingPath.sk_dating + "DZ_zoo.png",
 				DatingPath.sk_dating + "DZ_saolei.png",
 				DatingPath.sk_dating + "DZ_caishendao.png",
 				DatingPath.sk_dating + "DZ_majiang.png",
+				DatingPath.sk_dating + "DZ_rniuniu.png",
 
 				Path.ui_atlas_effect + "bairen.atlas",
 				Path.ui_atlas_effect + "btn_fx.atlas",
@@ -378,7 +379,7 @@ module gamedating.page {
 		}
 
 		private onFreeStyle() {
-			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
+			this._viewUI.btn_bangding.visible = WebConfig.info && !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 		}
 
@@ -396,7 +397,7 @@ module gamedating.page {
 		updatePos() {
 			if (this._viewUI.list_btns.dataSource)
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
-			this._viewUI.list_btns.width = this._clientWidth - 370;
+			this._viewUI.list_btns.width = this._clientWidth - 350;
 			this._viewUI.box_tabs.x = this._clientWidth;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
@@ -1084,7 +1085,7 @@ module gamedating.page {
 				this._avatar = new AvatarUIShow();
 				this.btn.addChild(this._avatar);
 			}
-			let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
+			let sk_url = DatingPath.sk_dating + "DZ_" + (this._type == DatingPageDef.TYPE_CARD ? 'r' : '') + this._gameStr;
 			this._avatar.loadSkeleton(sk_url, this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
