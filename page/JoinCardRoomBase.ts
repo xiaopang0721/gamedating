@@ -19,7 +19,7 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.JiaRuUI");
 			this.addChild(this._viewUI);
-			
+
 			this._game.cardRoomMgr.clear();
 			this._game.cardRoomMgr.RoomType = 2;
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
@@ -65,7 +65,9 @@ module gamedating.page {
 			if (this._game.cardRoomMgr.RoomID.length >= 6) {
 				this._game.cardRoomMgr.RoomType = 2;
 				// 输入完毕后自动寻找房间 加入成功后关闭当前页面
-				this._game.sceneObjectMgr.intoStory(this._game_id, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
+				//查找游戏id
+				//从服务端查找到对应的gameid
+				this._game.network.call_get_gameid_by_room_id(Number(this._game.cardRoomMgr.RoomID));
 			}
 		}
 
@@ -82,44 +84,37 @@ module gamedating.page {
 
 		private onOptHandler(optcode: number, msg: any) {
 			if (msg.type == Operation_Fields.OPRATE_CARDROOM) {
+				this._game.cardRoomMgr.RoomID = "";
+				this.initClipState();
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_CARDROOM_INST_NOT_FOUND:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_INST_NOT_FOUND");
 						this._game.showTips("该房间不存在，请输入正确的房号");
-						this._game.sceneObjectMgr.leaveStory(true);
-						this._game.uiRoot.general.open(this._open_id);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_CAN_NOT_JOIN:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_CAN_NOT_JOIN");
 						this._game.showTips("该房间已经满员啦，请加入其他房间");
-						this._game.sceneObjectMgr.leaveStory(true);
-						this._game.uiRoot.general.open(this._open_id);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_DISS_ROOM:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_DISS_ROOM");
 						this._game.showTips("该房间已经解散啦，请加入其他房间");
-						this._game.sceneObjectMgr.leaveStory(true);
-						this._game.uiRoot.general.open(this._open_id);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_GAME_START:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_GAME_START");
 						this._game.showTips("该房间已经开始游戏了，请加入其他房间");
-						this._game.sceneObjectMgr.leaveStory(true);
-						this._game.uiRoot.general.open(this._open_id);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_GAME_OVER:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_GAME_OVER");
 						this._game.showTips("该房间的牌局已经结束了，请加入其他房间");
-						this._game.sceneObjectMgr.leaveStory(true);
-						this._game.uiRoot.general.open(this._open_id);
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_JOIN_ROOM_NOT_MONEY:
 						this._game.setIsLockGame(false, false, "StoryBase.OPRATE_CARDROOM_JOIN_ROOM_NOT_MONEY");
 						this._game.alert(StringU.substitute("老板，您的金币不足哦~\n补充点金币去大杀四方吧~"), () => {
-							this._game.sceneObjectMgr.leaveStory(true);
-							this._game.uiRoot.general.open(this._open_id);
 						}, () => {
-						}, true,Tips.TIPS_SKIN_STR["cz"]);
+						}, true, Tips.TIPS_SKIN_STR["cz"]);
+						break;
+					case Operation_Fields.OPRATE_CARDROOM_GAME_ID_RETURN:             // 获取gameid成功
+						this._game.sceneObjectMgr.intoStory(msg.gameId, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
 						break;
 				}
 			}

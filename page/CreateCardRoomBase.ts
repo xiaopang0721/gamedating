@@ -36,10 +36,10 @@ module gamedating.page {
 
 		// 页面打开时执行函数
 		protected onOpen(): void {
-			// if (!this._game_id || this._game_id == "" || !this._round_count || this._round_count.length <= 0 ||
-			// 	!this._pay_money || this._pay_money.length <= 0)
-			// 	throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
 			super.onOpen();
+			if (!this._game_id || this._game_id == "" || !this._round_count || this._round_count.length <= 0 ||
+				!this._pay_money || this._pay_money.length <= 0)
+				throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this.setRoundCheckboxEvent(true);
