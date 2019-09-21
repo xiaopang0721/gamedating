@@ -377,6 +377,7 @@ module gamedating.page {
 		}
 
 		private onFreeStyle() {
+			if (!WebConfig.info)return;
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
