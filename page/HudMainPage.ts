@@ -436,7 +436,6 @@ module gamedating.page {
 				item.x = total_x1;
 				total_x1 -= item.width + 20;
 			}
-
 			//气泡框位置对齐
 			this.initQiPaoPos();
 		}
