@@ -51,6 +51,7 @@ module gamedating.page {
 			if (!this._curDiffTime || this._curDiffTime < 0) {
 				for (let i = 0; i < this._dataInfo.length; i++) {
 					let qfid: number = this._dataInfo[i].qf_id;
+					let qf_type: number = this._dataInfo[i].qf_type;
 					if (!this._mainplayer) return;
 					let qfendTime: number = this._mainplayer.GetQiFuEndTime(qfid - 1);
 					if (!qfendTime) {
@@ -59,7 +60,7 @@ module gamedating.page {
 					}
 					let curTime = this._game.sync.serverTimeBys;
 					let diffNum = qfendTime - curTime;
-					let isShowTime = diffNum > 0 ? true : false;
+					let isShowTime = (diffNum > 0 && qf_type == 1) ? true : false;
 					this._viewUI["box_time" + i].visible = isShowTime;
 					if (isShowTime)
 						this._viewUI["lb_time" + i].text = Sync.getTimeShortStr2(diffNum);
@@ -102,6 +103,7 @@ module gamedating.page {
 			for (let i = 0; i < this._dataInfo.length; i++) {
 				let type: string = this._dataInfo[i].qf_type == 1 ? "/天" : "/次";
 				this._txtMoneyUI[i].text = this._dataInfo[i].qf_money + type;
+				this._viewUI["box_time" + i].visible = false;
 			}
 		}
 
@@ -113,7 +115,7 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			if (!this._isHudDating && !this._game.qifuMgr.isCanQiFu) {
 				//仅在游戏中判断
-				this._game.uiRoot.topUnder.showTips("老板，当前不可以祈福哦~")
+				this._game.uiRoot.topUnder.showTips("老板，游戏中不可分心祈福哦~")
 				return;
 			}
 			let idx = this._boxQifuUI.indexOf(target);
@@ -129,11 +131,17 @@ module gamedating.page {
 					return;
 				}
 				let curTime = this._game.sync.serverTimeBys;
-
 				//是否祈福过
 				let strTip = "";
-				let addStr = qfid == 1 ? "洗" : "拜";
-				if (curTime < qfendTime) {
+				let addStr = "";
+				if (qfid == 1) {
+					addStr = "洗";
+				} else if (qfid == 2) {
+					addStr = "摸";
+				} else {
+					addStr = "拜";
+				}
+				if (curTime < qfendTime && qftype == 1) {
 					//祈福过
 					let strTime = Sync.getTimeShortStr2(qfendTime - curTime);
 					strTip = StringU.substitute("老板，当前效果还剩余<span color='{0}'>{1}</span>，诚心<span color='{2}'>{4}{3}</span>可能带来好运气哦~", TeaStyle.COLOR_RED, strTime, TeaStyle.COLOR_GREEN, qfname, addStr);

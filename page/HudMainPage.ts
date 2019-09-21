@@ -68,7 +68,6 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			//官网二维码
-
 			this._viewUI.img_gw.skin = WebConfig.ewmUrl
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
@@ -379,8 +378,22 @@ module gamedating.page {
 		}
 
 		private onFreeStyle() {
-			this._viewUI.btn_bangding.visible = WebConfig.info && !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
+			if (!WebConfig.info)return;
+			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
+			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			if (!mainPlayer) return;
+			let playerInfo = mainPlayer.playerInfo;
+			if (!playerInfo) return;
+			playerInfo.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl");
+			WebConfig.gwUrl = playerInfo.gwUrl;
+			WebConfig.ewmbaseUrl = WebConfig.gwUrl + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
+			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + playerInfo.invite_code;
+			WebConfig.downLoadUrl = WebConfig.gwUrl + "?invitecode=" + playerInfo.invite_code;
+			//官网二维码
+			this._viewUI.img_gw.skin = WebConfig.ewmUrl
+			//官网链接
+			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 		}
 
 		protected layout(): void {
@@ -425,7 +438,6 @@ module gamedating.page {
 				item.x = total_x1;
 				total_x1 -= item.width + 20;
 			}
-
 			//气泡框位置对齐
 			this.initQiPaoPos();
 		}
@@ -779,7 +791,7 @@ module gamedating.page {
 		}
 
 		public isOpenPage: boolean;
-		private _isFromRoom:boolean;
+		private _isFromRoom: boolean;
 		private _listBarMax: number = 0;
 
 		private onUpdateGameList(gameList) {
@@ -1200,10 +1212,12 @@ module gamedating.page {
 				if (gameStr == "r" + "paodekuai") {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreateCardRoomBase) => {
 						page.game_id = gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
 					});
 				} else {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
 						page.game_id = gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
 					});
 				}
 				return;

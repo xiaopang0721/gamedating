@@ -165,7 +165,7 @@ module gamedating {
 
 		//房卡类型单项变更
 		private onChangeCardRoom() {
-			WebConfig.hudtabIndex = WebConfig.hudgametype = PageDef.TYPE_CARD;
+			WebConfig.hudtabIndex = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;
 		}
 
 		//app关闭回调
