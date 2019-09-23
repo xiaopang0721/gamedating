@@ -466,8 +466,8 @@ module gamedating.page {
 				item.x = total_x1;
 				total_x1 -= item.width + 20;
 			}
-			//气泡框位置对齐
-			this.initQiPaoPos();
+			//气泡框位置对齐  位置挪动之后得到下一帧之后才会生效在去调整位置
+			Laya.timer.frameOnce(1, this, this.initQiPaoPos);
 		}
 
 		//需要隐藏的判断按钮
