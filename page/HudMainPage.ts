@@ -132,7 +132,7 @@ module gamedating.page {
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(90, -15), 1, null, [this._viewUI.btn_qiandao]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_zhuanpan, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_zhuanpan]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_daili]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(100, -15), 1, null, [this._viewUI.btn_vip]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(60, -18), 1, null, [this._viewUI.btn_vip]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(80, -15), 1, null, [this._viewUI.btn_shouchong]);
 			//hud弹窗逻辑
 			this.alertPage();
