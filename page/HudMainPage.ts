@@ -141,6 +141,7 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
 
+		private _qifuTypeImgUrl: string;
 		private qifuFly(dataSource: any): void {
 			if (!dataSource) return;
 			this._game.qifuMgr.showFlayAni(this._viewUI.btn_gren, this._viewUI, dataSource, (dataSource) => {
@@ -150,6 +151,14 @@ module gamedating.page {
 				if (!playerInfo) return;
 				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+				}
+				//祈福成功 头像上就有动画
+				let qf_id = dataSource.qf_id;
+				this._qifuTypeImgUrl = StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
+				if (qf_id) {
+					this._viewUI.qifu_type.visible = true;
+					this._viewUI.qifu_type.skin = this._qifuTypeImgUrl;
+					this.playTween(this._viewUI.qifu_type, qf_id);
 				}
 			}, true);
 		}
@@ -377,8 +386,27 @@ module gamedating.page {
 			this.updatePos();
 		}
 
+		private _diff: number = 500;
+		private _timeList: { [key: number]: number } = {};
+		private _firstList: { [key: number]: number } = {};
+		private playTween(img: LImage, index: number, isTween?: boolean) {
+			if (!img) return;
+			if (!this._timeList[index]) {
+				this._timeList[index] = 0;
+			}
+			if (this._timeList[index] >= 2500) {
+				this._timeList[index] = 0;
+				this._firstList[index] = 0;
+				img.visible = false;
+				return;
+			}
+			Laya.Tween.to(img, { alpha: isTween ? 1 : 0.2 }, this._diff, Laya.Ease.linearNone, Handler.create(this, this.playTween, [img, index, !isTween]), this._firstList[index] ? this._diff : 0);
+			this._timeList[index] += this._diff;
+			this._firstList[index] = 1;
+		}
+
 		private onFreeStyle() {
-			if (!WebConfig.info)return;
+			if (!WebConfig.info) return;
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
