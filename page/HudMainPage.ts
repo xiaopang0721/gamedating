@@ -1314,9 +1314,7 @@ module gamedating.page {
 					break;
 				case 'guanwang':
 					order = 3;
-					WebConfig.copyTxt(WebConfig.gwUrl);
-					this._game.showTips("复制成功");
-					return;
+					break;
 				case 'vip':
 					order = 4;
 					this._pageID = DatingPageDef.PAGE_VIP;
@@ -1336,9 +1334,11 @@ module gamedating.page {
 
 		private onClick(e) {
 			if (this._data == 'guanwang') {
+				WebConfig.copyTxt(WebConfig.gwUrl);
+				this._game.showTips("复制成功");
 				//显示气泡框
-				this._page.updatePos();
-				this._page.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
+				// this._page.updatePos();
+				// this._page.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
 				return;
 			}
 			this._game.uiRoot.general.open(this._pageID);
