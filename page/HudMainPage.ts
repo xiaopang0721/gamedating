@@ -365,7 +365,7 @@ module gamedating.page {
 			}
 			if (!this._clip_vip) {
 				this._clip_vip = new ClipUtil(ClipUtil.DATING_VIP_FONT);
-				this._clip_vip.centerX = this._viewUI.clip_vip.centerX;
+				this._clip_vip.centerX = this._viewUI.clip_vip.centerX - 10;
 				this._clip_vip.centerY = this._viewUI.clip_vip.centerY;
 				this._viewUI.clip_vip.parent && this._viewUI.clip_vip.parent.addChild(this._clip_vip);
 				this._viewUI.clip_vip.removeSelf();
@@ -1314,7 +1314,9 @@ module gamedating.page {
 					break;
 				case 'guanwang':
 					order = 3;
-					break;
+					WebConfig.copyTxt(WebConfig.gwUrl);
+					this._game.showTips("复制成功");
+					return;
 				case 'vip':
 					order = 4;
 					this._pageID = DatingPageDef.PAGE_VIP;

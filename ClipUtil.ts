@@ -149,7 +149,7 @@ module gamedating {
                 clipWidth: 39,
                 clipHeight: 41,
                 clipX: 10,
-                space: 0,
+                space: -15,
             };
 
         }
