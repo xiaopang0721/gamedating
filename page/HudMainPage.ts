@@ -741,7 +741,7 @@ module gamedating.page {
 		//--------------------游戏入口按钮列表相关---start------------------------------
 
 		private onDealGameData(index: number = -1) {
-			if (!this._game.sceneObjectMgr.mainPlayer || !WebConfig.gamelist)
+			if (!WebConfig.gamelist)
 				return;
 			if (index == -1) {
 				this._viewUI.tab.selectedIndex = 0;
@@ -765,7 +765,7 @@ module gamedating.page {
 			}
 			let game_list: any[] = []
 			let webPower: number = 0;
-			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo();
+			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
 			// 先筛选有用信息
 			for (let i = 0; i < WebConfig.gamelist.length; i++) {
 				let dz_str: any = WebConfig.gamelist[i];
