@@ -1304,6 +1304,7 @@ module gamedating.page {
 		private show() {
 			let order: number = 1;
 			this.img_ewm.visible = false;
+			this.txt_gw.visible = false;
 			switch (this._data) {
 				case 'daili':
 					order = 1;
@@ -1317,6 +1318,8 @@ module gamedating.page {
 					break;
 				case 'guanwang':
 					order = 3;
+					this.txt_gw.visible = true;
+					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl,14);
 					break;
 				case 'vip':
 					order = 4;
