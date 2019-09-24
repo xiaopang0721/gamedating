@@ -59,11 +59,20 @@ module gamedating.page {
 				this._viewUI.box.centerY = -160;
 			}
 		}
-
+		private _isTrigger: boolean = false;
 		private onBlur(input) {
 			if (input == this._viewUI.txt_name) {
 				this._viewUI.box.centerY = 0;
 			}
+			this._isTrigger = true;
+		}
+
+		onBlackSpriteClick(): void {
+			if (this._isTrigger) {
+				this._isTrigger = false;
+				return;
+			};
+			super.onBlackSpriteClick();
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
