@@ -62,7 +62,10 @@ module gamedating.page {
 		}
 
 		onBlackSpriteClick(): void {
-			if (this._isTrigger) return;
+			if (this._isTrigger) {
+				this._isTrigger = false;
+				return;
+			};
 			super.onBlackSpriteClick();
 		}
 
