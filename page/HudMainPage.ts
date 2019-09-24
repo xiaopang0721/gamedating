@@ -1303,6 +1303,7 @@ module gamedating.page {
 		private _pageID = "";
 		private show() {
 			let order: number = 1;
+			this.img_ewm.visible = false;
 			switch (this._data) {
 				case 'daili':
 					order = 1;
@@ -1311,6 +1312,8 @@ module gamedating.page {
 				case 'fenxiang':
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
+					this.img_ewm.visible = true;
+					this.img_ewm.skin = WebConfig.ewmUrl;
 					break;
 				case 'guanwang':
 					order = 3;
