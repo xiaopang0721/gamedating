@@ -467,8 +467,10 @@ module ui.nqp.dating.component {
 module ui.nqp.dating.component {
     export class HudAd_TUI extends View {
 		public img_ad:Laya.Image;
+		public img_ewm:Laya.Image;
+		public txt_gw:Laya.Label;
 
-        public static  uiView:any ={"type":"View","props":{"width":286,"height":434},"child":[{"type":"Image","props":{"width":286,"var":"img_ad","skin":"dating_ui/dating/tu_dl1.png","height":434}}]};
+        public static  uiView:any ={"type":"View","props":{"width":286,"height":434},"child":[{"type":"Image","props":{"width":286,"var":"img_ad","skin":"dating_ui/dating/tu_dl3.png","height":434}},{"type":"Image","props":{"y":291,"x":72,"width":118,"var":"img_ewm","sizeGrid":"10,10,10,10","height":118}},{"type":"Label","props":{"y":334,"x":30,"var":"txt_gw","valign":"middle","text":"www.adkdjf.com","fontSize":25,"color":"#008aff","bold":true,"align":"center"}}]};
         constructor(){ super()}
         createChildren():void {
         
@@ -502,7 +504,7 @@ module ui.nqp.dating.component {
     export class HudOne_TUI extends View {
 		public btn:Laya.Box;
 
-        public static  uiView:any ={"type":"View","props":{"width":245,"height":192},"child":[{"type":"Box","props":{"y":95,"x":123,"width":248,"var":"btn","height":192,"anchorY":0.5,"anchorX":0.5}}]};
+        public static  uiView:any ={"type":"View","props":{"width":245,"height":192},"child":[{"type":"Box","props":{"y":117,"x":138,"width":275,"var":"btn","height":235,"anchorY":0.5,"anchorX":0.5}}]};
         constructor(){ super()}
         createChildren():void {
         
