@@ -4,6 +4,7 @@
 module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DaTingUI;
+		public static PAGE_ID: Array<any> = [];
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -67,8 +68,9 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			HudMainPage.PAGE_ID = [DatingPageDef.PAGE_VIP, DatingPageDef.PAGE_HUD_SHARE, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE];
 			//官网二维码
-			this._viewUI.img_gw.skin = WebConfig.ewmUrl
+			this._viewUI.img_gw.skin = WebConfig.ewmUrl;
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -1027,7 +1029,7 @@ module gamedating.page {
 				this.visible = false;
 				return;
 			}
-			if (gameStr == this._gameStr) return;
+			// if (gameStr == this._gameStr) return;
 			this.visible = true;
 			this._page = page;
 			this._game = game;
@@ -1058,7 +1060,16 @@ module gamedating.page {
 		update(): void {
 			if (!this._gameStr || !this.alpha) return;
 			if (this._avatar) {
-				if (this._game.uiRoot.general.numChildren) {
+				let isOpenPage = false;
+				//有某些界面存在时不停止
+				for (let i = 0; i < HudMainPage.PAGE_ID.length; i++) {
+					let page = this._game.uiRoot.general.getPage(HudMainPage.PAGE_ID[i]);
+					if (page) {
+						isOpenPage = true;
+						break
+					}
+				}
+				if (this._game.uiRoot.general.numChildren && !isOpenPage) {
 					this._avatar.paused();
 				} else {
 					this._avatar.resume();
@@ -1126,6 +1137,8 @@ module gamedating.page {
 			if (!this._avatar) {
 				this._avatar = new AvatarUIShow();
 				this.addChild(this._avatar);
+			} else {
+				this._avatar.clear();
 			}
 			let sk_url = DatingPath.sk_dating + "DZ_" + (this._type == DatingPageDef.TYPE_CARD ? 'r' : '') + this._gameStr;
 			this._avatar.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
