@@ -1146,8 +1146,8 @@ module gamedating.page {
 				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
 				// this._waitingTip.ani1.play(1, true);
 			}
-			let offset_x: number = this.index % 2 == 0 ? 18 : 0;
-			this._waitingTip.x = this.width - 55 + offset_x;
+			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+			this._waitingTip.x = this.btn.width - 90 + offset_x;
 			this.addChild(this._waitingTip);
 			this.clearUpdate();
 		}
@@ -1169,7 +1169,7 @@ module gamedating.page {
 					start: 10000
 				});
 			}
-			this._updateEffect.x = this.btn.width - 90 + offset_x;
+			this._updateEffect.x = this.btn.width - 100 + offset_x;
 			this._updateEffect.y = -15;
 			this.addChild(this._updateEffect);
 			this._updateEffect.play(true);
@@ -1186,8 +1186,8 @@ module gamedating.page {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
 				this.addChild(this._loadingTip);
-				let offset_x: number = this.index % 2 == 0 ? 18 : 0;
-				this._loadingTip.x = this.width - 53 + offset_x;
+				let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+				this._loadingTip.x = this.btn.width - 90 + offset_x;
 			}
 			this._loadingTip.progress = value;
 			this._loadingTip.update();
