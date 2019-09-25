@@ -78,6 +78,8 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
+			this._viewUI.list_btns.spaceX = -50;
+			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
@@ -1049,7 +1051,7 @@ module gamedating.page {
 			this.clearWaiting();
 			this.clearUpdate();
 			this.clearProgress();
-			this.off(LEvent.CLICK, this, this.onMouseHandle);
+			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
 			super.destroy();
 		}
 
@@ -1098,17 +1100,17 @@ module gamedating.page {
 		}
 
 		private show(): void {
-			let offset_x: number = this.index % 2 == 0 ? 18 : 0;
-			this.on(LEvent.CLICK, this, this.onMouseHandle);
+			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
 			if (this._gameStr == 'zoo') {
 				if (!this._image)
 					this._image = new LImage(DatingPath.ui_dating + 'dating/btn_fqzs.png');
 				else
 					this._image.visible = true;
-				this.btn.addChild(this._image);
+				this.addChild(this._image);
 				this._image.anchorX = this._image.anchorY = 0.5;
-				this._image.x = this._image.width / 2 + 5 + offset_x;
-				this._image.y = this._image.height / 2 + 20;
+				this._image.x = 135 + offset_x;
+				this._image.y = 120;
 				if (this._avatar)
 					this._avatar.visible = false;
 				this.clearUpdate();
@@ -1123,10 +1125,10 @@ module gamedating.page {
 			}
 			if (!this._avatar) {
 				this._avatar = new AvatarUIShow();
-				this.btn.addChild(this._avatar);
+				this.addChild(this._avatar);
 			}
 			let sk_url = DatingPath.sk_dating + "DZ_" + (this._type == DatingPageDef.TYPE_CARD ? 'r' : '') + this._gameStr;
-			this._avatar.loadSkeleton(sk_url, this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
+			this._avatar.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
 				this.showUpdate(offset_x);
@@ -1319,7 +1321,7 @@ module gamedating.page {
 				case 'guanwang':
 					order = 3;
 					this.txt_gw.visible = true;
-					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl,14);
+					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
 					break;
 				case 'vip':
 					order = 4;
