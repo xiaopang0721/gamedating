@@ -359,6 +359,7 @@ module gamedating.page {
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
+			this._viewUI.btn_bangding.visible = !playerInfo.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			if (!this._clip_money) {
 				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);
 				this._clip_money.scale(0.9, 0.9);
