@@ -1169,7 +1169,7 @@ module gamedating.page {
 					start: 10000
 				});
 			}
-			this._updateEffect.x = this.width - 70 + offset_x;
+			this._updateEffect.x = this.btn.width - 90 + offset_x;
 			this._updateEffect.y = -15;
 			this.addChild(this._updateEffect);
 			this._updateEffect.play(true);
