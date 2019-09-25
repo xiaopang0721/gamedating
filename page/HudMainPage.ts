@@ -378,10 +378,11 @@ module gamedating.page {
 
 			this._clip_money.setText(playerInfo.money, true, false, playerInfo.money < 0 ? DatingPath.ui_dating_tongyong + "tu_jianhao.png" : null);
 
-			this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
 			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+			} else {
+				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			}
 
 			if (first)
