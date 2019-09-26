@@ -63,8 +63,23 @@ module gamedating.page {
 
 			this._viewUI.btn_clear.visible = false;
 			this._viewUI.txt_input.on(LEvent.CHANGE, this, this.onTextChange);
+			this._viewUI.txt_input.on(LEvent.INPUT,this,this.onTextChange);
 			this._viewUI.txt_input.on(LEvent.FOCUS, this, this.onFocus);
 			this._viewUI.txt_input.on(LEvent.BLUR, this, this.onBlur);
+
+			this._viewUI.ingput_yh0.on(LEvent.FOCUS, this, this.onFocus);
+			this._viewUI.ingput_yh0.on(LEvent.BLUR, this, this.onBlur);
+
+			this._viewUI.ingput_yh1.on(LEvent.FOCUS, this, this.onFocus);
+			this._viewUI.ingput_yh1.on(LEvent.BLUR, this, this.onBlur);
+
+			this._viewUI.txt_sm2.on(LEvent.FOCUS, this, this.onFocus);
+			this._viewUI.txt_sm2.on(LEvent.BLUR, this, this.onBlur);
+
+			this._viewUI.txt_sm3.on(LEvent.FOCUS, this, this.onFocus);
+			this._viewUI.txt_sm3.on(LEvent.BLUR, this, this.onBlur);
+
+
 			this._game.datingGame.chongZhiMgr.on(ChongZhiMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._paychannel = [{ name: "充值记录" }];
@@ -511,8 +526,19 @@ module gamedating.page {
 			}
 		}
 
-		private onFocus() {
-			this._viewUI.box.centerY = -220;
+		private onFocus(e: any) {
+			switch (e) {
+				case this._viewUI.ingput_yh0:
+				case this._viewUI.txt_input:
+				case this._viewUI.txt_sm2:
+					this._viewUI.box.centerY = -220;
+					break
+				case this._viewUI.ingput_yh1:
+				case this._viewUI.txt_sm3:
+					this._viewUI.box.centerY = -320;
+					break
+			}
+
 		}
 
 		private onBlur() {

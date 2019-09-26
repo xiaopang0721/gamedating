@@ -524,7 +524,7 @@ module gamedating.page {
 		setData(game: Game, data: any) {
 			this.dataSource = data;
 			this.txt_title.text = "Lv." + data.agency_lv;
-			// this.txt_yjed.text = StringU.substitute("{0}-{1}", data.agency_min, data.agency_max);
+			this.txt_yjed.text = StringU.substitute("{0}-{1}", data.agency_min, data.agency_max);
 			this.txt_fyvalue.text = data.agency_fytype == 2 ? StringU.substitute("返佣{0}%", data.agency_prec) : StringU.substitute("每万返佣{0}元", data.agency_prec);
 			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
 			this.visible = true;

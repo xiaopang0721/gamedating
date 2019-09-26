@@ -41,22 +41,32 @@ module gamedating.page {
 		private onFocus(input) {
 			switch (input) {
 				case this._viewUI.txt_name:
-					this._viewUI.box.centerY = -100;					
-					break;			
+					this._viewUI.box.centerY = -100;
+					break;
 				case this._viewUI.txt_khh:
-					this._viewUI.box.centerY = -150;					
-					break;			
+					this._viewUI.box.centerY = -150;
+					break;
 				case this._viewUI.txt_zh:
-					this._viewUI.box.centerY = -250;					
-					break;			
+					this._viewUI.box.centerY = -250;
+					break;
 				case this._viewUI.txt_khzh:
-					this._viewUI.box.centerY = -300;					
-					break;			
+					this._viewUI.box.centerY = -300;
+					break;
 			}
 		}
 
+		private _isTrigger: boolean = false;
 		private onBlur(input) {
 			this._viewUI.box.centerY = 20;
+			this._isTrigger = true;
+		}
+
+		onBlackSpriteClick(): void {
+			if (this._isTrigger) {
+				this._isTrigger = false;
+				return;
+			};
+			super.onBlackSpriteClick();
 		}
 
 		protected onSucessHandler(data: any) {
@@ -107,7 +117,7 @@ module gamedating.page {
 		}
 
 		private openJianPan(textUI: MyTextInput, viewUI: any, centerY: number) {
-			 DatingGame.ins.jianPanMgr.openJianPan(textUI, viewUI, centerY);
+			DatingGame.ins.jianPanMgr.openJianPan(textUI, viewUI, centerY);
 		}
 
 		public close(): void {

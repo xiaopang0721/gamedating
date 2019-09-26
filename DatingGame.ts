@@ -817,6 +817,12 @@ module gamedating {
 			} else {
 				this._checkVesionTime -= diff;
 			}
+			if (this._checkPingTime < 0) {
+				this._checkPingTime = 30000;
+				this._game.network.call_ping_pong();
+			} else {
+				this._checkPingTime -= diff;
+			}
 		}
 
 		private _vesion_byteArray: ByteArray;

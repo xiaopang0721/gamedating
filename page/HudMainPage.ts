@@ -4,6 +4,7 @@
 module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DaTingUI;
+		public static PAGE_ID: Array<any> = [];
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -67,8 +68,9 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			HudMainPage.PAGE_ID = [DatingPageDef.PAGE_VIP, DatingPageDef.PAGE_HUD_SHARE, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE];
 			//官网二维码
-			this._viewUI.img_gw.skin = WebConfig.ewmUrl
+			this._viewUI.img_gw.skin = WebConfig.ewmUrl;
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -78,6 +80,8 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
+			this._viewUI.list_btns.spaceX = -50;
+			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
@@ -132,8 +136,9 @@ module gamedating.page {
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(90, -15), 1, null, [this._viewUI.btn_qiandao]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_zhuanpan, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_zhuanpan]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_daili]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(100, -15), 1, null, [this._viewUI.btn_vip]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(60, -18), 1, null, [this._viewUI.btn_vip]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(80, -15), 1, null, [this._viewUI.btn_shouchong]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(50, -15), 1, null, [this._viewUI.btn_fenxiang]);
 			//hud弹窗逻辑
 			this.alertPage();
 			//气泡框逻辑
@@ -141,6 +146,7 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
 
+		private _qifuTypeImgUrl: string;
 		private qifuFly(dataSource: any): void {
 			if (!dataSource) return;
 			this._game.qifuMgr.showFlayAni(this._viewUI.btn_gren, this._viewUI, dataSource, (dataSource) => {
@@ -150,6 +156,14 @@ module gamedating.page {
 				if (!playerInfo) return;
 				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+				}
+				//祈福成功 头像上就有动画
+				let qf_id = dataSource.qf_id;
+				this._qifuTypeImgUrl = StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
+				if (qf_id) {
+					this._viewUI.qifu_type.visible = true;
+					this._viewUI.qifu_type.skin = this._qifuTypeImgUrl;
+					this.playTween(this._viewUI.qifu_type, qf_id);
 				}
 			}, true);
 		}
@@ -334,6 +348,8 @@ module gamedating.page {
 					return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
 				case this._viewUI.btn_shouchong:
 					return WebConfig.info.is_can_first_get;
+				case this._viewUI.btn_fenxiang:
+					return WebConfig.info.is_shared;
 			}
 		}
 
@@ -346,6 +362,7 @@ module gamedating.page {
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
+			this._viewUI.btn_bangding.visible = !playerInfo.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			if (!this._clip_money) {
 				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);
 				this._clip_money.scale(0.9, 0.9);
@@ -356,7 +373,7 @@ module gamedating.page {
 			}
 			if (!this._clip_vip) {
 				this._clip_vip = new ClipUtil(ClipUtil.DATING_VIP_FONT);
-				this._clip_vip.centerX = this._viewUI.clip_vip.centerX;
+				this._clip_vip.centerX = this._viewUI.clip_vip.centerX - 10;
 				this._clip_vip.centerY = this._viewUI.clip_vip.centerY;
 				this._viewUI.clip_vip.parent && this._viewUI.clip_vip.parent.addChild(this._clip_vip);
 				this._viewUI.clip_vip.removeSelf();
@@ -365,10 +382,11 @@ module gamedating.page {
 
 			this._clip_money.setText(playerInfo.money, true, false, playerInfo.money < 0 ? DatingPath.ui_dating_tongyong + "tu_jianhao.png" : null);
 
-			this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
 			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
 				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
+			} else {
+				this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			}
 
 			if (first)
@@ -377,9 +395,29 @@ module gamedating.page {
 			this.updatePos();
 		}
 
+		private _diff: number = 500;
+		private _timeList: { [key: number]: number } = {};
+		private _firstList: { [key: number]: number } = {};
+		private playTween(img: LImage, index: number, isTween?: boolean) {
+			if (!img) return;
+			if (!this._timeList[index]) {
+				this._timeList[index] = 0;
+			}
+			if (this._timeList[index] >= 2500) {
+				this._timeList[index] = 0;
+				this._firstList[index] = 0;
+				img.visible = false;
+				return;
+			}
+			Laya.Tween.to(img, { alpha: isTween ? 1 : 0.2 }, this._diff, Laya.Ease.linearNone, Handler.create(this, this.playTween, [img, index, !isTween]), this._firstList[index] ? this._diff : 0);
+			this._timeList[index] += this._diff;
+			this._firstList[index] = 1;
+		}
+
 		private onFreeStyle() {
-			if (!WebConfig.info)return;
+			if (!WebConfig.info) return;
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
+			FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GUANGGAOLUNBO_C, Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI);
 			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
@@ -434,8 +472,8 @@ module gamedating.page {
 				item.x = total_x1;
 				total_x1 -= item.width + 20;
 			}
-			//气泡框位置对齐
-			this.initQiPaoPos();
+			//气泡框位置对齐  位置挪动之后得到下一帧之后才会生效在去调整位置
+			Laya.timer.frameOnce(1, this, this.initQiPaoPos);
 		}
 
 		//需要隐藏的判断按钮
@@ -709,7 +747,7 @@ module gamedating.page {
 		//--------------------游戏入口按钮列表相关---start------------------------------
 
 		private onDealGameData(index: number = -1) {
-			if (!this._game.sceneObjectMgr.mainPlayer || !WebConfig.gamelist)
+			if (!WebConfig.gamelist)
 				return;
 			if (index == -1) {
 				this._viewUI.tab.selectedIndex = 0;
@@ -733,7 +771,7 @@ module gamedating.page {
 			}
 			let game_list: any[] = []
 			let webPower: number = 0;
-			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo();
+			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
 			// 先筛选有用信息
 			for (let i = 0; i < WebConfig.gamelist.length; i++) {
 				let dz_str: any = WebConfig.gamelist[i];
@@ -993,7 +1031,7 @@ module gamedating.page {
 				this.visible = false;
 				return;
 			}
-			if (gameStr == this._gameStr) return;
+			// if (gameStr == this._gameStr) return;
 			this.visible = true;
 			this._page = page;
 			this._game = game;
@@ -1017,14 +1055,23 @@ module gamedating.page {
 			this.clearWaiting();
 			this.clearUpdate();
 			this.clearProgress();
-			this.off(LEvent.CLICK, this, this.onMouseHandle);
+			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
 			super.destroy();
 		}
 
 		update(): void {
 			if (!this._gameStr || !this.alpha) return;
 			if (this._avatar) {
-				if (this._game.uiRoot.general.numChildren) {
+				let isOpenPage = false;
+				//有某些界面存在时不停止
+				for (let i = 0; i < HudMainPage.PAGE_ID.length; i++) {
+					let page = this._game.uiRoot.general.getPage(HudMainPage.PAGE_ID[i]);
+					if (page) {
+						isOpenPage = true;
+						break
+					}
+				}
+				if (this._game.uiRoot.general.numChildren && !isOpenPage) {
 					this._avatar.paused();
 				} else {
 					this._avatar.resume();
@@ -1066,17 +1113,17 @@ module gamedating.page {
 		}
 
 		private show(): void {
-			let offset_x: number = this.index % 2 == 0 ? 18 : 0;
-			this.on(LEvent.CLICK, this, this.onMouseHandle);
+			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
 			if (this._gameStr == 'zoo') {
 				if (!this._image)
 					this._image = new LImage(DatingPath.ui_dating + 'dating/btn_fqzs.png');
 				else
 					this._image.visible = true;
-				this.btn.addChild(this._image);
+				this.addChild(this._image);
 				this._image.anchorX = this._image.anchorY = 0.5;
-				this._image.x = this._image.width / 2 + 5 + offset_x;
-				this._image.y = this._image.height / 2 + 20;
+				this._image.x = 135 + offset_x;
+				this._image.y = 120;
 				if (this._avatar)
 					this._avatar.visible = false;
 				this.clearUpdate();
@@ -1091,10 +1138,12 @@ module gamedating.page {
 			}
 			if (!this._avatar) {
 				this._avatar = new AvatarUIShow();
-				this.btn.addChild(this._avatar);
+				this.addChild(this._avatar);
+			} else {
+				this._avatar.clear();
 			}
 			let sk_url = DatingPath.sk_dating + "DZ_" + (this._type == DatingPageDef.TYPE_CARD ? 'r' : '') + this._gameStr;
-			this._avatar.loadSkeleton(sk_url, this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
+			this._avatar.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
 				this.showUpdate(offset_x);
@@ -1112,8 +1161,8 @@ module gamedating.page {
 				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
 				// this._waitingTip.ani1.play(1, true);
 			}
-			let offset_x: number = this.index % 2 == 0 ? 18 : 0;
-			this._waitingTip.x = this.width - 55 + offset_x;
+			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+			this._waitingTip.x = this.btn.width - 90 + offset_x;
 			this.addChild(this._waitingTip);
 			this.clearUpdate();
 		}
@@ -1135,7 +1184,7 @@ module gamedating.page {
 					start: 10000
 				});
 			}
-			this._updateEffect.x = this.width - 70 + offset_x;
+			this._updateEffect.x = this.btn.width - 100 + offset_x;
 			this._updateEffect.y = -15;
 			this.addChild(this._updateEffect);
 			this._updateEffect.play(true);
@@ -1152,8 +1201,8 @@ module gamedating.page {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
 				this.addChild(this._loadingTip);
-				let offset_x: number = this.index % 2 == 0 ? 18 : 0;
-				this._loadingTip.x = this.width - 53 + offset_x;
+				let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+				this._loadingTip.x = this.btn.width - 90 + offset_x;
 			}
 			this._loadingTip.progress = value;
 			this._loadingTip.update();
@@ -1271,6 +1320,8 @@ module gamedating.page {
 		private _pageID = "";
 		private show() {
 			let order: number = 1;
+			this.img_ewm.visible = false;
+			this.txt_gw.visible = false;
 			switch (this._data) {
 				case 'daili':
 					order = 1;
@@ -1279,9 +1330,13 @@ module gamedating.page {
 				case 'fenxiang':
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
+					this.img_ewm.visible = true;
+					this.img_ewm.skin = WebConfig.ewmUrl;
 					break;
 				case 'guanwang':
 					order = 3;
+					this.txt_gw.visible = true;
+					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
 					break;
 				case 'vip':
 					order = 4;
@@ -1302,9 +1357,11 @@ module gamedating.page {
 
 		private onClick(e) {
 			if (this._data == 'guanwang') {
+				WebConfig.copyTxt(WebConfig.gwUrl);
+				this._game.showTips("复制成功");
 				//显示气泡框
-				this._page.updatePos();
-				this._page.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
+				// this._page.updatePos();
+				// this._page.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
 				return;
 			}
 			this._game.uiRoot.general.open(this._pageID);
