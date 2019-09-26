@@ -385,11 +385,7 @@ module gamedating.page {
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
-			playerInfo.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl");
-			WebConfig.gwUrl = playerInfo.gwUrl;
-			WebConfig.ewmbaseUrl = WebConfig.gwUrl + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
-			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + playerInfo.invite_code;
-			WebConfig.downLoadUrl = WebConfig.gwUrl + "?invitecode=" + playerInfo.invite_code;
+			this._game.datingGame.updateConfigUrl();
 			//官网二维码
 			this._viewUI.img_gw.skin = WebConfig.ewmUrl
 			//官网链接
