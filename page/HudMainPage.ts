@@ -349,7 +349,7 @@ module gamedating.page {
 				case this._viewUI.btn_shouchong:
 					return WebConfig.info.is_can_first_get;
 				case this._viewUI.btn_fenxiang:
-					return WebConfig.info.is_shared;
+					return !WebConfig.info.is_shared;
 			}
 		}
 
