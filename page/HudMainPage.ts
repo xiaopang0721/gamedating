@@ -430,7 +430,7 @@ module gamedating.page {
 			for (let index = 0; index < keys.length; index++) {
 				let key = keys[index];
 				let ggData: any = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GUANGGAOLUNBO_C, key);
-				if (!ggData && ggData.status != 1) continue;
+				if (!ggData || ggData.status != 1) continue;
 				if (this._curData.indexOf(ggData) != -1) continue;
 				this._curData[this._curData.length] = ggData;
 				count++;
