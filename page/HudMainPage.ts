@@ -414,11 +414,40 @@ module gamedating.page {
 			this._firstList[index] = 1;
 		}
 
+		//获取广告轮播数据
+		private _curData: any[] = null;
+		private guanggaoLunBoData() {
+			this._curData = [];
+			let keys = [
+				Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI,
+				Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG,
+				Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG,
+				Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_VIP,
+				Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_YUEBAO,
+				Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_ZHUANPAN
+			]
+			let count = 0;
+			for (let index = 0; index < keys.length; index++) {
+				let key = keys[index];
+				let ggData: any = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GUANGGAOLUNBO_C, key);
+				if (!ggData && ggData.status != 1) continue;
+				if (this._curData.indexOf(ggData) != -1) continue;
+				this._curData[this._curData.length] = ggData;
+				count++;
+			}
+			count > 0 && (this._curData = this._curData.sort((a: any, b: any) => {
+				if (!a || !b) return 0;
+				return a.sort - b.sort;
+			}));
+			//最后一个要推第一位重复，以便轮换
+			this._curData.push(this._curData[0]);
+			return this._curData;
+		}
+
 		private onFreeStyle() {
 			if (!WebConfig.info) return;
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
-			FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GUANGGAOLUNBO_C, Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI);
-			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
+			this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();//['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
@@ -1322,31 +1351,31 @@ module gamedating.page {
 			let order: number = 1;
 			this.img_ewm.visible = false;
 			this.txt_gw.visible = false;
-			switch (this._data) {
-				case 'daili':
+			switch (this._data.type) {
+				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI:
 					order = 1;
 					this._pageID = DatingPageDef.PAGE_QUANMINDAILI;
 					break;
-				case 'fenxiang':
+				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG:
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
 					this.img_ewm.visible = true;
 					this.img_ewm.skin = WebConfig.ewmUrl;
 					break;
-				case 'guanwang':
+				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;
 					this.txt_gw.visible = true;
 					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
 					break;
-				case 'vip':
+				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_VIP:
 					order = 4;
 					this._pageID = DatingPageDef.PAGE_VIP;
 					break;
-				case 'yuebao':
+				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_YUEBAO:
 					order = 5;
 					this._pageID = DatingPageDef.PAGE_YUEBAO;
 					break;
-				case 'zhuanpan':
+				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_ZHUANPAN:
 					order = 6;
 					this._pageID = DatingPageDef.PAGE_ZHUANPAN;
 					break;
