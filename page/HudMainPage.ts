@@ -138,6 +138,7 @@ module gamedating.page {
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_daili]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(60, -18), 1, null, [this._viewUI.btn_vip]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(80, -15), 1, null, [this._viewUI.btn_shouchong]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(50, -15), 1, null, [this._viewUI.btn_fenxiang]);
 			//hud弹窗逻辑
 			this.alertPage();
 			//气泡框逻辑
@@ -347,6 +348,8 @@ module gamedating.page {
 					return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
 				case this._viewUI.btn_shouchong:
 					return WebConfig.info.is_can_first_get;
+				case this._viewUI.btn_fenxiang:
+					return WebConfig.info.is_shared;
 			}
 		}
 
@@ -414,6 +417,7 @@ module gamedating.page {
 		private onFreeStyle() {
 			if (!WebConfig.info) return;
 			this._viewUI.btn_bangding.visible = !WebConfig.info.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
+			FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GUANGGAOLUNBO_C, Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI);
 			this._viewUI.list_ad.dataSource = ['daili', 'fenxiang', 'guanwang', 'vip', 'yuebao', 'zhuanpan', 'daili'];
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
