@@ -817,6 +817,9 @@ module gamedating.page {
 				if (type > -1) {
 					//所有游戏 或 对应类型的游戏
 					if (index == 0 || index == type) {
+						// 房卡不放进热门游戏里面
+						if (index == 0 && type == DatingPageDef.TYPE_CARD)
+							continue;
 						game_list.push([str.replace('r_', ''), type, webPower, times]);
 						webPower++;
 					}
