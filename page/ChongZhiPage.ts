@@ -541,8 +541,18 @@ module gamedating.page {
 
 		}
 
+		private _isTrigger: boolean = false;
 		private onBlur() {
 			this._viewUI.box.centerY = 0;
+			this._isTrigger = true;
+		}
+
+		onBlackSpriteClick(): void {
+			if (this._isTrigger) {
+				this._isTrigger = false;
+				return;
+			};
+			super.onBlackSpriteClick();
 		}
 
 		public close(): void {
