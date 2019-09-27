@@ -815,10 +815,10 @@ module gamedating.page {
 				else
 					type = DatingPageDef.GAME_CARD_TYPE_LIST[str1][0];
 				if (type > -1) {
-					//所有游戏 或 对应类型的游戏
-					if (index == 0 || index == type) {
+					//热门游戏 或 对应类型的游戏
+					if (index == DatingPageDef.TYPE_HOT || index == type) {
 						// 房卡不放进热门游戏里面
-						if (index == 0 && type == DatingPageDef.TYPE_CARD)
+						if (index == DatingPageDef.TYPE_HOT && type == DatingPageDef.TYPE_CARD)
 							continue;
 						game_list.push([str.replace('r_', ''), type, webPower, times]);
 						webPower++;
