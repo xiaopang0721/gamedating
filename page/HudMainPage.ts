@@ -935,9 +935,9 @@ module gamedating.page {
 					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
 					break;
 				case LEvent.MOUSE_MOVE:
-					if (v == 0) {
+					if (v <= 0) {
 						this._viewUI.list_ad.scrollBar.value = this.adListMax;
-					} else if (v == this.adListMax) {
+					} else if (v >= this.adListMax) {
 						this._viewUI.list_ad.scrollBar.value = 0;
 					}
 					break;
