@@ -541,8 +541,18 @@ module gamedating.page {
 
 		}
 
+		private _isTrigger: boolean = false;
 		private onBlur() {
 			this._viewUI.box.centerY = 0;
+			this._isTrigger = true;
+		}
+
+		onBlackSpriteClick(): void {
+			if (this._isTrigger) {
+				this._isTrigger = false;
+				return;
+			};
+			super.onBlackSpriteClick();
 		}
 
 		public close(): void {
@@ -629,11 +639,11 @@ module gamedating.page {
 			this.txt_time.text = Sync.getTimeStr(data.create_time * 1000);
 			this.txt_zt.text = data.status;
 			if (data.statustype == 1) {
-				this.txt_zt.color = TeaStyle.COLOR_GREEN;
+				this.txt_zt.color = '#1fc04c';
 			} else if (data.statustype == 2) {
-				this.txt_zt.color = TeaStyle.COLOR_RED;
+				this.txt_zt.color = '#ff2400';
 			} else {
-				this.txt_zt.color = TeaStyle.COLOR_YELLOW;
+				this.txt_zt.color = '#ed7b18';
 			}
 			this.txt_money.text = data.money;
 			this.txt_type.text = data.recharge_type;

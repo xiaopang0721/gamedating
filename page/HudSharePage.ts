@@ -44,15 +44,16 @@ module gamedating.page {
 		}
 
 		private onUpdatePlayerInfo() {
+			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
 			if (!this._clipJf) {
 				this._clipJf = new DatingClip(DatingClip.FENXIANG_FONT);
-				this._clipJf.x = this._viewUI.clip_money.x + (FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney") > 9 ? -60 : 0);
+				this._clipJf.x = this._viewUI.clip_money.x + (daysharegivemoney > 9 ? -60 : 0);
 				this._clipJf.y = this._viewUI.clip_money.y;
 				this._viewUI.clip_money.parent && this._viewUI.clip_money.parent.addChild(this._clipJf);
 				this._viewUI.clip_money.removeSelf();
 			}
-			if (FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney")) {
-				this._clipJf.setText(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney"), true, false);
+			if (daysharegivemoney) {
+				this._clipJf.setText(daysharegivemoney, true, false);
 			}
 		}
 
