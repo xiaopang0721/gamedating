@@ -441,6 +441,15 @@ module gamedating.page {
 			}));
 			//最后一个要推第一位重复，以便轮换
 			this._curData.push(this._curData[0]);
+			//没有数据就默认配置
+			if (this._curData.length <= 0) this._curData = [
+				{ sort: 1, status: 1, title: "代理", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI },
+				{ sort: 2, status: 1, title: "分享", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG },
+				{ sort: 3, status: 1, title: "官网", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG },
+				{ sort: 4, status: 1, title: "VIP", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_VIP },
+				{ sort: 5, status: 1, title: "余额宝", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_YUEBAO },
+				{ sort: 6, status: 1, title: "转盘", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_ZHUANPAN },
+				{ sort: 1, status: 1, title: "代理", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI }]
 			return this._curData;
 		}
 
