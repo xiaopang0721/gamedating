@@ -83,6 +83,7 @@ module gamedating.page {
 			this._viewUI.list_btns.spaceX = -50;
 			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
+			this._viewUI.list_btns.scrollBar.changeHandler = new Handler(this, this.listBtnChange);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
 			this._viewUI.list_ad.itemRender = AdItemRender;
@@ -783,6 +784,15 @@ module gamedating.page {
 		//====================弹窗气泡相关=end======================================
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
+		private listBtnChange(value: number): void {
+			this._viewUI.btn_right.visible = true;
+			this._viewUI.btn_left.visible = true;
+			if (value <= this._viewUI.list_btns.scrollBar.min) {
+				this._viewUI.btn_left.visible = false;
+			} else if(value >= this._viewUI.list_btns.scrollBar.max){
+				this._viewUI.btn_right.visible = false;
+			}
+		}
 
 		private onDealGameData(index: number = -1) {
 			if (!WebConfig.gamelist)
