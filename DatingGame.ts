@@ -146,9 +146,9 @@ module gamedating {
 		}
 
 		public onAppBlur(e?: any) {
+			this._game.sceneGame.sceneObjectMgr.event(SceneObjectMgr.EVENT_APP_STATE_CHANGE, Web_operation_fields.APP_STATE_TYPE_MINIMIZE);
 			if (this._game.uiRoot.HUD.isOpened(PageDef.PAGE_LOADING) || this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_LOGIN)) return;
 			if (this._game.sceneGame.network.connected) return;
-			this._game.sceneGame.sceneObjectMgr.event(SceneObjectMgr.EVENT_APP_STATE_CHANGE, Web_operation_fields.APP_STATE_TYPE_MINIMIZE);
 			this._game.sceneGame.clear("UIRoot onAppBlur", true);
 			// this._game.showTips("onAppBlur")
 			this._game.stopAllSound();
@@ -156,9 +156,9 @@ module gamedating {
 		}
 
 		public onAppFous(e?: any) {
+			this._game.sceneGame.sceneObjectMgr.event(SceneObjectMgr.EVENT_APP_STATE_CHANGE, Web_operation_fields.APP_STATE_TYPE_NORMAL);
 			if (this._game.uiRoot.HUD.isOpened(PageDef.PAGE_LOADING) || this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_LOGIN)) return;
 			if (this._game.sceneGame.network.connected) return;
-			this._game.sceneGame.sceneObjectMgr.event(SceneObjectMgr.EVENT_APP_STATE_CHANGE, Web_operation_fields.APP_STATE_TYPE_NORMAL);
 			// this._game.showTips("onAppFous")
 			this._game.playMusic(this._game.musicUrl);
 			this._game.sceneGame.clear("UIRoot onAppFous", true);
