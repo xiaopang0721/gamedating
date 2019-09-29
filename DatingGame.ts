@@ -982,7 +982,7 @@ module gamedating {
 		}
 	}
 
-	class HudTabScrollData {
+	export class HudTabScrollData {
 		tabIndex: number;
 		value: number;
 	}
