@@ -356,7 +356,7 @@ module gamedating.page {
 			this._viewUI.lb_wanfa.text = "16张";
 			this._cardCount = 16;
 			this._viewUI.lb_qiangguan.text = "抢关";
-			this._qiangGuan = 0;
+			this._qiangGuan = 1;
 			this._viewUI.lb_xianchu.text = "黑桃3";
 			this._first = 0;
 			this._viewUI.lb_shunzi.text = "5张起顺";
