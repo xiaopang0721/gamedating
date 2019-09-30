@@ -467,7 +467,7 @@ module gamedating.page {
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENETIMELINE)
 					break;
 				case this._viewUI.box_no_share:
-					WebConfig.copyTxt(WebConfig.gwUrl.toString());
+					WebConfig.copyTxt(WebConfig.ewmUrl.toString());
 					this._game.showTips("复制成功");
 					break
 			}
