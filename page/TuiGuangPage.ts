@@ -28,7 +28,7 @@ module gamedating.page {
 			//官网二维码
 			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
 			//官网链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 17);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.ewmUrl, 17);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -230,7 +230,7 @@ module gamedating.page {
 			//官网二维码
 			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
 			//官网链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 17);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.ewmUrl, 17);
 		}
 
 		private onUpdatePlayerInfo() {
@@ -480,7 +480,7 @@ module gamedating.page {
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENETIMELINE)
 					break;
 				case this._viewUI.box_no_share:
-					WebConfig.copyTxt(WebConfig.gwUrl.toString());
+					WebConfig.copyTxt(WebConfig.ewmUrl.toString());
 					this._game.showTips("复制成功");
 					break
 			}
