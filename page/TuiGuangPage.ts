@@ -28,7 +28,7 @@ module gamedating.page {
 			//官网二维码
 			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
 			//官网链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl,17);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.ewmUrl, 17);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
