@@ -245,6 +245,7 @@ module gamedating.page {
 			this._viewUI.txt_agency_shareminpay.text = agency_shareminpay || "";
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
 		}
 
 		private selectHandler(index: number) {
