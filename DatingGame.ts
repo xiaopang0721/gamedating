@@ -286,7 +286,7 @@ module gamedating {
 
 		//更新配置密码
 		public updateConfigUrl() {
-			let inviteCode = WebConfig.info ? WebConfig.info.inviteCode : "";
+			let inviteCode = WebConfig.info ? WebConfig.info.invite_code : "";
 			WebConfig.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl")
 			WebConfig.ewmbaseUrl = WebConfig.gwUrl + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
 			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + inviteCode || "";
