@@ -761,7 +761,7 @@ module gamedating {
 				this._game.uiRoot.general.closeAll();
 				this._game.uiRoot.HUD.closeAll();
 				let pageDef = getPageDef(info);
-				if (pageDef && !pageDef["__enterMapLv"]) {
+				if (pageDef && !pageDef["__enterMapLv"] && !pageDef["__roomcard"]) {
 					this._game.uiRoot.HUD.open(info + "1", (page) => {
 						page.dataSource = WebConfig.hudgametype || 0;
 						this._game.uiRoot.HUD.closeAll([info + "1"])
