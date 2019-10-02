@@ -51,7 +51,7 @@ module gamedating.page {
 		// 页面初始化函数
 		private initUI(): void {
 			//仅限显示3条
-			if (this._viewTips.length >= 3) {				
+			if (this._viewTips.length >= 3) {
 				ObjectPools.free(this._viewTips.pop());
 			}
 			let viewTip: ViewTip = ViewTip.create(this._dataSource, this) as ViewTip;
@@ -80,7 +80,7 @@ module gamedating.page {
 						if (!tip) continue;
 						ObjectPools.free(tip);
 						this._viewTips.splice(i, 1);
-						i --;
+						i--;
 					}
 				}
 				this._viewTips = null;
@@ -96,8 +96,9 @@ module gamedating.page {
 		private _index: number;
 		private _frames: any = [{ scaleX: 0.9, scaleY: 0.9, alpha: 0, centerX: -440 }, { scaleX: 1, scaleY: 1, alpha: 1, centerX: 0 }, { alpha: 1 }, { alpha: 0 }];
 		private _times: any = [0, 0.2, 1.2, 0.5];
-		private _page:TipsPage;
+		private _page: TipsPage;
 		poolName: string = "ViewTip";
+		private _htmlSize: Array<number>;
         /**
          * 进池 （相当于对象dispose函数）
          */
@@ -111,7 +112,7 @@ module gamedating.page {
 			this.init();
 		}
 
-		static create(message: string, page:TipsPage): ViewTip {
+		static create(message: string, page: TipsPage): ViewTip {
 			let obj: ViewTip = ObjectPools.malloc(ViewTip) as ViewTip;
 			obj.create(message, page);
 			return obj;
@@ -157,11 +158,12 @@ module gamedating.page {
 			this._boxTip.addChild(this._boxTxtTip);
 		}
 
-		private create(message: string, page:TipsPage) {
+		private create(message: string, page: TipsPage) {
 			this._page = page;
 			this.initBox();
 			this.initImgBg();
 			this.initLabel(message);
+			this._htmlSize = TextFieldU.setHtmlText(this._txtTip, message);
 			this.visible = true;
 			this.showAniShow();
 		}
@@ -171,7 +173,7 @@ module gamedating.page {
 			Laya.Tween.clearAll(this._boxTip);
 			this._boxTip.scale(0.9, 0.9);
 			this._boxTip.alpha = 0;
-			this._imgBg.width = this._txtTip.width + 200;
+			this._imgBg.width = this._htmlSize[0] + 200;
 			this._index = 0;
 			this.updateTween();
 		}
@@ -195,12 +197,13 @@ module gamedating.page {
 				this.updateTween();
 				return;
 			}
-			Laya.Tween.to(this._boxTip, frame, time, Laya.Ease.linearNone, Handler.create(this, ()=>{this.updateTween()}));
+			Laya.Tween.to(this._boxTip, frame, time, Laya.Ease.linearNone, Handler.create(this, () => { this.updateTween() }));
 		}
 
 		private clearAll(): void {
 			Laya.Tween.clearAll(this._boxTip);
 			this._txtTip.text = "";
+			TextFieldU.clearLabel(this._txtTip);
 		}
 
 		private dispose() {

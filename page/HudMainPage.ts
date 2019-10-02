@@ -674,17 +674,35 @@ module gamedating.page {
 			//判断从游戏退出次数   余额宝 月入百万
 			if (this._game.datingGame.diffMoney > 1000 && !this._game.datingGame.isAlertYEB) {
 				//余额宝
-				this.alertQiPaoKuang(DatingGame.QIPAOKUANGYEB);
-				this._game.datingGame.isAlertYEB = true;
+				let yebData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yueb");
+				if (yebData && yebData.isopen) {
+					this.alertQiPaoKuang(DatingGame.QIPAOKUANGYEB);
+					this._game.datingGame.isAlertYEB = true;
+				}
 			} else if (this._game.datingGame.isShareBack && !this._game.datingGame.isAlertYRBW) {
-				this.alertQiPaoKuang(DatingGame.QIPAOKUANGYRBW);
-				this._game.datingGame.isAlertYRBW = true;
+				let yrbwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yrbw");
+				if (yrbwData && yrbwData.isopen) {
+					this.alertQiPaoKuang(DatingGame.QIPAOKUANGYRBW);
+					this._game.datingGame.isAlertYRBW = true;
+				}
 			} else if (this._game.datingGame.exitGmeTimes == 1 && !this._game.datingGame.isAlertYGW) {
-				this.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
-				this._game.datingGame.isAlertYGW = true;
+				let gwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tggw");
+				if (gwData && gwData.isopen) {
+					this.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
+					this._game.datingGame.isAlertYGW = true;
+				}else{
+					//这次不算
+					this._game.datingGame.exitGmeTimes --;
+				}
 			} else if (this._game.datingGame.exitGmeTimes == 2 && !this._game.datingGame.isAlertYHD) {
-				this.alertQiPaoKuang(DatingGame.QIPAOKUANGHD);
-				this._game.datingGame.isAlertYHD = true;
+				let hdData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tghd");
+				if (hdData && hdData.isopen) {
+					this.alertQiPaoKuang(DatingGame.QIPAOKUANGHD);
+					this._game.datingGame.isAlertYHD = true;
+				}else{
+					//这次不算
+					this._game.datingGame.exitGmeTimes --;
+				}
 			}
 		}
 		//初始化气泡框位置
