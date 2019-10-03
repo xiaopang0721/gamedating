@@ -672,33 +672,29 @@ module gamedating.page {
 		//弹窗显示气泡框
 		showQiPaoKuang(): void {
 			//判断从游戏退出次数   余额宝 月入百万
+			let yebData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yueb");
+			let yrbwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yrbw");
+			let gwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tggw");
+			let hdData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tghd");
 			if (!this._game.datingGame.isCanAlertYGW) this._game.datingGame.isCanAlertYGW = this._game.datingGame.exitGmeTimes == 1;	//是否可以弹官网气泡框
-			if (!this._game.datingGame.isCanAlertYHD) this._game.datingGame.isCanAlertYHD = this._game.datingGame.exitGmeTimes == 2;	//是否可以弹活动气泡框
-			if (this._game.datingGame.diffMoney > 1000 && !this._game.datingGame.isAlertYEB) {
+			if (!this._game.datingGame.isCanAlertYHD) {
+				let condition = 1;		//受官网气泡框是否开关的结果，官网开第2次弹，官网没开第一次就要弹
+				if(gwData && gwData.isopen) condition = 2;
+				this._game.datingGame.isCanAlertYHD = this._game.datingGame.exitGmeTimes == condition;	//是否可以弹活动气泡框
+			}
+			if (yebData && yebData.isopen && this._game.datingGame.diffMoney > 1000 && !this._game.datingGame.isAlertYEB) {
 				//余额宝
-				let yebData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yueb");
-				if (yebData && yebData.isopen) {
-					this.alertQiPaoKuang(DatingGame.QIPAOKUANGYEB);
-					this._game.datingGame.isAlertYEB = true;
-				}
-			} else if (this._game.datingGame.isShareBack && !this._game.datingGame.isAlertYRBW) {
-				let yrbwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yrbw");
-				if (yrbwData && yrbwData.isopen) {
-					this.alertQiPaoKuang(DatingGame.QIPAOKUANGYRBW);
-					this._game.datingGame.isAlertYRBW = true;
-				}
-			} else if (this._game.datingGame.isCanAlertYGW && !this._game.datingGame.isAlertYGW) {
-				let gwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tggw");
-				if (gwData && gwData.isopen) {
-					this.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
-					this._game.datingGame.isAlertYGW = true;
-				}
-			} else if (this._game.datingGame.isCanAlertYHD && !this._game.datingGame.isAlertYHD) {
-				let hdData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tghd");
-				if (hdData && hdData.isopen) {
-					this.alertQiPaoKuang(DatingGame.QIPAOKUANGHD);
-					this._game.datingGame.isAlertYHD = true;
-				}
+				this.alertQiPaoKuang(DatingGame.QIPAOKUANGYEB);
+				this._game.datingGame.isAlertYEB = true;
+			} else if (yrbwData && yrbwData.isopen && this._game.datingGame.isShareBack && !this._game.datingGame.isAlertYRBW) {
+				this.alertQiPaoKuang(DatingGame.QIPAOKUANGYRBW);
+				this._game.datingGame.isAlertYRBW = true;
+			} else if (gwData && gwData.isopen && this._game.datingGame.isCanAlertYGW && !this._game.datingGame.isAlertYGW) {
+				this.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
+				this._game.datingGame.isAlertYGW = true;
+			} else if (hdData && hdData.isopen && this._game.datingGame.isCanAlertYHD && !this._game.datingGame.isAlertYHD) {
+				this.alertQiPaoKuang(DatingGame.QIPAOKUANGHD);
+				this._game.datingGame.isAlertYHD = true;
 			}
 		}
 		//初始化气泡框位置
