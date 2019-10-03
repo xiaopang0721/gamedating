@@ -189,6 +189,10 @@ module gamedating {
 			//月入百万弹框标志位
 			if (!this._isShareBack) {
 				this._isShareBack = true;
+				let page: any = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD);
+				if (page) {
+					page.showQiPaoKuang();
+				}
 			}
 			if (!WebConfig.info) {
 				return;
