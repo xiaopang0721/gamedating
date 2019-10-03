@@ -286,7 +286,7 @@ module gamedating {
 		public updateConfigUrl() {
 			let inviteCode = WebConfig.info ? WebConfig.info.invite_code : "";
 			WebConfig.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl")
-			WebConfig.ewmbaseUrl = WebConfig.gwUrl + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
+			WebConfig.ewmbaseUrl = WebConfig.ai_url + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
 			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + inviteCode || "";
 			WebConfig.downLoadUrl = WebConfig.gwUrl + "?invitecode=" + inviteCode || "";
 		}
@@ -1039,7 +1039,7 @@ module gamedating {
 		}
 	}
 
-	class HudTabScrollData {
+	export class HudTabScrollData {
 		tabIndex: number;
 		value: number;
 		subValue: number;
