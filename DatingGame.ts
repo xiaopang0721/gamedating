@@ -175,6 +175,11 @@ module gamedating {
 		}
 
 		private _shareCd: number = 0;
+		//分享要超时两秒
+		private _shareContinueTime: number = 0;
+		set shareContinueTime(value: number) {
+			this._shareContinueTime = value;
+		}
 		//分享标志位
 		private _isShare: boolean = false;
 		get isShare() {
@@ -190,14 +195,22 @@ module gamedating {
 			//月入百万弹框标志位
 			if (!this._isShareBack) {
 				this._isShareBack = true;
+				let page: any = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD);
+				if (page) {
+					page.showQiPaoKuang();
+				}
 			}
 			if (!WebConfig.info) {
 				return;
 			}
-			if (success && WebConfig.info.isCanFenXiang)//可以分享
+			if (success && WebConfig.info.isCanFenXiang)//可以分享 
 			{
-				if (Laya.timer.currTimer - this._shareCd < 3000) return;
+				if (Laya.timer.currTimer - this._shareCd < 0) return;
 				this._shareCd = Laya.timer.currTimer + 3000;
+				if (Laya.timer.currTimer - this._shareContinueTime < 2000) {
+					this._game.showTips("分享失败");
+					return
+				}
 				this._game.sceneGame.network.call_new_dailyshare();
 			}
 		}
@@ -286,9 +299,8 @@ module gamedating {
 		//更新配置密码
 		public updateConfigUrl() {
 			let inviteCode = WebConfig.info ? WebConfig.info.invite_code : "";
-			WebConfig.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl");
-			WebConfig.info && (WebConfig.info.gwUrl = WebConfig.gwUrl);
-			WebConfig.ewmbaseUrl = WebConfig.gwUrl + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode=";
+			WebConfig.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl")
+			WebConfig.ewmbaseUrl = WebConfig.ai_url + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
 			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + inviteCode || "";
 			WebConfig.downLoadUrl = WebConfig.gwUrl + "?invitecode=" + inviteCode || "";
 		}
@@ -595,11 +607,13 @@ module gamedating {
 			return this._isShareBack;
 		}
 		//是否弹起过月入百万气泡框
-		public isAlertYRBW: boolean = false;
+		public isisAlertYRBW: boolean = false;
 		//是否弹起过官网气泡框
 		public isAlertYGW: boolean = false;
+		public isCanAlertYGW: boolean = false;
 		//是否弹起过活动气泡框
 		public isAlertYHD: boolean = false;
+		public isCanAlertYHD: boolean = false;
 		//是否弹起过余额宝气泡框
 		public isAlertYEB: boolean = false;
 		static QIPAOKUANGHD: string = "qipaokuanghd";

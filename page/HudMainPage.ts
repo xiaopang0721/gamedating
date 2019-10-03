@@ -672,6 +672,8 @@ module gamedating.page {
 		//弹窗显示气泡框
 		showQiPaoKuang(): void {
 			//判断从游戏退出次数   余额宝 月入百万
+			if (!this._game.datingGame.isCanAlertYGW) this._game.datingGame.isCanAlertYGW = this._game.datingGame.exitGmeTimes == 1;	//是否可以弹官网气泡框
+			if (!this._game.datingGame.isCanAlertYHD) this._game.datingGame.isCanAlertYHD = this._game.datingGame.exitGmeTimes == 2;	//是否可以弹活动气泡框
 			if (this._game.datingGame.diffMoney > 1000 && !this._game.datingGame.isAlertYEB) {
 				//余额宝
 				let yebData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "yueb");
@@ -685,23 +687,17 @@ module gamedating.page {
 					this.alertQiPaoKuang(DatingGame.QIPAOKUANGYRBW);
 					this._game.datingGame.isAlertYRBW = true;
 				}
-			} else if (this._game.datingGame.exitGmeTimes == 1 && !this._game.datingGame.isAlertYGW) {
+			} else if (this._game.datingGame.isCanAlertYGW && !this._game.datingGame.isAlertYGW) {
 				let gwData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tggw");
 				if (gwData && gwData.isopen) {
 					this.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
 					this._game.datingGame.isAlertYGW = true;
-				}else{
-					//这次不算
-					this._game.datingGame.exitGmeTimes --;
 				}
-			} else if (this._game.datingGame.exitGmeTimes == 2 && !this._game.datingGame.isAlertYHD) {
+			} else if (this._game.datingGame.isCanAlertYHD && !this._game.datingGame.isAlertYHD) {
 				let hdData = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEPOPCONFIG_C, "tghd");
 				if (hdData && hdData.isopen) {
 					this.alertQiPaoKuang(DatingGame.QIPAOKUANGHD);
 					this._game.datingGame.isAlertYHD = true;
-				}else{
-					//这次不算
-					this._game.datingGame.exitGmeTimes --;
 				}
 			}
 		}

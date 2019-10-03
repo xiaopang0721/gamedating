@@ -32,7 +32,7 @@ module gamedating.page {
 			this._viewUI.btn_wxhy.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_fxq.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-			this._avatar.loadSkeleton(DatingPath.sk_dating + "caishen01", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 3,2);
+			this._avatar.loadSkeleton(DatingPath.sk_dating + "caishen01", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 3, 2);
 			this.onUpdatePlayerInfo();
 		}
 
@@ -58,15 +58,17 @@ module gamedating.page {
 		}
 
 
-		protected onBtnTweenEnd(e: any, target: any) {
+		protected onBtnTweenEnd(e: any, target: any) {		
 			switch (target) {
 				case this._viewUI.btn_wxhy://分享微信好友
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENESESSION)
 					this._game.datingGame.isShare = true;
+					this._game.datingGame.shareContinueTime = Laya.timer.currTimer;
 					break;
 				case this._viewUI.btn_fxq://分享朋友圈
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENETIMELINE)
 					this._game.datingGame.isShare = true;
+					this._game.datingGame.shareContinueTime = Laya.timer.currTimer;
 					break;
 			}
 		}
