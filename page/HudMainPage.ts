@@ -441,7 +441,7 @@ module gamedating.page {
 				return a.sort - b.sort;
 			}));
 			//最后一个要推第一位重复，以便轮换
-			this._curData.push(this._curData[0]);
+			if (this._curData.length > 0) this._curData.push(this._curData[0]);
 			//没有数据就默认配置
 			if (this._curData.length <= 0) this._curData = [
 				{ sort: 1, status: 1, title: "代理", type: Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI },
@@ -803,7 +803,7 @@ module gamedating.page {
 			this._viewUI.btn_left.visible = true;
 			if (value <= this._viewUI.list_btns.scrollBar.min) {
 				this._viewUI.btn_left.visible = false;
-			} else if(value >= this._viewUI.list_btns.scrollBar.max){
+			} else if (value >= this._viewUI.list_btns.scrollBar.max) {
 				this._viewUI.btn_right.visible = false;
 			}
 		}
