@@ -843,10 +843,12 @@ module gamedating.page {
 				let str1 = str.replace("r_", "");
 				let times = enterGameInfo[str] ? enterGameInfo[str] : 0;
 				let type = -1;
+				let d;
 				if (str.indexOf("r_") == -1)
-					type = DatingPageDef.GAME_TYPE_LIST[str1][0];
+					d = DatingPageDef.GAME_TYPE_LIST[str1];
 				else
-					type = DatingPageDef.GAME_CARD_TYPE_LIST[str1][0];
+					d = DatingPageDef.GAME_CARD_TYPE_LIST[str1];
+				type = d && d.length != 0 ? d[0] : -1;
 				if (type > -1) {
 					//热门游戏 或 对应类型的游戏
 					if (index == DatingPageDef.TYPE_HOT || index == type) {
