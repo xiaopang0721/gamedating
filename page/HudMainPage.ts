@@ -393,7 +393,7 @@ module gamedating.page {
 			if (first)
 				this.onFreeStyle();
 
-			this.updatePos();
+			Laya.timer.frameOnce(1,this,this.updatePos);
 		}
 
 		private _diff: number = 500;
