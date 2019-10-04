@@ -393,7 +393,7 @@ module gamedating.page {
 			if (first)
 				this.onFreeStyle();
 
-			Laya.timer.frameOnce(1,this,this.updatePos);
+			Laya.timer.frameOnce(1, this, this.updatePos);
 		}
 
 		private _diff: number = 500;
@@ -679,7 +679,7 @@ module gamedating.page {
 			if (!this._game.datingGame.isCanAlertYGW) this._game.datingGame.isCanAlertYGW = this._game.datingGame.exitGmeTimes == 1;	//是否可以弹官网气泡框
 			if (!this._game.datingGame.isCanAlertYHD) {
 				let condition = 1;		//受官网气泡框是否开关的结果，官网开第2次弹，官网没开第一次就要弹
-				if(gwData && gwData.isopen) condition = 2;
+				if (gwData && gwData.isopen) condition = 2;
 				this._game.datingGame.isCanAlertYHD = this._game.datingGame.exitGmeTimes == condition;	//是否可以弹活动气泡框
 			}
 			if (yebData && yebData.isopen && this._game.datingGame.diffMoney > 1000 && !this._game.datingGame.isAlertYEB) {
@@ -936,7 +936,7 @@ module gamedating.page {
 		}
 
 		private get adListMax(): number {
-			return this._adPerWidth * (this._viewUI.list_ad.dataSource.length - 1);
+			return this._viewUI.list_ad.dataSource ? this._adPerWidth * (this._viewUI.list_ad.dataSource.length - 1) : 0;
 		}
 
 		private onViewMouseHandler(e) {
