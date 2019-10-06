@@ -679,7 +679,7 @@ module gamedating.page {
 			if (!this._game.datingGame.isCanAlertYGW) this._game.datingGame.isCanAlertYGW = this._game.datingGame.exitGmeTimes == 1;	//是否可以弹官网气泡框
 			if (!this._game.datingGame.isCanAlertYHD) {
 				let condition = 1;		//受官网气泡框是否开关的结果，官网开第2次弹，官网没开第一次就要弹
-				if(gwData && gwData.isopen) condition = 2;
+				if (gwData && gwData.isopen) condition = 2;
 				this._game.datingGame.isCanAlertYHD = this._game.datingGame.exitGmeTimes == condition;	//是否可以弹活动气泡框
 			}
 			if (yebData && yebData.isopen && this._game.datingGame.diffMoney > 1000 && !this._game.datingGame.isAlertYEB) {
@@ -797,10 +797,15 @@ module gamedating.page {
 		private listBtnChange(value: number): void {
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
-			if (value <= this._viewUI.list_btns.scrollBar.min) {
+			if (!this._viewUI.list_btns.scrollBar.min && !this._viewUI.list_btns.scrollBar.max) {
 				this._viewUI.btn_left.visible = false;
-			} else if (value >= this._viewUI.list_btns.scrollBar.max) {
 				this._viewUI.btn_right.visible = false;
+			} else {
+				if (value <= this._viewUI.list_btns.scrollBar.min) {
+					this._viewUI.btn_left.visible = false;
+				} else if (value >= this._viewUI.list_btns.scrollBar.max) {
+					this._viewUI.btn_right.visible = false;
+				}
 			}
 		}
 
