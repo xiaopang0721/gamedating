@@ -24,7 +24,6 @@ module gamedating.page {
 			this.addChild(this._viewUI);
 
 			this._game.cardRoomMgr.clear();
-			this.setCardConfig();
 			this._game.cardRoomMgr.RoomRound = this._round_count[0];
 			this._game.cardRoomMgr.RoomPay = this._pay_money[0];
 			this._game.cardRoomMgr.PayType = 1;
@@ -41,6 +40,7 @@ module gamedating.page {
 				!this._pay_money || this._pay_money.length <= 0)
 				throw "创建房间失败,请确认游戏类型及房间信息是否正确!";
 			this.initTitle();
+			this.setCardConfig();
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this.setRoundCheckboxEvent(true);
