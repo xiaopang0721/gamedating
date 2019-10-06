@@ -393,7 +393,7 @@ module gamedating.page {
 			if (first)
 				this.onFreeStyle();
 
-			this.updatePos();
+			Laya.timer.frameOnce(1, this, this.updatePos);
 		}
 
 		private _diff: number = 500;
@@ -941,7 +941,7 @@ module gamedating.page {
 		}
 
 		private get adListMax(): number {
-			return this._adPerWidth * (this._viewUI.list_ad.dataSource.length - 1);
+			return this._viewUI.list_ad.dataSource ? this._adPerWidth * (this._viewUI.list_ad.dataSource.length - 1) : 0;
 		}
 
 		private onViewMouseHandler(e) {

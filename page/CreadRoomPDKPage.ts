@@ -8,7 +8,7 @@ module gamedating.page {
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数
 		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
-		private _cardsInfo = ["无大小王（3个2）1个A", "无大小王（3个2）3个A、 1个K", "无大小王", "无大小王（3个2）1个A"];
+		private _cardsInfo = ["无大小王|3个2|1个A", "无大小王|3个2|3个A、 1个K", "无大小王", "无大小王|3个2|1个A"];
 		private _shunTemp = [5, 6];		//顺子几张起
 		private _playerCount: number = 0;	//人数
 		private _cardCount: number = 0;		//牌数
@@ -69,12 +69,20 @@ module gamedating.page {
 		private onPlayerClick(i: number, name: string) {
 			this._playerCount = this._playersTemp[i];
 			//3人只有15和16张，4人只有12和13张
+			this.updateRenShuUI();
+			this._viewUI.lb_renshu.text = this._playerCount + "人";
+			this.onClick(name);
+		}
+
+		private updateRenShuUI(isInit: boolean = false): void {
 			if (this._playerCount == 3) {
 				this._viewUI.tab_wanfa.items[0].disabled = false;
 				this._viewUI.tab_wanfa.items[1].disabled = false;
 				this._viewUI.tab_wanfa.items[2].disabled = true;
 				this._viewUI.tab_wanfa.items[3].disabled = true;
 				this._cardCount = this._cardsTemp[0];
+				if (!isInit)
+					this._viewUI.tab_wanfa.selectedIndex = -1;
 				this._viewUI.lb_info_wanfa.text = this._cardsInfo[0];
 			} else if (this._playerCount == 4) {
 				this._viewUI.tab_wanfa.items[0].disabled = true;
@@ -82,16 +90,22 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[2].disabled = false;
 				this._viewUI.tab_wanfa.items[3].disabled = false;
 				this._cardCount = this._cardsTemp[2];
+				if (!isInit)
+					this._viewUI.tab_wanfa.selectedIndex = -1;
 				this._viewUI.lb_info_wanfa.text = this._cardsInfo[2];
 				this._zhaDanA = 0;
 			}
-			this._viewUI.lb_renshu.text = this._playerCount + "人";
-			this.onClick(name);
+			this._viewUI.lb_wanfa.text = this._cardCount + "张";
 		}
 
 		private onCardsClick(i: number, name: string) {
 			this._cardCount = this._cardsTemp[i];
 			this._viewUI.lb_info_wanfa.text = this._cardsInfo[i];
+			this.updateCardsUI();
+			this.onClick(name);
+		}
+
+		private updateCardsUI(): void {
 			this._viewUI.lb_wanfa.text = this._cardCount + "张";
 			// //牌数不够，要把3A炸弹禁用了
 			if (this._cardCount == 15 || this._cardCount == 13) {
@@ -101,7 +115,6 @@ module gamedating.page {
 				this._viewUI.box_4.disabled = false;
 				this._zhaDanA = 0;
 			}
-			this.onClick(name);
 		}
 
 		private onQiangGuanClick(i: number, name: string) {
@@ -250,6 +263,7 @@ module gamedating.page {
 						bombA: this._zhaDanA,
 					};
 					this._game.cardRoomMgr.RoomType = 1;
+					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
 					this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
 					if (this._game.sceneObjectMgr.story) {
 						this._game.sceneObjectMgr.changeStory(() => {
@@ -363,11 +377,14 @@ module gamedating.page {
 			this._shunZiCount = 5;
 			this._viewUI.btn_1.selected = true;
 			this._guanShang = 1;
-			this._baoDi = 0;
+			this._baoDi = 1;
+			this._viewUI.btn_2.selected = true;
 			this._viewUI.btn_3.selected = true;
 			this._siDaiSan = 1;
 			this._zhaDanA = 0;
 			this._viewUI.txt_money.text = this._pay_money[0].toString();
+			this.updateRenShuUI(true);
+			this.updateCardsUI();
 			//存起来
 			let temp = {
 				unit_count: this._playerCount,
