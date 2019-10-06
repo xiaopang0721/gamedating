@@ -34,7 +34,6 @@ module gamedating.page {
 			this._viewUI = this.createView("dating.ChuangJianUI");
 			this.addChild(this._viewUI);
 			this._game.cardRoomMgr.clear();
-			this.setCardConfig();
 			this._game.cardRoomMgr.RoomRound = this._round_count[0];
 			this._game.cardRoomMgr.PayType = 1;
 			this._game.cardRoomMgr.RoomType = 1;
@@ -325,6 +324,9 @@ module gamedating.page {
 			super.onOpen();
 			this._viewUI.box_main.on(LEvent.CLICK, this, this.hideAllTab);
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+			
+			this.setCardConfig();
 			this.setRoundEvent(true);
 			this.setPlayerEvent(true);
 			this.setWanFaEvent(true);
@@ -332,7 +334,6 @@ module gamedating.page {
 			this.setFirstEvent(true);
 			this.setShunEvent(true);
 			this.setOtherEvent(true);
-			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this.updateViewUI();
 		}
 
