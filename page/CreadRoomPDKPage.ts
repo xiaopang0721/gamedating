@@ -264,6 +264,8 @@ module gamedating.page {
 					this._game.cardRoomMgr.RoomType = 1;
 					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
 					this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
+					let hud = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+					hud && hud.saveListStatus();
 					if (this._game.sceneObjectMgr.story) {
 						this._game.sceneObjectMgr.changeStory(() => {
 							this._game.sceneObjectMgr.intoStory("rpaodekuai", Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
