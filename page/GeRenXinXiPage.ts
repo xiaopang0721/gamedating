@@ -110,17 +110,14 @@ module gamedating.page {
 		}
 
 		//上面信息
-		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
+		
 		private onUpdatePlayerInfo() {
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
-			this._viewUI.img_head.skin = DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
-			if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sceneGame.sync.serverTimeBys) {
-				this._viewUI.img_head.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
-			}
+			this._viewUI.img_head.skin = this._game.datingGame.getPlayerHeadUrl(playerInfo);
 
 			this._viewUI.lb_vip.text = StringU.substitute("vip {0}", playerInfo.vip_level);
 			this._viewUI.txt_id.text = playerInfo.userid;

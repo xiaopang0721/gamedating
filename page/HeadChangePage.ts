@@ -122,7 +122,7 @@ module gamedating.page {
 			let skin;
 			let headInfo;
 			let txtTime: number;
-			let qfType: number = this._mainPlayer.playerInfo.qifu_type;
+			// let qfType: number = this._mainPlayer.playerInfo.qifu_type;
 			if (this._selectIndex == 0) {
 				if (data >= 16 && data <= 21) {
 					//祈福头像
@@ -133,15 +133,16 @@ module gamedating.page {
 				} else {
 					skin = DatingPath.ui_dating + "touxiang/tu_tx" + data + ".png";
 				}
-				headInfo = playerInfo.headimg;
+				headInfo = playerInfo.headimg.split('.');
+				headInfo = headInfo[headInfo.length - 1];
 			} else {
 				skin = DatingPath.ui_dating + "touxiang/tu_txk" + data + ".png";
 				headInfo = playerInfo.headKuang;
 				this.img_jb.visible = false;
 			}
 			this.img_head.skin = skin;
-			if (qfType && this._mainPlayer.GetQiFuEndTime(qfType) > this._game.sync.serverTimeBys) {
-				if (qfType + 15 == data) {
+			if (this._index >= 16 && this._index <= 21 && this._mainPlayer.GetQiFuEndTime(this._index - 16) > this._game.sync.serverTimeBys) {
+				if (this._index == parseInt(headInfo)) {
 					this.img_select.visible = true;
 				} else {
 					this.img_select.visible = false;
@@ -216,7 +217,21 @@ module gamedating.page {
 				return;
 			}
 			//0表示头像 1表示头像框
-			this._game.network.call_set_role_info(this._viewUI.tab.selectedIndex, this._data.toString());
+			let d = this._data;
+			if (this._viewUI.tab.selectedIndex == 0) {
+				// 为了让玩家可以选择祈福头像，并且祈福时间到期后还可以回去原来的头像，做了特殊处理
+				let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+				if (!mainPlayer) return;
+				let headimgs = mainPlayer.playerInfo.headimg.split('.');
+				if (parseInt(d) >= 16 && parseInt(d) <= 21) {	// 祈福头像
+					headimgs[1] = d;
+				} else {
+					headimgs.length = 0;
+					headimgs[0] = d;
+				}
+				d = headimgs.join('.');
+			}
+			this._game.network.call_set_role_info(this._viewUI.tab.selectedIndex, d);
 		}
 
 		destory() {
