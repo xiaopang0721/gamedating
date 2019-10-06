@@ -31,7 +31,7 @@ module gamedating.managers {
 		public get roomPay() {
 			let story = this._game.sceneGame.sceneObjectMgr.story;
 			if (story && story instanceof StoryRoomCardBase && story.isCardRoomMaster) {
-				return DatingGame.ins.cardRoomMgr.RoomPay;
+				return this._game.cardRoomMgr.RoomPay;
 			}
 			return 0;
 		}
