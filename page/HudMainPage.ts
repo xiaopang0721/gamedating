@@ -1099,8 +1099,8 @@ module gamedating.page {
 			this.visible = true;
 			this._page = page;
 			this._game = game;
-			this._gameStr = gameStr;
-			this._type = type;
+			this._type = type;			
+			this._gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + gameStr : gameStr;
 			this.index = index;
 			this.show();
 		}
@@ -1206,7 +1206,7 @@ module gamedating.page {
 			} else {
 				this._avatar.clear();
 			}
-			let sk_url = DatingPath.sk_dating + "DZ_" + (this._type == DatingPageDef.TYPE_CARD ? 'r' : '') + this._gameStr;
+			let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
 			this._avatar.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
@@ -1302,7 +1302,7 @@ module gamedating.page {
 				return;
 			}
 			this._game.uiRoot.btnTween(this._avatar, this, () => {
-				let gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + this._gameStr : this._gameStr;
+				let gameStr = this._gameStr;
 				if (LoadingMgr.ins.isLoaded(gameStr)) {
 					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
 						this.openPage(gameStr);
