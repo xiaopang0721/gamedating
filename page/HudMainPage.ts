@@ -9,7 +9,6 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "datingsk.atlas",
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_bairendezhou.png",
 				DatingPath.sk_dating + "DZ_benchibaoma.png",
@@ -1181,7 +1180,7 @@ module gamedating.page {
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
 			if (this._gameStr == 'zoo') {
 				if (!this._image)
-					this._image = new LImage(DatingPath.ui_dating + 'dating/btn_fqzs.png');
+					this._image = new LImage(DatingPath.ui_dating + 'dating/btn_zoo.png');
 				else
 					this._image.visible = true;
 				this.addChild(this._image);
