@@ -124,7 +124,7 @@ module gamedating.page {
 			switch (target) {
 				case this._viewUI.btn_create:
 					if (!this.chkEnoughMoney()) return;
-					let hud = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+					let hud = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
 					hud && hud.saveListStatus();
 					if (this._game.sceneObjectMgr.story) {
 						this._game.sceneObjectMgr.changeStory(() => {
