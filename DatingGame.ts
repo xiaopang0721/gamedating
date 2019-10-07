@@ -24,15 +24,24 @@ module gamedating {
 			return this._hudTabScrollData;
 		}
 		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
-		getPlayerHeadUrl(playerInfo): string {
-			let hs = playerInfo.headimg.split('.');
+		getHeadUrl(headimg: string, type: number): string {
+			let hs = headimg.split('.');
 			let headIdx = parseInt(hs[hs.length - 1]);
 			if (headIdx >= 16 && headIdx <= 21) {
-				return DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[headIdx - 16] + ".png";
+				if (type == 1) {//大厅资源
+					return DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[headIdx - 16] + ".png";
+				} else {//通用资源
+					return PathGameTongyong.ui_tongyong_touxiang + "head_" + this._qifuNameStr[headIdx - 16] + ".png";
+				}
 			} else {
-				return DatingPath.ui_dating + "touxiang/tu_tx" + (playerInfo.headimg ? playerInfo.headimg : 0) + ".png";
+				if (type == 1) {//大厅资源
+					return DatingPath.ui_dating + "touxiang/tu_tx" + (headimg ? headimg : 0) + ".png";
+				} else {//通用资源
+					return PathGameTongyong.ui_tongyong_touxiang + "tu_tx" + (headimg ? headimg : 0) + ".png";
+				}
 			}
 		}
+
 		//退出游戏计数
 		private _exitGmeTimes: number = 0;
 		private get exitGmeTimes() { return this._exitGmeTimes };
@@ -845,11 +854,11 @@ module gamedating {
 				this._checkPingTime = 30000;
 				this._game.network.call_ping_pong();
 				if (this._game.sceneObjectMgr && this._game.sceneObjectMgr.mainPlayer) {
-					let hs:string[] = this._game.sceneObjectMgr.mainPlayer.playerInfo.headimg.split('.');
+					let hs: string[] = this._game.sceneObjectMgr.mainPlayer.playerInfo.headimg.split('.');
 					let hi = parseInt(hs[hs.length - 1]);
-					if (hi >= 16 && hi <= 21){
+					if (hi >= 16 && hi <= 21) {
 						let qfEndTime = this._game.sceneObjectMgr.mainPlayer.GetQiFuEndTime(hi - 16);
-						if (!qfEndTime || qfEndTime <= this._game.sync.serverTimeBys) 
+						if (!qfEndTime || qfEndTime <= this._game.sync.serverTimeBys)
 							this._game.network.call_set_role_info(0, hs[0]);
 					}
 				}
