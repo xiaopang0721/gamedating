@@ -279,7 +279,7 @@ module gamedating.page {
 						baodi: this._baoDi,
 						sidaisan: this._siDaiSan,
 						bombA: this._zhaDanA,
-						roundCount: this._game.cardRoomMgr.RoomRound
+						juIndex: this._round_count.indexOf(this._game.cardRoomMgr.RoomRound) < 0 ? 0 : this._round_count.indexOf(this._game.cardRoomMgr.RoomRound)
 					};
 					this._game.cardRoomMgr.RoomType = 1;
 					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
@@ -404,6 +404,7 @@ module gamedating.page {
 
 		private updateViewUI(): void {
 			let args: any = localGetItem("pdkRoomArgs");
+			let juIndex;
 			if (args) {
 				args = JSON.parse(args);
 				this._playerCount = args.unit_count;
@@ -416,8 +417,10 @@ module gamedating.page {
 				this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
 				this._shunZiCount = args.shunzi;
 				this._viewUI.lb_shunzi.text = this._shunZiCount + "张起顺";
-				this._game.cardRoomMgr.RoomRound = args.roundCount;
-				this._viewUI.lb_jushu.text = this._game.cardRoomMgr.RoomRound + "局";
+				juIndex = args.juIndex;
+				this._viewUI.lb_jushu.text = this._round_count[juIndex] + "局";
+				this._game.cardRoomMgr.RoomRound = this._round_count[juIndex];
+				this._viewUI.txt_money.text = this._pay_money[juIndex].toString();
 
 				this._guanShang = args.guanshang;
 				this._viewUI.btn_1.selected = this._guanShang ? true : false;
@@ -447,8 +450,9 @@ module gamedating.page {
 				this._viewUI.btn_3.selected = true;
 				this._siDaiSan = 1;
 				this._zhaDanA = 0;
-				this._viewUI.txt_money.text = this._pay_money[0].toString();
-				this._game.cardRoomMgr.RoomRound = this._round_count[0];
+				juIndex = 0;
+				this._viewUI.txt_money.text = this._pay_money[juIndex].toString();
+				this._game.cardRoomMgr.RoomRound = this._round_count[juIndex];
 			}
 
 			this.updateRenShuUI(true);
@@ -464,7 +468,7 @@ module gamedating.page {
 				baodi: this._baoDi,
 				sidaisan: this._siDaiSan,
 				bombA: this._zhaDanA,
-				roundCount: this._game.cardRoomMgr.RoomRound
+				juIndex: juIndex
 			};
 			this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
 			localSetItem("pdkRoomArgs", this._game.cardRoomMgr.Agrs);
