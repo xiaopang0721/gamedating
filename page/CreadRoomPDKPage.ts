@@ -8,7 +8,7 @@ module gamedating.page {
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数
 		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
-		private _cardsInfo = ["无大小王|3个2|1个A", "无大小王|3个2|3个A、 1个K", "无大小王", "无大小王|3个2|1个A"];
+		private _cardsInfo = ["无大小王 | 3个2 | 1个A", "无大小王 | 3个2 | 3个A、 1个K", "无大小王", "无大小王 | 3个2 | 1个A"];
 		private _shunTemp = [5, 6];		//顺子几张起
 		private _playerCount: number = 0;	//人数
 		private _cardCount: number = 0;		//牌数
@@ -83,9 +83,13 @@ module gamedating.page {
 		private updateRenShuUI(isInit: boolean = false): void {
 			if (this._playerCount == 3) {
 				this._viewUI.tab_wanfa.items[0].disabled = false;
+				this._viewUI.tab_wanfa.items[0].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[1].disabled = false;
+				this._viewUI.tab_wanfa.items[1].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[2].disabled = true;
+				this._viewUI.tab_wanfa.items[2].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[3].disabled = true;
+				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#8e8e8e";
 				this._cardCount = this._cardsTemp[0];
 				if (!isInit)
 					for (let i = 0; i < 4; i++) {
@@ -98,9 +102,13 @@ module gamedating.page {
 				this._viewUI.lb_info_wanfa.text = this._cardsInfo[0];
 			} else if (this._playerCount == 4) {
 				this._viewUI.tab_wanfa.items[0].disabled = true;
+				this._viewUI.tab_wanfa.items[0].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[1].disabled = true;
+				this._viewUI.tab_wanfa.items[1].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[2].disabled = false;
+				this._viewUI.tab_wanfa.items[2].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[3].disabled = false;
+				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#ffffff";
 				this._cardCount = this._cardsTemp[2];
 				if (!isInit)
 					for (let i = 0; i < 4; i++) {
