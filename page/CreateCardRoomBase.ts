@@ -22,12 +22,6 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.FangKa_ChuangJianUI");
 			this.addChild(this._viewUI);
-
-			this._game.cardRoomMgr.clear();
-			this._game.cardRoomMgr.RoomRound = this._round_count[0];
-			this._game.cardRoomMgr.RoomPay = this._pay_money[0];
-			this._game.cardRoomMgr.PayType = 1;
-			this._game.cardRoomMgr.RoomType = 1;
 			for (let i = 0; i < this._round_count.length; i++) {
 				this._viewUI["txt_round" + i].text = this._round_count[i] + "局";
 			}
@@ -75,6 +69,11 @@ module gamedating.page {
 				this._pay_money[count] = game_config[key].money;
 				count++;
 			}
+			this._game.cardRoomMgr.clear();
+			this._game.cardRoomMgr.RoomRound = this._round_count[0];
+			this._game.cardRoomMgr.RoomPay = this._pay_money[0];
+			this._game.cardRoomMgr.PayType = 1;
+			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private onCheckboxClick(name: string, i: number, max_num: number) {

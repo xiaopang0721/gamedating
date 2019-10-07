@@ -384,7 +384,7 @@ module gamedating.page {
 			this._clip_money.setText(playerInfo.money, true, false, playerInfo.money < 0 ? DatingPath.ui_dating_tongyong + "tu_jianhao.png" : null);
 
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
-			this._viewUI.btn_gren.skin = this._game.datingGame.getPlayerHeadUrl(playerInfo);
+			this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 
 			if (first)
 				this.onFreeStyle();
@@ -1098,7 +1098,7 @@ module gamedating.page {
 			this.visible = true;
 			this._page = page;
 			this._game = game;
-			this._type = type;			
+			this._type = type;
 			this._gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + gameStr : gameStr;
 			this.index = index;
 			this.show();

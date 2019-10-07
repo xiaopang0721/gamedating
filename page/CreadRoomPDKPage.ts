@@ -41,10 +41,6 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.ChuangJianUI");
 			this.addChild(this._viewUI);
-			this._game.cardRoomMgr.clear();
-			this._game.cardRoomMgr.RoomRound = this._round_count[0];
-			this._game.cardRoomMgr.PayType = 1;
-			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private setCardConfig() {
@@ -57,6 +53,9 @@ module gamedating.page {
 				this._pay_money[count] = game_config[key].money;
 				count++;
 			}
+			this._game.cardRoomMgr.clear();
+			this._game.cardRoomMgr.PayType = 1;
+			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private onClick(name: string) {
@@ -89,7 +88,13 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[3].disabled = true;
 				this._cardCount = this._cardsTemp[0];
 				if (!isInit)
-					this._viewUI.tab_wanfa.selectedIndex = -1;
+					for (let i = 0; i < 4; i++) {
+						if (this._cardCount == 0) {
+							this._viewUI.tab_wanfa.items[i].selected = true;
+						} else {
+							this._viewUI.tab_wanfa.items[i].selected = false;
+						}
+					}
 				this._viewUI.lb_info_wanfa.text = this._cardsInfo[0];
 			} else if (this._playerCount == 4) {
 				this._viewUI.tab_wanfa.items[0].disabled = true;
@@ -98,7 +103,13 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[3].disabled = false;
 				this._cardCount = this._cardsTemp[2];
 				if (!isInit)
-					this._viewUI.tab_wanfa.selectedIndex = -1;
+					for (let i = 0; i < 4; i++) {
+						if (this._cardCount == 2) {
+							this._viewUI.tab_wanfa.items[i].selected = true;
+						} else {
+							this._viewUI.tab_wanfa.items[i].selected = false;
+						}
+					}
 				this._viewUI.lb_info_wanfa.text = this._cardsInfo[2];
 				this._zhaDanA = 0;
 			}
@@ -268,10 +279,12 @@ module gamedating.page {
 						baodi: this._baoDi,
 						sidaisan: this._siDaiSan,
 						bombA: this._zhaDanA,
+						roundCount: this._game.cardRoomMgr.RoomRound
 					};
 					this._game.cardRoomMgr.RoomType = 1;
 					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
 					this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
+					localSetItem("pdkRoomArgs", this._game.cardRoomMgr.Agrs);
 					let hud = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
 					hud && hud.saveListStatus();
 					if (this._game.sceneObjectMgr.story) {
@@ -283,6 +296,20 @@ module gamedating.page {
 						this.close();
 					}
 					break;
+				case this._viewUI.btn_tc:
+					let paodekuaiStory = this._game.sceneObjectMgr.story as RpaodekuaiStory;
+					let mapInfo = this._game.sceneObjectMgr.mapInfo as MapInfo;
+					mapInfo = mapInfo as RpaodekuaiMapInfo;
+					let mainUnit = this._game.sceneObjectMgr.mainUnit;
+					if (!paodekuaiStory || !mapInfo || !mainUnit) {
+						super.close();
+						return;
+					} else {
+						paodekuaiStory.endRoomCardGame(mainUnit.GetIndex(), mapInfo.GetCardRoomId());
+						this._game.sceneObjectMgr.leaveStory();
+						super.close();
+					}
+					break
 				default:
 					break;
 			}
@@ -334,8 +361,9 @@ module gamedating.page {
 			super.onOpen();
 			this._viewUI.box_main.on(LEvent.CLICK, this, this.hideAllTab);
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_tc.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
-			
+
 			this.setCardConfig();
 			this.setRoundEvent(true);
 			this.setPlayerEvent(true);
@@ -375,25 +403,54 @@ module gamedating.page {
 		}
 
 		private updateViewUI(): void {
-			this._viewUI.lb_jushu.text = "5局";
-			this._viewUI.lb_renshu.text = "3人";
-			this._playerCount = 3;
-			this._viewUI.lb_wanfa.text = "16张";
-			this._cardCount = 16;
-			this._viewUI.lb_qiangguan.text = "抢关";
-			this._qiangGuan = 1;
-			this._viewUI.lb_xianchu.text = "黑桃3";
-			this._first = 0;
-			this._viewUI.lb_shunzi.text = "5张起顺";
-			this._shunZiCount = 5;
-			this._viewUI.btn_1.selected = true;
-			this._guanShang = 1;
-			this._baoDi = 1;
-			this._viewUI.btn_2.selected = true;
-			this._viewUI.btn_3.selected = true;
-			this._siDaiSan = 1;
-			this._zhaDanA = 0;
-			this._viewUI.txt_money.text = this._pay_money[0].toString();
+			let args: any = localGetItem("pdkRoomArgs");
+			if (args) {
+				args = JSON.parse(args);
+				this._playerCount = args.unit_count;
+				this._viewUI.lb_renshu.text = this._playerCount + "人";
+				this._cardCount = args.cards_count;
+				this._viewUI.lb_wanfa.text = this._cardCount + "张";
+				this._qiangGuan = args.qiangguan;
+				this._viewUI.lb_qiangguan.text = this._qiangGuan == 0 ? "抢关" : "不抢";
+				this._first = args.first;
+				this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
+				this._shunZiCount = args.shunzi;
+				this._viewUI.lb_shunzi.text = this._shunZiCount + "张起顺";
+				this._game.cardRoomMgr.RoomRound = args.roundCount;
+				this._viewUI.lb_jushu.text = this._game.cardRoomMgr.RoomRound + "局";
+
+				this._guanShang = args.guanshang;
+				this._viewUI.btn_1.selected = this._guanShang ? true : false;
+				this._baoDi = args.baodi;
+				this._viewUI.btn_2.selected = this._baoDi ? true : false;
+				this._siDaiSan = args.sidaisan;
+				this._viewUI.btn_3.selected = this._siDaiSan ? true : false;
+				this._zhaDanA = args.bombA;
+				this._viewUI.btn_4.selected = this._zhaDanA ? true : false;
+			} else {
+				//默认
+				this._viewUI.lb_jushu.text = "5局";
+				this._viewUI.lb_renshu.text = "3人";
+				this._playerCount = 3;
+				this._viewUI.lb_wanfa.text = "16张";
+				this._cardCount = 16;
+				this._viewUI.lb_qiangguan.text = "抢关";
+				this._qiangGuan = 1;
+				this._viewUI.lb_xianchu.text = "黑桃3";
+				this._first = 0;
+				this._viewUI.lb_shunzi.text = "5张起顺";
+				this._shunZiCount = 5;
+				this._viewUI.btn_1.selected = true;
+				this._guanShang = 1;
+				this._baoDi = 1;
+				this._viewUI.btn_2.selected = true;
+				this._viewUI.btn_3.selected = true;
+				this._siDaiSan = 1;
+				this._zhaDanA = 0;
+				this._viewUI.txt_money.text = this._pay_money[0].toString();
+				this._game.cardRoomMgr.RoomRound = this._round_count[0];
+			}
+
 			this.updateRenShuUI(true);
 			this.updateCardsUI();
 			//存起来
@@ -407,8 +464,10 @@ module gamedating.page {
 				baodi: this._baoDi,
 				sidaisan: this._siDaiSan,
 				bombA: this._zhaDanA,
+				roundCount: this._game.cardRoomMgr.RoomRound
 			};
 			this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
+			localSetItem("pdkRoomArgs", this._game.cardRoomMgr.Agrs);
 		}
 
 		private onMapOutSuccess() {

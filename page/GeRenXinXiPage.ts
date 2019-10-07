@@ -110,14 +110,14 @@ module gamedating.page {
 		}
 
 		//上面信息
-		
+
 		private onUpdatePlayerInfo() {
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
 			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
-			this._viewUI.img_head.skin = this._game.datingGame.getPlayerHeadUrl(playerInfo);
+			this._viewUI.img_head.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 
 			this._viewUI.lb_vip.text = StringU.substitute("vip {0}", playerInfo.vip_level);
 			this._viewUI.txt_id.text = playerInfo.userid;
