@@ -167,7 +167,6 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + 'bangding.atlas',
 				DatingPath.atlas_dating_ui + 'chongzhi.atlas',
 				DatingPath.atlas_dating_ui + 'dating.atlas',
-				DatingPath.atlas_dating_ui + 'datingsk.atlas',
 				DatingPath.atlas_dating_ui + 'denglu.atlas',
 				DatingPath.atlas_dating_ui + 'denglurk.atlas',
 				DatingPath.atlas_dating_ui + 'fenxiang.atlas',
@@ -188,6 +187,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "baoxianxiang.atlas",
 				DatingPath.atlas_dating_ui + "jiaru.atlas",
 				DatingPath.atlas_dating_ui + "fk.atlas",
+				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				
 				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 				//龙骨相关添加

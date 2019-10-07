@@ -41,9 +41,6 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.ChuangJianUI");
 			this.addChild(this._viewUI);
-			this._game.cardRoomMgr.clear();
-			this._game.cardRoomMgr.PayType = 1;
-			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private setCardConfig() {
@@ -56,6 +53,9 @@ module gamedating.page {
 				this._pay_money[count] = game_config[key].money;
 				count++;
 			}
+			this._game.cardRoomMgr.clear();
+			this._game.cardRoomMgr.PayType = 1;
+			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private onClick(name: string) {
@@ -285,7 +285,7 @@ module gamedating.page {
 					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
 					this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
 					localSetItem("pdkRoomArgs", this._game.cardRoomMgr.Agrs);
-					let hud = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+					let hud = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
 					hud && hud.saveListStatus();
 					if (this._game.sceneObjectMgr.story) {
 						this._game.sceneObjectMgr.changeStory(() => {
