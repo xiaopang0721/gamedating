@@ -19,6 +19,14 @@ module gamedating.page {
 		private _baoDi: number = 0;			//报单保底
 		private _siDaiSan: number = 0;		//四带三
 		private _zhaDanA: number = 0;		//3A炸弹
+		private _game_id: string;	// 当前游戏ID
+		get game_id() {
+			return this._game_id;
+		}
+
+		set game_id(v: string) {
+			this._game_id = v;
+		}
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -42,7 +50,7 @@ module gamedating.page {
 		private setCardConfig() {
 			if (!WebConfig.info) return;
 			let card_config = JSON.parse(WebConfig.info.card_config);
-			let game_config = card_config["paodekuai"];
+			let game_config = card_config[this._game_id];
 			let count = 0;
 			for (let key in game_config) {
 				this._round_count[count] = parseFloat(key);
