@@ -142,6 +142,7 @@ module gamedating.page {
 			}
 			this.img_head.skin = skin;
 			if (this._index >= 16 && this._index <= 21 && this._mainPlayer.GetQiFuEndTime(this._index - 16) > this._game.sync.serverTimeBys) {
+				//祈福判断
 				if (this._index == parseInt(headInfo)) {
 					this.img_select.visible = true;
 				} else {
@@ -231,7 +232,7 @@ module gamedating.page {
 				}
 				d = headimgs.join('.');
 			}
-			this._game.network.call_set_role_info(this._viewUI.tab.selectedIndex, d);
+			this._game.network.call_set_role_info(this._viewUI.tab.selectedIndex, d.toString());
 		}
 
 		destory() {
