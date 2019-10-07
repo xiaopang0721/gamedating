@@ -9,6 +9,7 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "datingsk.atlas",
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_bairendezhou.png",
 				DatingPath.sk_dating + "DZ_benchibaoma.png",
@@ -902,7 +903,7 @@ module gamedating.page {
 			if (this._isFromRoom)
 				return;
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
-			Laya.timer.frameOnce(1, this, () => {
+			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.cells.forEach(element => {
@@ -1080,11 +1081,10 @@ module gamedating.page {
 		private _game: Game;
 		private _gameStr: string;
 		private _type: number;
-		private _avatar: AvatarUIShow;
 		private _updateEffect: AnimationFrame;
-		private _image: LImage;
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.nqp.dating.component.Effect_dengdaiUI;
+		private _mainView:any;
 
 		constructor() {
 			super();
@@ -1105,16 +1105,16 @@ module gamedating.page {
 		}
 
 		destroy() {
-			if (this._avatar) {
-				this._avatar.clear();
-				this._avatar.destroy();
-				this._avatar = null;
-			}
-			if (this._image) {
-				this._image.removeSelf();
-				this._image.destroy();
-				this._image = null;
-			}
+			if (this._mainView instanceof AvatarUIShow) {
+				this._mainView.clear();
+				this._mainView.destroy();
+				this._mainView = null;
+			} 
+			if (this._mainView instanceof LImage) {
+				this._mainView.removeSelf();
+				this._mainView.destroy();
+				this._mainView = null;
+			} 			
 			this.clearWaiting();
 			this.clearUpdate();
 			this.clearProgress();
@@ -1124,7 +1124,7 @@ module gamedating.page {
 
 		update(): void {
 			if (!this._gameStr || !this.alpha) return;
-			if (this._avatar) {
+			if (this._mainView instanceof AvatarUIShow) {
 				let isOpenPage = false;
 				//有某些界面存在时不停止
 				for (let i = 0; i < HudMainPage.PAGE_ID.length; i++) {
@@ -1135,11 +1135,11 @@ module gamedating.page {
 					}
 				}
 				if (this._game.uiRoot.general.numChildren && !isOpenPage) {
-					this._avatar.paused();
+					this._mainView.paused();
 				} else {
-					this._avatar.resume();
+					this._mainView.resume();
 				}
-				this._avatar.onDraw();
+				this._mainView.onDraw();
 			}
 			if (this._updateEffect) {
 				this._updateEffect.onDraw();
@@ -1160,9 +1160,8 @@ module gamedating.page {
 
 		set setAlpha(v: number) {
 			this.alpha = v;
-			// this.visible = v != 0;
-			if (this._avatar) {
-				this._avatar.visible = v != 0;
+			if (this._mainView instanceof AvatarUIShow || this._mainView instanceof LImage) {
+				this._mainView.visible = v != 0;
 			}
 			if (this._updateEffect) {
 				this._updateEffect.visible = v != 0;
@@ -1174,39 +1173,42 @@ module gamedating.page {
 		get setAlpha(): number {
 			return this.alpha;
 		}
-
+		private static _jqqdGames:string[] = ['zoo', 'rshisanshui'];
 		private show(): void {
 			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
-			if (this._gameStr == 'zoo') {
-				if (!this._image)
-					this._image = new LImage(DatingPath.ui_dating + 'dating/btn_zoo.png');
-				else
-					this._image.visible = true;
-				this.addChild(this._image);
-				this._image.anchorX = this._image.anchorY = 0.5;
-				this._image.x = 135 + offset_x;
-				this._image.y = 120;
-				if (this._avatar)
-					this._avatar.visible = false;
+			if (GameItemRender._jqqdGames.indexOf('this._gameStr') != -1) {
+				if (this._mainView instanceof AvatarUIShow) {
+					this._mainView.clear();
+					this._mainView.destroy();
+					this._mainView = null;
+				}
+				if (!this._mainView)
+					this._mainView = new LImage();
+				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_fqzs.png';
+				this.addChild(this._mainView);
+				this._mainView.anchorX = this._mainView.anchorY = 0.5;
+				this._mainView.x = 135 + offset_x;
+				this._mainView.y = 120;				
 				this.clearUpdate();
 				this.clearProgress();
 				this.clearWaiting();
 				return;
 			} else {
-				if (this._image)
-					this._image.visible = false;
-				if (this._avatar)
-					this._avatar.visible = true;
+				if (this._mainView instanceof LImage) {
+					this._mainView.removeSelf();
+					this._mainView.destroy();
+					this._mainView = null;
+				}
+				if (!this._mainView) {
+					this._mainView = new AvatarUIShow();
+					this.addChild(this._mainView);
+				} else {
+					this._mainView.clear();
+				}
+				let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
+				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			}
-			if (!this._avatar) {
-				this._avatar = new AvatarUIShow();
-				this.addChild(this._avatar);
-			} else {
-				this._avatar.clear();
-			}
-			let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
-			this._avatar.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
 				this.showUpdate(offset_x);
@@ -1222,7 +1224,6 @@ module gamedating.page {
 		private showWaiting() {
 			if (!this._waitingTip) {
 				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
-				// this._waitingTip.ani1.play(1, true);
 			}
 			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
 			this._waitingTip.x = this.btn.width - 90 + offset_x;
@@ -1280,8 +1281,8 @@ module gamedating.page {
 
 		private onMouseHandle(e: LEvent) {
 			if (!this._gameStr) return;
-			if (this._gameStr == 'zoo') {
-				this._game.uiRoot.btnTween(this._image, this, () => {
+			if (GameItemRender._jqqdGames.indexOf('this._gameStr') != -1) {
+				this._game.uiRoot.btnTween(this._mainView, this, () => {
 					this._game.showTips("功能开发中，敬请期待...");
 				})
 				return;
@@ -1300,7 +1301,7 @@ module gamedating.page {
 				this._game.showTips("正在更新中...")
 				return;
 			}
-			this._game.uiRoot.btnTween(this._avatar, this, () => {
+			this._game.uiRoot.btnTween(this._mainView, this, () => {
 				let gameStr = this._gameStr;
 				if (LoadingMgr.ins.isLoaded(gameStr)) {
 					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {

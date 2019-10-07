@@ -285,7 +285,7 @@ module gamedating.page {
 					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
 					this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
 					localSetItem("pdkRoomArgs", this._game.cardRoomMgr.Agrs);
-					let hud = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+					let hud = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
 					hud && hud.saveListStatus();
 					if (this._game.sceneObjectMgr.story) {
 						this._game.sceneObjectMgr.changeStory(() => {
