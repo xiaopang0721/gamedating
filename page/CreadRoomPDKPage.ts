@@ -41,9 +41,6 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.ChuangJianUI");
 			this.addChild(this._viewUI);
-			this._game.cardRoomMgr.clear();
-			this._game.cardRoomMgr.PayType = 1;
-			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private setCardConfig() {
@@ -56,6 +53,9 @@ module gamedating.page {
 				this._pay_money[count] = game_config[key].money;
 				count++;
 			}
+			this._game.cardRoomMgr.clear();
+			this._game.cardRoomMgr.PayType = 1;
+			this._game.cardRoomMgr.RoomType = 1;
 		}
 
 		private onClick(name: string) {
