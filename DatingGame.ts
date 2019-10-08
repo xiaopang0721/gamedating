@@ -42,6 +42,15 @@ module gamedating {
 			}
 		}
 
+		getTouXiangKuangUrl(headKuang: string, type: number): string {
+			headKuang = headKuang ? headKuang : '0';
+			if (type == 1) {//大厅资源
+				return  DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
+			} else {//通用资源
+				return PathGameTongyong.ui_tongyong_touxiang + "tu_txk" + headKuang + ".png";
+			}
+		}
+
 		//退出游戏计数
 		private _exitGmeTimes: number = 0;
 		private get exitGmeTimes() { return this._exitGmeTimes };
