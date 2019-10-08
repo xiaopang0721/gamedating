@@ -19,7 +19,7 @@ module gamedating.page {
 		private _baoDi: number = 0;			//报单保底
 		private _siDaiSan: number = 0;		//四带三
 		private _zhaDanA: number = 0;		//3A炸弹
-		private _game_id: string;	// 当前游戏ID
+		private _game_id: string = "rpaodekuai";	// 当前游戏ID
 		get game_id() {
 			return this._game_id;
 		}
