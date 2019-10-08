@@ -38,7 +38,6 @@ module gamedating.managers {
 		private _cardroomList: string[] = ["rniuniu", "rddz", "rpaodekuai", "rshisanshui"];
 		//战斗日志转成字符串
 		private GetBattleInfoToString(game_id: string, battle_log: string): any {
-			game_id = "rniuniu"
 			if (!this._mapInfoList[game_id]) {
 				let mapid = game_id.substr(0, 1).toUpperCase() + game_id.substr(1, game_id.length);
 				let comm = StringU.substitute("new game{0}.data.{1}MapInfo({2})", game_id, mapid, "this._game.sceneGame.sceneObjectMgr")
