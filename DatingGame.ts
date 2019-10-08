@@ -29,9 +29,9 @@ module gamedating {
 			let headIdx = parseInt(hs[hs.length - 1]);
 			if (headIdx >= 16 && headIdx <= 21) {
 				if (type == 1) {//大厅资源
-					return DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[headIdx - 16] + ".png";
+					return DatingPath.ui_dating + "touxiang/tu_tx" + this._qifuNameStr[headIdx - 16] + ".png";
 				} else {//通用资源
-					return PathGameTongyong.ui_tongyong_touxiang + "head_" + this._qifuNameStr[headIdx - 16] + ".png";
+					return PathGameTongyong.ui_tongyong_touxiang + "tu_tx" + this._qifuNameStr[headIdx - 16] + ".png";
 				}
 			} else {
 				if (type == 1) {//大厅资源

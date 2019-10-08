@@ -154,9 +154,7 @@ module gamedating.page {
 				if (!mainPlayer) return;
 				let playerInfo = mainPlayer.playerInfo;
 				if (!playerInfo) return;
-				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
-					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
-				}
+				this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 				//祈福成功 头像上就有动画
 				let qf_id = dataSource.qf_id;
 				this._qifuTypeImgUrl = StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
@@ -333,6 +331,7 @@ module gamedating.page {
 		}
 
 		private checkout(btn: any) {
+			if(!WebConfig.info) return;
 			switch (btn) {
 				case this._viewUI.btn_xiaoxi:
 					return this._game.datingGame.mailMgr.isShowRed || WebConfig.info.is_new_bulletin;
@@ -1176,7 +1175,7 @@ module gamedating.page {
 		private show(): void {
 			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
-			if (GameItemRender._jqqdGames.indexOf('this._gameStr') != -1) {
+			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
 				if (this._mainView instanceof AvatarUIShow) {
 					this._mainView.clear();
 					this._mainView.destroy();
@@ -1184,7 +1183,7 @@ module gamedating.page {
 				}
 				if (!this._mainView)
 					this._mainView = new LImage();
-				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_fqzs.png';
+				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_' + this._gameStr + '.png';
 				this.addChild(this._mainView);
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
@@ -1280,7 +1279,7 @@ module gamedating.page {
 
 		private onMouseHandle(e: LEvent) {
 			if (!this._gameStr) return;
-			if (GameItemRender._jqqdGames.indexOf('this._gameStr') != -1) {
+			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
 				this._game.uiRoot.btnTween(this._mainView, this, () => {
 					this._game.showTips("功能开发中，敬请期待...");
 				})
