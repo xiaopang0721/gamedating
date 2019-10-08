@@ -8,7 +8,7 @@ module gamedating.page {
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数
 		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
-		private _cardsInfo = ["无大小王|3个2|1个A", "无大小王|3个2|3个A、 1个K", "无大小王", "无大小王|3个2|1个A"];
+		private _cardsInfo = ["无大小王 | 3个2 | 1个A", "无大小王 | 3个2 | 3个A、 1个K", "无大小王", "无大小王 | 3个2 | 1个A"];
 		private _shunTemp = [5, 6];		//顺子几张起
 		private _playerCount: number = 0;	//人数
 		private _cardCount: number = 0;		//牌数
@@ -83,9 +83,13 @@ module gamedating.page {
 		private updateRenShuUI(isInit: boolean = false): void {
 			if (this._playerCount == 3) {
 				this._viewUI.tab_wanfa.items[0].disabled = false;
+				this._viewUI.tab_wanfa.items[0].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[1].disabled = false;
+				this._viewUI.tab_wanfa.items[1].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[2].disabled = true;
+				this._viewUI.tab_wanfa.items[2].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[3].disabled = true;
+				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#8e8e8e";
 				this._cardCount = this._cardsTemp[0];
 				if (!isInit)
 					for (let i = 0; i < 4; i++) {
@@ -98,9 +102,13 @@ module gamedating.page {
 				this._viewUI.lb_info_wanfa.text = this._cardsInfo[0];
 			} else if (this._playerCount == 4) {
 				this._viewUI.tab_wanfa.items[0].disabled = true;
+				this._viewUI.tab_wanfa.items[0].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[1].disabled = true;
+				this._viewUI.tab_wanfa.items[1].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[2].disabled = false;
+				this._viewUI.tab_wanfa.items[2].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[3].disabled = false;
+				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#ffffff";
 				this._cardCount = this._cardsTemp[2];
 				if (!isInit)
 					for (let i = 0; i < 4; i++) {
@@ -279,7 +287,7 @@ module gamedating.page {
 						baodi: this._baoDi,
 						sidaisan: this._siDaiSan,
 						bombA: this._zhaDanA,
-						roundCount: this._game.cardRoomMgr.RoomRound
+						juIndex: this._round_count.indexOf(this._game.cardRoomMgr.RoomRound) < 0 ? 0 : this._round_count.indexOf(this._game.cardRoomMgr.RoomRound)
 					};
 					this._game.cardRoomMgr.RoomType = 1;
 					this._game.cardRoomMgr.RoomPay = Number(this._viewUI.txt_money.text);
@@ -404,6 +412,7 @@ module gamedating.page {
 
 		private updateViewUI(): void {
 			let args: any = localGetItem("pdkRoomArgs");
+			let juIndex;
 			if (args) {
 				args = JSON.parse(args);
 				this._playerCount = args.unit_count;
@@ -416,8 +425,10 @@ module gamedating.page {
 				this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
 				this._shunZiCount = args.shunzi;
 				this._viewUI.lb_shunzi.text = this._shunZiCount + "张起顺";
-				this._game.cardRoomMgr.RoomRound = args.roundCount;
-				this._viewUI.lb_jushu.text = this._game.cardRoomMgr.RoomRound + "局";
+				juIndex = args.juIndex;
+				this._viewUI.lb_jushu.text = this._round_count[juIndex] + "局";
+				this._game.cardRoomMgr.RoomRound = this._round_count[juIndex];
+				this._viewUI.txt_money.text = this._pay_money[juIndex].toString();
 
 				this._guanShang = args.guanshang;
 				this._viewUI.btn_1.selected = this._guanShang ? true : false;
@@ -447,8 +458,9 @@ module gamedating.page {
 				this._viewUI.btn_3.selected = true;
 				this._siDaiSan = 1;
 				this._zhaDanA = 0;
-				this._viewUI.txt_money.text = this._pay_money[0].toString();
-				this._game.cardRoomMgr.RoomRound = this._round_count[0];
+				juIndex = 0;
+				this._viewUI.txt_money.text = this._pay_money[juIndex].toString();
+				this._game.cardRoomMgr.RoomRound = this._round_count[juIndex];
 			}
 
 			this.updateRenShuUI(true);
@@ -464,7 +476,7 @@ module gamedating.page {
 				baodi: this._baoDi,
 				sidaisan: this._siDaiSan,
 				bombA: this._zhaDanA,
-				roundCount: this._game.cardRoomMgr.RoomRound
+				juIndex: juIndex
 			};
 			this._game.cardRoomMgr.Agrs = JSON.stringify(temp);
 			localSetItem("pdkRoomArgs", this._game.cardRoomMgr.Agrs);
