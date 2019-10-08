@@ -51,6 +51,21 @@ module gamedating {
 			}
 		}
 
+		getQFTypeImg(qf_id): string {
+			return StringU.substitute(PathGameTongyong.ui_tongyong_touxiang + "f_{0}2.png", this._qifuNameStr[qf_id - 1]);
+		}
+
+		getIsHaveQiFu(player): boolean {
+			if (!player || !player.GetQiFuEndTime) return false;
+			for (let i = 0; i < 6; i++) {
+				let qfEndTime = player.GetQiFuEndTime(i);
+				if (qfEndTime && qfEndTime > this._game.sync.serverTimeBys) {
+					return true;
+				}
+			}
+			return false;
+		}
+
 		//退出游戏计数
 		private _exitGmeTimes: number = 0;
 		private get exitGmeTimes() { return this._exitGmeTimes };
