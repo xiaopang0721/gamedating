@@ -9,7 +9,6 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "datingsk.atlas",
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_bairendezhou.png",
 				DatingPath.sk_dating + "DZ_benchibaoma.png",
@@ -334,6 +333,7 @@ module gamedating.page {
 		}
 
 		private checkout(btn: any) {
+			if(!WebConfig.info) return;
 			switch (btn) {
 				case this._viewUI.btn_xiaoxi:
 					return this._game.datingGame.mailMgr.isShowRed || WebConfig.info.is_new_bulletin;
