@@ -1174,7 +1174,7 @@ module gamedating.page {
 		private show(): void {
 			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
-			if (GameItemRender._jqqdGames.indexOf('this._gameStr') != -1) {
+			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
 				if (this._mainView instanceof AvatarUIShow) {
 					this._mainView.clear();
 					this._mainView.destroy();
@@ -1182,7 +1182,7 @@ module gamedating.page {
 				}
 				if (!this._mainView)
 					this._mainView = new LImage();
-				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_fqzs.png';
+				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_' + this._gameStr + '.png';
 				this.addChild(this._mainView);
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
@@ -1278,7 +1278,7 @@ module gamedating.page {
 
 		private onMouseHandle(e: LEvent) {
 			if (!this._gameStr) return;
-			if (GameItemRender._jqqdGames.indexOf('this._gameStr') != -1) {
+			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
 				this._game.uiRoot.btnTween(this._mainView, this, () => {
 					this._game.showTips("功能开发中，敬请期待...");
 				})
