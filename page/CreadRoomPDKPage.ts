@@ -420,7 +420,7 @@ module gamedating.page {
 				this._cardCount = args.cards_count;
 				this._viewUI.lb_wanfa.text = this._cardCount + "张";
 				this._qiangGuan = args.qiangguan;
-				this._viewUI.lb_qiangguan.text = this._qiangGuan == 0 ? "抢关" : "不抢";
+				this._viewUI.lb_qiangguan.text = this._qiangGuan == 1 ? "抢关" : "不抢";
 				this._first = args.first;
 				this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
 				this._shunZiCount = args.shunzi;
