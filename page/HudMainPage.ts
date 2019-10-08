@@ -154,9 +154,7 @@ module gamedating.page {
 				if (!mainPlayer) return;
 				let playerInfo = mainPlayer.playerInfo;
 				if (!playerInfo) return;
-				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
-					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
-				}
+				this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 				//祈福成功 头像上就有动画
 				let qf_id = dataSource.qf_id;
 				this._qifuTypeImgUrl = StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
