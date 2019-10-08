@@ -121,8 +121,8 @@ module gamedating.page {
 			let idx = this._boxQifuUI.indexOf(target);
 			if (!this._dataInfo || !this._dataInfo.length) return;
 			if (idx != -1) {
-				let qftype: number = this._dataInfo[idx].qf_type;
-				let qfid: number = this._dataInfo[idx].qf_id;
+				let qftype: number = parseInt(this._dataInfo[idx].qf_type);
+				let qfid: number = parseInt(this._dataInfo[idx].qf_id);
 				if (!this._mainplayer) return;
 				let qfendTime: number = this._mainplayer.GetQiFuEndTime(qfid - 1);
 				let qfname: string = this._nameInfo[idx];

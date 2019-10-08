@@ -154,9 +154,7 @@ module gamedating.page {
 				if (!mainPlayer) return;
 				let playerInfo = mainPlayer.playerInfo;
 				if (!playerInfo) return;
-				if (playerInfo.qifu_type > 0 && playerInfo.qifu_endtime > this._game.sync.serverTimeBys) {
-					this._viewUI.btn_gren.skin = DatingPath.ui_dating + "touxiang/head_" + this._qifuNameStr[playerInfo.qifu_type - 1] + ".png";
-				}
+				this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 				//祈福成功 头像上就有动画
 				let qf_id = dataSource.qf_id;
 				this._qifuTypeImgUrl = StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
@@ -383,7 +381,7 @@ module gamedating.page {
 
 			this._clip_money.setText(playerInfo.money, true, false, playerInfo.money < 0 ? DatingPath.ui_dating_tongyong + "tu_jianhao.png" : null);
 
-			this._viewUI.img_txk.skin = DatingPath.ui_dating + "touxiang/tu_txk" + (playerInfo.headKuang ? playerInfo.headKuang : 0) + ".png";
+			this._viewUI.img_txk.skin = this._game.datingGame.getTouXiangKuangUrl(playerInfo.headKuang, 1);
 			this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 
 			if (first)
