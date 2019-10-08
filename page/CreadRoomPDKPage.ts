@@ -8,7 +8,7 @@ module gamedating.page {
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数
 		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
-		private _cardsInfo = ["无大小王 | 3个2 | 1个A", "无大小王 | 3个2 | 3个A、 1个K", "无大小王", "无大小王 | 3个2 | 1个A"];
+		private _cardsInfo = ["无大小王 | 3个2 | 1个A", "无大小王 | 3个2 | 3个A | 1个K", "无大小王", "无大小王 | 3个2 | 1个A"];
 		private _shunTemp = [5, 6];		//顺子几张起
 		private _playerCount: number = 0;	//人数
 		private _cardCount: number = 0;		//牌数
@@ -19,7 +19,7 @@ module gamedating.page {
 		private _baoDi: number = 0;			//报单保底
 		private _siDaiSan: number = 0;		//四带三
 		private _zhaDanA: number = 0;		//3A炸弹
-		private _game_id: string;	// 当前游戏ID
+		private _game_id: string = "rpaodekuai";	// 当前游戏ID
 		get game_id() {
 			return this._game_id;
 		}
