@@ -24,7 +24,8 @@ module gamedating {
 			return this._hudTabScrollData;
 		}
 		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
-		getHeadUrl(headimg: string, type: number): string {
+		getHeadUrl(headimg: string, type: number = 2): string {
+			headimg = headimg ? headimg : '0';
 			let hs = headimg.split('.');
 			let headIdx = parseInt(hs[hs.length - 1]);
 			if (headIdx >= 16 && headIdx <= 21) {
@@ -42,7 +43,7 @@ module gamedating {
 			}
 		}
 
-		getTouXiangKuangUrl(headKuang: string, type: number): string {
+		getTouXiangKuangUrl(headKuang: string, type: number = 2): string {
 			headKuang = headKuang ? headKuang : '0';
 			if (type == 1) {//大厅资源
 				return  DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
