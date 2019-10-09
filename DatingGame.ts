@@ -24,7 +24,8 @@ module gamedating {
 			return this._hudTabScrollData;
 		}
 		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
-		getHeadUrl(headimg: string, type: number): string {
+		getHeadUrl(headimg: string, type: number = 2): string {
+			headimg = headimg ? headimg : '0';
 			let hs = headimg.split('.');
 			let headIdx = parseInt(hs[hs.length - 1]);
 			if (headIdx >= 16 && headIdx <= 21) {
@@ -42,7 +43,7 @@ module gamedating {
 			}
 		}
 
-		getTouXiangKuangUrl(headKuang: string, type: number): string {
+		getTouXiangKuangUrl(headKuang: string, type: number = 2): string {
 			headKuang = headKuang ? headKuang : '0';
 			if (type == 1) {//大厅资源
 				return  DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
@@ -139,12 +140,15 @@ module gamedating {
 			}
 			this._game.setIsLockGame(false, false, "UIRoot.onMPlayerData");
 			this._isLogined = true;
+
+			let hud_page = WebConfig.enterGameLocked ? (WebConfig.gameid + "1") : DatingPageDef.PAGE_HUD;
+
 			//界面上什么都没有 就打开hud
-			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, DatingPageDef.PAGE_HUD, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
-			if (!this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_HUD)) {
-				this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
+			if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
+				this._game.uiRoot.HUD.open(hud_page, () => {
 					this._game.playSound(Path.sound_hy);
-					this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD]);
+					this._game.uiRoot.HUD.closeAll([hud_page]);
 				});
 			}
 
