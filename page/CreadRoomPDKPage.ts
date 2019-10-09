@@ -122,6 +122,7 @@ module gamedating.page {
 				this._zhaDanA = 0;
 			}
 			this._viewUI.lb_wanfa.text = this._cardCount + "张";
+			this.updateCardsUI();
 		}
 
 		private onCardsClick(i: number, name: string) {
