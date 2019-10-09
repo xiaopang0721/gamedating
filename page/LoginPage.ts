@@ -49,6 +49,13 @@ module gamedating.page {
                 Laya.SoundManager.setMusicVolume(value);
                 localSetItem("musicVolume", value.toString());
             }
+
+            //单入口弹出账号登录界面
+            if (WebConfig.isSingleEnter) {
+                this._game.uiRoot.general.open(DatingPageDef.PAGE_BINDPHONE, (page) => {
+                    page.dataSource = LoginBindPage.TYPE_LOGIN_PASSWORD;
+                });
+            }
         }
 
         protected onBtnTweenEnd(e: any, target: any) {
