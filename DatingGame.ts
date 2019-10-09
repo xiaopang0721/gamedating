@@ -140,12 +140,15 @@ module gamedating {
 			}
 			this._game.setIsLockGame(false, false, "UIRoot.onMPlayerData");
 			this._isLogined = true;
+
+			let hud_page = WebConfig.enterGameLocked ? (WebConfig.gameid + "1") : DatingPageDef.PAGE_HUD;
+
 			//界面上什么都没有 就打开hud
-			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, DatingPageDef.PAGE_HUD, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
-			if (!this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_HUD)) {
-				this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
+			if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
+				this._game.uiRoot.HUD.open(hud_page, () => {
 					this._game.playSound(Path.sound_hy);
-					this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD]);
+					this._game.uiRoot.HUD.closeAll([hud_page]);
 				});
 			}
 
