@@ -311,7 +311,7 @@ module gamedating.page {
 					mapInfo = mapInfo as RpaodekuaiMapInfo;
 					let mainUnit = this._game.sceneObjectMgr.mainUnit;
 					if (!paodekuaiStory || !mapInfo || !mainUnit) {
-						let page:any = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD);
+						let page = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as gamedating.page.HudMainPage;
 						if (page && page.isOpenPage) {
 							page.isOpenPage = false;
 						}
