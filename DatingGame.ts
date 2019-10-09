@@ -23,13 +23,13 @@ module gamedating {
 				this._hudTabScrollData = new HudTabScrollData();
 			return this._hudTabScrollData;
 		}
-		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
+		readonly qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
 		getHeadUrl(headimg: string, type: number = 2): string {
 			headimg = headimg ? headimg : '0';
 			let hs = headimg.split('.');
 			let headIdx = parseInt(hs[hs.length - 1]);
 			if (headIdx >= 16 && headIdx <= 21) {
-				return DatingPath.ui_dating + "touxiang/tu_tx" + this._qifuNameStr[headIdx - 16] + ".png";
+				return DatingPath.ui_dating + "touxiang/tu_tx" + this.qifuNameStr[headIdx - 16] + ".png";
 			} else {
 				return DatingPath.ui_dating + "touxiang/tu_tx" + (headimg ? headimg : 0) + ".png";
 			}
@@ -41,7 +41,7 @@ module gamedating {
 		}
 
 		getQFTypeImg(qf_id): string {
-			return StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
+			return StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this.qifuNameStr[qf_id - 1]);
 		}
 
 		getIsHaveQiFu(player): boolean {
