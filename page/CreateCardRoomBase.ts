@@ -36,6 +36,7 @@ module gamedating.page {
 			this.initTitle();
 			this.setCardConfig();
 			this._viewUI.btn_create.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_tc.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this.setRoundCheckboxEvent(true);
 			this._viewUI.cb_round0.selected = true;
@@ -133,6 +134,24 @@ module gamedating.page {
 						this._game.sceneObjectMgr.intoStory(this._game_id, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
 					}
 					break;
+				case this._viewUI.btn_tc:
+					let paodekuaiStory = this._game.sceneObjectMgr.story;
+					let mapInfo = this._game.sceneObjectMgr.mapInfo;
+					mapInfo = mapInfo;
+					let mainUnit = this._game.sceneObjectMgr.mainUnit;
+					if (!paodekuaiStory || !mapInfo || !mainUnit) {
+						let page: any = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD);
+						if (page && page.isOpenPage) {
+							page.isOpenPage = false;
+						}
+						super.close();
+						return;
+					} else {
+						paodekuaiStory.endRoomCardGame(mainUnit.GetIndex(), mapInfo.GetCardRoomId());
+						this._game.sceneObjectMgr.leaveStory();
+						super.close();
+					}
+					break
 				default:
 					break;
 			}
