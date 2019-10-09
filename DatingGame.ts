@@ -29,31 +29,19 @@ module gamedating {
 			let hs = headimg.split('.');
 			let headIdx = parseInt(hs[hs.length - 1]);
 			if (headIdx >= 16 && headIdx <= 21) {
-				if (type == 1) {//大厅资源
-					return DatingPath.ui_dating + "touxiang/tu_tx" + this._qifuNameStr[headIdx - 16] + ".png";
-				} else {//通用资源
-					return PathGameTongyong.ui_tongyong_touxiang + "tu_tx" + this._qifuNameStr[headIdx - 16] + ".png";
-				}
+				return DatingPath.ui_dating + "touxiang/tu_tx" + this._qifuNameStr[headIdx - 16] + ".png";
 			} else {
-				if (type == 1) {//大厅资源
-					return DatingPath.ui_dating + "touxiang/tu_tx" + (headimg ? headimg : 0) + ".png";
-				} else {//通用资源
-					return PathGameTongyong.ui_tongyong_touxiang + "tu_tx" + (headimg ? headimg : 0) + ".png";
-				}
+				return DatingPath.ui_dating + "touxiang/tu_tx" + (headimg ? headimg : 0) + ".png";
 			}
 		}
 
 		getTouXiangKuangUrl(headKuang: string, type: number = 2): string {
 			headKuang = headKuang ? headKuang : '0';
-			if (type == 1) {//大厅资源
-				return  DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
-			} else {//通用资源
-				return PathGameTongyong.ui_tongyong_touxiang + "tu_txk" + headKuang + ".png";
-			}
+			return  DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
 		}
 
 		getQFTypeImg(qf_id): string {
-			return StringU.substitute(PathGameTongyong.ui_tongyong_touxiang + "f_{0}2.png", this._qifuNameStr[qf_id - 1]);
+			return StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
 		}
 
 		getIsHaveQiFu(player): boolean {
