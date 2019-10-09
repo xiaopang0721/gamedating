@@ -97,7 +97,7 @@ module gamedating.managers {
 		 * @param dataSource 祈福数据
 		 * @param callBack 动画完成时的回调函数
 		 */
-		showFlayAni(headView: Sprite, view: View, dataSource: any, callBack?: Handler, isAnchor: boolean = false): void {
+		showFlayAni(headView: Sprite, view: View, dataSource: any, callBack?: any, isAnchor: boolean = false): void {
 			if (!dataSource) return;
 			let qfId = dataSource.qf_id;
 			let qfImg = new LImage(DatingPath.ui_dating + "qifu/f_" + this._qifuNameStr[qfId - 1] + "1.png");
@@ -113,7 +113,7 @@ module gamedating.managers {
 			Laya.Tween.to(qfImg, { x: endX, y: endY, scaleX: 0.1, scaleY: 0.1 }, 1000, Laya.Ease.circOut, Handler.create(this, () => {
 				qfImg.removeSelf();
 				qfImg.destroy();
-				callBack && callBack.runWith(dataSource);
+				callBack && callBack.runWith ? callBack.runWith(dataSource) : callBack(dataSource);
 			}))
 		}
 
