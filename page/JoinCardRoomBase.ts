@@ -125,7 +125,12 @@ module gamedating.page {
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_GAME_ID_RETURN:             // 获取gameid成功
 						WebConfig.hudgametype = DatingPageDef.TYPE_CARD;
-						this._game.sceneObjectMgr.intoStory(msg.data, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
+						let gameid = msg.data;
+						if (LoadingMgr.ins.isLoaded(gameid)) {
+							JsLoader.ins.startLoad(gameid, Handler.create(this, (assets) => {
+								this._game.sceneObjectMgr.intoStory(gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
+							}))
+						}
 						break;
 				}
 			}
