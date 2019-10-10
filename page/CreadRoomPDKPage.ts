@@ -430,7 +430,7 @@ module gamedating.page {
 				this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
 				this._shunZiCount = args.shunzi;
 				this._viewUI.lb_shunzi.text = this._shunZiCount + "张起顺";
-				juIndex = args.juIndex||juIndex;
+				juIndex = args.juIndex || juIndex;
 				this._viewUI.lb_jushu.text = this._round_count[juIndex] + "局";
 				this._game.cardRoomMgr.RoomRound = this._round_count[juIndex];
 				this._viewUI.txt_money.text = this._pay_money[juIndex].toString();
