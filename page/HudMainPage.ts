@@ -157,7 +157,7 @@ module gamedating.page {
 				this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 				//祈福成功 头像上就有动画
 				let qf_id = dataSource.qf_id;
-				this._qifuTypeImgUrl = StringU.substitute(DatingPath.ui_dating + "touxiang/f_{0}2.png", this._qifuNameStr[qf_id - 1]);
+				this._qifuTypeImgUrl = this._game.datingGame.getQFTypeImg(qf_id);
 				if (qf_id) {
 					this._viewUI.qifu_type.visible = true;
 					this._viewUI.qifu_type.skin = this._qifuTypeImgUrl;
@@ -354,7 +354,6 @@ module gamedating.page {
 
 		private _clip_money: ClipUtil;
 		private _clip_vip: ClipUtil;
-		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
 		private onUpdatePlayerInfo(first: boolean = false) {
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;

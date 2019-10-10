@@ -89,7 +89,6 @@ module gamedating.managers {
 			this.event(QiFuMgr.QIFU_CHANGE, 1);
 		}
 
-		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
 		/**
 		 * 
 		 * @param headView 头像UI
@@ -100,7 +99,7 @@ module gamedating.managers {
 		showFlayAni(headView: Sprite, view: View, dataSource: any, callBack?: any, isAnchor: boolean = false): void {
 			if (!dataSource) return;
 			let qfId = dataSource.qf_id;
-			let qfImg = new LImage(DatingPath.ui_dating + "qifu/f_" + this._qifuNameStr[qfId - 1] + "1.png");
+			let qfImg = new LImage(DatingPath.ui_dating + "qifu/f_" + this._game.datingGame.qifuNameStr[qfId - 1] + "1.png");
 			view.addChild(qfImg);
 			qfImg.anchorX = 0.5;
 			qfImg.anchorY = 0.5;

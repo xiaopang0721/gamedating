@@ -107,7 +107,6 @@ module gamedating.page {
 		private _index: number;
 		private _selectIndex: number;
 		private _viewUI: ui.nqp.dating.TouXiangUI;
-		private _qifuNameStr: string[] = ["xs", "px", "gsy", "gg", "cs", "tdg"];
 		private _mainPlayer: PlayerData;
 		setData(game: Game, data: any, index: number, view: ui.nqp.dating.TouXiangUI, selectedIndex: number) {
 			this._game = game;
@@ -126,7 +125,7 @@ module gamedating.page {
 			if (this._selectIndex == 0) {
 				if (data >= 16 && data <= 21) {
 					//祈福头像
-					skin = DatingPath.ui_dating + "touxiang/tu_tx" + this._qifuNameStr[data - 16] + ".png";
+					skin = DatingPath.ui_dating + "touxiang/tu_tx" + this._game.datingGame.qifuNameStr[data - 16] + ".png";
 					this.txt_time.visible = true;
 					this.txt_time.text = this.getQiFuEndTimeStr(data - 16);
 					Laya.timer.loop(1000, this, this.update, [data - 16]);
