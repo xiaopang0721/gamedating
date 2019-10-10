@@ -7,8 +7,8 @@ module gamedating.page {
 		private _round_count = [5, 10, 15, 20];	// 游戏局数
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数
-		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
 		private _cardsInfo = ["无大小王 | 3个2 | 1个A", "无大小王 | 3个2 | 3个A | 1个K", "无大小王", "无大小王 | 3个2 | 1个A"];
+		private _cardsTemp = [16, 15, 13, 12];	//可选牌数
 		private _shunTemp = [5, 6];		//顺子几张起
 		private _playerCount: number = 0;	//人数
 		private _cardCount: number = 0;		//牌数
@@ -90,10 +90,10 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[2].getChildAt(0).color = "#8e8e8e";
 				this._viewUI.tab_wanfa.items[3].disabled = true;
 				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#8e8e8e";
-				this._cardCount = this._cardsTemp[0];
+				this._cardCount = this._cardCount == 15 || this._cardCount == 16 ? this._cardCount : this._cardsTemp[0];
 				if (!isInit)
 					for (let i = 0; i < 4; i++) {
-						if (this._cardCount == 0) {
+						if (this._cardsTemp.indexOf(this._cardCount)) {
 							this._viewUI.tab_wanfa.items[i].selected = true;
 						} else {
 							this._viewUI.tab_wanfa.items[i].selected = false;
@@ -109,10 +109,10 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[2].getChildAt(0).color = "#ffffff";
 				this._viewUI.tab_wanfa.items[3].disabled = false;
 				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#ffffff";
-				this._cardCount = this._cardsTemp[2];
+				this._cardCount = this._cardCount == 13 || this._cardCount == 12 ? this._cardCount : this._cardsTemp[2];
 				if (!isInit)
 					for (let i = 0; i < 4; i++) {
-						if (this._cardCount == 2) {
+						if (this._cardCount == this._cardsTemp.indexOf(this._cardCount)) {
 							this._viewUI.tab_wanfa.items[i].selected = true;
 						} else {
 							this._viewUI.tab_wanfa.items[i].selected = false;
@@ -430,7 +430,7 @@ module gamedating.page {
 				this._viewUI.lb_xianchu.text = this._first == 0 ? "黑桃3" : "赢家";
 				this._shunZiCount = args.shunzi;
 				this._viewUI.lb_shunzi.text = this._shunZiCount + "张起顺";
-				juIndex = args.juIndex;
+				juIndex = args.juIndex||juIndex;
 				this._viewUI.lb_jushu.text = this._round_count[juIndex] + "局";
 				this._game.cardRoomMgr.RoomRound = this._round_count[juIndex];
 				this._viewUI.txt_money.text = this._pay_money[juIndex].toString();

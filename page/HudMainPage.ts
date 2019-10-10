@@ -1417,7 +1417,7 @@ module gamedating.page {
 		}
 
 		private onClick(e) {
-			if (this._data == 'guanwang') {
+			if (this._data.type == Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG) {
 				WebConfig.copyTxt(WebConfig.gwUrl);
 				this._game.showTips("复制成功");
 				//显示气泡框
