@@ -417,7 +417,7 @@ module gamedating.page {
 
 		private updateViewUI(): void {
 			let args: any = localGetItem("pdkRoomArgs");
-			let juIndex;
+			let juIndex = 0;
 			if (args) {
 				args = JSON.parse(args);
 				this._playerCount = args.unit_count;
