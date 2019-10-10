@@ -57,17 +57,24 @@ module gamedating.page {
 			}
 		}
 
+		private _gameid: string = "";//gameid缓存，界面关掉就失效
 		private onBtnClick(i: number, e: LEvent) {
 			let len: number = this._game.cardRoomMgr.RoomID.length;
+			if (len + 1 > 6) return;
 			this._game.cardRoomMgr.RoomID += i.toString();
 			this._viewUI["clip_" + (len + 1)].index = i;
 			this._viewUI["clip_" + (len + 1)].visible = true;
 			if (this._game.cardRoomMgr.RoomID.length >= 6) {
 				this._game.cardRoomMgr.RoomType = 2;
 				// 输入完毕后自动寻找房间 加入成功后关闭当前页面
-				//查找游戏id
-				//从服务端查找到对应的gameid
-				this._game.network.call_get_gameid_by_room_id(this._game.cardRoomMgr.RoomID);
+				//没有gameid缓存的话就去找
+				if (!this._gameid) {
+					//从服务端查找到对应的gameid
+					this._game.network.call_get_gameid_by_room_id(this._game.cardRoomMgr.RoomID);
+				} else {
+					//有gameid缓存的话，说明js也加载过了，就直接进吧
+					this._game.sceneObjectMgr.intoStory(this._gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
+				}
 			}
 		}
 
@@ -125,10 +132,10 @@ module gamedating.page {
 						break;
 					case Operation_Fields.OPRATE_CARDROOM_GAME_ID_RETURN:             // 获取gameid成功
 						WebConfig.hudgametype = DatingPageDef.TYPE_CARD;
-						let gameid = msg.data;
-						if (LoadingMgr.ins.isLoaded(gameid)) {
-							JsLoader.ins.startLoad(gameid, Handler.create(this, (assets) => {
-								this._game.sceneObjectMgr.intoStory(gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
+						this._gameid = msg.data;
+						if (LoadingMgr.ins.isLoaded(this._gameid)) {
+							JsLoader.ins.startLoad(this._gameid, Handler.create(this, (assets) => {
+								this._game.sceneObjectMgr.intoStory(this._gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
 							}))
 						}
 						break;
