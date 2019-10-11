@@ -331,7 +331,7 @@ module gamedating.page {
 		}
 
 		private checkout(btn: any) {
-			if(!WebConfig.info) return;
+			if (!WebConfig.info) return;
 			switch (btn) {
 				case this._viewUI.btn_xiaoxi:
 					return this._game.datingGame.mailMgr.isShowRed || WebConfig.info.is_new_bulletin;
@@ -1081,7 +1081,7 @@ module gamedating.page {
 		private _updateEffect: AnimationFrame;
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.nqp.dating.component.Effect_dengdaiUI;
-		private _mainView:any;
+		private _mainView: any;
 
 		constructor() {
 			super();
@@ -1098,6 +1098,7 @@ module gamedating.page {
 			this._type = type;
 			this._gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + gameStr : gameStr;
 			this.index = index;
+			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
 			this.show();
 		}
 
@@ -1106,16 +1107,17 @@ module gamedating.page {
 				this._mainView.clear();
 				this._mainView.destroy();
 				this._mainView = null;
-			} 
+			}
 			if (this._mainView instanceof LImage) {
 				this._mainView.removeSelf();
 				this._mainView.destroy();
 				this._mainView = null;
-			} 			
+			}
 			this.clearWaiting();
 			this.clearUpdate();
 			this.clearProgress();
 			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
+			this._game && this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
 			super.destroy();
 		}
 
@@ -1170,7 +1172,8 @@ module gamedating.page {
 		get setAlpha(): number {
 			return this.alpha;
 		}
-		private static _jqqdGames:string[] = ['zoo', 'rshisanshui'];
+		//敬请期待
+		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		private show(): void {
 			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
@@ -1186,7 +1189,7 @@ module gamedating.page {
 				this.addChild(this._mainView);
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
-				this._mainView.y = 120;				
+				this._mainView.y = 120;
 				this.clearUpdate();
 				this.clearProgress();
 				this.clearWaiting();
