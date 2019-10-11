@@ -23,6 +23,7 @@ module gamedating.page {
 			this._game.cardRoomMgr.clear();
 			this._game.cardRoomMgr.RoomType = 2;
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE, this, this.onGameUpdate);
 		}
 
 		// 页面打开时执行函数
@@ -89,6 +90,21 @@ module gamedating.page {
 			this._viewUI["clip_" + len].visible = false;
 		}
 
+		private onGameUpdate() {
+			if (!this._gameid) return;
+			if (LoadingMgr.ins.isLoaded(this._gameid)) {
+				JsLoader.ins.startLoad(this._gameid, Handler.create(this, (assets) => {
+					this._game.sceneObjectMgr.intoStory(this._gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
+				}))
+			} else {
+				this._game.showTips(StringU.substitute("{0}需要更新，先为您更新游戏", PageDef.getNameById(this._gameid)));
+				this._game.sceneObjectMgr.event(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameid);
+				JsLoader.ins.startLoad(this._gameid, Handler.create(this, (assets) => {
+					LoadingMgr.ins.load(this._gameid, assets);
+				}))
+			}
+		}
+
 		private onOptHandler(optcode: number, msg: any) {
 			if (msg.type == Operation_Fields.OPRATE_CARDROOM) {
 				switch (msg.reason) {
@@ -137,6 +153,12 @@ module gamedating.page {
 							JsLoader.ins.startLoad(this._gameid, Handler.create(this, (assets) => {
 								this._game.sceneObjectMgr.intoStory(this._gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
 							}))
+						} else {
+							this._game.showTips(StringU.substitute("{0}需要更新，先为您更新游戏", PageDef.getNameById(this._gameid)));
+							this._game.sceneObjectMgr.event(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameid);
+							JsLoader.ins.startLoad(this._gameid, Handler.create(this, (assets) => {
+								LoadingMgr.ins.load(this._gameid, assets);
+							}))
 						}
 						break;
 				}
@@ -167,6 +189,7 @@ module gamedating.page {
 
 		public close(): void {
 			this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+			this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE, this, this.onGameUpdate);
 			this.setButtonEvent(false);
 			super.close();
 		}
