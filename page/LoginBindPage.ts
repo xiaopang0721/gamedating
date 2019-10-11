@@ -155,7 +155,6 @@ module gamedating.page {
             this._inputCode.settext(this._game, this._promptColor, "请输入验证码...", this._inputColor, 26, 6, MyTextInput.TYPE_INPUT_NUMBER);
             this._inputSetPsd.settext(this._game, this._promptColor, "请设置密码...", this._inputColor, 26, 10, MyTextInput.TYPE_INPUT_ENGLISH, false);
             this._inputSetNewPsd.settext(this._game, this._promptColor, "请设置新密码...", this._inputColor, 26, 10, MyTextInput.TYPE_INPUT_ENGLISH, false);
-            this._viewUI.btn_account_clear.visible = this._inputPhone.input.text.length > 0;
             this._inputPhone.on(LEvent.CLICK, this, this.onClickHandle);
             this._inputCode.on(LEvent.CLICK, this, this.onClickHandle);
             this._inputSetPsd.on(LEvent.CLICK, this, this.onClickHandle);
@@ -170,7 +169,7 @@ module gamedating.page {
             this._viewUI.btn_phone_clear.visible = false;
             this._viewUI.box_login_account.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD;
             this._viewUI.btn_see_psd.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && !WebConfig.isSingleEnter;
-            this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD;
+            this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._inputPhone.input.text.length > 0;
             this._viewUI.box_bind.visible = this._type == LoginBindPage.TYPE_BIND_PHONE;
             this._viewUI.box_reset.visible = this._type == LoginBindPage.TYPE_RESET_PASSWORD;
             this._viewUI.btn_close.visible = true;

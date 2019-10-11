@@ -1117,7 +1117,7 @@ module gamedating.page {
 			this.clearUpdate();
 			this.clearProgress();
 			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
-			this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
+			this._game && this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
 			super.destroy();
 		}
 
