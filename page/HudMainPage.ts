@@ -1136,9 +1136,9 @@ module gamedating.page {
 				if (this._game.uiRoot.general.numChildren && !isOpenPage) {
 					this._mainView.paused();
 				} else {
+					isOpenPage ? (this._mainView.playbackRate = 2) : (this._mainView.playbackRate = 1);
 					this._mainView.resume();
 				}
-				this._mainView.onDraw();
 			}
 			if (this._updateEffect) {
 				this._updateEffect.onDraw();
