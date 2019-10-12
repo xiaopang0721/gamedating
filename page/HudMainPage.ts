@@ -82,7 +82,6 @@ module gamedating.page {
 			this._viewUI.list_btns.spaceX = -50;
 			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
-			this._viewUI.list_btns.scrollBar.changeHandler = new Handler(this, this.listBtnChange);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
 			this._viewUI.list_ad.itemRender = AdItemRender;
@@ -787,7 +786,8 @@ module gamedating.page {
 		//====================弹窗气泡相关=end======================================
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
-		private listBtnChange(value: number): void {
+		private listBtnChange(): void {
+			let value = this._viewUI.list_btns.scrollBar.value;
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
 			if (!this._viewUI.list_btns.scrollBar.min && !this._viewUI.list_btns.scrollBar.max) {
@@ -984,6 +984,7 @@ module gamedating.page {
 		private _adPerWidth: number = 241;// 一个广告图的宽度
 		update(diff: number) {
 			super.update(diff);
+			this.listBtnChange();
 			// 轮播广告图
 			if (!this._isPlayAd)
 				return;
@@ -1136,9 +1137,9 @@ module gamedating.page {
 				if (this._game.uiRoot.general.numChildren && !isOpenPage) {
 					this._mainView.paused();
 				} else {
+					isOpenPage ? (this._mainView.playbackRate = 2) : (this._mainView.playbackRate = 1);
 					this._mainView.resume();
 				}
-				this._mainView.onDraw();
 			}
 			if (this._updateEffect) {
 				this._updateEffect.onDraw();

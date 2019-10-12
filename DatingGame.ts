@@ -487,6 +487,14 @@ module gamedating {
 							this.isAlertFirstPay = true;
 						}
 						break;
+					case Operation_Fields.OPRATE_GAME_QIFU_SUCCESS_RESULT:
+						let dataInfo = JSON.parse(msg.data);
+						//打开祈福动画界面
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU_ANI, (page) => {
+							page.dataSource = dataInfo;
+						});
+						this._game.uiRoot.general.close(DatingPageDef.PAGE_QIFU);
+						break;
 				}
 			}
 		}

@@ -91,15 +91,17 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[3].disabled = true;
 				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#8e8e8e";
 				this._cardCount = this._cardCount == 15 || this._cardCount == 16 ? this._cardCount : this._cardsTemp[0];
-				if (!isInit)
+				let carIndex1 = this._cardsTemp.indexOf(this._cardCount);
+				if (!isInit) {
 					for (let i = 0; i < 4; i++) {
-						if (this._cardsTemp.indexOf(this._cardCount)) {
+						if (carIndex1) {
 							this._viewUI.tab_wanfa.items[i].selected = true;
 						} else {
 							this._viewUI.tab_wanfa.items[i].selected = false;
 						}
 					}
-				this._viewUI.lb_info_wanfa.text = this._cardsInfo[0];
+				}
+				this._viewUI.lb_info_wanfa.text = this._cardsInfo[carIndex1];
 			} else if (this._playerCount == 4) {
 				this._viewUI.tab_wanfa.items[0].disabled = true;
 				this._viewUI.tab_wanfa.items[0].getChildAt(0).color = "#8e8e8e";
@@ -110,16 +112,17 @@ module gamedating.page {
 				this._viewUI.tab_wanfa.items[3].disabled = false;
 				this._viewUI.tab_wanfa.items[3].getChildAt(0).color = "#ffffff";
 				this._cardCount = this._cardCount == 13 || this._cardCount == 12 ? this._cardCount : this._cardsTemp[2];
-				if (!isInit)
+				let carIndex2 = this._cardsTemp.indexOf(this._cardCount);
+				if (!isInit) {
 					for (let i = 0; i < 4; i++) {
-						if (this._cardCount == this._cardsTemp.indexOf(this._cardCount)) {
+						if (this._cardCount == carIndex2) {
 							this._viewUI.tab_wanfa.items[i].selected = true;
 						} else {
 							this._viewUI.tab_wanfa.items[i].selected = false;
 						}
 					}
-				this._viewUI.lb_info_wanfa.text = this._cardsInfo[2];
-				this._zhaDanA = 0;
+				}
+				this._viewUI.lb_info_wanfa.text = this._cardsInfo[carIndex2];
 			}
 			this._viewUI.lb_wanfa.text = this._cardCount + "张";
 			this.updateCardsUI();
@@ -140,7 +143,6 @@ module gamedating.page {
 				this._zhaDanA = 0;
 			} else {
 				this._viewUI.box_4.disabled = false;
-				this._zhaDanA = 0;
 			}
 		}
 
@@ -267,7 +269,7 @@ module gamedating.page {
 				this._game.alert(StringU.substitute("老板，您的金币不足开房间哦~\n补充点金币去大杀四方吧~"), () => {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 				}, () => {
-				}, false, Tips.TIPS_SKIN_STR["cz"]);
+				}, true, Tips.TIPS_SKIN_STR["cz"]);
 				return false;
 			}
 			return true;

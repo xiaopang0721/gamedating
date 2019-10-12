@@ -41,7 +41,6 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_CHANGE, this, this.onUpdateDataInfo);
 			this._game.qifuMgr.getData();
 			this.onUpdateDataInfo();
-			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this._mainplayer = this._game.sceneObjectMgr.mainPlayer;
 		}
 
@@ -68,21 +67,6 @@ module gamedating.page {
 				this._curDiffTime = 1000;
 			} else {
 				this._curDiffTime -= diff;
-			}
-		}
-
-		protected onOptHandler(optcode: number, msg: any) {
-			if (msg.type == Operation_Fields.OPRATE_GAME) {
-				switch (msg.reason) {
-					case Operation_Fields.OPRATE_GAME_QIFU_SUCCESS_RESULT:
-						let dataInfo = JSON.parse(msg.data);
-						//打开祈福动画界面
-						this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU_ANI, (page) => {
-							page.dataSource = dataInfo;
-						});
-						this.close();
-						break;
-				}
 			}
 		}
 
@@ -159,7 +143,6 @@ module gamedating.page {
 
 		public close(): void {
 			if (this._viewUI) {
-				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				this._game.qifuMgr.off(QiFuMgr.QIFU_CHANGE, this, this.onUpdateDataInfo);
 				this._game.qifuMgr.clear();
 			}
