@@ -112,7 +112,7 @@ module gamedating.managers {
 			Laya.Tween.to(qfImg, { x: endX, y: endY, scaleX: 0.1, scaleY: 0.1 }, 1000, Laya.Ease.circOut, Handler.create(this, () => {
 				qfImg.removeSelf();
 				qfImg.destroy();
-				callBack && callBack.runWith ? callBack.runWith(dataSource) : callBack(dataSource);
+				callBack && (callBack.runWith ? callBack.runWith(dataSource) : callBack(dataSource));
 			}))
 		}
 
