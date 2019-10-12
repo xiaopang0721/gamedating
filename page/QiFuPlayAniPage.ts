@@ -32,11 +32,15 @@ module gamedating.page {
 			}
 			this._viewUI["img" + this._index].visible = true;
 			this._viewUI["ani" + this._index].play(0, true);
-			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
-			if (!mainPlayer) return;
-			let playerInfo = mainPlayer.playerInfo;
-			if (!playerInfo) return;
-			this._viewUI.lb_name.text = playerInfo.nickname;
+			if (this.dataSource.name) {
+				this._viewUI.lb_name.text = this.dataSource.name;
+			} else {
+				let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+				if (!mainPlayer) return;
+				let playerInfo = mainPlayer.playerInfo;
+				if (!playerInfo) return;
+				this._viewUI.lb_name.text = playerInfo.nickname;
+			}
 			this._viewUI.lb_info.text = this._nameInfo[this._index];
 			this._viewUI.lb_name.x = this._viewUI.lb_1.x + this._viewUI.lb_1.width;
 			this._viewUI.lb_2.x = this._viewUI.lb_name.x + this._viewUI.lb_name.width;
