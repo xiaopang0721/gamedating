@@ -79,6 +79,7 @@ module gamedating.page {
 			if (target == this._viewUI.btn_clear) {
 				this._viewUI.txt_name.text = "";
 				this._viewUI.btn_enter.visible = false;
+				this._viewUI.box_lb.visible = true;
 			} else if (target == this._viewUI.btn_enter) {
 				if (!this._viewUI.txt_name.text) {
 					this._game.showTips("昵称为空，请重新输入");
