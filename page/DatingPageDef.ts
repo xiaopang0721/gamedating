@@ -190,6 +190,11 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				
 				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
+				DatingPath.ui_dating_tongyong + "mask_top.png",
+				DatingPath.ui_dating_tongyong + "mask_bottom.png",
+				DatingPath.ui_dating_tongyong + "mask_middle.png",
+				DatingPath.ui_dating_tongyong + "mask_left.png",
+				DatingPath.ui_dating_tongyong + "mask_right.png",
 				//龙骨相关添加
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_baijiale.sk",

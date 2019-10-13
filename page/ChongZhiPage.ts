@@ -42,6 +42,7 @@ module gamedating.page {
 			this._viewUI.list_qudao.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_qudao.selectHandler = new Handler(this, this.qudaoselectHandler);
 			this._viewUI.list_qudao.visible = false;
+			this._viewUI.list_qudao.scrollBar.changeHandler = new Handler(this, this.qudaoChangeHandler);
 
 			this._viewUI.list_yh.hScrollBarSkin = "";
 			this._viewUI.list_yh.scrollBar.elasticDistance = 100;
@@ -49,6 +50,7 @@ module gamedating.page {
 			this._viewUI.list_yh.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_yh.selectHandler = new Handler(this, this.yhSelectHandler);
 			this._viewUI.list_yh.visible = false;
+			this._viewUI.list_yh.scrollBar.changeHandler = new Handler(this, this.yhkChangeHandler);
 
 			this._viewUI.list_sm.hScrollBarSkin = "";
 			this._viewUI.list_sm.scrollBar.elasticDistance = 100;
@@ -56,6 +58,7 @@ module gamedating.page {
 			this._viewUI.list_sm.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_sm.selectHandler = new Handler(this, this.smSelectHandler);
 			this._viewUI.list_sm.visible = false;
+			this._viewUI.list_sm.scrollBar.changeHandler = new Handler(this, this.smChangeHandler);
 
 			this._viewUI.list_money.itemRender = this.createChildren("dating.component.MoneyItemRenderUI", MoneyItemRender);
 			this._viewUI.list_money.renderHandler = new Handler(this, this.renderHandler);
@@ -63,7 +66,7 @@ module gamedating.page {
 
 			this._viewUI.btn_clear.visible = false;
 			this._viewUI.txt_input.on(LEvent.CHANGE, this, this.onTextChange);
-			this._viewUI.txt_input.on(LEvent.INPUT,this,this.onTextChange);
+			this._viewUI.txt_input.on(LEvent.INPUT, this, this.onTextChange);
 			this._viewUI.txt_input.on(LEvent.FOCUS, this, this.onFocus);
 			this._viewUI.txt_input.on(LEvent.BLUR, this, this.onBlur);
 
@@ -85,6 +88,16 @@ module gamedating.page {
 			this._paychannel = [{ name: "充值记录" }];
 			this._viewUI.list_tab.dataSource = this._paychannel;
 			this.onUpdatePlayerInfo();
+		}
+
+		private yhkChangeHandler(): void {
+			DisplayU.onScrollChange(this._viewUI.list_yh, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
+		}
+		private smChangeHandler(): void {
+			DisplayU.onScrollChange(this._viewUI.list_sm, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
+		}
+		private qudaoChangeHandler(): void {
+			DisplayU.onScrollChange(this._viewUI.list_qudao, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
 		}
 
 		private moneyselectHandler(e, index: number) {
@@ -557,6 +570,10 @@ module gamedating.page {
 
 		public close(): void {
 			if (this._viewUI) {
+				DisplayU.onScrollChange(this._viewUI.list_yh, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_V);
+				DisplayU.onScrollChange(this._viewUI.list_sm, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_V);
+				DisplayU.onScrollChange(this._viewUI.list_qudao, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_V);
+
 				this._viewUI.txt_input.off(LEvent.CHANGE, this, this.onTextChange);
 				this._viewUI.txt_input.off(LEvent.FOCUS, this, this.onFocus);
 				this._viewUI.txt_input.off(LEvent.BLUR, this, this.onBlur);
