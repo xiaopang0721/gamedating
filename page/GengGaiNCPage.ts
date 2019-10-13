@@ -78,7 +78,7 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			if (target == this._viewUI.btn_clear) {
 				this._viewUI.txt_name.text = "";
-				this._viewUI.btn_enter.visible = true;
+				this._viewUI.btn_enter.visible = false;
 			} else if (target == this._viewUI.btn_enter) {
 				if (!this._viewUI.txt_name.text) {
 					this._game.showTips("昵称为空，请重新输入");
