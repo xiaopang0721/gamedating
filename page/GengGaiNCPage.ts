@@ -78,8 +78,12 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			if (target == this._viewUI.btn_clear) {
 				this._viewUI.txt_name.text = "";
+				this._viewUI.btn_enter.visible = true;
 			} else if (target == this._viewUI.btn_enter) {
-				// this._game.network.call_set_info("", "", "", "", "", this._viewUI.txt_name.text);
+				if (!this._viewUI.txt_name.text) {
+					this._game.showTips("昵称为空，请重新输入");
+					return;
+				}
 				this._game.network.call_set_role_info(2, this._viewUI.txt_name.text);
 			}
 		}
