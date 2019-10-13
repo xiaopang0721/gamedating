@@ -308,9 +308,9 @@ module gamedating.page {
 					}
 					break;
 				case this._viewUI.btn_tc:
-					let paodekuaiStory = this._game.sceneObjectMgr.story as RpaodekuaiStory;
-					let mapInfo = this._game.sceneObjectMgr.mapInfo as MapInfo;
-					mapInfo = mapInfo as RpaodekuaiMapInfo;
+					let paodekuaiStory = this._game.sceneObjectMgr.story;
+					let mapInfo = this._game.sceneObjectMgr.mapInfo;
+					mapInfo = mapInfo;
 					let mainUnit = this._game.sceneObjectMgr.mainUnit;
 					if (!paodekuaiStory || !mapInfo || !mainUnit) {
 						let page = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as gamedating.page.HudMainPage;
