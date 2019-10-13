@@ -480,9 +480,13 @@ module gamedating.page {
 					break;
 				case this._viewUI.btn_wxhy://分享微信好友
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENESESSION)
+					this._game.datingGame.isShare = true;
+					this._game.datingGame.shareContinueTime = Laya.timer.currTimer;
 					break;
 				case this._viewUI.btn_fxq://分享朋友圈
 					this._game.datingGame.wxShareQrcodeImg("", "", Web_operation_fields.WXSCENETIMELINE)
+					this._game.datingGame.isShare = true;
+					this._game.datingGame.shareContinueTime = Laya.timer.currTimer;
 					break;
 				case this._viewUI.box_no_share:
 					WebConfig.copyTxt(WebConfig.downLoadUrl.toString());

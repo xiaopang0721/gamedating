@@ -242,7 +242,7 @@ module gamedating {
 			{
 				if (Laya.timer.currTimer - this._shareCd < 0) return;
 				this._shareCd = Laya.timer.currTimer + 3000;
-				if (Laya.timer.currTimer - this._shareContinueTime < 2000) {
+				if (Laya.timer.currTimer - this._shareContinueTime < 3000) {
 					this._game.showTips("分享失败");
 					return
 				}
