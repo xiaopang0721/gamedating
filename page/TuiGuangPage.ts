@@ -26,7 +26,9 @@ module gamedating.page {
 			this._viewUI = this.createView("dating.TuiGuangUI");
 			this.addChild(this._viewUI);
 			//官网二维码
-			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
+			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, (base64)=>{
+				this._viewUI.img_ewm.skin = base64;
+			})
 			//落地页链接
 			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
 			//推广明细
@@ -228,7 +230,9 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			this._viewUI.img_ewm.skin = WebConfig.ewmUrl;
+			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, (base64)=>{
+				this._viewUI.img_ewm.skin = base64;
+			})
 			//落地页链接
 			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
 		}
