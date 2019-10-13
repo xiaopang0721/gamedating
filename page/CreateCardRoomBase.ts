@@ -48,7 +48,7 @@ module gamedating.page {
 			let titleSkin = "";
 			switch (this._game_id) {
 				case "rddz":
-					titleSkin = TongyongPageDef.TIPS_SKIN_STR["title_ddz"];
+					titleSkin = DatingPath.ui_dating + "fk/tu_fkddz.png";
 					break
 				case "rniuniu":
 					titleSkin = DatingPath.ui_dating + "fk/tu_qznn.png";
