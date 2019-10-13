@@ -48,8 +48,18 @@ module gamedating.page {
 			this._viewUI.box.centerY = -100;
 		}
 
+		private _isTrigger: boolean = false;
 		private onBlur(input) {
 			this._viewUI.box.centerY = 20;
+			this._isTrigger = true;
+		}
+
+		onBlackSpriteClick(): void {
+			if (this._isTrigger) {
+				this._isTrigger = false;
+				return;
+			};
+			super.onBlackSpriteClick();
 		}
 
 		protected onSucessHandler(data: any) {
