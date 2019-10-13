@@ -145,6 +145,15 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
 
+		/**按钮点击事件 带缓动 */
+		protected onBtnClickWithTween(...agrs): void {
+			super.onBtnClickWithTween.apply(this, agrs);
+			let e = agrs[0];
+			if (e instanceof LEvent && e.currentTarget == this._viewUI.img_copy_gw) {
+				e.stopPropagation();
+			}
+		}
+
 		private _qifuTypeImgUrl: string;
 		private qifuFly(dataSource: any): void {
 			if (!dataSource) return;
@@ -626,6 +635,7 @@ module gamedating.page {
 				case this._viewUI.img_copy_gw:
 					WebConfig.copyTxt(this._viewUI.txt_gw_url.text);
 					this._game.showTips("复制成功");
+					this.closeQiPaoKuang();
 					break;
 				default:
 					break;
