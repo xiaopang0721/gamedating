@@ -712,7 +712,7 @@ module gamedating {
 			return this._curKey;
 		}
 		public firstAlertPage(): void {
-			if (!this._firstAlert) {
+			if (!this._firstAlert && !WebConfig.isConnected) {
 				this._alertPageIndex = this._alertPageIndex + 1;
 				if (!this.popUpData) return;
 				let popKeyData: any = this.popUpData[this._alertPageIndex];
