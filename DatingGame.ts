@@ -37,7 +37,7 @@ module gamedating {
 
 		getTouXiangKuangUrl(headKuang: string, type: number = 2): string {
 			headKuang = headKuang ? headKuang : '0';
-			return  DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
+			return DatingPath.ui_dating + "touxiang/tu_txk" + headKuang + ".png";
 		}
 
 		getQFTypeImg(qf_id): string {
@@ -242,6 +242,7 @@ module gamedating {
 			{
 				if (Laya.timer.currTimer - this._shareCd < 0) return;
 				this._shareCd = Laya.timer.currTimer + 3000;
+				if (Laya.timer.currTimer - this._shareContinueTime < 1000) return;	//防点击就会有回调的那种情况
 				if (Laya.timer.currTimer - this._shareContinueTime < 3000) {
 					this._game.showTips("分享失败");
 					return
@@ -328,7 +329,7 @@ module gamedating {
 			let data2 = {}
 			WebConfig.wxDebug && WebConfig.alert("微信注册1");
 			WebConfig.wxDebug && WebConfig.alert("微信分享合成图 + 文");
-			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, 140, 140, (base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, 140, 140, (base64) => {
 				WebConfig.wxShareQrcodeImg(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 233, 461, 140, 140, title, description, scene - 1);
 			})
 		}
@@ -346,7 +347,7 @@ module gamedating {
 		 * 保存合成图片
 		 */
 		public saveQrcodeImage() {
-			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, 140, 140, (base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, 140, 140, (base64) => {
 				WebConfig.saveQrcodeImage(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 235, 461, 140, 140);
 			})
 		}
