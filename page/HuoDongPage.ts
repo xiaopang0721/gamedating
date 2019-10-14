@@ -71,12 +71,12 @@ module gamedating.page {
 				this._viewUI.myhd0.visible = false;
 				this._viewUI.myhd1.visible = false;
 				this._viewUI.myhd2.visible = false;
-				if (selectedItem) {
-					let listData = selectedItem.img_list ? JSON.parse(selectedItem.img_list) : "";
+				let listData = selectedItem.img_list ? JSON.parse(selectedItem.img_list) : "";
+				if (listData && listData.length > 0) {
 					if (selectedItem.pro_type == 1) {
 						//图文
 						this._viewUI.myhd1.visible = true;
-						this._viewUI.img_myhd.skin = listData > 0 ? listData[0] : '';
+						this._viewUI.img_myhd.skin = listData.length > 0 ? listData[0].path : '';
 						this._viewUI.txt_myhd.text = selectedItem.content;
 						this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
 						this._viewUI.myhd1.height = selectedItem.topopup > 1 ? 425 : 510;
