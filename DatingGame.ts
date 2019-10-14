@@ -310,7 +310,7 @@ module gamedating {
 		 * @param scene 
 		 */
 		public wxShareUrl(title: string, description: string, img_url: string) {
-			let iconUrl = img_url || Laya.URL.formatURL(DatingPath.ui_dating + "logo/app_100.png");
+			let iconUrl = img_url || Laya.URL.formatURL(Path.ui + "logo/app_100.png");
 			WebConfig.wxShareUrl(WebConfig.downLoadUrl, title, description, iconUrl, Web_operation_fields.WXSCENESESSION - 1);
 		}
 
