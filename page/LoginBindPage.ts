@@ -613,7 +613,6 @@ module gamedating.page {
                         }
                         else if (msg.data == 19) {//手机已被绑定
                             this._viewUI.ani1.gotoAndStop(0);
-                            this._inputCode.visible = false;
                             this._inputCode.clearInput();
                             this._viewUI.btn_get_code.visible = true;
                         }
