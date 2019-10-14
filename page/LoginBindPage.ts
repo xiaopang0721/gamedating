@@ -611,6 +611,12 @@ module gamedating.page {
                             this._inputCode.clearInput();
                             this._viewUI.box_send_over.visible = true;
                         }
+                        else if (msg.data == 19) {//手机已被绑定
+                            this._viewUI.ani1.gotoAndStop(0);
+                            this._inputCode.visible = false;
+                            this._inputCode.clearInput();
+                            this._viewUI.btn_get_code.visible = true;
+                        }
                         else if (msg.data == 33) {//密码错误
                             if (WebConfig.isSingleEnter) return;
                             this._viewUI.ani4.play(0, false);
