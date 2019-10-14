@@ -548,6 +548,7 @@ module gamedating.page {
 		}
 
 		private enTerClick(): void {
+			this.saveListStatus();
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM);
 		}
 
