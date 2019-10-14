@@ -248,7 +248,7 @@ module gamedating {
 				// 	return
 				// }
 				//因为分享机制变动，所以改成延迟随机3-5秒就给奖励
-				Laya.timer.once(MathU.randomRange(3000, 5000), this, () => {
+				Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
 					this._game.sceneGame.network.call_new_dailyshare();
 				});
 			}
