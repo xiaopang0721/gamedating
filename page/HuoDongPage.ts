@@ -172,6 +172,8 @@ module gamedating.page {
 						refAsset.offAll();
 						refAsset.release();
 						refAsset = null;
+						this._refAssetArr.splice(i, 1);
+						i--;
 					}
 				}
 			}

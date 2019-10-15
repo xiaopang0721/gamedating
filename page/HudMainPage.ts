@@ -9,6 +9,7 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_bairendezhou.png",
 				DatingPath.sk_dating + "DZ_benchibaoma.png",
@@ -69,7 +70,7 @@ module gamedating.page {
 			super.onOpen();
 			HudMainPage.PAGE_ID = [DatingPageDef.PAGE_VIP, DatingPageDef.PAGE_HUD_SHARE, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE];
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64)=>{
 				this._viewUI.img_gw.skin = base64;
 			})
 			//官网链接
@@ -467,7 +468,7 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64)=>{
 				this._viewUI.img_gw.skin = base64;
 			})
 			//官网链接
@@ -1410,7 +1411,7 @@ module gamedating.page {
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
 					this.img_ewm.visible = true;
-					QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, this.img_ewm.width, this.img_ewm.height, (base64)=>{
+					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64)=>{
 						this.img_ewm.skin = base64;
 					})
 					break;
@@ -1432,7 +1433,7 @@ module gamedating.page {
 					this._pageID = DatingPageDef.PAGE_ZHUANPAN;
 					break;
 			}
-			this.img_ad.skin = DatingPath.ui_dating + 'dating/tu_dl' + order + '.png';
+			this.img_ad.skin = DatingPath.ui_dating + 'datinglunbotu/tu_dl' + order + '.png';
 			this.on(LEvent.CLICK, this, this.onClick);
 		}
 
