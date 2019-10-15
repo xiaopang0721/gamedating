@@ -332,7 +332,7 @@ module gamedating {
 			let data2 = {}
 			WebConfig.wxDebug && WebConfig.alert("微信注册1");
 			WebConfig.wxDebug && WebConfig.alert("微信分享合成图 + 文");
-			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, 140, 140, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, (base64) => {
 				WebConfig.wxShareQrcodeImg(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 233, 461, 140, 140, title, description, scene - 1);
 			})
 		}
@@ -341,8 +341,6 @@ module gamedating {
 		public updateConfigUrl() {
 			let inviteCode = WebConfig.info ? WebConfig.info.invite_code : "";
 			WebConfig.gwUrl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "gwurl")
-			WebConfig.ewmbaseUrl = WebConfig.ai_url + "/qrcode?urlsize=9&urltext=" + encodeURIComponent(WebConfig.gwUrl) + "?invitecode="
-			WebConfig.ewmUrl = WebConfig.ewmbaseUrl + inviteCode || "";
 			WebConfig.downLoadUrl = WebConfig.gwUrl + "?invitecode=" + inviteCode || "";
 		}
 
@@ -350,7 +348,7 @@ module gamedating {
 		 * 保存合成图片
 		 */
 		public saveQrcodeImage() {
-			QRCodeSprite.createQRCodeBase64(WebConfig.gwUrl, 140, 140, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, (base64) => {
 				WebConfig.saveQrcodeImage(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 235, 461, 140, 140);
 			})
 		}
