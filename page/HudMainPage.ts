@@ -651,7 +651,8 @@ module gamedating.page {
 			Laya.timer.clearAll(this);
 			this.clearTweens();
 			this.resetList();
-			if (index == DatingPageDef.TYPE_CARD) {
+			this.onDealGameData(index);
+			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
 				this._viewUI.btn_enterRoom.visible = true;
 				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
 				this._viewUI.btn_enterRoom.alpha = 0;
@@ -661,7 +662,6 @@ module gamedating.page {
 					this._viewUI.btn_enterRoom.visible = false;
 				});
 			}
-			this.onDealGameData(index);
 		}
 
 		//====================弹窗气泡相关=start======================================
@@ -869,8 +869,10 @@ module gamedating.page {
 					}
 				}
 			}
-			if (!game_list.length)
+			if (!game_list.length){
+				this._viewUI.list_btns.dataSource = [];
 				return;
+			}
 
 			// 后台 + 玩家操作习惯排序
 			game_list.sort(this.onSortList);
