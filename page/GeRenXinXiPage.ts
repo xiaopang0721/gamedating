@@ -126,7 +126,7 @@ module gamedating.page {
 			this._viewUI.btn_changge_nc.visible = !playerInfo.isNicknameChanged
 			// this._viewUI.box_wx.visible = !WebConfig.isSingleEnter && playerInfo.is_wx_open;			
 			if (playerInfo.wx_unionid) {//绑定微信
-				this._viewUI.txt_wx.text = playerInfo.wx_unionid;
+				this._viewUI.txt_wx.text = "已绑定"//playerInfo.wx_unionid;
 				this._viewUI.btn_bindwx.visible = false;
 			} else {
 				this._viewUI.txt_wx.text = "未绑定微信号";
