@@ -489,7 +489,6 @@ module gamedating.page {
 			if (this._viewUI.list_btns.dataSource)
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 			this._viewUI.list_btns.width = this._clientWidth - 350;
-			this._viewUI.box_tabs.x = this._clientWidth;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
 				this._viewUI.box_btn_top.right = 25;
