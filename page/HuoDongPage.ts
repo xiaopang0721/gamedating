@@ -78,6 +78,7 @@ module gamedating.page {
 				this._viewUI.myhd1.visible = false;
 				this._viewUI.myhd2.visible = false;
 				let listData = selectedItem.img_list ? JSON.parse(selectedItem.img_list) : "";
+				let isShowBtn = selectedItem.topopup > 1 && selectedItem.show_button && Number(selectedItem.show_button) == 1;
 				if (listData && listData.length > 0) {
 					if (selectedItem.pro_type == 1) {
 						//图文
@@ -85,11 +86,11 @@ module gamedating.page {
 						this._viewUI.img_myhd.skin = listData.length > 0 ? listData[0].path : '';
 						this._viewUI.txt_myhd.text = selectedItem.content;
 						this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
-						this._viewUI.myhd1.height = selectedItem.topopup > 1 && selectedItem.show_button == 1 ? 425 : 510;
+						this._viewUI.myhd1.height = isShowBtn ? 425 : 510;
 					} else {
 						//纯大图
 						this._viewUI.myhd2.visible = true;
-						this._viewUI.myhd2.height = selectedItem.topopup > 1 && selectedItem.show_button == 1 ? 425 : 510;
+						this._viewUI.myhd2.height = isShowBtn ? 425 : 510;
 						//排序数据
 						if (listData) {
 							listData.sort((a: any, b: any) => {
@@ -101,15 +102,14 @@ module gamedating.page {
 							this.firstLoadUrl();
 						}
 					}
-				} else {
 					//纯文本
 					this._viewUI.myhd0.visible = true;
 					this._viewUI.txt.text = selectedItem.content;
 					this._viewUI.txt.height = this._viewUI.txt.textField.textHeight;
-					this._viewUI.myhd0.height = selectedItem.topopup > 1 && selectedItem.show_button == 1 ? 425 : 510;
+					this._viewUI.myhd0.height = isShowBtn ? 425 : 510;
 				}
-				this._viewUI.img_bg.visible = selectedItem.topopup > 1 && selectedItem.show_button == 1;
-				this._viewUI.btn_qiandao.visible = selectedItem.topopup > 1 && selectedItem.show_button == 1;
+				this._viewUI.img_bg.visible = isShowBtn;
+				this._viewUI.btn_qiandao.visible = isShowBtn;
 			}
 		}
 
