@@ -102,6 +102,7 @@ module gamedating.page {
 							this.firstLoadUrl();
 						}
 					}
+				} else {
 					//纯文本
 					this._viewUI.myhd0.visible = true;
 					this._viewUI.txt.text = selectedItem.content;
