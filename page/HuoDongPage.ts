@@ -35,6 +35,8 @@ module gamedating.page {
 			this._viewUI.myhd2.vScrollBarSkin = "";
 			// this._viewUI.myhd2.itemRender = this.createChildren("dating.component.ChongZhi_IMGUI", ChongzhiImgRender);
 			// this._viewUI.myhd2.renderHandler = new Handler(this, this.renderImgHandler);
+			this._viewUI.myhd2.on(LEvent.MOUSE_DOWN, this, this.judgeIsJump);
+			this._viewUI.myhd2.on(LEvent.MOUSE_UP, this, this.judgeIsJump);
 			this._viewUI.txt.text = "";
 			this._viewUI.txt_myhd.text = "";
 
@@ -54,6 +56,10 @@ module gamedating.page {
 					dataList.push(element);
 				}
 			}
+			//排序
+			dataList.sort((a: any, b: any) => {
+				return Number(b.orderby) - Number(a.orderby);
+			})
 			this._viewUI.list_tab.dataSource = dataList && dataList.length > 0 ? dataList : [];
 			this._viewUI.list_tab.visible = dataList && dataList.length > 0;
 		}
@@ -72,6 +78,7 @@ module gamedating.page {
 				this._viewUI.myhd1.visible = false;
 				this._viewUI.myhd2.visible = false;
 				let listData = selectedItem.img_list ? JSON.parse(selectedItem.img_list) : "";
+				let isShowBtn = selectedItem.topopup > 1 && selectedItem.show_button && Number(selectedItem.show_button) == 1;
 				if (listData && listData.length > 0) {
 					if (selectedItem.pro_type == 1) {
 						//图文
@@ -79,11 +86,11 @@ module gamedating.page {
 						this._viewUI.img_myhd.skin = listData.length > 0 ? listData[0].path : '';
 						this._viewUI.txt_myhd.text = selectedItem.content;
 						this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
-						this._viewUI.myhd1.height = selectedItem.topopup > 1 ? 425 : 510;
+						this._viewUI.myhd1.height = isShowBtn ? 425 : 510;
 					} else {
 						//纯大图
 						this._viewUI.myhd2.visible = true;
-						this._viewUI.myhd2.height = selectedItem.topopup > 1 ? 425 : 510;
+						this._viewUI.myhd2.height = isShowBtn ? 425 : 510;
 						//排序数据
 						if (listData) {
 							listData.sort((a: any, b: any) => {
@@ -100,10 +107,10 @@ module gamedating.page {
 					this._viewUI.myhd0.visible = true;
 					this._viewUI.txt.text = selectedItem.content;
 					this._viewUI.txt.height = this._viewUI.txt.textField.textHeight;
-					this._viewUI.myhd0.height = selectedItem.topopup > 1 ? 425 : 510;
+					this._viewUI.myhd0.height = isShowBtn ? 425 : 510;
 				}
-				this._viewUI.img_bg.visible = selectedItem.topopup > 1;
-				this._viewUI.btn_qiandao.visible = selectedItem.topopup > 1;
+				this._viewUI.img_bg.visible = isShowBtn;
+				this._viewUI.btn_qiandao.visible = isShowBtn;
 			}
 		}
 
@@ -186,6 +193,27 @@ module gamedating.page {
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
+			this.jumpPage();
+		}
+
+		private _isMouseDown: boolean = false;
+		private _mouseDownY: number = 0;
+		private judgeIsJump(e: LEvent): void {
+			switch (e.type) {
+				case LEvent.MOUSE_DOWN:
+					this._isMouseDown = true;
+					this._mouseDownY = e.stageY;
+					break
+				case LEvent.MOUSE_UP:
+					let diffYNum = Math.abs(e.stageY - this._mouseDownY);
+					if (diffYNum < 5) {
+						this.jumpPage();
+					}
+					break
+			}
+		}
+
+		private jumpPage(): void {
 			let indx = this._viewUI.list_tab.selectedIndex;
 			let cc: any = this._viewUI.list_tab.dataSource[indx];
 			if (!cc) return;
