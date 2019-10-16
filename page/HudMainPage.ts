@@ -127,7 +127,7 @@ module gamedating.page {
 
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onDealGameData);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectTab);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 
 			this.onUpdatePlayerInfo(true);
@@ -320,7 +320,7 @@ module gamedating.page {
 				this._viewUI.off(LEvent.MOUSE_OUT, this, this.onViewMouseHandler);
 				this._game.qifuMgr.off(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onDealGameData);
+				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectTab);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 				if (this._clip_money) {
 					this._clip_money.removeSelf();
@@ -645,24 +645,7 @@ module gamedating.page {
 				default:
 					break;
 			}
-		}
-
-		private onSelectTab(index) {
-			Laya.timer.clearAll(this);
-			this.clearTweens();
-			this.resetList();
-			this.onDealGameData(index);
-			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
-				this._viewUI.btn_enterRoom.visible = true;
-				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
-				this._viewUI.btn_enterRoom.alpha = 0;
-				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
-			} else {
-				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
-					this._viewUI.btn_enterRoom.visible = false;
-				});
-			}
-		}
+		}		
 
 		//====================弹窗气泡相关=start======================================
 		initQiPaoUI(): void {
@@ -817,13 +800,13 @@ module gamedating.page {
 			}
 		}
 
-		private onDealGameData(index: number = -1) {
+		private onSelectTab(index: number = -1) {
 			if (!WebConfig.gamelist)
 				return;
 			if (index == -1) {
 				this._viewUI.tab.selectedIndex = 0;
 				return;
-			}
+			}	
 			// 如果有值，说明该干活了
 			let listData = this._game.datingGame.hudTabScrollData;
 			if (listData) {
@@ -837,9 +820,28 @@ module gamedating.page {
 					this._isFromRoom = false;
 				})
 				if (tabIndex != index) {
-					return;
+					return ;
 				}
 			}
+			Laya.timer.clearAll(this);
+			this.clearTweens();
+			this.resetList();
+			let b = this.onDealGameData(index);
+			if (b)
+				return;
+			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
+				this._viewUI.btn_enterRoom.visible = true;
+				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
+				this._viewUI.btn_enterRoom.alpha = 0;
+				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
+			} else {
+				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
+					this._viewUI.btn_enterRoom.visible = false;
+				});
+			}
+		}
+
+		private onDealGameData(index: number) {
 			let game_list: any[] = []
 			let webPower: number = 0;
 			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
@@ -871,7 +873,7 @@ module gamedating.page {
 			}
 			if (!game_list.length){
 				this._viewUI.list_btns.dataSource = [];
-				return;
+				return true;
 			}
 
 			// 后台 + 玩家操作习惯排序
