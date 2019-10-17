@@ -648,6 +648,8 @@ module gamedating.page {
 					WebConfig.copyTxt(this._viewUI.txt_gw_url.text);
 					this._game.showTips("复制成功");
 					this.closeQiPaoKuang();
+					//音效
+					this._game.playSound(Path.music_copy);
 					break;
 				default:
 					break;

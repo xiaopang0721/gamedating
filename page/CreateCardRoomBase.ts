@@ -135,11 +135,11 @@ module gamedating.page {
 					}
 					break;
 				case this._viewUI.btn_tc:
-					let paodekuaiStory = this._game.sceneObjectMgr.story;
+					let story = this._game.sceneObjectMgr.story;
 					let mapInfo = this._game.sceneObjectMgr.mapInfo;
 					mapInfo = mapInfo;
 					let mainUnit = this._game.sceneObjectMgr.mainUnit;
-					if (!paodekuaiStory || !mapInfo || !mainUnit) {
+					if (!story || !mapInfo || !mainUnit) {
 						let page = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as gamedating.page.HudMainPage;
 						if (page && page.isOpenPage) {
 							page.isOpenPage = false;
@@ -147,7 +147,7 @@ module gamedating.page {
 						super.close();
 						return;
 					} else {
-						paodekuaiStory.endRoomCardGame(mainUnit.GetIndex(), mapInfo.GetCardRoomId());
+						story.endRoomCardGame(mainUnit.GetIndex(), mapInfo.GetCardRoomId());
 						this._game.sceneObjectMgr.leaveStory();
 						super.close();
 					}
