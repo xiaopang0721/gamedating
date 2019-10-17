@@ -495,7 +495,7 @@ module gamedating.page {
 				this._viewUI.box_btn_top.right = 25;
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56 - 11;
-				this._viewUI.btn_right.right = 200;
+				this._viewUI.btn_right.right = 150;
 				this._viewUI.box_tabs.right = -35;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
