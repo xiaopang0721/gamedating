@@ -358,20 +358,20 @@ module gamedating.page {
 				case 1:
 					viewRunBox = this._viewUI.box_run_bojin;
 					curData = this._boJinData;
-					aniBorder = this._viewUI.ani8;
+					// aniBorder = this._viewUI.ani8;
 					aniGet = this._viewUI.ani10;
 					imgGet = this._viewUI.img_get_bojin;
 					aniGo = this._viewUI.ani6;
-					img_effect = this._viewUI.img_effect_bojin;
+					// img_effect = this._viewUI.img_effect_bojin;
 					break
 				case 2:
 					viewRunBox = this._viewUI.box_run_zuanshi;
 					curData = this._zuanShiData;
-					aniBorder = this._viewUI.ani9;
+					// aniBorder = this._viewUI.ani9;
 					aniGet = this._viewUI.ani11;
 					imgGet = this._viewUI.img_get_zs;
 					aniGo = this._viewUI.ani12;
-					img_effect = this._viewUI.img_effect_zs;
+					// img_effect = this._viewUI.img_effect_zs;
 					break
 			}
 			imgGet.alpha = 0;
