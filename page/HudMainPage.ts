@@ -495,11 +495,15 @@ module gamedating.page {
 				this._viewUI.box_btn_top.right = 25;
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56 - 11;
+				this._viewUI.btn_right.right = 200;
+				this._viewUI.box_tabs.right = 15;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
 				this._viewUI.box_btn_top.right = 0;
 				this._viewUI.box_bottomLeft.left = 17;
 				this._viewUI.box_bottomRight.right = 11;
+				this._viewUI.btn_right.right = 150;
+				this._viewUI.box_tabs.right = -35;
 			}
 			this.judgeBtnShow();
 			this.updateFenXiangPos();
