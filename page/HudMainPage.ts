@@ -85,7 +85,7 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.spaceX = -50;
+			this._viewUI.list_btns.spaceX = -55;
 			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
@@ -492,14 +492,14 @@ module gamedating.page {
 		updatePos() {
 			if (this._viewUI.list_btns.dataSource)
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
-			this._viewUI.list_btns.width = this._clientWidth - 350;
+			this._viewUI.list_btns.width = this._clientWidth - 250;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
 				this._viewUI.box_btn_top.right = 25;
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56 - 11;
 				this._viewUI.btn_right.right = 200;
-				this._viewUI.box_tabs.right = 15;
+				this._viewUI.box_tabs.right = -35;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
 				this._viewUI.box_btn_top.right = 0;
@@ -1204,8 +1204,9 @@ module gamedating.page {
 		//敬请期待
 		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		private show(): void {
-			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
+			this.btn.x = 148 + offset_x;
 			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
 				if (this._mainView instanceof AvatarUIShow) {
 					this._mainView.clear();
