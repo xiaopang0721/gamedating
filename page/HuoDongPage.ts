@@ -3,7 +3,11 @@
 */
 module gamedating.page {
 	export class HuoDongPage extends game.gui.base.Page {
+		static readonly TYPE_HUODONG = 1; //活动类型
+		static readonly TYPE_GONGGAO = 2; //公告类型
 		private _viewUI: ui.nqp.dating.HuoDongUI;
+		private _curSelectTab: number;
+		private _curSelectData: any;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -22,32 +26,86 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
+			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange);
+			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
 			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TabItemRender1UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
-
-
 			this._viewUI.myhd0.vScrollBarSkin = "";
 			this._viewUI.myhd1.vScrollBarSkin = "";
 			this._viewUI.myhd2.vScrollBarSkin = "";
-			// this._viewUI.myhd2.itemRender = this.createChildren("dating.component.ChongZhi_IMGUI", ChongzhiImgRender);
-			// this._viewUI.myhd2.renderHandler = new Handler(this, this.renderImgHandler);
 			this._viewUI.myhd2.on(LEvent.MOUSE_DOWN, this, this.judgeIsJump);
 			this._viewUI.myhd2.on(LEvent.MOUSE_UP, this, this.judgeIsJump);
 			this._viewUI.txt.text = "";
 			this._viewUI.txt_myhd.text = "";
-
 			this._viewUI.btn_qiandao.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.getData);
+
+			//公告区
+			this._viewUI.panel_tu.visible = false;
+			this._viewUI.panel_wenzi.visible = false;
+			this._viewUI.panel_wenzitu.visible = false;
+			this._viewUI.panel_tu.vScrollBarSkin = "";
+			this._viewUI.panel_wenzi.vScrollBarSkin = "";
+			this._viewUI.panel_wenzitu.vScrollBarSkin = "";
+			this._viewUI.lab_wenzi.on(LEvent.LINK, this, this.onLinkHandle);
+			this._viewUI.lab_wenzitu.on(LEvent.LINK, this, this.onLinkHandle);
+			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.getHuoDongData);
+			//获取公告数据
+			this._game.network.call_get_bulletin_list();
 			//获取数据
-			this.getData();
-			this._viewUI.list_tab.selectedIndex = 0;
+			this.getHuoDongData();
+			this.onBtnTabChange();
 		}
 
-		private getData(): void {
+		private onBtnTabChange(): void {
+			if (!this._curSelectTab && this._curSelectTab != 0) {
+				this._curSelectTab = 1;
+				this._viewUI.btn_tab.selected = false;
+			}
+			else {
+				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
+				this._viewUI.btn_tab.selected = !this._viewUI.btn_tab.selected;
+			}
+			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
+				//公告
+				this._curSelectData = this._activeList;
+				this._viewUI.box_hd.visible = false;
+				this._viewUI.box_gg.visible = true;
+				this._viewUI.list_tab.dataSource = this._activeList && this._activeList.length > 0 ? this._activeList : [];
+				this._viewUI.list_tab.visible = this._activeList && this._activeList.length > 0;
+			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
+				//活动
+				this._curSelectData = this._curHDData;
+				this._viewUI.box_hd.visible = true;
+				this._viewUI.box_gg.visible = false;
+				this._viewUI.list_tab.dataSource = this._curHDData && this._curHDData.length > 0 ? this._curHDData : [];
+				this._viewUI.list_tab.visible = this._curHDData && this._curHDData.length > 0;
+			}
+			this._viewUI.list_tab.selectedIndex = 0;
+			this.selectHandler(0);
+		}
+
+		private selectHandler(index: number) {
+			let selectedIndex = this._viewUI.list_tab.selectedIndex;
+			if (selectedIndex < 0) return;
+			if (!this._viewUI.list_tab.dataSource || !this._viewUI.list_tab.dataSource.length) return;
+			let selectedItem = this._viewUI.list_tab.dataSource[selectedIndex];
+			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
+				this.updateSelectHandleGongGao(selectedItem);
+			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
+				this.updateSelectHandleHuoDong(selectedItem);
+			}
+		}
+
+
+		private _curHDData: any;
+		private _activeList: any;
+		private getHuoDongData(): void {
+			//活动数据获取
 			let dataObj: any = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_PROMOTIONSCFG_C, "");
 			let dataList = [];
 			for (let key in dataObj) {
@@ -60,19 +118,49 @@ module gamedating.page {
 			dataList.sort((a: any, b: any) => {
 				return Number(b.orderby) - Number(a.orderby);
 			})
-			this._viewUI.list_tab.dataSource = dataList && dataList.length > 0 ? dataList : [];
-			this._viewUI.list_tab.visible = dataList && dataList.length > 0;
+			this._curHDData = dataList;
 		}
 
-		private selectHandler(index: number) {
-			this.updateSelectHandle();
+		private onSucessHandler(data: any) {
+			if (data.code == Web_operation_fields.CLIENT_IRCODE_GETBULLETINLIST) {
+				if (data && data.success == 0) {//公告
+					this._activeList = [];
+					let gonggao = data.msg && data.msg.list && data.msg.list.length > 0 ? data.msg.list : [];
+					for (let key in gonggao) {
+						this._activeList.push(gonggao[key]);
+						//读取公告
+						this._game.network.call_read_bulletin();
+					}
+				}
+			}
 		}
 
-		private updateSelectHandle() {
-			let selectedIndex = this._viewUI.list_tab.selectedIndex;
-			if (selectedIndex < 0) return;
-			if (!this._viewUI.list_tab.dataSource || !this._viewUI.list_tab.dataSource.length) return;
-			let selectedItem = this._viewUI.list_tab.dataSource[selectedIndex];
+		//================公告start=================
+		private updateSelectHandleGongGao(selectedItem): void {
+			if (selectedItem) {
+				this._viewUI.panel_wenzi.visible = selectedItem.b_type == 1;
+				this._viewUI.panel_tu.visible = selectedItem.b_type == 2;
+				this._viewUI.panel_wenzitu.visible = !this._viewUI.panel_wenzi.visible && !this._viewUI.panel_tu.visible;
+				if (selectedItem.b_type == 1) {//纯文字
+					TextFieldU.setHtmlText(this._viewUI.lab_wenzi, selectedItem.context);
+					this._viewUI.lab_wenzi.height = this._viewUI.lab_wenzi.textField.textHeight;
+				} if (selectedItem.b_type == 2) {//纯图片
+					this._viewUI.img_tu.skin = selectedItem.img_url;
+				} else {//图片+文字
+					this._viewUI.img_wenzitu.skin = selectedItem.img_url;
+					TextFieldU.setHtmlText(this._viewUI.lab_wenzitu, selectedItem.context);
+					this._viewUI.lab_wenzitu.height = this._viewUI.lab_wenzitu.textField.textHeight;
+
+				}
+			}
+		}
+		private onLinkHandle(data: string) {
+			WebConfig.openUrl(data);
+		}
+		//================公告end=================
+
+		//================活动start=================
+		private updateSelectHandleHuoDong(selectedItem: any) {
 			if (selectedItem) {
 				this._viewUI.myhd0.visible = false;
 				this._viewUI.myhd1.visible = false;
@@ -113,7 +201,6 @@ module gamedating.page {
 				this._viewUI.btn_qiandao.visible = isShowBtn;
 			}
 		}
-
 		//资源预加载
 		private _listData;
 		private _refAssetArr: Array<RefAsset> = [];
@@ -185,17 +272,14 @@ module gamedating.page {
 				}
 			}
 		}
-
 		private renderHandler(cell: TabItemRender, index: number) {
 			if (cell) {
 				cell.setData(this._game, cell.dataSource);
 			}
 		}
-
 		protected onBtnTweenEnd(e: any, target: any) {
 			this.jumpPage();
 		}
-
 		private _isMouseDown: boolean = false;
 		private _mouseDownY: number = 0;
 		private judgeIsJump(e: LEvent): void {
@@ -212,7 +296,6 @@ module gamedating.page {
 					break
 			}
 		}
-
 		private jumpPage(): void {
 			let indx = this._viewUI.list_tab.selectedIndex;
 			let cc: any = this._viewUI.list_tab.dataSource[indx];
@@ -233,11 +316,15 @@ module gamedating.page {
 				}
 			}
 		}
+		//================活动end=================
 
 		public close(): void {
 			if (this._viewUI) {
 				this.clerarAll();
-				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.getData);
+				this._viewUI.lab_wenzi.off(LEvent.LINK, this, this.onLinkHandle);
+				this._viewUI.lab_wenzitu.off(LEvent.LINK, this, this.onLinkHandle);
+				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
+				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.getHuoDongData);
 			}
 			super.close();
 		}
@@ -247,10 +334,10 @@ module gamedating.page {
 		private _game: Game;
 		private _data: any;
 		/**
-		 * 
-		 * @param game 
-		 * @param data 
-		 */
+		  * 
+		  * @param game 
+		  * @param data 
+		  */
 		setData(game: Game, data: any) {
 			if (!data || !data.title) {
 				this.visible = false;
