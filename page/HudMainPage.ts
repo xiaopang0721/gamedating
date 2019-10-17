@@ -4,6 +4,9 @@
 module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DaTingUI;
+		get viewUI(){
+			return this._viewUI;
+		}
 		public static PAGE_ID: Array<any> = [];
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
