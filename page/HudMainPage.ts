@@ -4,6 +4,9 @@
 module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DaTingUI;
+		get viewUI(){
+			return this._viewUI;
+		}
 		public static PAGE_ID: Array<any> = [];
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -645,6 +648,8 @@ module gamedating.page {
 					WebConfig.copyTxt(this._viewUI.txt_gw_url.text);
 					this._game.showTips("复制成功");
 					this.closeQiPaoKuang();
+					//音效
+					this._game.playSound(Path.music_copy);
 					break;
 				default:
 					break;

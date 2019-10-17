@@ -502,7 +502,7 @@ module ui.nqp.dating.component {
     export class TabItemRender1UI extends View {
 		public txt_name:laya.display.Text;
 
-        public static  uiView:any ={"type":"View","props":{"width":270,"height":80},"child":[{"type":"Clip","props":{"y":46,"x":143,"skin":"dating_ui/tongyong/btn_an.png","name":"selectBox","index":1,"clipY":3,"clipX":1,"anchorY":0.5,"anchorX":0.5}},{"type":"Text","props":{"y":20,"x":8,"wordWrap":false,"width":251,"var":"txt_name","text":"活动内容","height":42,"fontSize":40,"font":"SimHei","color":"#fffdf9","cacheAs":"normal","align":"center"}}]};
+        public static  uiView:any ={"type":"View","props":{"width":270,"height":80},"child":[{"type":"Clip","props":{"y":46,"x":143,"skin":"dating_ui/tongyong/btn_an.png","name":"selectBox","index":1,"clipY":3,"clipX":1,"anchorY":0.5,"anchorX":0.5}},{"type":"Text","props":{"y":20,"x":8,"wordWrap":false,"width":251,"var":"txt_name","text":"活动内容","strokeColor":"#959595","stroke":3,"height":42,"fontSize":40,"color":"#fffdf9","cacheAs":"normal","bold":true,"align":"center"}}]};
         constructor(){ super()}
         createChildren():void {
         			View.regComponent("Text",laya.display.Text);

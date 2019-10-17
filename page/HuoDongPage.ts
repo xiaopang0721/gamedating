@@ -306,11 +306,21 @@ module gamedating.page {
 				} else if (cc.topopup == Web_operation_fields.GAME_GONGGAO_OPENPAGE_TYPE_CHONGZHI) {//充值
 					this._game.uiRoot.general.open(DatingPageDef.GONGGAO_GOTO[cc.topopup], (page) => {
 						page.dataSource = DatingPageDef.CHONGZHI_GOTO[cc.sub_topopup];
+					}, () => {
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_HUODONG);
 					});
 					this.close();
 					return;
+				} else if (cc.topopup == Web_operation_fields.GAME_GONGGAO_OPENPAGE_TYPE_FANGKA) {	//房卡标签
+					let page: HudMainPage = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+					if (page) {
+						page.viewUI.tab.selectedIndex = Number(DatingPageDef.TYPE_CARD);
+					}
+					this.close();
 				} else {
-					this._game.uiRoot.general.open(DatingPageDef.GONGGAO_GOTO[cc.topopup]);
+					this._game.uiRoot.general.open(DatingPageDef.GONGGAO_GOTO[cc.topopup], null, () => {
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_HUODONG);
+					});
 					this.close();
 					return;
 				}
