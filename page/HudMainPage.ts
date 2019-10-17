@@ -1424,7 +1424,7 @@ module gamedating.page {
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
 					this.img_ewm.visible = true;
-					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64) => {
+					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 110, 110, (base64) => {
 						this.img_ewm.skin = base64;
 					})
 					break;
