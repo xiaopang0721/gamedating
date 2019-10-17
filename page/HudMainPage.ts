@@ -4,7 +4,7 @@
 module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.nqp.dating.DaTingUI;
-		get viewUI(){
+		get viewUI() {
 			return this._viewUI;
 		}
 		public static PAGE_ID: Array<any> = [];
@@ -70,7 +70,7 @@ module gamedating.page {
 			super.onOpen();
 			HudMainPage.PAGE_ID = [DatingPageDef.PAGE_VIP, DatingPageDef.PAGE_HUD_SHARE, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE];
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64) => {
 				this._viewUI.img_gw.skin = base64;
 			})
 			//官网链接
@@ -468,7 +468,7 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64) => {
 				this._viewUI.img_gw.skin = base64;
 			})
 			//官网链接
@@ -651,7 +651,7 @@ module gamedating.page {
 				default:
 					break;
 			}
-		}		
+		}
 
 		//====================弹窗气泡相关=start======================================
 		initQiPaoUI(): void {
@@ -812,7 +812,7 @@ module gamedating.page {
 			if (index == -1) {
 				this._viewUI.tab.selectedIndex = 0;
 				return;
-			}	
+			}
 			// 如果有值，说明该干活了
 			let listData = this._game.datingGame.hudTabScrollData;
 			if (listData) {
@@ -826,7 +826,7 @@ module gamedating.page {
 					this._isFromRoom = false;
 				})
 				if (tabIndex != index) {
-					return ;
+					return;
 				}
 			}
 			Laya.timer.clearAll(this);
@@ -877,7 +877,7 @@ module gamedating.page {
 					}
 				}
 			}
-			if (!game_list.length){
+			if (!game_list.length) {
 				this._viewUI.list_btns.dataSource = [];
 				return true;
 			}
@@ -1422,7 +1422,7 @@ module gamedating.page {
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
 					this.img_ewm.visible = true;
-					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64)=>{
+					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64) => {
 						this.img_ewm.skin = base64;
 					})
 					break;
@@ -1452,6 +1452,8 @@ module gamedating.page {
 			if (this._data.type == Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG) {
 				WebConfig.copyTxt(WebConfig.gwUrl);
 				this._game.showTips("复制成功");
+				//音效
+				this._game.playSound(Path.music_copy);
 				//显示气泡框
 				// this._page.updatePos();
 				// this._page.alertQiPaoKuang(DatingGame.QIPAOKUANGGW);
