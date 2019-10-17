@@ -735,7 +735,7 @@ module gamedating.page {
 			this._game = game;
 			this._data.index = index;
 			this._viewUI = viewUI;
-			this.txt_name.text = StringU.substitute("{0} {1}", data.name, index + 1);
+			this.txt_name.text = data.name;
 			this.txt_money.text = StringU.substitute("单笔:{0}元 - {1}元", data.minmoney, data.maxmoney);
 		}
 	}

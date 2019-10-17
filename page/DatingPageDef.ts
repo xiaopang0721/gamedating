@@ -16,9 +16,6 @@ module gamedating.page {
 		static PAGE_QUKUAN: string = "6";
 		//客服
 		static PAGE_KEFU: string = "7";
-
-		//打开公告
-		static PAGE_NEW_GONGGAO: string = "9";
 		//绑定送钱
 		static PAGE_BINDMONEY: string = "10";
 		//打开邮件
@@ -85,8 +82,6 @@ module gamedating.page {
 
 		//键盘
 		static PAGE_JIANPAN: string = "48";
-		//停机公告界面
-		static PAGE_TIP_GONGGAO: string = "51";
 		//VIP界面
 		static PAGE_VIP: string = "52";
 
@@ -119,7 +114,6 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUIT_TIPS] = TipsQuit;
 			PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_XIAOXI] = MessagePage;
-			PageDef._pageClassMap[DatingPageDef.PAGE_NEW_GONGGAO] = GongGaoOpenPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GENGGAINC] = GengGaiNCPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GET_REWARD] = RewardPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_CHANGGE_HEAD] = HeadChangePage;
@@ -147,7 +141,6 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_YUEBAO] = YuEBaoPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_YUEBAO_HELP] = YuEBaoHelpPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_JIANPAN] = JianPanPage;
-			PageDef._pageClassMap[DatingPageDef.PAGE_TIP_GONGGAO] = TipGongGaoPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_VIP_UP] = VipUpPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_BINDPHONE] = LoginBindPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_FIRST_RECHARGE] = FirstRechargePage;
