@@ -1256,7 +1256,7 @@ module gamedating.page {
 			if (!this._waitingTip) {
 				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
 			}
-			let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 			this._waitingTip.x = this.btn.width - 90 + offset_x;
 			this.addChild(this._waitingTip);
 			this.clearUpdate();
@@ -1270,6 +1270,8 @@ module gamedating.page {
 
 		// 显示更新状态
 		private showUpdate(offset_x: number): void {
+			if (this._waitingTip && this._waitingTip.parent)
+				return;
 			if (!this._updateEffect) {
 				this._updateEffect = new AnimationFrame({
 					source: 'update',
@@ -1296,7 +1298,7 @@ module gamedating.page {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
 				this.addChild(this._loadingTip);
-				let offset_x: number = this.index % 2 == 0 ? 12 : -3;
+				let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 				this._loadingTip.x = this.btn.width - 90 + offset_x;
 			}
 			this._loadingTip.progress = value;
