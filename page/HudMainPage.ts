@@ -131,11 +131,8 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 
 			this.onUpdatePlayerInfo(true);
-			if (WebConfig.platform == "qpdwj" || WebConfig.platform == "qpbt") {
-				this._game.playMusic(Path.music_bg_away);
-			} else {
-				this._game.playMusic(Path.music_bg);
-			}
+
+			this._game.playMusic(Path.music_bg);
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(55, -10), 1, null, [this._viewUI.btn_xiaoxi]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(70, -10), 1, null, [this._viewUI.btn_bangding]);
