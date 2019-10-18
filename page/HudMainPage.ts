@@ -151,7 +151,7 @@ module gamedating.page {
 
 		protected onApiHandle() {
 			super.onApiHandle();
-			this._viewUI.box_qipaok.visible = this._viewUI.box_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = !WebConfig.enterGameLocked;
+			this._viewUI.box_qipaok.visible = this._viewUI.btn_cz.visible = this._viewUI.btn_vip.visible = this._viewUI.box_btn_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = !WebConfig.enterGameLocked;
 		}
 
 		/**按钮点击事件 带缓动 */
@@ -574,6 +574,7 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
 					break;
 				case this._viewUI.btn_add://刷新金币
+					if (WebConfig.enterGameLocked) return;
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 					break;
 				case this._viewUI.btn_zhuanpan://大转盘
