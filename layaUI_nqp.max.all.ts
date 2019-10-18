@@ -388,7 +388,7 @@ module ui.nqp.dating.component {
 		public img_ewm:Laya.Image;
 		public txt_gw:Laya.Label;
 
-        public static  uiView:any ={"type":"View","props":{"width":286,"height":434},"child":[{"type":"Image","props":{"width":286,"var":"img_ad","skin":"dating_ui/datinglunbotu/tu_dl2.png","height":434}},{"type":"Image","props":{"width":110,"var":"img_ewm","height":110,"centerY":130,"centerX":-11}},{"type":"Label","props":{"y":334,"x":30,"var":"txt_gw","valign":"middle","text":"www.adkdjf.com","fontSize":25,"color":"#008aff","bold":true,"align":"center"}}]};
+        public static  uiView:any ={"type":"View","props":{"width":286,"height":434},"child":[{"type":"Image","props":{"width":286,"var":"img_ad","skin":"dating_ui/datinglunbotu/tu_dl2.png","height":434}},{"type":"Box","props":{"y":290,"x":72,"width":120,"height":120},"child":[{"type":"Image","props":{"width":110,"var":"img_ewm","height":110,"centerY":0,"centerX":0}}]},{"type":"Label","props":{"y":334,"x":30,"var":"txt_gw","valign":"middle","text":"www.adkdjf.com","fontSize":25,"color":"#008aff","bold":true,"align":"center"}}]};
         constructor(){ super()}
         createChildren():void {
         

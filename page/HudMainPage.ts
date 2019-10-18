@@ -1417,8 +1417,8 @@ module gamedating.page {
 		private _pageID = "";
 		private show() {
 			let order: number = 1;
-			this.img_ewm.visible = false;
-			this.txt_gw.visible = false;
+			this.img_ewm.visible = this._data.type == Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG;
+			this.txt_gw.visible = this._data.type == Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG;
 			switch (this._data.type) {
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_DAILI:
 					order = 1;
@@ -1427,14 +1427,13 @@ module gamedating.page {
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG:
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
-					this.img_ewm.visible = true;
-					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 110, 110, (base64) => {
+					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64) => {
 						this.img_ewm.skin = base64;
+						this.img_ewm.centerY = -2;
 					})
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;
-					this.txt_gw.visible = true;
 					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_VIP:
