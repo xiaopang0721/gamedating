@@ -149,6 +149,11 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
 
+		protected onApiHandle() {
+			super.onApiHandle();
+			this._viewUI.box_qipaok.visible = this._viewUI.box_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = !WebConfig.enterGameLocked;
+		}
+
 		/**按钮点击事件 带缓动 */
 		protected onBtnClickWithTween(...agrs): void {
 			super.onBtnClickWithTween.apply(this, agrs);

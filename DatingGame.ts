@@ -348,7 +348,7 @@ module gamedating {
 		 * 保存合成图片
 		 */
 		public saveQrcodeImage() {
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, Handler.create(this,(base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, Handler.create(this, (base64) => {
 				WebConfig.saveQrcodeImage(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 235, 461, 140, 140);
 			}))
 		}
@@ -710,7 +710,7 @@ module gamedating {
 			return this._curKey;
 		}
 		public firstAlertPage(): void {
-			if (!this._firstAlert && !WebConfig.isConnected) {
+			if (!this._firstAlert && !WebConfig.isConnected && !WebConfig.enterGameLocked) {
 				this._alertPageIndex = this._alertPageIndex + 1;
 				if (!this.popUpData) return;
 				let popKeyData: any = this.popUpData[this._alertPageIndex];
