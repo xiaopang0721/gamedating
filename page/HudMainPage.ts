@@ -1426,7 +1426,8 @@ module gamedating.page {
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
 					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, Handler.create(this, (base64) => {
 						this.img_ewm.skin = base64;
-					})					break;
+					}))
+					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;
 					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
