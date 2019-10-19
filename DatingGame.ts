@@ -57,10 +57,10 @@ module gamedating {
 
 		//退出游戏计数
 		private _exitGmeTimes: number = 0;
-		private get exitGmeTimes() { return this._exitGmeTimes };
+		get exitGmeTimes() { return this._exitGmeTimes };
 		//游戏前后金币差值
 		private _diffMoney: number = 0;
-		private get diffMoney() { return this._diffMoney };
+		get diffMoney() { return this._diffMoney };
 		private _game: Game;
 		constructor() {
 			this._game = main.game;
@@ -656,7 +656,7 @@ module gamedating {
 			return this._isShareBack;
 		}
 		//是否弹起过月入百万气泡框
-		public isisAlertYRBW: boolean = false;
+		public isAlertYRBW: boolean = false;
 		//是否弹起过官网气泡框
 		public isAlertYGW: boolean = false;
 		public isCanAlertYGW: boolean = false;
