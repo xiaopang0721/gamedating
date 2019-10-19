@@ -18,6 +18,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "qifu.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
 			];
 		}
 
