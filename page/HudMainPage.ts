@@ -856,7 +856,7 @@ module gamedating.page {
 			let game_list: any[] = []
 			let webPower: number = 0;
 			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
-			if (!WebConfig.game_list) {
+			if (!WebConfig.gamelist) {
 				this._viewUI.list_btns.dataSource = [];
 				return true;
 			}
@@ -1005,6 +1005,7 @@ module gamedating.page {
 		private playNext() {
 			Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
 			Laya.Tween.to(this._viewUI.list_ad.scrollBar, { value: this._adPerWidth * this._curAdIndex }, 200, null, Handler.create(this, () => {
+				if (!this._viewUI.list_ad.dataSource) return;
 				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
 					this._viewUI.list_ad.scrollTo(this._curAdIndex);
