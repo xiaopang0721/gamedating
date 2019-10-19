@@ -1005,6 +1005,9 @@ module gamedating.page {
 		private playNext() {
 			Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
 			Laya.Tween.to(this._viewUI.list_ad.scrollBar, { value: this._adPerWidth * this._curAdIndex }, 200, null, Handler.create(this, () => {
+				if (!this._viewUI.list_ad.dataSource)
+					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
+				//去获取一遍，这还没有，就不要了
 				if (!this._viewUI.list_ad.dataSource) return;
 				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
