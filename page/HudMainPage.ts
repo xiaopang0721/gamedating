@@ -152,6 +152,8 @@ module gamedating.page {
 		protected onApiHandle() {
 			super.onApiHandle();
 			this._viewUI.box_qipaok.visible = this._viewUI.btn_cz.visible = this._viewUI.btn_vip.visible = this._viewUI.box_btn_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = !WebConfig.enterGameLocked;
+			this._viewUI.box.left = WebConfig.enterGameLocked ? -210 : 30;
+			this._viewUI.list_btns.width = WebConfig.enterGameLocked ? 1617 : 1287;
 		}
 
 		/**按钮点击事件 带缓动 */
