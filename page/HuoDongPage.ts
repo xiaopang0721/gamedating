@@ -35,6 +35,7 @@ module gamedating.page {
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler);
 			this._viewUI.myhd0.vScrollBarSkin = "";
 			this._viewUI.myhd1.vScrollBarSkin = "";
 			this._viewUI.myhd2.vScrollBarSkin = "";
@@ -59,6 +60,10 @@ module gamedating.page {
 			//获取数据
 			this.getHuoDongData();
 			this.onBtnTabChange();
+		}
+
+		private changeHandler(): void {
+			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
 		}
 
 		private onBtnTabChange(): void {
@@ -331,6 +336,7 @@ module gamedating.page {
 		public close(): void {
 			if (this._viewUI) {
 				this.clerarAll();
+				DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				this._viewUI.lab_wenzi.off(LEvent.LINK, this, this.onLinkHandle);
 				this._viewUI.lab_wenzitu.off(LEvent.LINK, this, this.onLinkHandle);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
