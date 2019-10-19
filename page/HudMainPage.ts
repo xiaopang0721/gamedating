@@ -155,6 +155,13 @@ module gamedating.page {
 			this._viewUI.box.left = WebConfig.enterGameLocked ? -210 : 30;
 			this._viewUI.list_btns.width = WebConfig.enterGameLocked ? 1612 : 1287;
 			this._viewUI.btn_left.left = WebConfig.enterGameLocked ? 30 : 327;
+			//房卡标签要隐藏掉，不要问为什么，我也不知道
+			let item4: any = this._viewUI.tab.getChildAt(4) as Button;
+			item4.visible = false;
+			let item3: any = this._viewUI.tab.getChildAt(3) as Button;
+			item3.skin = DatingPath.ui_dating + "dating/btn_dw1.png";
+			this._viewUI.img_tab.height = WebConfig.enterGameLocked ? 474 : 572;
+			this._viewUI.box_tabs.height = WebConfig.enterGameLocked ? 449 : 545;
 		}
 
 		/**按钮点击事件 带缓动 */
@@ -846,7 +853,7 @@ module gamedating.page {
 			let b = this.onDealGameData(index);
 			if (b)
 				return;
-			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
+			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0 && !WebConfig.enterGameLocked) {
 				this._viewUI.btn_enterRoom.visible = true;
 				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
 				this._viewUI.btn_enterRoom.alpha = 0;
