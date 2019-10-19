@@ -70,9 +70,9 @@ module gamedating.page {
 			super.onOpen();
 			HudMainPage.PAGE_ID = [DatingPageDef.PAGE_VIP, DatingPageDef.PAGE_HUD_SHARE, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE];
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, Handler.create(this, (base64) => {
 				this._viewUI.img_gw.skin = base64;
-			})
+			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -469,9 +469,9 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, Handler.create(this, (base64) => {
 				this._viewUI.img_gw.skin = base64;
-			})
+			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 		}
@@ -1424,9 +1424,9 @@ module gamedating.page {
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG:
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
-					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64) => {
+					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, Handler.create(this, (base64) => {
 						this.img_ewm.skin = base64;
-					})
+					}))
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;
