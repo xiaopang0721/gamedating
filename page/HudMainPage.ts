@@ -154,6 +154,7 @@ module gamedating.page {
 			this._viewUI.box_qipaok.visible = this._viewUI.btn_cz.visible = this._viewUI.btn_vip.visible = this._viewUI.box_btn_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = !WebConfig.enterGameLocked;
 			this._viewUI.box.left = WebConfig.enterGameLocked ? -210 : 30;
 			this._viewUI.list_btns.width = WebConfig.enterGameLocked ? 1617 : 1287;
+			this._viewUI.btn_left.left = WebConfig.enterGameLocked ? 327 : 15;
 		}
 
 		/**按钮点击事件 带缓动 */
@@ -573,6 +574,7 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
 					break;
 				case this._viewUI.btn_gren://个人信息
+					if (WebConfig.enterGameLocked) return;
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
 					break;
 				case this._viewUI.btn_add://刷新金币
