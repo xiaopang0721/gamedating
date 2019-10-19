@@ -716,9 +716,12 @@ module gamedating.page {
 			}
 		}
 		/**hud关闭相关气泡框逻辑 */
-		private _isCanClose: boolean = false;
+		private _isCanClose: boolean = false;	//判断是否开的动画是否播放完成
+		private _isPlayCloseQiPaoKuang: boolean = false;
 		closeQiPaoKuang(isHD: boolean = false): void {
 			if (!this._isCanClose) return;
+			if(this._isPlayCloseQiPaoKuang) return;
+			this._isPlayCloseQiPaoKuang = true;
 			let ani: Laya.FrameAnimation;
 			if (this._type == DatingGame.QIPAOKUANGGW) {
 				ani = this._viewUI.ani7;
@@ -734,6 +737,7 @@ module gamedating.page {
 		}
 		//气泡关闭动画完成时
 		private completCloseQiPao(ani: Laya.FrameAnimation, isHD: boolean): void {
+			this._isPlayCloseQiPaoKuang = false;
 			this._viewUI.img_hd.visible = false;
 			this._viewUI.box_qipaok.visible = false;
 			this._isCanClose = false;
