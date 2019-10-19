@@ -72,6 +72,17 @@ module gamedating.page {
 			this.onBtnTabChange();
 		}
 
+		//重置滚动条参数
+		private resetScrollValue(): void {
+			this._viewUI.myhd2.vScrollBar.value
+				= this._viewUI.myhd1.vScrollBar.value
+				= this._viewUI.myhd0.vScrollBar.value
+				= this._viewUI.panel_tu.vScrollBar.value
+				= this._viewUI.panel_wenzi.vScrollBar.value
+				= this._viewUI.panel_wenzitu.vScrollBar.value
+				= 0;
+		}
+
 		private changeHandler_list_tab(e: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
 		}
@@ -98,6 +109,7 @@ module gamedating.page {
 				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
 				this._viewUI.btn_tab.selected = !this._viewUI.btn_tab.selected;
 			}
+			this.resetScrollValue();
 			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
 				//公告
 				this._curSelectData = this._activeList;
@@ -127,6 +139,7 @@ module gamedating.page {
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				this.updateSelectHandleHuoDong(selectedItem);
 			}
+			this.resetScrollValue();
 		}
 
 
