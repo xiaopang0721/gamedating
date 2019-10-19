@@ -720,7 +720,7 @@ module gamedating.page {
 		private _isPlayCloseQiPaoKuang: boolean = false;
 		closeQiPaoKuang(isHD: boolean = false): void {
 			if (!this._isCanClose) return;
-			if(this._isPlayCloseQiPaoKuang) return;
+			if (this._isPlayCloseQiPaoKuang) return;
 			this._isPlayCloseQiPaoKuang = true;
 			let ani: Laya.FrameAnimation;
 			if (this._type == DatingGame.QIPAOKUANGGW) {
@@ -856,6 +856,10 @@ module gamedating.page {
 			let game_list: any[] = []
 			let webPower: number = 0;
 			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
+			if (!WebConfig.game_list) {
+				this._viewUI.list_btns.dataSource = [];
+				return true;
+			}
 			// 先筛选有用信息
 			for (let i = 0; i < WebConfig.gamelist.length; i++) {
 				let dz_str: any = WebConfig.gamelist[i];
