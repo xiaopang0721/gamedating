@@ -101,10 +101,10 @@ module gamedating.page {
 			//分享动态
 			this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang);
 
+			this._viewUI.btn_gren.onAPI(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_add.onAPI(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.btn_gren.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.btn_add.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_remen.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_yuebao.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_qukuan.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -151,17 +151,13 @@ module gamedating.page {
 
 		protected onApiHandle() {
 			super.onApiHandle();
-			this._viewUI.box_qipaok.visible = this._viewUI.btn_cz.visible = this._viewUI.btn_vip.visible = this._viewUI.box_btn_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = !WebConfig.enterGameLocked;
-			this._viewUI.box.left = WebConfig.enterGameLocked ? -210 : 30;
-			this._viewUI.list_btns.width = WebConfig.enterGameLocked ? 1612 : 1287;
-			this._viewUI.btn_left.left = WebConfig.enterGameLocked ? 30 : 327;
+			this._viewUI.box_qipaok.visible = this._viewUI.btn_cz.visible = this._viewUI.btn_vip.visible = this._viewUI.box_btn_top.visible = this._viewUI.box_bottom.visible = this._viewUI.box_lbt.visible = false;
+			this._viewUI.box.left = -210;
+			this._viewUI.list_btns.left = 240;
+			this._viewUI.btn_left.left = 30;
+			this._viewUI.btn_right.right = 30;
 			//房卡标签要隐藏掉，不要问为什么，我也不知道
-			let item4: any = this._viewUI.tab.getChildAt(4) as Button;
-			item4.visible = false;
-			let item3: any = this._viewUI.tab.getChildAt(3) as Button;
-			item3.skin = DatingPath.ui_dating + "dating/btn_dw1.png";
-			this._viewUI.img_tab.height = WebConfig.enterGameLocked ? 474 : 572;
-			this._viewUI.box_tabs.height = WebConfig.enterGameLocked ? 449 : 545;
+			this._viewUI.box_tabs.visible = false;
 		}
 
 		/**按钮点击事件 带缓动 */
@@ -505,7 +501,7 @@ module gamedating.page {
 		updatePos() {
 			if (this._viewUI.list_btns.dataSource)
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
-			this._viewUI.list_btns.width = this._clientWidth - 250;
+			this._viewUI.list_btns.width = WebConfig.enterGameLocked ? 1612 : this._clientWidth - 250;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
 				this._viewUI.box_btn_top.right = 25;
@@ -581,11 +577,9 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
 					break;
 				case this._viewUI.btn_gren://个人信息
-					if (WebConfig.enterGameLocked) return;
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
 					break;
 				case this._viewUI.btn_add://刷新金币
-					if (WebConfig.enterGameLocked) return;
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
 					break;
 				case this._viewUI.btn_zhuanpan://大转盘
