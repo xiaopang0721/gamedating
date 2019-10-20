@@ -733,9 +733,12 @@ module gamedating.page {
 			}
 		}
 		/**hud关闭相关气泡框逻辑 */
-		private _isCanClose: boolean = false;
+		private _isCanClose: boolean = false;	//判断是否开的动画是否播放完成
+		private _isPlayCloseQiPaoKuang: boolean = false;
 		closeQiPaoKuang(isHD: boolean = false): void {
 			if (!this._isCanClose) return;
+			if (this._isPlayCloseQiPaoKuang) return;
+			this._isPlayCloseQiPaoKuang = true;
 			let ani: Laya.FrameAnimation;
 			if (this._type == DatingGame.QIPAOKUANGGW) {
 				ani = this._viewUI.ani7;
@@ -751,6 +754,7 @@ module gamedating.page {
 		}
 		//气泡关闭动画完成时
 		private completCloseQiPao(ani: Laya.FrameAnimation, isHD: boolean): void {
+			this._isPlayCloseQiPaoKuang = false;
 			this._viewUI.img_hd.visible = false;
 			this._viewUI.box_qipaok.visible = false;
 			this._isCanClose = false;
@@ -869,6 +873,10 @@ module gamedating.page {
 			let game_list: any[] = []
 			let webPower: number = 0;
 			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
+			if (!WebConfig.gamelist) {
+				this._viewUI.list_btns.dataSource = [];
+				return true;
+			}
 			// 先筛选有用信息
 			for (let i = 0; i < WebConfig.gamelist.length; i++) {
 				let dz_str: any = WebConfig.gamelist[i];
@@ -1014,6 +1022,10 @@ module gamedating.page {
 		private playNext() {
 			Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
 			Laya.Tween.to(this._viewUI.list_ad.scrollBar, { value: this._adPerWidth * this._curAdIndex }, 200, null, Handler.create(this, () => {
+				if (!this._viewUI.list_ad.dataSource)
+					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
+				//去获取一遍，这还没有，就不要了
+				if (!this._viewUI.list_ad.dataSource) return;
 				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
 					this._viewUI.list_ad.scrollTo(this._curAdIndex);
