@@ -926,7 +926,7 @@ module gamedating.page {
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
-			this._listBarMax = 245 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
