@@ -37,19 +37,6 @@ module gamedating.page {
             this._viewUI.btn_youke.on(LEvent.CLICK, this, this.onBtnClickWithTween);
             this._viewUI.btn_wx.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 
-            //初始化音量大小
-            let soundVolume = localGetItem("soundVolume");
-            let value = 0.15;
-            if (soundVolume == null || soundVolume == undefined) {
-                localSetItem("soundVolume", value.toString());
-                Laya.SoundManager.setSoundVolume(value);
-            }
-            let musicVolume = localGetItem("musicVolume");
-            if (musicVolume == null || soundVolume == undefined) {
-                Laya.SoundManager.setMusicVolume(value);
-                localSetItem("musicVolume", value.toString());
-            }
-
             //单入口弹出账号登录界面
             if (WebConfig.isSingleEnter) {
                 this._game.uiRoot.general.open(DatingPageDef.PAGE_BINDPHONE, (page) => {
