@@ -81,14 +81,14 @@ module gamedating.page {
 			this._isShowBtnEffect && this.initBtnAnimationFrame();
 			this._viewUI.list_btns.hScrollBarSkin = "";
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
-			this._viewUI.list_btns.itemRender = GameItemRender;
+			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.HudOne_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_btns.spaceX = -50;
 			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
-			this._viewUI.list_ad.itemRender = AdItemRender;
+			this._viewUI.list_ad.itemRender = this.createChildren("dating.component.HudAd_TUI", AdItemRender);
 			this._viewUI.list_ad.renderHandler = new Handler(this, this.adRenderHandler);
 			this._viewUI.list_ad.scrollBar.rollRatio = 0;
 			this._viewUI.list_ad.on(LEvent.MOUSE_DOWN, this, this.onAdMouseHandler);
@@ -1264,7 +1264,8 @@ module gamedating.page {
 		// 显示等待状态
 		private showWaiting() {
 			if (!this._waitingTip) {
-				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
+				let cla = Page.FindClass("dating.component.Effect_dengdaiUI");
+				this._waitingTip = new cla();
 			}
 			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 			this._waitingTip.x = this.btn.width - 90 + offset_x;
