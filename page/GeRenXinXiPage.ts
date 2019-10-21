@@ -378,7 +378,7 @@ module gamedating.page {
 					this._game.alert("清理缓存将删除本地数据对此造成的损失，本平台将不承担任何责任。为了您的虚拟财产安全,我们强烈建议您先绑定帐号信息!\n是否清除缓存？", () => {
 						localClear();
 						this._game.showTips("清理缓存成功!")
-					}, null, false)
+					}, null, true);
 					break;
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
