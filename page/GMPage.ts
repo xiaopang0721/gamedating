@@ -12,7 +12,7 @@ module gamedating.page {
 
 		// 页面初始化函数
 		protected init(): void {
-			this._viewUI = this.createView('nqp.dating.GMPageUI');
+			this._viewUI = this.createView('dating.GMPageUI');
 			this.addChild(this._viewUI);
 		}
 

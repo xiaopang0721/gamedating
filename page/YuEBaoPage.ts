@@ -28,7 +28,7 @@ module gamedating.page {
 
 		// 页面初始化函数
 		protected init(): void {
-			this._viewUI = this.createView("nqp.dating.YuEBaoUI");
+			this._viewUI = this.createView("dating.YuEBaoUI");
 			this.addChild(this._viewUI);
 
 			this._viewUI.txt_totalGet.text = "";
@@ -43,7 +43,7 @@ module gamedating.page {
 			this._viewUI.txt_jilu_no.visible = false;
 			this._viewUI.list_jilu.vScrollBarSkin = "";
 			this._viewUI.list_jilu.scrollBar.elasticDistance = 100;
-			this._viewUI.list_jilu.itemRender = this.createChildren("nqp.dating.component.YuEBaoTUI", BaoXianXiangT);
+			this._viewUI.list_jilu.itemRender = this.createChildren("dating.component.YuEBaoTUI", BaoXianXiangT);
 			this._viewUI.list_jilu.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_jilu.visible = false;
 
