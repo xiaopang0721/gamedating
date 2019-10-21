@@ -60,9 +60,10 @@ module gamedating.page {
 		// private _banner: Banner;
 		// 页面初始化函数
 		protected init(): void {
-			this._viewUI = this.createView("nqp.dating.DaTingUI");
+			this._viewUI = this.createView("dating.DaTingUI");
 			this.addChild(this._viewUI);
 			this._viewUI.box.mouseThrough = true;
+			this._adPerWidth = WebConfig.platform == PageDef.BASE_PLATFORM_TYPE_AJQP ? 292 : 241;
 		}
 
 		// 页面打开时执行函数
