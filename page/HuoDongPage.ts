@@ -85,6 +85,19 @@ module gamedating.page {
 
 		private changeHandler_list_tab(e: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+			let value = this._viewUI.list_tab.scrollBar.value;
+			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
+				this._viewUI.btn_pre.visible = false;
+				this._viewUI.btn_next.visible = false;
+			} else {
+				if (value <= this._viewUI.list_tab.scrollBar.min) {
+					this._viewUI.btn_pre.visible = false;
+					this._viewUI.btn_next.visible = true;
+				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
+					this._viewUI.btn_pre.visible = true;
+					this._viewUI.btn_next.visible = false;
+				}
+			}
 		}
 		private changeHandler_myhd0(e: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.myhd0, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
@@ -117,6 +130,8 @@ module gamedating.page {
 				this._viewUI.box_gg.visible = true;
 				this._viewUI.list_tab.dataSource = this._activeList && this._activeList.length > 0 ? this._activeList : [];
 				this._viewUI.list_tab.visible = this._activeList && this._activeList.length > 0;
+				this._viewUI.btn_pre.visible = false;
+				this._viewUI.btn_next.visible = this._activeList && this._activeList.length > 6;
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				//活动
 				this._curSelectData = this._curHDData;
@@ -124,6 +139,8 @@ module gamedating.page {
 				this._viewUI.box_gg.visible = false;
 				this._viewUI.list_tab.dataSource = this._curHDData && this._curHDData.length > 0 ? this._curHDData : [];
 				this._viewUI.list_tab.visible = this._curHDData && this._curHDData.length > 0;
+				this._viewUI.btn_pre.visible = false;
+				this._viewUI.btn_next.visible = this._curHDData && this._curHDData.length > 6;
 			}
 			this._viewUI.list_tab.selectedIndex = 0;
 			this.selectHandler(0);
