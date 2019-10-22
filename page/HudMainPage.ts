@@ -347,7 +347,7 @@ module gamedating.page {
 			if (!WebConfig.info) return;
 			switch (btn) {
 				case this._viewUI.btn_xiaoxi:
-					return this._game.datingGame.mailMgr.isShowRed || WebConfig.info.is_new_bulletin;
+					return this._game.datingGame.mailMgr.isShowRed;
 				case this._viewUI.btn_bangding:
 					return WebConfig.info.isguest;
 				case this._viewUI.btn_qiandao:
