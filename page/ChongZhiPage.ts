@@ -15,12 +15,7 @@ module gamedating.page {
 
 		// 页面初始化函数
 		protected init(): void {
-			this._viewUI = this.createView("dating.ChongZhiUI",["dating.component.ChongZhiT1UI", 
-																"dating.component.TabItemRender2UI", 
-																"dating.component.VipItemRenderUI", 
-																"dating.component.ChongZhi_dsfUI",
-																"dating.component.ChongZhi_skUI",
-																]);
+			this._viewUI = this.createView("dating.ChongZhiUI");
 			this.addChild(this._viewUI);
 
 			this._viewUI.list_record.vScrollBarSkin = "";
