@@ -57,10 +57,10 @@ module gamedating {
 
 		//退出游戏计数
 		private _exitGmeTimes: number = 0;
-		private get exitGmeTimes() { return this._exitGmeTimes };
+		get exitGmeTimes() { return this._exitGmeTimes };
 		//游戏前后金币差值
 		private _diffMoney: number = 0;
-		private get diffMoney() { return this._diffMoney };
+		get diffMoney() { return this._diffMoney };
 		private _game: Game;
 		constructor() {
 			this._game = main.game;
@@ -243,14 +243,15 @@ module gamedating {
 				// if (Laya.timer.currTimer - this._shareCd < 0) return;
 				// this._shareCd = Laya.timer.currTimer + 3000;
 				// if (Laya.timer.currTimer - this._shareContinueTime < 1000) return;	//防点击就会有回调的那种情况
-				// if (Laya.timer.currTimer - this._shareContinueTime < 3000) {
-				// 	this._game.showTips("分享失败");
-				// 	return
-				// }
+				if (Laya.timer.currTimer - this._shareContinueTime < 2000) {
+					this._game.showTips("分享失败");
+					return
+				}
 				//因为分享机制变动，所以改成延迟随机3-5秒就给奖励
-				Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
-					this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
-				});
+				// Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
+				// 	this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
+				// });
+				this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
 			}
 		}
 
@@ -332,9 +333,9 @@ module gamedating {
 			let data2 = {}
 			WebConfig.wxDebug && WebConfig.alert("微信注册1");
 			WebConfig.wxDebug && WebConfig.alert("微信分享合成图 + 文");
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, Handler.create(this, (base64) => {
 				WebConfig.wxShareQrcodeImg(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 233, 461, 140, 140, title, description, scene - 1);
-			})
+			}))
 		}
 
 		//更新配置密码
@@ -348,9 +349,9 @@ module gamedating {
 		 * 保存合成图片
 		 */
 		public saveQrcodeImage() {
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, Handler.create(this, (base64) => {
 				WebConfig.saveQrcodeImage(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 235, 461, 140, 140);
-			})
+			}))
 		}
 
 		/**
@@ -656,7 +657,7 @@ module gamedating {
 			return this._isShareBack;
 		}
 		//是否弹起过月入百万气泡框
-		public isisAlertYRBW: boolean = false;
+		public isAlertYRBW: boolean = false;
 		//是否弹起过官网气泡框
 		public isAlertYGW: boolean = false;
 		public isCanAlertYGW: boolean = false;
@@ -710,7 +711,7 @@ module gamedating {
 			return this._curKey;
 		}
 		public firstAlertPage(): void {
-			if (!this._firstAlert && !WebConfig.isConnected) {
+			if (!this._firstAlert && !WebConfig.isConnected && !WebConfig.enterGameLocked) {
 				this._alertPageIndex = this._alertPageIndex + 1;
 				if (!this.popUpData) return;
 				let popKeyData: any = this.popUpData[this._alertPageIndex];

@@ -35,9 +35,15 @@ module gamedating.page {
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			this._viewUI.myhd0.vScrollBarSkin = "";
+			this._viewUI.myhd0.vScrollBar.changeHandler = new Handler(this, this.changeHandler_myhd0);
+
 			this._viewUI.myhd1.vScrollBarSkin = "";
+			this._viewUI.myhd1.vScrollBar.changeHandler = new Handler(this, this.changeHandler_myhd1);
+
 			this._viewUI.myhd2.vScrollBarSkin = "";
+
 			this._viewUI.myhd2.on(LEvent.MOUSE_DOWN, this, this.judgeIsJump);
 			this._viewUI.myhd2.on(LEvent.MOUSE_UP, this, this.judgeIsJump);
 			this._viewUI.txt.text = "";
@@ -49,8 +55,13 @@ module gamedating.page {
 			this._viewUI.panel_wenzi.visible = false;
 			this._viewUI.panel_wenzitu.visible = false;
 			this._viewUI.panel_tu.vScrollBarSkin = "";
+
 			this._viewUI.panel_wenzi.vScrollBarSkin = "";
+			this._viewUI.panel_wenzi.vScrollBar.changeHandler = new Handler(this, this.changeHandler_panel_wenzi);
+
 			this._viewUI.panel_wenzitu.vScrollBarSkin = "";
+			this._viewUI.panel_wenzitu.vScrollBar.changeHandler = new Handler(this, this.changeHandler_panel_wenzitu);
+
 			this._viewUI.lab_wenzi.on(LEvent.LINK, this, this.onLinkHandle);
 			this._viewUI.lab_wenzitu.on(LEvent.LINK, this, this.onLinkHandle);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.getHuoDongData);
@@ -61,6 +72,47 @@ module gamedating.page {
 			this.onBtnTabChange();
 		}
 
+		//重置滚动条参数
+		private resetScrollValue(): void {
+			this._viewUI.myhd2.vScrollBar.value
+				= this._viewUI.myhd1.vScrollBar.value
+				= this._viewUI.myhd0.vScrollBar.value
+				= this._viewUI.panel_tu.vScrollBar.value
+				= this._viewUI.panel_wenzi.vScrollBar.value
+				= this._viewUI.panel_wenzitu.vScrollBar.value
+				= 0;
+		}
+
+		private changeHandler_list_tab(e: LEvent): void {
+			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+			let value = this._viewUI.list_tab.scrollBar.value;
+			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
+				this._viewUI.btn_pre.visible = false;
+				this._viewUI.btn_next.visible = false;
+			} else {
+				if (value <= this._viewUI.list_tab.scrollBar.min) {
+					this._viewUI.btn_pre.visible = false;
+					this._viewUI.btn_next.visible = true;
+				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
+					this._viewUI.btn_pre.visible = true;
+					this._viewUI.btn_next.visible = false;
+				}
+			}
+		}
+		private changeHandler_myhd0(e: LEvent): void {
+			DisplayU.onScrollChange(this._viewUI.myhd0, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+		}
+		private changeHandler_myhd1(e: LEvent): void {
+			DisplayU.onScrollChange(this._viewUI.myhd1, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+		}
+		private changeHandler_panel_wenzi(e: LEvent): void {
+			DisplayU.onScrollChange(this._viewUI.panel_wenzi, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+		}
+		private changeHandler_panel_wenzitu(e: LEvent): void {
+			DisplayU.onScrollChange(this._viewUI.panel_wenzitu, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+		}
+
+
 		private onBtnTabChange(): void {
 			if (!this._curSelectTab && this._curSelectTab != 0) {
 				this._curSelectTab = 1;
@@ -70,6 +122,7 @@ module gamedating.page {
 				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
 				this._viewUI.btn_tab.selected = !this._viewUI.btn_tab.selected;
 			}
+			this.resetScrollValue();
 			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
 				//公告
 				this._curSelectData = this._activeList;
@@ -77,6 +130,8 @@ module gamedating.page {
 				this._viewUI.box_gg.visible = true;
 				this._viewUI.list_tab.dataSource = this._activeList && this._activeList.length > 0 ? this._activeList : [];
 				this._viewUI.list_tab.visible = this._activeList && this._activeList.length > 0;
+				this._viewUI.btn_pre.visible = false;
+				this._viewUI.btn_next.visible = this._activeList && this._activeList.length > 6;
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				//活动
 				this._curSelectData = this._curHDData;
@@ -84,6 +139,8 @@ module gamedating.page {
 				this._viewUI.box_gg.visible = false;
 				this._viewUI.list_tab.dataSource = this._curHDData && this._curHDData.length > 0 ? this._curHDData : [];
 				this._viewUI.list_tab.visible = this._curHDData && this._curHDData.length > 0;
+				this._viewUI.btn_pre.visible = false;
+				this._viewUI.btn_next.visible = this._curHDData && this._curHDData.length > 6;
 			}
 			this._viewUI.list_tab.selectedIndex = 0;
 			this.selectHandler(0);
@@ -99,6 +156,7 @@ module gamedating.page {
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				this.updateSelectHandleHuoDong(selectedItem);
 			}
+			this.resetScrollValue();
 		}
 
 
@@ -164,6 +222,7 @@ module gamedating.page {
 			if (selectedItem) {
 				this._viewUI.myhd0.visible = false;
 				this._viewUI.myhd1.visible = false;
+				this._viewUI.img_myhd.visible = false;
 				this._viewUI.myhd2.visible = false;
 				let listData = selectedItem.img_list ? JSON.parse(selectedItem.img_list) : "";
 				let isShowBtn = selectedItem.topopup > 1 && selectedItem.show_button && Number(selectedItem.show_button) == 1;
@@ -171,10 +230,11 @@ module gamedating.page {
 					if (selectedItem.pro_type == 1) {
 						//图文
 						this._viewUI.myhd1.visible = true;
+						this._viewUI.img_myhd.visible = true;
 						this._viewUI.img_myhd.skin = listData.length > 0 ? listData[0].path : '';
 						this._viewUI.txt_myhd.text = selectedItem.content;
 						this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
-						this._viewUI.myhd1.height = isShowBtn ? 425 : 510;
+						this._viewUI.myhd1.height = isShowBtn ? 243 : 323;
 					} else {
 						//纯大图
 						this._viewUI.myhd2.visible = true;
@@ -331,6 +391,11 @@ module gamedating.page {
 		public close(): void {
 			if (this._viewUI) {
 				this.clerarAll();
+				DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
+				DisplayU.onScrollChange(this._viewUI.myhd0, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
+				DisplayU.onScrollChange(this._viewUI.myhd1, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
+				DisplayU.onScrollChange(this._viewUI.panel_wenzi, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
+				DisplayU.onScrollChange(this._viewUI.panel_wenzitu, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				this._viewUI.lab_wenzi.off(LEvent.LINK, this, this.onLinkHandle);
 				this._viewUI.lab_wenzitu.off(LEvent.LINK, this, this.onLinkHandle);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);

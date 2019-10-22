@@ -29,7 +29,7 @@ module gamedating.page {
 			this._viewUI.list_mail.itemRender = this.createChildren("dating.component.XinXi_lbUI", MailItemRender);
 			this._viewUI.list_mail.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_mail.dataSource = [];
-			
+
 		}
 
 		// 页面打开时执行函数
@@ -70,11 +70,25 @@ module gamedating.page {
 			this._data = data;
 			this.txt_title.text = data.title;
 			this.txt_name.text = data.mail_from;
-			TextFieldU.setHtmlText(this.txt_content, data.context || "点击查看详情");
+			this.txt_content.text = this.onDescHandle(data.context) || "点击查看详情";
 			this.txt_time.text = Sync.getTimeStr(data.mail_time * 1000);
 			this.btn_dingyue.visible = data.isread > 0;
 			this.img_mail.skin = data.isread > 0 ? DatingPath.ui_dating + "xinxi/tu_weidu.png" : DatingPath.ui_dating + "xinxi/tu_xinfen.png";
 			this.on(LEvent.CLICK, this, this.onMouseHandle);
+		}
+
+		private onDescHandle(desc): string {
+			let str = "";
+			for (let i = 0; i < desc.length; i++) {
+				if (desc.charCodeAt(i) > 255) {
+					str += desc[i];
+				}
+			}
+			if (str.length > 15) {
+				return str.substr(0, 15) + "...";
+			} else {
+				return str
+			}
 		}
 
 		private onMouseHandle() {

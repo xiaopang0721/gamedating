@@ -60,9 +60,10 @@ module gamedating.page {
 		// private _banner: Banner;
 		// 页面初始化函数
 		protected init(): void {
-			this._viewUI = this.createView("nqp.dating.DaTingUI");
+			this._viewUI = this.createView("dating.DaTingUI");
 			this.addChild(this._viewUI);
 			this._viewUI.box.mouseThrough = true;
+			this._adPerWidth = WebConfig.platform == PageDef.BASE_PLATFORM_TYPE_AJQP ? 292 : 241;
 		}
 
 		// 页面打开时执行函数
@@ -70,9 +71,9 @@ module gamedating.page {
 			super.onOpen();
 			HudMainPage.PAGE_ID = [DatingPageDef.PAGE_VIP, DatingPageDef.PAGE_HUD_SHARE, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE];
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, Handler.create(this, (base64) => {
 				this._viewUI.img_gw.skin = base64;
-			})
+			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -82,7 +83,7 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.spaceX = -55;
+			this._viewUI.list_btns.spaceX = -50;
 			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
@@ -131,11 +132,8 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 
 			this.onUpdatePlayerInfo(true);
-			if (WebConfig.platform == "qpdwj" || WebConfig.platform == "qpbt") {
-				this._game.playMusic(Path.music_bg_away);
-			} else {
-				this._game.playMusic(Path.music_bg);
-			}
+
+			this._game.playMusic(Path.music_bg);
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(55, -10), 1, null, [this._viewUI.btn_xiaoxi]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(70, -10), 1, null, [this._viewUI.btn_bangding]);
@@ -349,7 +347,7 @@ module gamedating.page {
 			if (!WebConfig.info) return;
 			switch (btn) {
 				case this._viewUI.btn_xiaoxi:
-					return this._game.datingGame.mailMgr.isShowRed || WebConfig.info.is_new_bulletin;
+					return this._game.datingGame.mailMgr.isShowRed;
 				case this._viewUI.btn_bangding:
 					return WebConfig.info.isguest;
 				case this._viewUI.btn_qiandao:
@@ -472,9 +470,9 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, (base64) => {
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_gw.width, this._viewUI.img_gw.height, Handler.create(this, (base64) => {
 				this._viewUI.img_gw.skin = base64;
-			})
+			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
 		}
@@ -719,9 +717,12 @@ module gamedating.page {
 			}
 		}
 		/**hud关闭相关气泡框逻辑 */
-		private _isCanClose: boolean = false;
+		private _isCanClose: boolean = false;	//判断是否开的动画是否播放完成
+		private _isPlayCloseQiPaoKuang: boolean = false;
 		closeQiPaoKuang(isHD: boolean = false): void {
 			if (!this._isCanClose) return;
+			if (this._isPlayCloseQiPaoKuang) return;
+			this._isPlayCloseQiPaoKuang = true;
 			let ani: Laya.FrameAnimation;
 			if (this._type == DatingGame.QIPAOKUANGGW) {
 				ani = this._viewUI.ani7;
@@ -737,6 +738,7 @@ module gamedating.page {
 		}
 		//气泡关闭动画完成时
 		private completCloseQiPao(ani: Laya.FrameAnimation, isHD: boolean): void {
+			this._isPlayCloseQiPaoKuang = false;
 			this._viewUI.img_hd.visible = false;
 			this._viewUI.box_qipaok.visible = false;
 			this._isCanClose = false;
@@ -856,6 +858,10 @@ module gamedating.page {
 			let game_list: any[] = []
 			let webPower: number = 0;
 			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
+			if (!WebConfig.gamelist) {
+				this._viewUI.list_btns.dataSource = [];
+				return true;
+			}
 			// 先筛选有用信息
 			for (let i = 0; i < WebConfig.gamelist.length; i++) {
 				let dz_str: any = WebConfig.gamelist[i];
@@ -922,7 +928,7 @@ module gamedating.page {
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
-			this._listBarMax = 245 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
@@ -1001,6 +1007,10 @@ module gamedating.page {
 		private playNext() {
 			Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
 			Laya.Tween.to(this._viewUI.list_ad.scrollBar, { value: this._adPerWidth * this._curAdIndex }, 200, null, Handler.create(this, () => {
+				if (!this._viewUI.list_ad.dataSource)
+					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
+				//去获取一遍，这还没有，就不要了
+				if (!this._viewUI.list_ad.dataSource) return;
 				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
 					this._viewUI.list_ad.scrollTo(this._curAdIndex);
@@ -1428,10 +1438,9 @@ module gamedating.page {
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_FENXIANG:
 					order = 2;
 					this._pageID = DatingPageDef.PAGE_HUD_SHARE;
-					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, (base64) => {
+					QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this.img_ewm.width, this.img_ewm.height, Handler.create(this, (base64) => {
 						this.img_ewm.skin = base64;
-						this.img_ewm.centerY = -2;
-					})
+					}))
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;

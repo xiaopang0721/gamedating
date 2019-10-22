@@ -609,7 +609,7 @@ module gamedating.page {
                             this._viewUI.ani2.play(0, false);
                             this._inputCode.visible = false;
                             this._inputCode.clearInput();
-                            this._viewUI.box_send_over.visible = true;
+                            this._viewUI.box_send_over.visible = !this._viewUI.btn_get_code.visible;
                         }
                         else if (msg.data == 19) {//手机已被绑定
                             this._viewUI.ani1.gotoAndStop(0);

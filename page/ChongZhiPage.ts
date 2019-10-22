@@ -29,6 +29,7 @@ module gamedating.page {
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TabItemRender2UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.tabChangeHandler);
 
 			this._viewUI.list_vip.vScrollBarSkin = "";
 			this._viewUI.list_vip.scrollBar.elasticDistance = 100;
@@ -90,14 +91,71 @@ module gamedating.page {
 			this.onUpdatePlayerInfo();
 		}
 
+		private tabChangeHandler(): void {
+			let value = this._viewUI.list_tab.scrollBar.value;
+			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
+				this._viewUI.btn_pre_tab.visible = false;
+				this._viewUI.btn_next_tab.visible = false;
+			} else {
+				if (value <= this._viewUI.list_tab.scrollBar.min) {
+					this._viewUI.btn_pre_tab.visible = false;
+					this._viewUI.btn_next_tab.visible = true;
+				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
+					this._viewUI.btn_pre_tab.visible = true;
+					this._viewUI.btn_next_tab.visible = false;
+				}
+			}
+		}
+
 		private yhkChangeHandler(): void {
 			DisplayU.onScrollChange(this._viewUI.list_yh, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
+			let value = this._viewUI.list_yh.scrollBar.value;
+			if (!this._viewUI.list_yh.scrollBar.min && !this._viewUI.list_yh.scrollBar.max) {
+				this._viewUI.btn_left_yh.visible = false;
+				this._viewUI.btn_right_yh.visible = false;
+			} else {
+				if (value <= this._viewUI.list_yh.scrollBar.min) {
+					this._viewUI.btn_left_yh.visible = false;
+					this._viewUI.btn_right_yh.visible = true;
+				} else if (value >= this._viewUI.list_yh.scrollBar.max) {
+					this._viewUI.btn_left_yh.visible = true;
+					this._viewUI.btn_right_yh.visible = false;
+				}
+			}
 		}
+
 		private smChangeHandler(): void {
 			DisplayU.onScrollChange(this._viewUI.list_sm, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
+			let value = this._viewUI.list_sm.scrollBar.value;
+			if (!this._viewUI.list_sm.scrollBar.min && !this._viewUI.list_sm.scrollBar.max) {
+				this._viewUI.btn_left_sm.visible = false;
+				this._viewUI.btn_right_sm.visible = false;
+			} else {
+				if (value <= this._viewUI.list_sm.scrollBar.min) {
+					this._viewUI.btn_left_sm.visible = false;
+					this._viewUI.btn_right_sm.visible = true;
+				} else if (value >= this._viewUI.list_sm.scrollBar.max) {
+					this._viewUI.btn_left_sm.visible = true;
+					this._viewUI.btn_right_sm.visible = false;
+				}
+			}
 		}
+
 		private qudaoChangeHandler(): void {
 			DisplayU.onScrollChange(this._viewUI.list_qudao, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
+			let value = this._viewUI.list_qudao.scrollBar.value;
+			if (!this._viewUI.list_qudao.scrollBar.min && !this._viewUI.list_qudao.scrollBar.max) {
+				this._viewUI.btn_left_qudao.visible = false;
+				this._viewUI.btn_right_qudao.visible = false;
+			} else {
+				if (value <= this._viewUI.list_qudao.scrollBar.min) {
+					this._viewUI.btn_left_qudao.visible = false;
+					this._viewUI.btn_right_qudao.visible = true;
+				} else if (value >= this._viewUI.list_qudao.scrollBar.max) {
+					this._viewUI.btn_left_qudao.visible = true;
+					this._viewUI.btn_right_qudao.visible = false;
+				}
+			}
 		}
 
 		private moneyselectHandler(e, index: number) {
@@ -370,6 +428,8 @@ module gamedating.page {
 				}
 			}
 			this._viewUI.list_tab.dataSource = this._paychannel;
+			this._viewUI.btn_pre_tab.visible = false;
+			this._viewUI.btn_next_tab.visible = this._paychannel && this._paychannel && this._paychannel.length > 5;
 			if (this.dataSource && this._viewUI.list_tab && this._viewUI.list_tab.length > 1) {
 				for (let i = 0; i < this._viewUI.list_tab.length; i++) {
 					if (this._viewUI.list_tab.dataSource[i].type == this.dataSource) {
@@ -409,6 +469,8 @@ module gamedating.page {
 					this._viewUI.list_yh.visible = true;
 					this._viewUI.list_yh.dataSource = data && data.list ? data.list : [];
 					this._viewUI.list_yh.selectedIndex = 0;
+					this._viewUI.btn_left_yh.visible = false;
+					this._viewUI.btn_right_yh.visible = data && data.list && data.list.length > 3;
 					this.yhSelectHandler();
 					this._viewUI.txt_yh0.text = this._viewUI.list_yh.dataSource[0].remittype;
 					this._viewUI.txt_yh1.text = this._viewUI.list_yh.dataSource[0].remitname;
@@ -431,6 +493,8 @@ module gamedating.page {
 					this._viewUI.list_sm.dataSource = data && data.list ? data.list : [];
 					// this._viewUI.list_tab.scrollBar.value = 0;
 					this._viewUI.list_sm.selectedIndex = 0;
+					this._viewUI.btn_left_sm.visible = false;
+					this._viewUI.btn_right_sm.visible = data && data.list && data.list.length > 3;
 					this.smSelectHandler();
 					if (data.list && data.list.length) {
 						this._viewUI.txt_sm1.text = data.list[0].alipaynum;
@@ -486,6 +550,8 @@ module gamedating.page {
 						this._viewUI.list_qudao.visible = data && data.list && data.list.length;
 						this._viewUI.list_qudao.scrollBar.value = 0;
 						this._viewUI.list_qudao.selectedIndex = 0;
+						this._viewUI.btn_left_qudao.visible = false;
+						this._viewUI.btn_right_qudao.visible = data && data.list && data.list.length > 3;
 						if (data.list && data.list.length) {
 							let arr = data.list[0].quickmoney ? data.list[0].quickmoney.split(",") : [];
 							this._qudao = data.list[0];
