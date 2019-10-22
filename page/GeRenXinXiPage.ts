@@ -10,6 +10,8 @@ module gamedating.page {
 		private _inputCode: MyTextInput;
 		private _inputKey: MyTextInput;
 		private _inputKey1: MyTextInput;
+		private _selectColor: string;	//选中颜色
+		private _unSelectColor: string;	//未选中颜色
 
 		public static readonly TYPE_SHEZHI: number = 4;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
@@ -65,6 +67,7 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			this.initColor();
 
 			this.initVolume();
 			this.initBaoBiaoUI();
@@ -88,6 +91,11 @@ module gamedating.page {
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
 			this.onUpdatePlayerInfo()
+		}
+
+		private initColor(): void {
+			this._selectColor = this._viewUI.lb_0.color;
+			this._unSelectColor = this._viewUI.lb_time.color;
 		}
 
 		//===================个人信息=================
@@ -161,7 +169,7 @@ module gamedating.page {
 				let curTimeStr = Sync.getTimeStr3(this._timeList[i]);
 				this._viewUI["lb_" + i].text = curTimeStr;
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
-				this._viewUI["lb_" + i].color = (i == 6) ? TeaStyle.COLOR_YELLOW : "#89d4ff";
+				this._viewUI["lb_" + i].color = (i == 6) ? this._selectColor : this._unSelectColor;
 				this._viewUI["btn_" + i].on(LEvent.CLICK, this, this.onMouseHandle, [i]);
 
 			}
@@ -213,7 +221,8 @@ module gamedating.page {
 			for (let i = 0; i < 7; i++) {
 				let curTimeStr = this._viewUI["lb_" + i].text;
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
-				this._viewUI["lb_" + i].color = (i == index) ? TeaStyle.COLOR_YELLOW : "#89d4ff";
+				this._viewUI["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
+
 			}
 			//当天的话，数据重新获取
 			if (this._timeSelectIndex == 6) DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
