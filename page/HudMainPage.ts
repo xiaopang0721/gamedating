@@ -795,6 +795,7 @@ module gamedating.page {
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
 		private listBtnChange(): void {
+			if(!this._viewUI.list_btns.scrollBar) return;
 			let value = this._viewUI.list_btns.scrollBar.value;
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
