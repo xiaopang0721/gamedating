@@ -347,7 +347,7 @@ module gamedating.page {
 			if (!WebConfig.info) return;
 			switch (btn) {
 				case this._viewUI.btn_xiaoxi:
-					return this._game.datingGame.mailMgr.isShowRed || WebConfig.info.is_new_bulletin;
+					return this._game.datingGame.mailMgr.isShowRed;
 				case this._viewUI.btn_bangding:
 					return WebConfig.info.isguest;
 				case this._viewUI.btn_qiandao:
@@ -797,6 +797,7 @@ module gamedating.page {
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
 		private listBtnChange(): void {
+			if(!this._viewUI.list_btns.scrollBar) return;
 			let value = this._viewUI.list_btns.scrollBar.value;
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
