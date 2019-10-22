@@ -26,7 +26,7 @@ module gamedating.page {
 			this._viewUI = this.createView("dating.TuiGuangUI");
 			this.addChild(this._viewUI);
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this,(base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this, (base64) => {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
@@ -230,7 +230,7 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this,(base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this, (base64) => {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
@@ -250,6 +250,11 @@ module gamedating.page {
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
 			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
+			//代理返利
+			for (let i = 0; i < 10; i++) {
+				this._viewUI["txt_percent" + i].text = playerrbbl + "%";
+			}
 		}
 
 		private selectHandler(index: number) {
@@ -333,9 +338,6 @@ module gamedating.page {
 						if (data.msg.list.lv && data.msg.list.lv.length > 0) {
 							if (data.msg.list.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
 								this._viewUI.list_fsmx.dataSource = data.msg.list.lv;
-								for (let i = 0; i < 10; i++) {
-									this._viewUI["txt_percent" + i].text = data.msg.list.fybl + "%";
-								}
 							} else {
 								this._viewUI.list_mx.dataSource = data.msg.list.lv;
 								this.onSetDaiLiData(data.msg.list.lv);
