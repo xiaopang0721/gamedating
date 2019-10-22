@@ -288,7 +288,7 @@ module gamedating.page {
 				let btn = this._tabItems[index];
 				if (!btn || !btn.visible) continue;
 				btn.y = total_y;
-				total_y += btn.height + 5;
+				total_y += btn.height;
 			}
 		}
 
@@ -297,11 +297,11 @@ module gamedating.page {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_AGENCYREPORT) {//分享赚钱
 				if (data && data.success == 0 && data.msg && data.msg) {
 					//根据lv是否存在来判断是否显示
-					// let lvbool = data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
-					// if (lvbool != this._tabItems[1].visible) {
-					// 	this._tabItems[1].visible = lvbool;
-					// 	this.updatePos();
-					// }
+					let lvbool = data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
+					if (lvbool != this._tabItems[1].visible) {
+						this._tabItems[1].visible = lvbool;
+						this.updatePos();
+					}
 
 					this._viewUI.txt_szzjl.text = data.msg.allfy || "0";
 					this._viewUI.txt_zswjrs.text = data.msg.zxnum || "0";
