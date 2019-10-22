@@ -63,7 +63,7 @@ module gamedating.page {
 			this._viewUI = this.createView("dating.DaTingUI");
 			this.addChild(this._viewUI);
 			this._viewUI.box.mouseThrough = true;
-			this._adPerWidth = WebConfig.platform == PageDef.BASE_PLATFORM_TYPE_AJQP ? 292 : 241;
+			this._adPerWidth = this._viewUI.list_ad.width;
 		}
 
 		// 页面打开时执行函数
