@@ -100,7 +100,7 @@ module gamedating.page {
 			this._viewUI.tab.selectHandler = new Handler(this, this.onSelectTab);
 			this._viewUI.tab.selectedIndex = 0;
 			//分享动态
-			this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang);
+			// this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_fenxiang);
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -334,7 +334,7 @@ module gamedating.page {
 					this._clip_vip.destroy();
 					this._clip_vip = null;
 				}
-				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_fenxiang);
+				// this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_fenxiang);
 				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
 				this._box_btn_top = null;
 				this._box_btn_bottom = null;
