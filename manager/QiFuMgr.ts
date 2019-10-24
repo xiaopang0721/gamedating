@@ -13,20 +13,6 @@ module gamedating.managers {
 		getQiFuList() {
 			return this._qifuList;
 		}
-		protected onSucessHandler(data: any) {
-			if (data.code == Web_operation_fields.CLIENT_IRCODE_PLAYERQIFU) {
-				if (data && data.success == 0) {
-					this._qifuList = data.msg.list;
-					this.event(QiFuMgr.QIFU_CHANGE, 1);
-				}
-			}
-			else if (data.code == Web_operation_fields.CLIENT_IRCODE_PLAYERQIFU) {
-				if (data && data.success == 0) {
-					this._qifuList = data.msg.list;
-					this.event(QiFuMgr.QIFU_CHANGE, 1);
-				}
-			}
-		}
 
 		public get roomPay() {
 			let story = this._game.sceneGame.sceneObjectMgr.story;
@@ -78,13 +64,9 @@ module gamedating.managers {
 		}
 
 		public getData() {
-			if (WebConfig.baseplatform == PageDef.BASE_PLATFORM_TYPE_NQP) {
-				let list = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_QIFUCONFIG_C, "");
-				for (let key in list) {
-					this._qifuList.push(list[key]);
-				}
-			} else {
-				this._game.sceneGame.network.call_get_qifu_list();
+			let list = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_QIFUCONFIG_C, "");
+			for (let key in list) {
+				this._qifuList.push(list[key]);
 			}
 			this.event(QiFuMgr.QIFU_CHANGE, 1);
 		}

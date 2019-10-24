@@ -83,8 +83,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.spaceX = -50;
-			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
@@ -475,6 +473,14 @@ module gamedating.page {
 			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
+			//分享按钮
+			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
+			if (!daysharegivemoney || Number(daysharegivemoney) <= 0) {
+				this._viewUI.btn_fenxiang.visible = false;
+			} else {
+				this._viewUI.btn_fenxiang.visible = true;
+			}
+			this.updatePos();
 		}
 
 		protected layout(): void {
@@ -797,7 +803,7 @@ module gamedating.page {
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
 		private listBtnChange(): void {
-			if(!this._viewUI.list_btns.scrollBar) return;
+			if (!this._viewUI.list_btns.scrollBar) return;
 			let value = this._viewUI.list_btns.scrollBar.value;
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
@@ -1231,7 +1237,7 @@ module gamedating.page {
 				if (!this._mainView)
 					this._mainView = new LImage();
 				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_' + this._gameStr + '.png';
-				this.addChild(this._mainView);
+				this.box.addChild(this._mainView);
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
 				this._mainView.y = 120;
@@ -1247,7 +1253,7 @@ module gamedating.page {
 				}
 				if (!this._mainView) {
 					this._mainView = new AvatarUIShow();
-					this.addChild(this._mainView);
+					this.box.addChild(this._mainView);
 				} else {
 					this._mainView.clear();
 				}
@@ -1272,7 +1278,7 @@ module gamedating.page {
 			}
 			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 			this._waitingTip.x = this.btn.width - 90 + offset_x;
-			this.addChild(this._waitingTip);
+			this.box.addChild(this._waitingTip);
 			this.clearUpdate();
 		}
 		private clearWaiting() {
@@ -1297,7 +1303,7 @@ module gamedating.page {
 			}
 			this._updateEffect.x = this.btn.width - 100 + offset_x;
 			this._updateEffect.y = -15;
-			this.addChild(this._updateEffect);
+			this.box.addChild(this._updateEffect);
 			this._updateEffect.play(true);
 		}
 		private clearUpdate(): void {
@@ -1311,7 +1317,7 @@ module gamedating.page {
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this.addChild(this._loadingTip);
+				this.box.addChild(this._loadingTip);
 				let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 				this._loadingTip.x = this.btn.width - 90 + offset_x;
 			}
