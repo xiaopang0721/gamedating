@@ -83,8 +83,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.spaceX = -50;
-			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
