@@ -1234,7 +1234,7 @@ module gamedating.page {
 				if (!this._mainView)
 					this._mainView = new LImage();
 				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_' + this._gameStr + '.png';
-				this.addChild(this._mainView);
+				this.box.addChild(this._mainView);
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
 				this._mainView.y = 120;
@@ -1250,7 +1250,7 @@ module gamedating.page {
 				}
 				if (!this._mainView) {
 					this._mainView = new AvatarUIShow();
-					this.addChild(this._mainView);
+					this.box.addChild(this._mainView);
 				} else {
 					this._mainView.clear();
 				}
@@ -1276,7 +1276,7 @@ module gamedating.page {
 			}
 			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 			this._waitingTip.x = this.btn.width - 90 + offset_x;
-			this.addChild(this._waitingTip);
+			this.box.addChild(this._waitingTip);
 			this.clearUpdate();
 		}
 		private clearWaiting() {
@@ -1301,7 +1301,7 @@ module gamedating.page {
 			}
 			this._updateEffect.x = this.btn.width - 100 + offset_x;
 			this._updateEffect.y = -15;
-			this.addChild(this._updateEffect);
+			this.box.addChild(this._updateEffect);
 			this._updateEffect.play(true);
 		}
 		private clearUpdate(): void {
@@ -1315,7 +1315,7 @@ module gamedating.page {
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this.addChild(this._loadingTip);
+				this.box.addChild(this._loadingTip);
 				let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
 				this._loadingTip.x = this.btn.width - 90 + offset_x;
 			}
