@@ -75,7 +75,7 @@ module gamedating.page {
 				this._viewUI.img_gw.skin = base64;
 			}))
 			//官网链接
-			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
+			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this.initQiPaoUI();
 			this._isShowBtnEffect && this.initBtnAnimationFrame();
@@ -474,7 +474,7 @@ module gamedating.page {
 				this._viewUI.img_gw.skin = base64;
 			}))
 			//官网链接
-			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
+			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
 		}
 
 		protected layout(): void {
@@ -644,7 +644,7 @@ module gamedating.page {
 					this.closeQiPaoKuang();
 					break;
 				case this._viewUI.img_copy_gw:
-					WebConfig.copyTxt(this._viewUI.txt_gw_url.text);
+					WebConfig.copyTxt(WebConfig.gwUrl);
 					this._game.showTips("复制成功");
 					this.closeQiPaoKuang();
 					//音效
@@ -1444,7 +1444,7 @@ module gamedating.page {
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;
-					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
+					this.txt_gw.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_VIP:
 					order = 4;
