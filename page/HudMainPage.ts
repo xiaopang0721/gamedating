@@ -924,7 +924,7 @@ module gamedating.page {
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
 		private _listBarMax: number = 0;
-
+                                                                                                                                                                                                    
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
@@ -933,8 +933,11 @@ module gamedating.page {
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
-			if (this._isFromRoom)
+			if (this._isFromRoom){
+				//重新校正一下滚动条最大值
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				return;
+			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
