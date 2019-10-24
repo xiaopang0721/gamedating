@@ -26,7 +26,7 @@ module gamedating.page {
 			this._viewUI = this.createView("dating.TuiGuangUI");
 			this.addChild(this._viewUI);
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this,(base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this, (base64) => {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
@@ -230,7 +230,7 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._game.datingGame.updateConfigUrl();
 			//官网二维码
-			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this,(base64)=>{
+			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, this._viewUI.img_ewm.width, this._viewUI.img_ewm.height, Handler.create(this, (base64) => {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
@@ -250,6 +250,11 @@ module gamedating.page {
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
 			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
+			//代理返利
+			for (let i = 0; i < 10; i++) {
+				this._viewUI["txt_percent" + i].text = playerrbbl + "%";
+			}
 		}
 
 		private selectHandler(index: number) {
@@ -283,7 +288,7 @@ module gamedating.page {
 				let btn = this._tabItems[index];
 				if (!btn || !btn.visible) continue;
 				btn.y = total_y;
-				total_y += btn.height + 5;
+				total_y += btn.height;
 			}
 		}
 
@@ -292,11 +297,11 @@ module gamedating.page {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_AGENCYREPORT) {//分享赚钱
 				if (data && data.success == 0 && data.msg && data.msg) {
 					//根据lv是否存在来判断是否显示
-					// let lvbool = data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
-					// if (lvbool != this._tabItems[1].visible) {
-					// 	this._tabItems[1].visible = lvbool;
-					// 	this.updatePos();
-					// }
+					let lvbool = data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
+					if (lvbool != this._tabItems[1].visible) {
+						this._tabItems[1].visible = lvbool;
+						this.updatePos();
+					}
 
 					this._viewUI.txt_szzjl.text = data.msg.allfy || "0";
 					this._viewUI.txt_zswjrs.text = data.msg.zxnum || "0";
@@ -333,9 +338,6 @@ module gamedating.page {
 						if (data.msg.list.lv && data.msg.list.lv.length > 0) {
 							if (data.msg.list.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
 								this._viewUI.list_fsmx.dataSource = data.msg.list.lv;
-								for (let i = 0; i < 10; i++) {
-									this._viewUI["txt_percent" + i].text = data.msg.list.fybl + "%";
-								}
 							} else {
 								this._viewUI.list_mx.dataSource = data.msg.list.lv;
 								this.onSetDaiLiData(data.msg.list.lv);

@@ -243,14 +243,15 @@ module gamedating {
 				// if (Laya.timer.currTimer - this._shareCd < 0) return;
 				// this._shareCd = Laya.timer.currTimer + 3000;
 				// if (Laya.timer.currTimer - this._shareContinueTime < 1000) return;	//防点击就会有回调的那种情况
-				// if (Laya.timer.currTimer - this._shareContinueTime < 3000) {
-				// 	this._game.showTips("分享失败");
-				// 	return
-				// }
+				if (Laya.timer.currTimer - this._shareContinueTime < 2000) {
+					this._game.showTips("分享失败");
+					return
+				}
 				//因为分享机制变动，所以改成延迟随机3-5秒就给奖励
-				Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
-					this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
-				});
+				// Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
+				// 	this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
+				// });
+				this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
 			}
 		}
 
