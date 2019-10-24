@@ -475,6 +475,14 @@ module gamedating.page {
 			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
+			//分享按钮
+			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
+			if (!daysharegivemoney || Number(daysharegivemoney) <= 0) {
+				this._viewUI.btn_fenxiang.visible = false;
+			} else {
+				this._viewUI.btn_fenxiang.visible = true;
+			}
+			this.updatePos();
 		}
 
 		protected layout(): void {
@@ -797,7 +805,7 @@ module gamedating.page {
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
 		private listBtnChange(): void {
-			if(!this._viewUI.list_btns.scrollBar) return;
+			if (!this._viewUI.list_btns.scrollBar) return;
 			let value = this._viewUI.list_btns.scrollBar.value;
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
