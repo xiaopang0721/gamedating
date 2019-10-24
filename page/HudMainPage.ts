@@ -930,7 +930,7 @@ module gamedating.page {
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
 		private _listBarMax: number = 0;
-
+                                                                                                                                                                                                    
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
@@ -939,8 +939,11 @@ module gamedating.page {
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
-			if (this._isFromRoom)
+			if (this._isFromRoom){
+				//重新校正一下滚动条最大值
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				return;
+			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
@@ -1255,7 +1258,7 @@ module gamedating.page {
 					this._mainView.clear();
 				}
 				let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
-				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
+				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)
 			}
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
@@ -1275,8 +1278,8 @@ module gamedating.page {
 				this._waitingTip = new cla();
 			}
 			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
-			this._waitingTip.x = this.btn.width - 90 + offset_x;
-			this.box.addChild(this._waitingTip);
+			this._waitingTip.x = offset_x;
+			this.tip.addChild(this._waitingTip);
 			this.clearUpdate();
 		}
 		private clearWaiting() {
@@ -1299,9 +1302,9 @@ module gamedating.page {
 					start: 10000
 				});
 			}
-			this._updateEffect.x = this.btn.width - 100 + offset_x;
+			this._updateEffect.x = offset_x - 15;
 			this._updateEffect.y = -15;
-			this.box.addChild(this._updateEffect);
+			this.tip.addChild(this._updateEffect);
 			this._updateEffect.play(true);
 		}
 		private clearUpdate(): void {
@@ -1315,9 +1318,9 @@ module gamedating.page {
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this.box.addChild(this._loadingTip);
+				this.tip.addChild(this._loadingTip);
 				let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
-				this._loadingTip.x = this.btn.width - 90 + offset_x;
+				this._loadingTip.x = offset_x;
 			}
 			this._loadingTip.progress = value;
 			this._loadingTip.update();
