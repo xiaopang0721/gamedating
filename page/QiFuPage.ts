@@ -74,7 +74,7 @@ module gamedating.page {
 		private onUpdateDataInfo(date?: any) {
 			this._dataInfo = [];
 			let value = this._game.qifuMgr.getQiFuList();
-			if (!value) {
+			if (!value || value.length < 0) {
 				for (let i = 0; i < 6; i++) {
 					this._viewUI["box_time" + i].visible = false;
 				}
