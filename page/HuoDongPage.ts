@@ -424,7 +424,7 @@ module gamedating.page {
 			}
 			this.visible = true;
 			this.dataSource = data;
-			this.txt_name.text = data.title;
+			this.txt_name.text = EnumToString.getLimitStr(data.title, 6);
 		}
 	}
 
