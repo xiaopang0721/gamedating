@@ -26,7 +26,7 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdateData);
 
 			for (let i = 0; i < this._viewUI.box_qiandao.numChildren; i++) {
-				this._qiandaos[i] = this._viewUI["qiandao" + i] as ui.nqp.dating.component.Effect_qdUI;
+				this._qiandaos[i] = this._viewUI["qiandao" + i];
 				this._qiandaos[i].visible = false;
 			}
 			for (let i = 0; i < this._viewUI.box_award.numChildren; i++) {
