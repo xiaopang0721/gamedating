@@ -988,25 +988,26 @@ module gamedating.page {
 			if (this._isPlayAd)
 				return;
 			let v = this._viewUI.list_ad.scrollBar.value;
-			this._isPlayAd = true;
 			this._adPlayDelta = 0;
 			let diffNum = v - this._curListValue;
 			if (Math.abs(diffNum) < this._adPerWidth) {
 				//单个旋转
 				if (diffNum > 0) {
 					this._curAdIndex++;
-					if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
-						this._curAdIndex = 0;
+					if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
+						this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
 					}
 				} else {
 					this._curAdIndex--;
-					if(this._curAdIndex<0) this._curAdIndex = 0;
+					if (this._curAdIndex < 0) this._curAdIndex = 0;
 				}
 			}
 			else {
 				this._curAdIndex = Math.round(v / this._adPerWidth);
 			}
 			this.playNext();
+			this._isPlayAd = true;
+			this._adPlayDelta = 0;
 		}
 
 		private _curListValue: number;
