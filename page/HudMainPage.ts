@@ -1367,6 +1367,7 @@ module gamedating.page {
 					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
 						LoadingMgr.ins.load(gameStr, assets);
 					}))
+					this._game.showTips(StringU.substitute("{0}已加入更新队列",PageDef.getNameById(gameStr)));
 				}
 			})
 		}
