@@ -994,12 +994,12 @@ module gamedating.page {
 				//单个旋转
 				if (diffNum > 0) {
 					this._curAdIndex++;
-					if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
-						this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
+					if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
+						this._curAdIndex = 0;
 					}
 				} else {
 					this._curAdIndex--;
-					if (this._curAdIndex < 0) this._curAdIndex = 0;
+					if (this._curAdIndex < 0) this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
 				}
 			}
 			else {
@@ -1040,10 +1040,13 @@ module gamedating.page {
 					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
 				//去获取一遍，这还没有，就不要了
 				if (!this._viewUI.list_ad.dataSource) return;
-				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
+				console.log("playNext", this._curAdIndex)
+				if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
-					this._viewUI.list_ad.scrollTo(this._curAdIndex);
+				} else if (this._curAdIndex < 0) {
+					this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
 				}
+				this._viewUI.list_ad.scrollTo(this._curAdIndex);
 			}));
 		}
 		private _isPlayAd: boolean = true;
