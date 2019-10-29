@@ -75,7 +75,7 @@ module gamedating.page {
 				this._viewUI.img_gw.skin = base64;
 			}))
 			//官网链接
-			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
+			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this.initQiPaoUI();
 			this._isShowBtnEffect && this.initBtnAnimationFrame();
@@ -83,8 +83,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.spaceX = -50;
-			this._viewUI.list_btns.spaceY = 0;
 			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
@@ -135,14 +133,16 @@ module gamedating.page {
 
 			this._game.playMusic(Path.music_bg);
 
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(55, -10), 1, null, [this._viewUI.btn_xiaoxi]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(70, -10), 1, null, [this._viewUI.btn_bangding]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(90, -15), 1, null, [this._viewUI.btn_qiandao]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_zhuanpan, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_zhuanpan]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_daili]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(60, -18), 1, null, [this._viewUI.btn_vip]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(80, -15), 1, null, [this._viewUI.btn_shouchong]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(65, -11), 1, null, [this._viewUI.btn_bangding]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(60, -21), 1, null, [this._viewUI.btn_vip]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(55, -12), 1, null, [this._viewUI.btn_xiaoxi]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(50, -15), 1, null, [this._viewUI.btn_fenxiang]);
+
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(90, -15), 1, null, [this._viewUI.btn_daili]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(100, -25), 1, null, [this._viewUI.btn_qiandao]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_zhuanpan, this, this.checkout, new Point(90, -10), 1, null, [this._viewUI.btn_zhuanpan]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(80, -13), 1, null, [this._viewUI.btn_shouchong]);
+
 			//hud弹窗逻辑
 			this.alertPage();
 			//气泡框逻辑
@@ -474,7 +474,15 @@ module gamedating.page {
 				this._viewUI.img_gw.skin = base64;
 			}))
 			//官网链接
-			this._viewUI.txt_gw_url.text = WebConfig.gwUrl;
+			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
+			//分享按钮
+			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
+			if (!daysharegivemoney || Number(daysharegivemoney) <= 0) {
+				this._viewUI.btn_fenxiang.visible = false;
+			} else {
+				this._viewUI.btn_fenxiang.visible = true;
+			}
+			this.updatePos();
 		}
 
 		protected layout(): void {
@@ -644,7 +652,7 @@ module gamedating.page {
 					this.closeQiPaoKuang();
 					break;
 				case this._viewUI.img_copy_gw:
-					WebConfig.copyTxt(this._viewUI.txt_gw_url.text);
+					WebConfig.copyTxt(WebConfig.gwUrl);
 					this._game.showTips("复制成功");
 					this.closeQiPaoKuang();
 					//音效
@@ -797,7 +805,7 @@ module gamedating.page {
 
 		//--------------------游戏入口按钮列表相关---start------------------------------
 		private listBtnChange(): void {
-			if(!this._viewUI.list_btns.scrollBar) return;
+			if (!this._viewUI.list_btns.scrollBar) return;
 			let value = this._viewUI.list_btns.scrollBar.value;
 			this._viewUI.btn_right.visible = true;
 			this._viewUI.btn_left.visible = true;
@@ -933,8 +941,11 @@ module gamedating.page {
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
-			if (this._isFromRoom)
+			if (this._isFromRoom) {
+				//重新校正一下滚动条最大值
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				return;
+			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
@@ -977,18 +988,40 @@ module gamedating.page {
 			if (this._isPlayAd)
 				return;
 			let v = this._viewUI.list_ad.scrollBar.value;
+			let diffNum = v - this._curListValue;
+			if (!diffNum) {
+				return
+			}
+			// console.log("onViewMouseHandler----start",diffNum,this._curAdIndex);
+			if (Math.abs(diffNum) <= this._adPerWidth) {
+				//单个旋转
+				if (diffNum > 0) {
+					this._curAdIndex++;
+					if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
+						this._curAdIndex = 1;
+					}
+				} else {
+					this._curAdIndex--;
+					if (this._curAdIndex < 0) this._curAdIndex = this._viewUI.list_ad.dataSource.length - 2;
+				}
+			}
+			else {
+				this._curAdIndex = Math.round(v / this._adPerWidth);
+			}
+			// console.log("onViewMouseHandler----end",diffNum,this._curAdIndex);
+			this.playNext();
 			this._isPlayAd = true;
 			this._adPlayDelta = 0;
-			this._curAdIndex = Math.round(v / this._adPerWidth);
-			this.playNext();
 		}
 
+		private _curListValue: number;
 		private onAdMouseHandler(e) {
 			let v = this._viewUI.list_ad.scrollBar.value;
 			switch (e.type) {
 				case LEvent.MOUSE_DOWN:
 					this._isPlayAd = false;
 					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
+					this._curListValue = v;
 					break;
 				case LEvent.MOUSE_MOVE:
 					if (v <= 0) {
@@ -1011,10 +1044,12 @@ module gamedating.page {
 					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
 				//去获取一遍，这还没有，就不要了
 				if (!this._viewUI.list_ad.dataSource) return;
-				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
+				if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
-					this._viewUI.list_ad.scrollTo(this._curAdIndex);
+				} else if (this._curAdIndex < 0) {
+					this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
 				}
+				this._viewUI.list_ad.scrollTo(this._curAdIndex);
 			}));
 		}
 		private _isPlayAd: boolean = true;
@@ -1228,7 +1263,7 @@ module gamedating.page {
 				if (!this._mainView)
 					this._mainView = new LImage();
 				this._mainView.skin = DatingPath.ui_dating + 'dating/btn_' + this._gameStr + '.png';
-				this.addChild(this._mainView);
+				this.box.addChild(this._mainView);
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
 				this._mainView.y = 120;
@@ -1244,12 +1279,12 @@ module gamedating.page {
 				}
 				if (!this._mainView) {
 					this._mainView = new AvatarUIShow();
-					this.addChild(this._mainView);
+					this.box.addChild(this._mainView);
 				} else {
 					this._mainView.clear();
 				}
 				let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
-				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)//this.btn.width / 2 + 5 + offset_x, this.btn.height / 2 + 18);
+				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)
 			}
 			// 是否显示更新标签
 			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
@@ -1268,8 +1303,8 @@ module gamedating.page {
 				this._waitingTip = new ui.nqp.dating.component.Effect_dengdaiUI();
 			}
 			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
-			this._waitingTip.x = this.btn.width - 90 + offset_x;
-			this.addChild(this._waitingTip);
+			this._waitingTip.x = offset_x;
+			this.tip.addChild(this._waitingTip);
 			this.clearUpdate();
 		}
 		private clearWaiting() {
@@ -1292,9 +1327,9 @@ module gamedating.page {
 					start: 10000
 				});
 			}
-			this._updateEffect.x = this.btn.width - 100 + offset_x;
+			this._updateEffect.x = offset_x - 15;
 			this._updateEffect.y = -15;
-			this.addChild(this._updateEffect);
+			this.tip.addChild(this._updateEffect);
 			this._updateEffect.play(true);
 		}
 		private clearUpdate(): void {
@@ -1308,9 +1343,9 @@ module gamedating.page {
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this.addChild(this._loadingTip);
+				this.tip.addChild(this._loadingTip);
 				let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
-				this._loadingTip.x = this.btn.width - 90 + offset_x;
+				this._loadingTip.x = offset_x;
 			}
 			this._loadingTip.progress = value;
 			this._loadingTip.update();
@@ -1356,6 +1391,7 @@ module gamedating.page {
 					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
 						LoadingMgr.ins.load(gameStr, assets);
 					}))
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
 				}
 			})
 		}
@@ -1444,7 +1480,7 @@ module gamedating.page {
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_GUANWANG:
 					order = 3;
-					this.txt_gw.text = EnumToString.getLimitStr(WebConfig.gwUrl, 14);
+					this.txt_gw.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
 					break;
 				case Web_operation_fields.GAME_HOME_AD_LOOP_TYPE_VIP:
 					order = 4;

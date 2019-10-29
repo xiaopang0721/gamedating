@@ -70,7 +70,6 @@ module gamedating.page {
 			this.initColor();
 
 			this.initVolume();
-			this.initBaoBiaoUI();
 			this._viewUI.tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.tab.selectedIndex = this._dataSource || 0;
 			this._viewUI.btn_bindwx.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -84,9 +83,8 @@ module gamedating.page {
 
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
-
+			this.initBaoBiaoUI();			
 			DatingGame.ins.baobiaoMgr.on(BaoBiaoMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
-			this.onUpdateDataInfo();
 
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
@@ -118,7 +116,6 @@ module gamedating.page {
 		}
 
 		//上面信息
-
 		private onUpdatePlayerInfo() {
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
@@ -161,8 +158,6 @@ module gamedating.page {
 			this.initList();
 			this._selectTime = this._game.sceneGame.sync.serverTimeBys;
 			this._timeSelectIndex = 6;
-			//当天的话，数据重新获取
-			DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
 			let curSelectedTimeStr = Sync.getTimeStr3(this._selectTime);
 			for (let i = 0; i < 7; i++) {
 				this._timeList[i] = this._selectTime - 86400 * (6 - i);
@@ -171,7 +166,6 @@ module gamedating.page {
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
 				this._viewUI["lb_" + i].color = (i == 6) ? this._selectColor : this._unSelectColor;
 				this._viewUI["btn_" + i].on(LEvent.CLICK, this, this.onMouseHandle, [i]);
-
 			}
 
 			this._viewUI.lb_time.text = curSelectedTimeStr;
@@ -222,7 +216,6 @@ module gamedating.page {
 				let curTimeStr = this._viewUI["lb_" + i].text;
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
 				this._viewUI["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
-
 			}
 			//当天的话，数据重新获取
 			if (this._timeSelectIndex == 6) DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
@@ -350,6 +343,7 @@ module gamedating.page {
 		private selectHandler(index: number) {
 			this._viewUI.box0.visible = index == 0;
 			this._viewUI.box1.visible = index == 1;
+			if(index == 1) this.onUpdateDataInfo();
 			this._viewUI.box2.visible = index == 2;
 		}
 

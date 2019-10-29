@@ -169,7 +169,8 @@ module gamedating.page {
 			for (let key in dataObj) {
 				if (dataObj.hasOwnProperty(key)) {
 					let element = dataObj[key];
-					dataList.push(element);
+					if (element && Number(element.status) == 1)
+						dataList.push(element);
 				}
 			}
 			//排序
@@ -185,10 +186,13 @@ module gamedating.page {
 					this._activeList = [];
 					let gonggao = data.msg && data.msg.list && data.msg.list.length > 0 ? data.msg.list : [];
 					for (let key in gonggao) {
-						this._activeList.push(gonggao[key]);
-						//读取公告
-						this._game.network.call_read_bulletin();
+						let element = gonggao[key];
+						if (element && Number(element.status) == 1) {
+							this._activeList.push(element);
+						}
 					}
+					//读取公告
+					// this._game.network.call_read_bulletin();
 				}
 			}
 		}
@@ -420,7 +424,7 @@ module gamedating.page {
 			}
 			this.visible = true;
 			this.dataSource = data;
-			this.txt_name.text = data.title;
+			this.txt_name.text = EnumToString.getLimitStr(data.title, 6);
 		}
 	}
 
