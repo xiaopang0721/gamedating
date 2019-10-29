@@ -950,10 +950,7 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			let rrr = Math.random().toString(MathU.randomRange(0, 36));
-			let rlen = rrr.length;
-			let ccr = rrr.substr(2, MathU.randomRange(2, rlen));
-			Laya.loader.load("version_h5_min.bin?v=" + ccr, Handler.create(this, (data: any) => {
+			Laya.loader.load("version_h5_min.bin?v=" + MathU.randomRange(MathU.randomRange(1000, 100000), MathU.randomRange(100000, 1000000)), Handler.create(this, (data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();
