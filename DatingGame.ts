@@ -112,12 +112,7 @@ module gamedating {
 		}
 
 		private onUpdateHongBao(msg) {
-			//必须在游戏以外才弹出红包界面
-			if (this._game.sceneGame) return;
-			this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO, (page)=>{
-				page.dataSource = msg.id;
-			});
-			this._game.datingGame.flyGlodMgr.show(1, 1, this._game.clientWidth, this._game.clientHeight);
+			this.hongbaoMgr.setInfo(msg);
 		}
 
 		//主玩家下来了
@@ -528,6 +523,15 @@ module gamedating {
 			return this._flyGlodMgr;
 		}
 
+		//红包管理器
+		private _hongbaoMgr: HongBaoMgr;
+		public get hongbaoMgr(): HongBaoMgr {
+			if (!this._hongbaoMgr) {
+				this._hongbaoMgr = new HongBaoMgr(this._game);
+			}
+			return this._hongbaoMgr;
+		}
+
 		//红点管理器
 		private _redPointCheckMgr: RedPointCheckMgr;
 		public get redPointCheckMgr(): RedPointCheckMgr {
@@ -899,6 +903,7 @@ module gamedating {
 			if (!this._game.sceneGame.inScene) {
 				this._mailMgr && this._mailMgr.update(diff);
 				this._flyGlodMgr && this._flyGlodMgr.update(diff);
+				this._hongbaoMgr && this._hongbaoMgr.update(diff);
 				this._redPointCheckMgr && this._redPointCheckMgr.update(diff);
 			}
 			if (this._checkVesionTime < 0) {
@@ -1050,6 +1055,10 @@ module gamedating {
 			if (this._flyGlodMgr) {
 				this._flyGlodMgr.clear(true);
 				this._flyGlodMgr = null;
+			}
+			if (this._hongbaoMgr) {
+				this._hongbaoMgr.clear(true);
+				this._hongbaoMgr = null;
 			}
 
 			if (this._noticeMgr) {

@@ -24,6 +24,7 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			this._viewUI.btn_chai.visible = false;
 			this._viewUI.box_yichai.visible = false;
 			this._viewUI.btn_chai.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_get.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -31,25 +32,24 @@ module gamedating.page {
 			this._viewUI.ani2.on(LEvent.COMPLETE, this, this.onAfterChai);
 		}
 
-        private _id: number;
-        set dataSource(v: any) {
-            this._dataSource = this._id = v;
-        }
+		private _id: number;
+		private _money: number;
+		set dataSource(v: any) {
+			this._dataSource = v;
+			this._id = v.id;
+			this._money = v.money;
+		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
 				case this._viewUI.btn_chai:
 					this._game.network.call_hongbao_operate(this._id, HongBaoPage.TYPE_OPERATE_QIANG_HONGBAO);
 					break;
-				case this._viewUI.btn_get:
-					this._game.network.call_hongbao_operate(this._id, HongBaoPage.TYPE_OPERATE_LING_HONGBAO);
-					break;
-
 			}
 		}
 
 		private onAfterChai() {
-			this._viewUI.ani3.play(0, true);
+			this._viewUI.txt_money.text = this._money.toString();
 		}
 
 		// 清理下页面

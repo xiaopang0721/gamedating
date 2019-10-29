@@ -23,6 +23,7 @@ import TipsQuit = gamedating.page.TipsQuit;
 import RedCheckMgr = gamedating.managers.RedCheckMgr;
 import RedPointCheckMgr = gamedating.managers.RedPointCheckMgr;
 import FlyGlodMgr = gamedating.managers.FlyGlodMgr;
+import HongBaoMgr = gamedating.managers.HongBaoMgr;
 
 
 
