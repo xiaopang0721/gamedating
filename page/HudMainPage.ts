@@ -932,7 +932,7 @@ module gamedating.page {
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
 		private _listBarMax: number = 0;
-                                                                                                                                                                                                    
+
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
@@ -941,7 +941,7 @@ module gamedating.page {
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
-			if (this._isFromRoom){
+			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				return;
@@ -988,18 +988,36 @@ module gamedating.page {
 			if (this._isPlayAd)
 				return;
 			let v = this._viewUI.list_ad.scrollBar.value;
+			this._adPlayDelta = 0;
+			let diffNum = v - this._curListValue;
+			if (Math.abs(diffNum) < this._adPerWidth) {
+				//单个旋转
+				if (diffNum > 0) {
+					this._curAdIndex++;
+					if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
+						this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
+					}
+				} else {
+					this._curAdIndex--;
+					if (this._curAdIndex < 0) this._curAdIndex = 0;
+				}
+			}
+			else {
+				this._curAdIndex = Math.round(v / this._adPerWidth);
+			}
+			this.playNext();
 			this._isPlayAd = true;
 			this._adPlayDelta = 0;
-			this._curAdIndex = Math.round(v / this._adPerWidth);
-			this.playNext();
 		}
 
+		private _curListValue: number;
 		private onAdMouseHandler(e) {
 			let v = this._viewUI.list_ad.scrollBar.value;
 			switch (e.type) {
 				case LEvent.MOUSE_DOWN:
 					this._isPlayAd = false;
 					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
+					this._curListValue = this._viewUI.list_ad.scrollBar.value;
 					break;
 				case LEvent.MOUSE_MOVE:
 					if (v <= 0) {
@@ -1367,6 +1385,7 @@ module gamedating.page {
 					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
 						LoadingMgr.ins.load(gameStr, assets);
 					}))
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
 				}
 			})
 		}

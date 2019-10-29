@@ -721,7 +721,7 @@ module gamedating {
 			return this._curKey;
 		}
 		public firstAlertPage(): void {
-			if (!this._firstAlert && !WebConfig.isConnected && !WebConfig.enterGameLocked) {
+			if (!this._firstAlert && !WebConfig.isConnected && !WebConfig.enterGameLocked && !isDebug) {
 				this._alertPageIndex = this._alertPageIndex + 1;
 				if (!this.popUpData) return;
 				let popKeyData: any = this.popUpData[this._alertPageIndex];
@@ -791,6 +791,15 @@ module gamedating {
 			else if (e.keyCode == Laya.Keyboard.W) {
 				this._game.sceneGame.sceneObjectMgr.leaveStory(true);
 			}
+			// else if (e.keyCode == Laya.Keyboard.A) {
+			// 	PlayCardMgr.ins.up_show()
+			// }
+			// else if (e.keyCode == Laya.Keyboard.D) {
+			// 	PlayCardMgr.ins.init()
+			// }
+			// else if (e.keyCode == Laya.Keyboard.B) {
+			// 	PlayCardMgr.ins.down_show()
+			// }
 			//红包测试
 			else if (e.keyCode == Laya.Keyboard.E) {
 				//必须在游戏以外才弹出红包界面
