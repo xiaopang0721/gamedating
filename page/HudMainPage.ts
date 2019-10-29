@@ -988,23 +988,27 @@ module gamedating.page {
 			if (this._isPlayAd)
 				return;
 			let v = this._viewUI.list_ad.scrollBar.value;
-			this._adPlayDelta = 0;
 			let diffNum = v - this._curListValue;
-			if (Math.abs(diffNum) < this._adPerWidth) {
+			if (!diffNum) {
+				return
+			}
+			// console.log("onViewMouseHandler----start",diffNum,this._curAdIndex);
+			if (Math.abs(diffNum) <= this._adPerWidth) {
 				//单个旋转
 				if (diffNum > 0) {
 					this._curAdIndex++;
 					if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
-						this._curAdIndex = 0;
+						this._curAdIndex = 1;
 					}
 				} else {
 					this._curAdIndex--;
-					if (this._curAdIndex < 0) this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
+					if (this._curAdIndex < 0) this._curAdIndex = this._viewUI.list_ad.dataSource.length - 2;
 				}
 			}
 			else {
 				this._curAdIndex = Math.round(v / this._adPerWidth);
 			}
+			// console.log("onViewMouseHandler----end",diffNum,this._curAdIndex);
 			this.playNext();
 			this._isPlayAd = true;
 			this._adPlayDelta = 0;
@@ -1017,7 +1021,7 @@ module gamedating.page {
 				case LEvent.MOUSE_DOWN:
 					this._isPlayAd = false;
 					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
-					this._curListValue = this._viewUI.list_ad.scrollBar.value;
+					this._curListValue = v;
 					break;
 				case LEvent.MOUSE_MOVE:
 					if (v <= 0) {
@@ -1040,7 +1044,6 @@ module gamedating.page {
 					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
 				//去获取一遍，这还没有，就不要了
 				if (!this._viewUI.list_ad.dataSource) return;
-				console.log("playNext", this._curAdIndex)
 				if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
 				} else if (this._curAdIndex < 0) {
