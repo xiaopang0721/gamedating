@@ -78,6 +78,7 @@ module gamedating {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_PLAYER_INFO_GAME_ID, this, this.onUpdateReConnectStatus);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.___MAIN_PLAYER_CHANGE, this, this.onMainUnitChange);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onUpdateFreeStyle);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_HONGBAO_UPDATE, this, this.onUpdateHongBao);
 			this.onUpdateFreeStyle();
 
 
@@ -108,6 +109,15 @@ module gamedating {
 
 		private onUpdateFreeStyle() {
 			this.updateConfigUrl();
+		}
+
+		private onUpdateHongBao(msg) {
+			//必须在游戏以外才弹出红包界面
+			if (this._game.sceneGame) return;
+			this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO, (page)=>{
+				page.dataSource = msg.id;
+			});
+			this._game.datingGame.flyGlodMgr.show(1, 1, this._game.clientWidth, this._game.clientHeight);
 		}
 
 		//主玩家下来了
@@ -780,6 +790,13 @@ module gamedating {
 			}
 			else if (e.keyCode == Laya.Keyboard.W) {
 				this._game.sceneGame.sceneObjectMgr.leaveStory(true);
+			}
+			//红包测试
+			else if (e.keyCode == Laya.Keyboard.E) {
+				//必须在游戏以外才弹出红包界面
+				if (this._game.sceneGame) return;
+				this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO);
+				this._game.datingGame.flyGlodMgr.show(1, 1, this._game.clientWidth, this._game.clientHeight);
 			}
 		}
 

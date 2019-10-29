@@ -3,6 +3,9 @@
 */
 module gamedating.page {
 	export class HongBaoPage extends game.gui.base.Page {
+		static readonly TYPE_OPERATE_QIANG_HONGBAO: number = 0;
+		static readonly TYPE_OPERATE_LING_HONGBAO: number = 1;
+
 		private _viewUI: ui.nqp.dating.HongbaoUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -28,13 +31,18 @@ module gamedating.page {
 			this._viewUI.ani2.on(LEvent.COMPLETE, this, this.onAfterChai);
 		}
 
+        private _id: number;
+        set dataSource(v: any) {
+            this._dataSource = this._id = v;
+        }
+
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
 				case this._viewUI.btn_chai:
-					this._viewUI.ani1
+					this._game.network.call_hongbao_operate(this._id, HongBaoPage.TYPE_OPERATE_QIANG_HONGBAO);
 					break;
 				case this._viewUI.btn_get:
-
+					this._game.network.call_hongbao_operate(this._id, HongBaoPage.TYPE_OPERATE_LING_HONGBAO);
 					break;
 
 			}
@@ -49,7 +57,6 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._viewUI.ani2.on(LEvent.COMPLETE, this, this.onAfterChai);
 			}
-
 			super.close();
 		}
 	}

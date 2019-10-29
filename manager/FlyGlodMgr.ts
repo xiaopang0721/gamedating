@@ -1,5 +1,5 @@
 /**
-* name 公告管理器
+* name 金币雨管理器
 */
 module gamedating.managers {
 	const MAX_GLOD_NUM = 100;
