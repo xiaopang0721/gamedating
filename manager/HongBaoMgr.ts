@@ -5,12 +5,12 @@ module gamedating.managers {
 	export class HongBaoMgr extends gamecomponent.managers.BaseMgr {
 		constructor(game: Game) {
 			super(game)
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_HONGBAO_DELAY_UPDATE, this, this.onUpdateHongBao);
 		}
 
 		private _info: any = [];
-		setInfo(data) {
-			let info = JSON.parse(data);
-			if (!info || !info.length) return;
+		setInfo(info) {
+			if (!info) return;
 			this._info = this._info.concat(info);
 			this.onUpdateHongBao();
 		}
@@ -43,6 +43,7 @@ module gamedating.managers {
 
 		clear(fource?: boolean) {
 			if (fource) super.clear(fource)
+			this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_HONGBAO_DELAY_UPDATE, this, this.onUpdateHongBao);
 			Laya.timer.clearAll(this);
 			this._info = [];
 		}

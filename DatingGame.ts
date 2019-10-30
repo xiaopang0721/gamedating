@@ -112,7 +112,7 @@ module gamedating {
 		}
 
 		private onUpdateHongBao(data) {
-			this.hongbaoMgr.setInfo(data);
+			this.hongbaoMgr.setInfo(JSON.parse(data));
 		}
 
 		//主玩家下来了
@@ -852,7 +852,7 @@ module gamedating {
 				this._exitGmeTimes++;
 				this.calculateDiffMoney(true);
 				this._game.uiRoot.top.closeAll([DatingPageDef.PAGE_GONGGAO, DatingPageDef.PAGE_TIP]);
-				this._game.uiRoot.general.closeAll();
+				this._game.uiRoot.general.closeAll([DatingPageDef.PAGE_HONGBAO]);
 				this._game.uiRoot.HUD.closeAll();
 				let pageDef = getPageDef(info);
 				if (pageDef && !pageDef["__enterMapLv"] && !pageDef["__roomcard"]) {

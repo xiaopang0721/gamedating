@@ -30,6 +30,7 @@ module gamedating.page {
 			this._viewUI.btn_close.visible = false;
 			this._viewUI.box_yichai.visible = false;
 			this._viewUI.txt_desc.text = this._content;
+			this._viewUI.img_kuang.visible = this._content.length > 0;
 			this._viewUI.txt_title.text = this._viewUI.txt_title1.text = this._title;
 
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
