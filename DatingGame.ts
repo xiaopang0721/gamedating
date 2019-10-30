@@ -111,8 +111,8 @@ module gamedating {
 			this.updateConfigUrl();
 		}
 
-		private onUpdateHongBao(msg) {
-			this.hongbaoMgr.setInfo(msg);
+		private onUpdateHongBao(data) {
+			this.hongbaoMgr.setInfo(data);
 		}
 
 		//主玩家下来了
@@ -137,7 +137,7 @@ module gamedating {
 			let hud_page = WebConfig.enterGameLocked ? (WebConfig.gameid + "1") : DatingPageDef.PAGE_HUD;
 
 			//界面上什么都没有 就打开hud
-			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
+			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE, DatingPageDef.PAGE_HONGBAO]);
 			if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
 				this._game.uiRoot.HUD.open(hud_page, () => {
 					this._game.playSound(Path.sound_hy);

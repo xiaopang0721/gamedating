@@ -185,6 +185,8 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "fk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
+				DatingPath.atlas_dating_ui + "hongbao.atlas",
+				
 				
 				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 				DatingPath.ui_dating_tongyong + "mask_top.png",
