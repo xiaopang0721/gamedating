@@ -13,6 +13,8 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "hongbao.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
 			];
+			this._isNeedBlack = true;
+			this._isClickBlack = true;
 		}
 
 		// 页面初始化函数
@@ -25,6 +27,7 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			this._viewUI.btn_get.visible = false;
+			this._viewUI.btn_close.visible = false;
 			this._viewUI.box_yichai.visible = false;
 			this._viewUI.txt_desc.text = this._content;
 			this._viewUI.txt_title.text = this._viewUI.txt_title1.text = this._title;
@@ -59,11 +62,15 @@ module gamedating.page {
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_GAME_GET_HONGBAO_SUCCESS:     //红包领取成功
 						this._viewUI.ani2.play(0, false);
-						this._game.datingGame.flyGlodMgr.show(1, 0, this._game.clientWidth, this._game.clientHeight);
 						this._viewUI.txt_money.text = this._money || msg.data;
+						this._game.datingGame.flyGlodMgr.show(1, 0, this._game.clientWidth, this._game.clientHeight);
+						Laya.timer.once(3000, this, this.close);
 						break;
 					case Operation_Fields.OPRATE_GAME_GET_HONGBAO_FAILED:     //红包领取失败
 						this._game.showTips("红包领取失败！");
+						break;
+					case Operation_Fields.OPRATE_GAME_HONGBAO_IS_UNVALID:     //红包领取失败
+						this._game.showTips("该红包已经失效！");
 						break;
 				}
 			}

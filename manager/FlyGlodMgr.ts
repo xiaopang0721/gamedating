@@ -182,7 +182,7 @@ module gamedating.managers {
 			//随机一个初始旋轉角度 
 			this._curRotation = MathU.getAngleByRotaion(MathU.randomRange(0, 360));
 			//随机貼圖
-			this._curTexture = this._type == FlyGlodMgr.TYPE_FLY_GOLD ? this._textures[MathU.randomRange(0, this._textures.length - 1)] : this._textures[this._textures.length - 1];
+			this._curTexture = this._textures[MathU.randomRange(0, this._textures.length - 1)];
 			//随机加速度
 			this._acceleration = Math.random() * 3 + 0.5;
 		}
