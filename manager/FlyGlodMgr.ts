@@ -7,6 +7,14 @@ module gamedating.managers {
 		static readonly TYPE_FLY_GOLD: number = 0;
 		static readonly TYPE_FLY_HONGBAO: number = 1;
 
+		//资源获取
+		static get FLY_SKIN_STR() {
+			return {
+				0: Path.ui_atlas_effect + 'flycoin.atlas',
+				1: Path.ui_atlas_effect + 'hongbao.atlas',
+			}
+
+		}
 		constructor(game: Game) {
 			super(game)
 			this._delta = 0;
@@ -26,8 +34,21 @@ module gamedating.managers {
 			this._stageHeight = height;
 		}
 
+		setAsset(type: number) {
+			let asset_url = "";
+			switch (type) {
+				case FlyGlodMgr.TYPE_FLY_GOLD:
+					asset_url = FlyGlodMgr.FLY_SKIN_STR[FlyGlodMgr.TYPE_FLY_GOLD];
+					break
+				case FlyGlodMgr.TYPE_FLY_HONGBAO:
+					asset_url = FlyGlodMgr.FLY_SKIN_STR[FlyGlodMgr.TYPE_FLY_HONGBAO];
+					break
+			}
+			return asset_url;
+		}
+
 		show(times: number = 1, type: number, width: number, height: number) {
-			this._asset_url = Path.ui_atlas_effect + 'flycoin.atlas';
+			this._asset_url = this.setAsset(type);
 			if (!this._refAsset) {
 				this._refAsset = RefAsset.Get(this._asset_url)
 				this._refAsset.retain();
