@@ -12,6 +12,7 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
 				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_bairendezhou.png",
