@@ -78,9 +78,8 @@ module gamedating.page {
 			super.onOpen();
 			if (!this._clipMoney) {
 				this._clipMoney = new DatingClip(DatingClip.YUEBAO_FONT);
-				this._clipMoney.scaleX = this._clipMoney.scaleY = 0.6;
-				this._clipMoney.centerX = this._viewUI.clip_money.centerX-8;
-				this._clipMoney.centerY = this._viewUI.clip_money.centerY-15;
+				this._clipMoney.centerX = this._viewUI.clip_money.centerX;
+				this._clipMoney.centerY = this._viewUI.clip_money.centerY;
 				this._viewUI.clip_money.parent.addChild(this._clipMoney);
 				this._viewUI.clip_money.removeSelf();
 			}
@@ -372,10 +371,10 @@ module gamedating.page {
 			this._data = data;
 			this.txt_time.text = Sync.getTimeStr(data.op_time * 1000);
 			this.txt_zt.text = (data.op_type == Web_operation_fields.USE_MONEY_LOG_TYPE_SAFEBOX_INTEREST) ? "利息" : (data.op_type == Web_operation_fields.USE_MONEY_LOG_TYPE_SAFEBOX_IN ? "存入" : "取出");
-			let color: string = data.money < 0 ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
+			let color: string = data.money < 0 ? "#03a503" : "#a20000";
 			TextFieldU.setHtmlText(this.txt_money, HtmlFormat.addHtmlColor((-data.money).toString(), color));
 			this.txt_yue.text = data.new_savebox_money;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
