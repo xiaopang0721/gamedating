@@ -44,6 +44,10 @@ module gamedating.managers {
 			//如果红包界面已经打开了，就不需要再打开了
 			if (this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HONGBAO)) return;
 			this._hongbao = this._info[0];
+			//已经结束了啊喂！
+			if (this._game.sync.serverTimeBys > this._hongbao.end_time) {
+				return;
+			}
 			//开始时间还没到
 			if (this._game.sync.serverTimeBys < this._hongbao.start_time) {
 				this._nextTime = this._hongbao.start_time;//把下个时间存下来
