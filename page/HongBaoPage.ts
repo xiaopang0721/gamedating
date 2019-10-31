@@ -14,7 +14,6 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
 			];
 			this._isNeedBlack = true;
-			this._isClickBlack = true;
 		}
 
 		// 页面初始化函数
@@ -27,15 +26,13 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			this._viewUI.btn_get.visible = false;
-			this._viewUI.btn_close.visible = false;
 			this._viewUI.box_yichai.visible = false;
 			this._viewUI.txt_desc.text = this._content;
 			this._viewUI.img_kuang.visible = this._content.length > 0;
 			this._viewUI.txt_title.text = this._viewUI.txt_title1.text = this._title;
 
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
-			this._viewUI.btn_chai.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			// this._viewUI.btn_get.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.box_weichai.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 		}
 
 		private _id: number;
@@ -52,7 +49,7 @@ module gamedating.page {
 
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
-				case this._viewUI.btn_chai:
+				case this._viewUI.box_weichai:
 					this._game.network.call_hongbao_operate(this._id, HongBaoPage.TYPE_OPERATE_QIANG_HONGBAO);
 					break;
 			}
