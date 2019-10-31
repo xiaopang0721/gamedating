@@ -67,7 +67,6 @@ module gamedating.page {
 						this._viewUI.ani2.play(0, false);
 						this._viewUI.txt_money.text = this._money || msg.data;
 						this._game.datingGame.flyGlodMgr.show(1, 0, this._game.clientWidth, this._game.clientHeight);
-						this._canClick = false;
 						Laya.timer.once(3000, this, this.close);
 						break;
 					case Operation_Fields.OPRATE_GAME_GET_HONGBAO_FAILED:     //红包领取失败

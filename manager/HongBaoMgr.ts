@@ -5,8 +5,7 @@ module gamedating.managers {
 	export class HongBaoMgr extends gamecomponent.managers.BaseMgr {
 		constructor(game: Game) {
 			super(game)
-			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_HONGBAO_DELAY_UPDATE, this, this.onUpdateHongBao);
-			this._delta = 1000;
+			this._delta = 500;
 		}
 
 		private _info: any = [];
@@ -27,13 +26,12 @@ module gamedating.managers {
 					}
 				}
 			}
-			this.onUpdateHongBao();
 		}
 
 		private _nextTime: number;
 		deltaUpdate() {
 			//如果还没到下个最近的红包开始时间
-			if (this._game.sync.serverTimeBys < this._nextTime || !this._nextTime) return;
+			if (this._game.sync.serverTimeBys < this._nextTime) return;
 			this.onUpdateHongBao();
 		}
 
@@ -54,20 +52,12 @@ module gamedating.managers {
 			this._hongbao = this._info.shift();
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO, (page) => {
 				page.dataSource = this._hongbao;
-				this._nextTime = 0;
 				this._game.datingGame.flyGlodMgr.show(1, FlyGlodMgr.TYPE_FLY_HONGBAO, this._game.clientWidth, this._game.clientHeight);
-			}, () => {
-				if (this._info.length > 0) {
-					Laya.timer.once(500, this, () => {
-						this.onUpdateHongBao();
-					})
-				}
 			});
 		}
 
 		clear(fource?: boolean) {
 			if (fource) super.clear(fource)
-			this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_HONGBAO_DELAY_UPDATE, this, this.onUpdateHongBao);
 			Laya.timer.clearAll(this);
 			this._info = [];
 		}
