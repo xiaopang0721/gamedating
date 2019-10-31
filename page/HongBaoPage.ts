@@ -71,10 +71,12 @@ module gamedating.page {
 						break;
 					case Operation_Fields.OPRATE_GAME_GET_HONGBAO_FAILED:     //红包领取失败
 						this._game.showTips("红包领取失败！");
+						this.close();
 						this._canClick = false;
 						break;
 					case Operation_Fields.OPRATE_GAME_HONGBAO_IS_UNVALID:     //红包领取失败
-						this._game.showTips("该红包已经失效！");
+						this._game.showTips("当前红包已过期！");
+						this.close();
 						this._canClick = false;
 						break;
 				}
