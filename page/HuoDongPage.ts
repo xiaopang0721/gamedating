@@ -96,6 +96,9 @@ module gamedating.page {
 				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
 					this._viewUI.btn_pre.visible = true;
 					this._viewUI.btn_next.visible = false;
+				}else{
+					this._viewUI.btn_pre.visible = true;
+					this._viewUI.btn_next.visible = true;
 				}
 			}
 		}
