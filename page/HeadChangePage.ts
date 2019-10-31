@@ -81,7 +81,6 @@ module gamedating.page {
 				return v2 - v1;
 			});
 			this._viewUI.list.dataSource = data;
-			this._viewUI.list.scrollBar.value = 0;
 		}
 
 		private renderHandler(cell: HeadItemRender, index: number) {

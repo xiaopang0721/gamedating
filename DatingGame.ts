@@ -166,7 +166,7 @@ module gamedating {
 				utils.Request.sendA(url, data);
 			}
 
-			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			//设置下设备类型
@@ -473,6 +473,7 @@ module gamedating {
 
 		private onOptHandler(optcode: number, msg: any): void {
 			if (msg.type == Operation_Fields.OPRATE_GAME) {//游戏操作错误类型
+				let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_GAME_DEVICE_PUSH_INFO:             // 推送消息
 						WebConfig.setNotificationInfo(msg.data);
@@ -490,7 +491,6 @@ module gamedating {
 						break;
 					case Operation_Fields.OPRATE_GAME_FIRST_PAY_CAN_GET:     //首充可领取弹窗
 						//首充
-						let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 						if (!mainPlayer) return;
 						let is_get_fitst_pay: boolean = mainPlayer.playerInfo.is_get_fitst_pay;
 						let isOpenFirst = Number(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "isopen"));
@@ -505,7 +505,11 @@ module gamedating {
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU_ANI, (page) => {
 							page.dataSource = dataInfo;
 						});
-						this._game.uiRoot.general.close(DatingPageDef.PAGE_QIFU);
+						//判断是否是自己祈福
+						if (!mainPlayer) return;
+						if (dataInfo && dataInfo.uid == mainPlayer.GetUserId()) {
+							this._game.uiRoot.general.close(DatingPageDef.PAGE_QIFU);
+						}
 						break;
 				}
 			}
@@ -819,6 +823,8 @@ module gamedating {
 
 		//打开登陆界面
 		public openLoginPage() {
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
+			if (mainPlayer) return;
 			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN, DatingPageDef.PAGE_TIPS]);
 			let isOpened = this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_LOGIN);
 			!isOpened && this._game.uiRoot.HUD.open(DatingPageDef.PAGE_LOGIN, (page) => {
@@ -972,7 +978,7 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			Laya.loader.load("version_h5_min.bin?v=" + MathU.randomRange(1, 1000000), Handler.create(this, (data: any) => {
+			Laya.loader.load("version_h5_min.bin?v=" + MathU.randomRange(MathU.randomRange(1000, 100000), MathU.randomRange(100000, 1000000)), Handler.create(this, (data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();

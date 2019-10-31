@@ -33,6 +33,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "fk.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "shezhi.atlas",
 			];
 			this._isNeedBlack = true;
 		}

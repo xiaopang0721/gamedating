@@ -17,6 +17,7 @@ module gamedating.page {
 
 		/**数据*/
 		set dataSource(v: any) {
+			if (!this._viewUI) return;
 			this._dataSource = v;
 			this.initUI();
 		}
