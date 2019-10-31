@@ -292,7 +292,7 @@ module gamedating.page {
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_SHEZHI_MIMA);
 						return;
 					}
-					if (this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorTimes() >= 3) {
+					if (this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorTimes() >= 3 && this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorCD() >= this._game.sync.serverTimeBys) {
 						// 打开超过错误次数界面
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_MIMA_TISHI);
 						return;
