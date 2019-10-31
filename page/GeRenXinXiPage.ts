@@ -386,8 +386,7 @@ module gamedating.page {
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
 					// localRemoveItem("session_key");
-					DatingGame.ins.openLoginPage();
-					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN]);
+					 this._game.openLoginPage();
 					break;
 				case this._viewUI.btn_set_psd://设置密码
 					if (WebConfig.info.isguest || !WebConfig.info.mobile) {//游客要先绑定手机

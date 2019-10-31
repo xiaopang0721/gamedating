@@ -161,7 +161,7 @@ module gamedating {
 				utils.Request.sendA(url, data);
 			}
 
-			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			//设置下设备类型
@@ -798,6 +798,8 @@ module gamedating {
 
 		//打开登陆界面
 		public openLoginPage() {
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
+			if (mainPlayer) return;
 			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN, DatingPageDef.PAGE_TIPS]);
 			let isOpened = this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_LOGIN);
 			!isOpened && this._game.uiRoot.HUD.open(DatingPageDef.PAGE_LOGIN, (page) => {
