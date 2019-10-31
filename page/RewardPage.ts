@@ -8,6 +8,7 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "huode.atlas",
+				DatingPath.atlas_dating_ui + "vip.atlas",
 			];
 
 			this._isNeedBlack = true;
