@@ -88,12 +88,12 @@ module gamedating.page {
 		private _ccb: Function;
 		setInfo(str, ecb: Function, ccb: Function, okSkin: string, cancleSkin: string, titleSkin: string) {
 			this._viewUI.txt_label.text = str;
-			TextFieldU.setHtmlText(this._viewUI.txt_label, str);//支持HTML
+			TextFieldU.setHtmlText(this._viewUI.txt_label, str, false);//支持HTML
 			this._ecb = ecb;
 			this._ccb = ccb;
-			if(titleSkin == Tips.TIPS_SKIN_STR["title_qf"]){
+			if (titleSkin == Tips.TIPS_SKIN_STR["title_qf"]) {
 				this._viewUI.lb_tip.visible = true;
-			}else{
+			} else {
 				this._viewUI.lb_tip.visible = false;
 			}
 			if (okSkin) {
