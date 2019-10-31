@@ -6,12 +6,18 @@ module gamedating.managers {
 		constructor(game: Game) {
 			super(game)
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_HONGBAO_DELAY_UPDATE, this, this.onUpdateHongBao);
+			this._delta = 60000;
 		}
 
 		private _info: any = [];
 		setInfo(info) {
 			if (!info) return;
 			this._info = this._info.concat(info);
+			this.onUpdateHongBao();
+		}
+
+		//每十分钟检测一下吧，之前没开始的补弹出来
+		deltaUpdate() {
 			this.onUpdateHongBao();
 		}
 
@@ -29,6 +35,12 @@ module gamedating.managers {
 			//如果红包界面已经打开了，就不需要再打开了
 			if (this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HONGBAO)) return;
 			let info = this._info.shift();
+			//开始时间还没到
+			if (this._game.sync.serverTimeBys < info.start_time) {
+				this._info.length > 0 && this.onUpdateHongBao();
+				this._info.push(info);
+				return;
+			}
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO, (page) => {
 				page.dataSource = info;
 				this._game.datingGame.flyGlodMgr.show(1, FlyGlodMgr.TYPE_FLY_HONGBAO, this._game.clientWidth, this._game.clientHeight);
