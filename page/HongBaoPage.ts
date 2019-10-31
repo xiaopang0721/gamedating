@@ -14,6 +14,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
 			];
 			this._isNeedBlack = true;
+			this._isClickBlack = false;
 		}
 
 		// 页面初始化函数
