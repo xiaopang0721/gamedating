@@ -27,7 +27,7 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
-			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange);
+			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange, [false]);
 			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
 			// this._viewUI.list_tab.scrollBar.elasticDistance = 100;
@@ -113,7 +113,7 @@ module gamedating.page {
 		}
 
 
-		private onBtnTabChange(): void {
+		private onBtnTabChange(isInit: boolean = true, e?: LEvent, ): void {
 			if (!this._curSelectTab && this._curSelectTab != 0) {
 				this._curSelectTab = 1;
 				this._viewUI.btn_tab.selected = false;
@@ -122,6 +122,7 @@ module gamedating.page {
 				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
 				this._viewUI.btn_tab.selected = !this._viewUI.btn_tab.selected;
 			}
+			if (!isInit) this._game.playSound(Path.music + "btn.mp3");
 			this.resetScrollValue();
 			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
 				//公告
@@ -342,7 +343,11 @@ module gamedating.page {
 			}
 		}
 		protected onBtnTweenEnd(e: any, target: any) {
-			this.jumpPage();
+			switch (target) {
+				case this._viewUI.btn_qiandao:
+					this.jumpPage();
+					break
+			}
 		}
 		private _isMouseDown: boolean = false;
 		private _mouseDownY: number = 0;
@@ -413,10 +418,10 @@ module gamedating.page {
 		private _game: Game;
 		private _data: any;
 		/**
-		  * 
-		  * @param game 
-		  * @param data 
-		  */
+			* 
+			* @param game 
+			* @param data 
+			*/
 		setData(game: Game, data: any) {
 			if (!data || !data.title) {
 				this.visible = false;
