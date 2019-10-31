@@ -169,7 +169,7 @@ module gamedating.page {
             this._viewUI.btn_phone_clear.visible = false;
             this._viewUI.box_login_account.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD;
             this._viewUI.btn_see_psd.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && !WebConfig.isSingleEnter;
-            this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._inputPhone.input.text.length > 0;
+            this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._inputAccount.input.text.length > 0;
             this._viewUI.box_bind.visible = this._type == LoginBindPage.TYPE_BIND_PHONE;
             this._viewUI.box_reset.visible = this._type == LoginBindPage.TYPE_RESET_PASSWORD;
             this._viewUI.btn_close.visible = true;

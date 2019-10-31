@@ -78,6 +78,7 @@ module gamedating {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_PLAYER_INFO_GAME_ID, this, this.onUpdateReConnectStatus);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.___MAIN_PLAYER_CHANGE, this, this.onMainUnitChange);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onUpdateFreeStyle);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_HONGBAO_UPDATE, this, this.onUpdateHongBao);
 			this.onUpdateFreeStyle();
 
 
@@ -110,6 +111,10 @@ module gamedating {
 			this.updateConfigUrl();
 		}
 
+		private onUpdateHongBao(data) {
+			this.hongbaoMgr.setInfo(JSON.parse(data));
+		}
+
 		//主玩家下来了
 		private onMainUnitChange(): void {
 			this.onMPlayerData();
@@ -132,7 +137,7 @@ module gamedating {
 			let hud_page = WebConfig.enterGameLocked ? (WebConfig.gameid + "1") : DatingPageDef.PAGE_HUD;
 
 			//界面上什么都没有 就打开hud
-			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
+			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE, DatingPageDef.PAGE_HONGBAO]);
 			if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
 				this._game.uiRoot.HUD.open(hud_page, () => {
 					this._game.playSound(Path.sound_hy);
@@ -522,6 +527,15 @@ module gamedating {
 			return this._flyGlodMgr;
 		}
 
+		//红包管理器
+		private _hongbaoMgr: HongBaoMgr;
+		public get hongbaoMgr(): HongBaoMgr {
+			if (!this._hongbaoMgr) {
+				this._hongbaoMgr = new HongBaoMgr(this._game);
+			}
+			return this._hongbaoMgr;
+		}
+
 		//红点管理器
 		private _redPointCheckMgr: RedPointCheckMgr;
 		public get redPointCheckMgr(): RedPointCheckMgr {
@@ -794,6 +808,13 @@ module gamedating {
 			// else if (e.keyCode == Laya.Keyboard.B) {
 			// 	PlayCardMgr.ins.down_show()
 			// }
+			//红包测试
+			else if (e.keyCode == Laya.Keyboard.E) {
+				//必须在游戏以外才弹出红包界面
+				if (this._game.sceneGame) return;
+				this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO);
+				this._game.datingGame.flyGlodMgr.show(1, 1, this._game.clientWidth, this._game.clientHeight);
+			}
 		}
 
 		private onKeyUp(e: LEvent): void {
@@ -837,7 +858,7 @@ module gamedating {
 				this._exitGmeTimes++;
 				this.calculateDiffMoney(true);
 				this._game.uiRoot.top.closeAll([DatingPageDef.PAGE_GONGGAO, DatingPageDef.PAGE_TIP]);
-				this._game.uiRoot.general.closeAll();
+				this._game.uiRoot.general.closeAll([DatingPageDef.PAGE_HONGBAO]);
 				this._game.uiRoot.HUD.closeAll();
 				let pageDef = getPageDef(info);
 				if (pageDef && !pageDef["__enterMapLv"] && !pageDef["__roomcard"]) {
@@ -888,6 +909,7 @@ module gamedating {
 			if (!this._game.sceneGame.inScene) {
 				this._mailMgr && this._mailMgr.update(diff);
 				this._flyGlodMgr && this._flyGlodMgr.update(diff);
+				this._hongbaoMgr && this._hongbaoMgr.update(diff);
 				this._redPointCheckMgr && this._redPointCheckMgr.update(diff);
 			}
 			if (this._checkVesionTime < 0) {
@@ -1039,6 +1061,10 @@ module gamedating {
 			if (this._flyGlodMgr) {
 				this._flyGlodMgr.clear(true);
 				this._flyGlodMgr = null;
+			}
+			if (this._hongbaoMgr) {
+				this._hongbaoMgr.clear(true);
+				this._hongbaoMgr = null;
 			}
 
 			if (this._noticeMgr) {
