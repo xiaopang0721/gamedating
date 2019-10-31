@@ -23,7 +23,9 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			this._viewUI.btn_enter.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.txt_time.text = Sync.getTimeShortStr2((this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorCD() - this._game.sync.serverTimeBys));
+			let mainPlayer = this._game.sceneObjectMgr.mainPlayer;
+            if (!mainPlayer) return;
+			this._viewUI.txt_time.text = Sync.getTimeShortStr2((mainPlayer.GetDrawMoneyErrorCD() - this._game.sync.serverTimeBys));
 		}
 		public close(): void {
 			if (this._viewUI) {
@@ -33,7 +35,9 @@ module gamedating.page {
 		}
 
 		deltaUpdate() {
-			let diffNum = this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorCD() - this._game.sync.serverTimeBys;
+			let mainPlayer = this._game.sceneObjectMgr.mainPlayer;
+            if (!mainPlayer) return;
+			let diffNum = mainPlayer.GetDrawMoneyErrorCD() - this._game.sync.serverTimeBys;
 			if (diffNum > 0) {
 				this._viewUI.txt_time.text = Sync.getTimeShortStr2(diffNum);
 			} else {
