@@ -10,9 +10,19 @@ module gamedating.managers {
 		}
 
 		private _info: any = [];
+		private _hongbao: any;
 		setInfo(info) {
 			if (!info) return;
-			this._info = this._info.concat(info);
+			this._info = info;
+			if (this._hongbao) {
+				for (let i = 0; i < this._info.length; i++) {
+					//如果发下来的是已经弹出来的红包，但是还没领取，就剔除掉
+					if (this._info[i].id == this._hongbao.id) {
+						this._info.splice(i, 1);
+						break;
+					}
+				}
+			}
 			this.onUpdateHongBao();
 		}
 
@@ -34,15 +44,15 @@ module gamedating.managers {
 			if (!this._info.length) return;
 			//如果红包界面已经打开了，就不需要再打开了
 			if (this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HONGBAO)) return;
-			let info = this._info.shift();
+			this._hongbao = this._info.shift();
 			//开始时间还没到
-			if (this._game.sync.serverTimeBys < info.start_time) {
+			if (this._game.sync.serverTimeBys < this._hongbao.start_time) {
 				this._info.length > 0 && this.onUpdateHongBao();
-				this._info.push(info);
+				this._info.push(this._hongbao);
 				return;
 			}
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO, (page) => {
-				page.dataSource = info;
+				page.dataSource = this._hongbao;
 				this._game.datingGame.flyGlodMgr.show(1, FlyGlodMgr.TYPE_FLY_HONGBAO, this._game.clientWidth, this._game.clientHeight);
 			}, () => {
 				if (this._info.length > 0) {
