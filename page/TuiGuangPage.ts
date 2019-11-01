@@ -31,7 +31,9 @@ module gamedating.page {
 			}))
 			//落地页链接
 			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(txtGw,17);
+			let showGw = txtGw.split("?")[0];
+			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
+			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -234,7 +236,9 @@ module gamedating.page {
 			}))
 			//落地页链接
 			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(txtGw,17);
+			let showGw = txtGw.split("?")[0];
+			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
+			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
 		}
 
 		private onUpdatePlayerInfo() {
@@ -244,13 +248,16 @@ module gamedating.page {
 			// this._viewUI.box_no_share.visible = !daysharegivemoney;
 			// this._viewUI.txt_daysharegivemoney.text = daysharegivemoney;
 			let agency_sharereward = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_sharereward");
-			this._viewUI.txt_agency_sharereward.text = agency_sharereward || "";
 			let agency_shareminpay = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_shareminpay");
-			this._viewUI.txt_agency_shareminpay.text = agency_shareminpay || "";
+			let agency_str = StringU.substitute("玩家通过您分享的链接下载并且充值{0}金额，您即可获得{1}现金奖励", HtmlFormat.addHtmlColor(agency_shareminpay.toString(), "#3aa4fe"), HtmlFormat.addHtmlColor(agency_sharereward.toString(), "#3aa4fe"))
+			TextFieldU.setHtmlText(this._viewUI.txt_agency, agency_str);
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
+			//落地页链接
 			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(txtGw,17);
+			let showGw = txtGw.split("?")[0];
+			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
+			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
 			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
 			//代理返利
 			for (let i = 0; i < 10; i++) {
