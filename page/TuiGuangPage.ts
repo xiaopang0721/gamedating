@@ -30,7 +30,8 @@ module gamedating.page {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(txtGw,17);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -71,8 +72,6 @@ module gamedating.page {
 			this._viewUI.list_child.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_child.visible = false;
 
-			(<Button>this._viewUI.tab.getChildByName("item6")).visible = false;
-			this._viewUI.box6.visible = false;
 
 			for (let i = 0; i < 5; i++) {
 				this._tuiGuangYeJiTxt[i] = this._viewUI["txt_yeji" + i];
@@ -234,7 +233,8 @@ module gamedating.page {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(txtGw,17);
 		}
 
 		private onUpdatePlayerInfo() {
@@ -249,7 +249,8 @@ module gamedating.page {
 			this._viewUI.txt_agency_shareminpay.text = agency_shareminpay || "";
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
+			this._viewUI.txt_gw.text = EnumToString.getLimitStr(txtGw,17);
 			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
 			//代理返利
 			for (let i = 0; i < 10; i++) {
@@ -288,7 +289,7 @@ module gamedating.page {
 				let btn = this._tabItems[index];
 				if (!btn || !btn.visible) continue;
 				btn.y = total_y;
-				total_y += btn.height;
+				total_y += btn.height - 7;
 			}
 		}
 
