@@ -62,7 +62,7 @@ module gamedating.page {
 				v2 += b == 11 ? (b + 1) * 100 : 0;
 				//vip
 				v1 += a >= 1 && a <= 10 ? a - 5 : a;
-				v2 += b >= 1 && b <= 10 ? b - 3 : b;
+				v2 += b >= 1 && b <= 10 ? b - 5 : b;
 				//已获得
 				if (a == 11 && playerInfo.is_get_fitst_pay // 首充已获得
 					|| a >= 1 && a <= 10 && mainPlayer.GetVipAwardReceived(a - 1) // vip已获得
