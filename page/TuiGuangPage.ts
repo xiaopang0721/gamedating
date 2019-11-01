@@ -7,6 +7,7 @@ module gamedating.page {
 		static readonly TYPE_QUANMIN_DAILI = 2;//全民代理
 
 		private _viewUI: ui.nqp.dating.TuiGuangUI;
+		private _curAgencytype: number = 0;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -249,6 +250,7 @@ module gamedating.page {
 			// this._viewUI.txt_daysharegivemoney.text = daysharegivemoney;
 			let agency_sharereward = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_sharereward");
 			let agency_shareminpay = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_shareminpay");
+			this._curAgencytype = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agencytype");
 			let agency_str = StringU.substitute("玩家通过您分享的链接下载并且充值{0}金额，您即可获得{1}现金奖励", HtmlFormat.addHtmlColor(agency_shareminpay.toString(), "#3aa4fe"), HtmlFormat.addHtmlColor(agency_sharereward.toString(), "#3aa4fe"))
 			TextFieldU.setHtmlText(this._viewUI.txt_agency, agency_str);
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
@@ -305,7 +307,7 @@ module gamedating.page {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_AGENCYREPORT) {//分享赚钱
 				if (data && data.success == 0 && data.msg && data.msg) {
 					//根据lv是否存在来判断是否显示
-					let lvbool = data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
+					let lvbool = this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
 					if (lvbool != this._tabItems[1].visible) {
 						this._tabItems[1].visible = lvbool;
 						this.updatePos();
@@ -334,7 +336,7 @@ module gamedating.page {
 						this._viewUI.txt_w4.text = "上月其他玩家奖励："
 					}
 					//代理类型
-					this.typeDaiLi = data.msg.agencytype;
+					this.typeDaiLi = this._curAgencytype;
 					this._viewUI.img_type.visible = true;
 					this._viewUI.img_type.skin = this.typeDaiLi == TuiGuangPage.TYPE_QUANMIN_DAILI ? DatingPath.ui_dating + "tuiguang/tit_daili.png" : DatingPath.ui_dating + "tuiguang/tit_daili1.png";
 					(<Button>this._viewUI.tab.getChildByName("item1")).skin = this.typeDaiLi == TuiGuangPage.TYPE_QUANMIN_DAILI ? DatingPath.ui_dating + "tuiguang/btn_fs.png" : DatingPath.ui_dating + "tuiguang/btn_mx.png";
@@ -367,8 +369,10 @@ module gamedating.page {
 			}
 			else if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAGRLASTWEEK) {//分享奖励明细
 				if (data && data.success == 0) {
+					this._viewUI.box3_0.visible = this._curAgencytype == TuiGuangPage.TYPE_WUXIAN_DAILI;
+					this._viewUI.box3_1.visible = this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI;
 					if (data.msg && data.msg.list) {
-						if (data.msg.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
+						if (this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
 							this._viewUI.txt_name.text = data.msg.list.account;
 							data.msg.list.fsvalue && (this._viewUI.txt_validBet.text = data.msg.list.fsvalue.toString());
 							data.msg.list.fs && (this._viewUI.txt_fanshui.text = data.msg.list.fs.toString());
@@ -381,12 +385,10 @@ module gamedating.page {
 							let list = this.onFilterList(data.msg.list.child);
 							this._viewUI.list3.dataSource = list;
 						}
-						this._viewUI.box3_0.visible = data.msg.agencytype == TuiGuangPage.TYPE_WUXIAN_DAILI;
-						this._viewUI.box3_1.visible = data.msg.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI;
 					} else {
 						this._viewUI.list3.dataSource = [];
 					}
-					if (data.msg.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
+					if (this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
 						this._viewUI.list_child.visible = this._viewUI.list_child.dataSource && this._viewUI.list_child.dataSource.length > 0
 						this._viewUI.box_no_3.visible = !this._viewUI.list_child.visible;
 					} else {
