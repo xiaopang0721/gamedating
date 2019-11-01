@@ -71,8 +71,6 @@ module gamedating.page {
 			this._viewUI.list_child.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_child.visible = false;
 
-			(<Button>this._viewUI.tab.getChildByName("item6")).visible = false;
-			this._viewUI.box6.visible = false;
 
 			for (let i = 0; i < 5; i++) {
 				this._tuiGuangYeJiTxt[i] = this._viewUI["txt_yeji" + i];
@@ -288,7 +286,7 @@ module gamedating.page {
 				let btn = this._tabItems[index];
 				if (!btn || !btn.visible) continue;
 				btn.y = total_y;
-				total_y += btn.height;
+				total_y += btn.height - 7;
 			}
 		}
 
