@@ -30,12 +30,12 @@ module gamedating.page {
 			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange, [false]);
 			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			// this._viewUI.list_tab.scrollBar.elasticDistance = 100;
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TabItemRender1UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
-			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			this._viewUI.myhd0.vScrollBarSkin = "";
 			this._viewUI.myhd0.vScrollBar.changeHandler = new Handler(this, this.changeHandler_myhd0);
 
@@ -83,7 +83,7 @@ module gamedating.page {
 				= 0;
 		}
 
-		private changeHandler_list_tab(e: LEvent): void {
+		private changeHandler_list_tab(e?: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
 			let value = this._viewUI.list_tab.scrollBar.value;
 			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
