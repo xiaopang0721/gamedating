@@ -481,7 +481,7 @@ module gamedating {
 					case Operation_Fields.OPRATE_GAME_READY_CLOSE:             //服务器准备更新关闭
 						WebConfig.server_close = true;
 						if (this instanceof Game) {
-							this.noticeMgr.makeNotice("亲爱的玩家，为了您更好的游戏体验，我们正在更新游戏，预计本次更新需要一分钟时间，请耐心等待。对您造成的不便，我们深表歉意！");
+							this.noticeMgr.makeNotice("亲爱的玩家，游戏服务器正在火速升级中，请稍候1分钟再进入游戏场，游戏有您更精彩~");
 						}
 						break;
 					case Operation_Fields.OPRATE_GAME_DAILY_SHARE_SUCCESS:            //每日分享成功
