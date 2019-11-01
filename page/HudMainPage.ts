@@ -988,25 +988,43 @@ module gamedating.page {
 		private onViewMouseHandler(e) {
 			if (this._isPlayAd)
 				return;
+			let curAdIdx = this._curAdIndex;
 			let v = this._viewUI.list_ad.scrollBar.value;
 			this._isPlayAd = true;
 			this._adPlayDelta = 0;
 			this._curAdIndex = Math.round(v / this._adPerWidth);
+			if (curAdIdx == this._curAdIndex || curAdIdx == 0 && this._curAdIndex == this._viewUI.list_ad.dataSource.length - 1) {
+				if (v < this._markAdBar) {
+					// 往右滑动
+					this._curAdIndex --;
+				}
+				if (v > this._markAdBar) {
+					// 往左滑动
+					if (this._curAdIndex == this._viewUI.list_ad.dataSource.length - 1)
+						this._curAdIndex --;
+					else
+						this._curAdIndex ++;
+				}
+			}
 			this.playNext();
 		}
 
+		private _markAdBar:number;
 		private onAdMouseHandler(e) {
 			let v = this._viewUI.list_ad.scrollBar.value;
 			switch (e.type) {
 				case LEvent.MOUSE_DOWN:
 					this._isPlayAd = false;
 					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
+					this._markAdBar = v;
 					break;
 				case LEvent.MOUSE_MOVE:
-					if (v <= 0) {
-						this._viewUI.list_ad.scrollBar.value = this.adListMax;
-					} else if (v >= this.adListMax) {
-						this._viewUI.list_ad.scrollBar.value = 0;
+					if (!this._isPlayAd) {
+						if (v <= 0) {
+							this._viewUI.list_ad.scrollBar.value = this.adListMax;
+						} else if (v >= this.adListMax) {
+							this._viewUI.list_ad.scrollBar.value = 0;
+						}
 					}
 					break;
 				case LEvent.MOUSE_UP:
@@ -1023,12 +1041,11 @@ module gamedating.page {
 					this._viewUI.list_ad.dataSource = this.guanggaoLunBoData();
 				//去获取一遍，这还没有，就不要了
 				if (!this._viewUI.list_ad.dataSource) return;
-				if (this._curAdIndex > this._viewUI.list_ad.dataSource.length - 1) {
+				if (this._curAdIndex >= this._viewUI.list_ad.dataSource.length - 1) {
 					this._curAdIndex = 0;
-				} else if (this._curAdIndex < 0) {
-					this._curAdIndex = this._viewUI.list_ad.dataSource.length - 1;
+					this._viewUI.list_ad.scrollTo(this._curAdIndex);
 				}
-				this._viewUI.list_ad.scrollTo(this._curAdIndex);			}));
+			}));
 		}
 		private _isPlayAd: boolean = true;
 		private _adPlayNextTime: number = 5000;
