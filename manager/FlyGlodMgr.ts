@@ -105,13 +105,17 @@ module gamedating.managers {
 			Laya.timer.clearAll(this);
 			for (let index = 0; index < this._glodCells.length; index++) {
 				let glodcell = this._glodCells[index];
-				if (glodcell) ObjectPools.free(glodcell);
+				if (!glodcell) continue;
+				ObjectPools.free(glodcell);
+				this._glodCells.splice(index, 1);
+				index--;
 			}
 			if (this._refAsset) {
 				this._refAsset.offAll();
 				this._refAsset.release(true);
 				this._refAsset = null;
 			}
+			this._game.uiRoot.top.graphics.clear();
 			this._glodCells.length = 0;
 		}
 	}
