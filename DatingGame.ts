@@ -276,11 +276,11 @@ module gamedating {
 				if (this._game.sceneGame.network.connected && this._isBind) {
 					WebConfig.wxDebug && WebConfig.alert("微信绑定");
 					if (WebConfig.info) {
-						this._game.sceneGame.network.call_bind(WebConfig.account, Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId, "", "", "", "", "", WebConfig.device, WebConfig.info.invite_code || "");
+						this._game.sceneGame.network.call_bind(WebConfig.account || "", Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId || "", "", "", "", "", "", WebConfig.device || "", WebConfig.info.invite_code || "");
 					}
 				} else {
 					WebConfig.wxDebug && WebConfig.alert("微信登陆");
-					this._game.sceneGame.login("UIRoot wxLoginCallBack", Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId);
+					this._game.sceneGame.login("UIRoot wxLoginCallBack", Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId || "");
 				}
 			}
 		}

@@ -373,6 +373,7 @@ module gamedating.page {
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
+			if (!this._viewUI) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
 			this._viewUI.btn_bangding.visible = !playerInfo.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			if (!this._clip_money) {
@@ -933,7 +934,7 @@ module gamedating.page {
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
 		private _listBarMax: number = 0;
-                                                                                                                                                                                                    
+
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
@@ -942,7 +943,7 @@ module gamedating.page {
 			this._viewUI.list_btns.dataSource = data;
 			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
-			if (this._isFromRoom){
+			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				return;
@@ -996,20 +997,20 @@ module gamedating.page {
 			if (curAdIdx == this._curAdIndex || curAdIdx == 0 && this._curAdIndex == this._viewUI.list_ad.dataSource.length - 1) {
 				if (v < this._markAdBar) {
 					// 往右滑动
-					this._curAdIndex --;
+					this._curAdIndex--;
 				}
 				if (v > this._markAdBar) {
 					// 往左滑动
 					if (this._curAdIndex == this._viewUI.list_ad.dataSource.length - 1)
-						this._curAdIndex --;
+						this._curAdIndex--;
 					else
-						this._curAdIndex ++;
+						this._curAdIndex++;
 				}
 			}
 			this.playNext();
 		}
 
-		private _markAdBar:number;
+		private _markAdBar: number;
 		private onAdMouseHandler(e) {
 			let v = this._viewUI.list_ad.scrollBar.value;
 			switch (e.type) {
@@ -1386,7 +1387,7 @@ module gamedating.page {
 					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
 						LoadingMgr.ins.load(gameStr, assets);
 					}))
-					this._game.showTips(StringU.substitute("{0}已加入更新队列",PageDef.getNameById(gameStr)));
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
 				}
 			})
 		}

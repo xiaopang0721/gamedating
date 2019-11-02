@@ -164,6 +164,7 @@ module gamedating.managers {
 		private initTexture(): void {
 			let texture: Texture;
 			let atlas = Loader.getAtlas(this._asset_url);
+			if (!atlas) return;
 			for (let index = 0; index < atlas.length; index++) {
 				let a: string = atlas[index];
 				this._textures[index] = Loader.getRes(a);
