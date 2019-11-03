@@ -421,6 +421,9 @@ module gamedating.page {
 			"zoo": [
 				DatingPageDef.TYPE_GAME,
 			],
+			"mpniuniu": [
+				DatingPageDef.TYPE_CHESS,
+			],
 
 		}
 	}
