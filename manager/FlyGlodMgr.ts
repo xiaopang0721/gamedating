@@ -105,13 +105,17 @@ module gamedating.managers {
 			Laya.timer.clearAll(this);
 			for (let index = 0; index < this._glodCells.length; index++) {
 				let glodcell = this._glodCells[index];
-				if (glodcell) ObjectPools.free(glodcell);
+				if (!glodcell) continue;
+				ObjectPools.free(glodcell);
+				this._glodCells.splice(index, 1);
+				index--;
 			}
 			if (this._refAsset) {
 				this._refAsset.offAll();
 				this._refAsset.release(true);
 				this._refAsset = null;
 			}
+			this._game.uiRoot.top.graphics.clear();
 			this._glodCells.length = 0;
 		}
 	}
@@ -164,6 +168,7 @@ module gamedating.managers {
 		private initTexture(): void {
 			let texture: Texture;
 			let atlas = Loader.getAtlas(this._asset_url);
+			if (!atlas) return;
 			for (let index = 0; index < atlas.length; index++) {
 				let a: string = atlas[index];
 				this._textures[index] = Loader.getRes(a);

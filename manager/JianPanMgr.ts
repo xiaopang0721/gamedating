@@ -125,7 +125,7 @@ module gamedating.managers {
 				this._game.uiRoot.top.open(DatingPageDef.PAGE_JIANPAN, (page) => {
 					page.dataSource = textUI.inputType;
 				}, () => {
-					if (DatingGame.ins.jianPanMgr.pageUI && DatingGame.ins.jianPanMgr.pageUI.box) {
+					if (DatingGame.ins.jianPanMgr.pageUI && DatingGame.ins.jianPanMgr.pageUI.box && DatingGame.ins.jianPanMgr.pageUI.box.centerY) {
 						DatingGame.ins.jianPanMgr.pageUI.box.centerY = 20;
 					}
 				});
