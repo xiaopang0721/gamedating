@@ -247,6 +247,8 @@ module gamedating.page {
 				DatingPath.sk_dating + "bangdingsongjin.sk",
 				DatingPath.sk_dating + "caishen01.png",
 				DatingPath.sk_dating + "caishen01.sk",
+				DatingPath.sk_dating + "DZ_wxsaolei.png",
+				DatingPath.sk_dating + "DZ_wxsaolei.sk",
 				//特效部分添加
 				Path.ui_atlas_effect + "bairen.atlas",
 				Path.ui_atlas_effect + "btn_fx.atlas",
@@ -421,7 +423,9 @@ module gamedating.page {
 			"zoo": [
 				DatingPageDef.TYPE_GAME,
 			],
-
+			"wxsaolei": [
+				DatingPageDef.TYPE_GAME,
+			],
 		}
 	}
 }
