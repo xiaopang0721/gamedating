@@ -239,6 +239,8 @@ module gamedating.page {
 				DatingPath.sk_dating + "DZ_rpaodekuai.sk",
 				DatingPath.sk_dating + "DZ_zoo.png",
 				DatingPath.sk_dating + "DZ_zoo.sk",
+				DatingPath.sk_dating + "DZ_mpniuniu.png",
+				DatingPath.sk_dating + "DZ_mpniuniu.sk",
 				DatingPath.sk_dating + "shouchang.png",
 				DatingPath.sk_dating + "shouchang.sk",
 				DatingPath.sk_dating + "vip.png",
