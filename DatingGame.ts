@@ -978,11 +978,13 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			Laya.loader.load("version_h5_min.bin?v=" + MathU.randomRange(MathU.randomRange(1000, 100000), MathU.randomRange(100000, 1000000)), Handler.create(this, (data: any) => {
+			let version_h5_min = "version_h5_min.bin?v=" + cur_vesion;
+			Laya.loader.load(version_h5_min, Handler.create(this, (data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();
 				this._vesion_byteArray.clear();
+				Laya.loader.clearRes(version_h5_min);
 				this._vesion_byteArray.buffer = data;
 				let conf_url_value: any = StringU.readZlibData(this._vesion_byteArray);
 				let arr = conf_url_value.split("\n");
