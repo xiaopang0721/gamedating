@@ -978,7 +978,7 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			let version_path = "version_h5_min.bin?v=" +Math.random();
+			let version_path = "version_h5_min.bin?v=" +MathU.randomRange(0,100000000);
 			Laya.loader.load(version_path, Handler.create(this, (version_h5_min,data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
