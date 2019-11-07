@@ -984,9 +984,9 @@ module gamedating {
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();
 				this._vesion_byteArray.clear();
-				Laya.loader.clearRes(version_h5_min);
 				this._vesion_byteArray.buffer = data;
 				let conf_url_value: any = StringU.readZlibData(this._vesion_byteArray);
+				Laya.loader.clearRes(version_h5_min);
 				let arr = conf_url_value.split("\n");
 				if (!arr || arr.length < 2) return;
 				let client_version = arr[1].replace("\r", "");
