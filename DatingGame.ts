@@ -978,8 +978,8 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			let version_h5_min = "version_h5_min.bin?v=" + MathU.randomRange(0,1000000000);
-			Laya.loader.load(version_h5_min, Handler.create(this, (data: any) => {
+			let version_path = "version_h5_min.bin?v=" + MathU.randomRange(0,1000000000);
+			Laya.loader.load(version_path, Handler.create(this, (version_h5_min,data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();
@@ -1022,7 +1022,7 @@ module gamedating {
 
 				isShowTips && this._game.showTips("当前已经是最新版本");
 				this._checkLoack = false;
-			}))
+			},[version_path]))
 		}
 
 		clearMgr() {
