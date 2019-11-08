@@ -17,6 +17,7 @@ module gamedating.page {
 
 		/**数据*/
 		set dataSource(v: any) {
+			if (!this._viewUI) return;
 			this._dataSource = v;
 			this.initUI();
 		}
@@ -50,6 +51,9 @@ module gamedating.page {
 		}
 		// 页面初始化函数
 		private initUI(): void {
+			if (!this._viewTips) {
+				this._viewTips = [];
+			}
 			//仅限显示3条
 			if (this._viewTips.length >= 3) {
 				ObjectPools.free(this._viewTips.pop());

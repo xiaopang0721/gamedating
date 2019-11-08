@@ -1,9 +1,20 @@
 /**
-* name 公告管理器
+* name 金币雨管理器
 */
 module gamedating.managers {
 	const MAX_GLOD_NUM = 100;
 	export class FlyGlodMgr extends gamecomponent.managers.BaseMgr {
+		static readonly TYPE_FLY_GOLD: number = 0;
+		static readonly TYPE_FLY_HONGBAO: number = 1;
+
+		//资源获取
+		static get FLY_SKIN_STR() {
+			return {
+				0: Path.ui_atlas_effect + 'flycoin.atlas',
+				1: Path.ui_atlas_effect + 'hongbao.atlas',
+			}
+
+		}
 		constructor(game: Game) {
 			super(game)
 			this._delta = 0;
@@ -11,24 +22,41 @@ module gamedating.managers {
 
 		private _refAsset: RefAsset;
 		private _glodCells: GlodCell[] = [];
-		private _stageWidth ;
-		private _stageHeight ;
-		private _widthRate:number = 1;
+		private _stageWidth;
+		private _stageHeight;
+		private _widthRate: number = 1;
+		private _asset_url: string = "";
+		private _type: number = 0;
 
-		layout(width:number, height:number) {
+		layout(width: number, height: number) {
 			this._widthRate = this._stageWidth / width;
 			this._stageWidth = width;
 			this._stageHeight = height;
 		}
 
-		show(times:number = 1, width:number, height:number) {
+		setAsset(type: number) {
+			let asset_url = "";
+			switch (type) {
+				case FlyGlodMgr.TYPE_FLY_GOLD:
+					asset_url = FlyGlodMgr.FLY_SKIN_STR[FlyGlodMgr.TYPE_FLY_GOLD];
+					break
+				case FlyGlodMgr.TYPE_FLY_HONGBAO:
+					asset_url = FlyGlodMgr.FLY_SKIN_STR[FlyGlodMgr.TYPE_FLY_HONGBAO];
+					break
+			}
+			return asset_url;
+		}
+
+		show(times: number = 1, type: number, width: number, height: number) {
+			this._asset_url = this.setAsset(type);
 			if (!this._refAsset) {
-				this._refAsset = RefAsset.Get(Path.ui_atlas_effect + 'flycoin.atlas')
+				this._refAsset = RefAsset.Get(this._asset_url)
 				this._refAsset.retain();
 			}
+			this._type = type;
 			this._stageWidth = width;
 			this._stageHeight = height;
-			let refAsset = this._refAsset;			
+			let refAsset = this._refAsset;
 			if (!refAsset.parseComplete) {
 				refAsset.once(LEvent.COMPLETE, this, () => {
 					this.onStart(times);
@@ -38,16 +66,16 @@ module gamedating.managers {
 				this.onStart(times);
 			}
 		}
-		
+
 		private onStart(times) {
 			for (var i = 0; i < times; i++) {
-				Laya.timer.once(100 * i, this, ()=>{this.start()});				
+				Laya.timer.once(100 * i, this, () => { this.start() });
 			}
 		}
 
 		private start() {
 			for (let index = 0; index < MAX_GLOD_NUM; index++) {
-				let glodcell = GlodCell.create(this._stageWidth, this._widthRate);
+				let glodcell = GlodCell.create(this._stageWidth, this._widthRate, this._asset_url, this._type);
 				this._glodCells.push(glodcell);
 			}
 		}
@@ -64,7 +92,7 @@ module gamedating.managers {
 				if (glodcell.isDestroy) {
 					this._glodCells.splice(index, 1);
 					ObjectPools.free(glodcell);
-					index --;
+					index--;
 				} else {
 					glodcell.onDraw(diff, this._game.uiRoot.top.graphics, this._stageWidth, this._stageHeight, this._widthRate);
 				}
@@ -77,26 +105,32 @@ module gamedating.managers {
 			Laya.timer.clearAll(this);
 			for (let index = 0; index < this._glodCells.length; index++) {
 				let glodcell = this._glodCells[index];
-				if (glodcell) ObjectPools.free(glodcell);
+				if (!glodcell) continue;
+				ObjectPools.free(glodcell);
+				this._glodCells.splice(index, 1);
+				index--;
 			}
 			if (this._refAsset) {
 				this._refAsset.offAll();
 				this._refAsset.release(true);
 				this._refAsset = null;
 			}
+			this._game.uiRoot.top.graphics.clear();
 			this._glodCells.length = 0;
 		}
 	}
 
 	class GlodCell implements IPoolsObject {
 		isDestroy: boolean = false;
-		private _stageWidth ;
-		private _stageHeight ;
-		private _widthRate:number = 1;
+		private _stageWidth;
+		private _stageHeight;
+		private _widthRate: number = 1;
 		private _curScale: number;
 		private _curRotation: number;
 		private _acceleration: number;//加速度
 		private _duration: number = 0;
+		private _type: number = 0;
+		private _asset_url: string = "";
 		private _textures: Texture[] = [];
 		private _curTexture: Texture;
 		private _bornPos: Vector2 = new Vector2();//出生的位置
@@ -116,23 +150,25 @@ module gamedating.managers {
 
 		}
 
-		static create(width:number, widthRate:number): GlodCell {
+		static create(width: number, widthRate: number, asset_url: string, type: number): GlodCell {
 			let obj = ObjectPools.malloc(GlodCell) as GlodCell;
-			obj.create(width, widthRate);
+			obj.create(width, widthRate, asset_url, type);
 			return obj;
 		}
 
-		private create(width:number, widthRate:number) {
+		private create(width: number, widthRate: number, asset_url: string, type: number) {
 			this.isDestroy = false;
 			this._stageWidth = width;
 			this._widthRate = widthRate;
+			this._asset_url = asset_url;
+			this._type = type;
 			this.initTexture();
 		}
 
 		private initTexture(): void {
 			let texture: Texture;
-			let url = Path.ui_atlas_effect + 'flycoin.atlas';
-			let atlas = Loader.getAtlas(url);
+			let atlas = Loader.getAtlas(this._asset_url);
+			if (!atlas) return;
 			for (let index = 0; index < atlas.length; index++) {
 				let a: string = atlas[index];
 				this._textures[index] = Loader.getRes(a);
@@ -158,12 +194,12 @@ module gamedating.managers {
 
 		//缩放心跳
 		private updateRotation(): void {
-			if (this.isDestroy) 
+			if (this.isDestroy)
 				return;
 			this._curRotation += (Math.PI / 180) * 5;
 		}
 
-		onDraw(diff: number, g: Graphics, width:number, height:number, widthRate:number) {
+		onDraw(diff: number, g: Graphics, width: number, height: number, widthRate: number) {
 			if (!this.isDestroy)
 				this.updateRotation();
 			else
@@ -175,7 +211,7 @@ module gamedating.managers {
 
 			this._duration += diff;
 			this._curPos.x = this._curPos.x * widthRate;
-			this._curPos.y = this._curPos.y + this._acceleration * this._duration * (diff/1000);
+			this._curPos.y = this._curPos.y + this._acceleration * this._duration * (diff / 1000);
 
 			if (this._curPos.y >= height)
 				this.isDestroy = true;

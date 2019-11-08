@@ -16,6 +16,8 @@ module gamedating.page {
 		static PAGE_QUKUAN: string = "6";
 		//客服
 		static PAGE_KEFU: string = "7";
+		//红包
+		static PAGE_HONGBAO: string = "8";
 		//绑定送钱
 		static PAGE_BINDMONEY: string = "10";
 		//打开邮件
@@ -154,6 +156,7 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_JOIN_CARD_ROOM] = JoinCardRoomBase;
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_CREATE_CARDROOM] = CreadRoomPDKPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_HONGBAO] = HongBaoPage;
 			
 
 			this["__needLoadAsset"] = [
@@ -182,6 +185,8 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "fk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
+				DatingPath.atlas_dating_ui + "hongbao.atlas",
+				
 				
 				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 				DatingPath.ui_dating_tongyong + "mask_top.png",

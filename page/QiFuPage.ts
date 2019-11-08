@@ -75,15 +75,12 @@ module gamedating.page {
 		private onUpdateDataInfo(date?: any) {
 			this._dataInfo = [];
 			let value = this._game.qifuMgr.getQiFuList();
-			let count: number = 0;
-			for (let i = 0; i < value.length; i++) {
-				if (value[i]) {
-					for (let key in value[i]) {
-						count++;
-					}
+			if (!value || value.length < 0) {
+				for (let i = 0; i < 6; i++) {
+					this._viewUI["box_time" + i].visible = false;
 				}
+				return;
 			}
-			if (!count) return;
 			this._dataInfo = value;
 			for (let i = 0; i < this._dataInfo.length; i++) {
 				let type: string = this._dataInfo[i].qf_type == 1 ? "/天" : "/次";

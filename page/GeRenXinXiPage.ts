@@ -10,6 +10,8 @@ module gamedating.page {
 		private _inputCode: MyTextInput;
 		private _inputKey: MyTextInput;
 		private _inputKey1: MyTextInput;
+		private _selectColor: string;	//选中颜色
+		private _unSelectColor: string;	//未选中颜色
 
 		public static readonly TYPE_SHEZHI: number = 4;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
@@ -65,9 +67,9 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			this.initColor();
 
 			this.initVolume();
-			this.initBaoBiaoUI();
 			this._viewUI.tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.tab.selectedIndex = this._dataSource || 0;
 			this._viewUI.btn_bindwx.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -81,13 +83,17 @@ module gamedating.page {
 
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
-
+			this.initBaoBiaoUI();			
 			DatingGame.ins.baobiaoMgr.on(BaoBiaoMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
-			this.onUpdateDataInfo();
 
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
 			this.onUpdatePlayerInfo()
+		}
+
+		private initColor(): void {
+			this._selectColor = this._viewUI.lb_0.color;
+			this._unSelectColor = this._viewUI.lb_time.color;
 		}
 
 		//===================个人信息=================
@@ -110,7 +116,6 @@ module gamedating.page {
 		}
 
 		//上面信息
-
 		private onUpdatePlayerInfo() {
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
@@ -153,17 +158,14 @@ module gamedating.page {
 			this.initList();
 			this._selectTime = this._game.sceneGame.sync.serverTimeBys;
 			this._timeSelectIndex = 6;
-			//当天的话，数据重新获取
-			DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
 			let curSelectedTimeStr = Sync.getTimeStr3(this._selectTime);
 			for (let i = 0; i < 7; i++) {
 				this._timeList[i] = this._selectTime - 86400 * (6 - i);
 				let curTimeStr = Sync.getTimeStr3(this._timeList[i]);
 				this._viewUI["lb_" + i].text = curTimeStr;
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
-				this._viewUI["lb_" + i].color = (i == 6) ? TeaStyle.COLOR_YELLOW : "#89d4ff";
+				this._viewUI["lb_" + i].color = (i == 6) ? this._selectColor : this._unSelectColor;
 				this._viewUI["btn_" + i].on(LEvent.CLICK, this, this.onMouseHandle, [i]);
-
 			}
 
 			this._viewUI.lb_time.text = curSelectedTimeStr;
@@ -213,7 +215,7 @@ module gamedating.page {
 			for (let i = 0; i < 7; i++) {
 				let curTimeStr = this._viewUI["lb_" + i].text;
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
-				this._viewUI["lb_" + i].color = (i == index) ? TeaStyle.COLOR_YELLOW : "#89d4ff";
+				this._viewUI["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
 			}
 			//当天的话，数据重新获取
 			if (this._timeSelectIndex == 6) DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
@@ -341,6 +343,7 @@ module gamedating.page {
 		private selectHandler(index: number) {
 			this._viewUI.box0.visible = index == 0;
 			this._viewUI.box1.visible = index == 1;
+			if(index == 1) this.onUpdateDataInfo();
 			this._viewUI.box2.visible = index == 2;
 		}
 
@@ -378,13 +381,12 @@ module gamedating.page {
 					this._game.alert("清理缓存将删除本地数据对此造成的损失，本平台将不承担任何责任。为了您的虚拟财产安全,我们强烈建议您先绑定帐号信息!\n是否清除缓存？", () => {
 						localClear();
 						this._game.showTips("清理缓存成功!")
-					}, null, false)
+					}, null, true);
 					break;
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
 					// localRemoveItem("session_key");
-					DatingGame.ins.openLoginPage();
-					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN]);
+					 this._game.openLoginPage();
 					break;
 				case this._viewUI.btn_set_psd://设置密码
 					if (WebConfig.info.isguest || !WebConfig.info.mobile) {//游客要先绑定手机

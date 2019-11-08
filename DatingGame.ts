@@ -78,6 +78,7 @@ module gamedating {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_PLAYER_INFO_GAME_ID, this, this.onUpdateReConnectStatus);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.___MAIN_PLAYER_CHANGE, this, this.onMainUnitChange);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onUpdateFreeStyle);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_HONGBAO_UPDATE, this, this.onUpdateHongBao);
 			this.onUpdateFreeStyle();
 
 
@@ -110,6 +111,10 @@ module gamedating {
 			this.updateConfigUrl();
 		}
 
+		private onUpdateHongBao(data) {
+			this.hongbaoMgr.setInfo(JSON.parse(data));
+		}
+
 		//主玩家下来了
 		private onMainUnitChange(): void {
 			this.onMPlayerData();
@@ -132,7 +137,7 @@ module gamedating {
 			let hud_page = WebConfig.enterGameLocked ? (WebConfig.gameid + "1") : DatingPageDef.PAGE_HUD;
 
 			//界面上什么都没有 就打开hud
-			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE]);
+			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE, DatingPageDef.PAGE_HONGBAO]);
 			if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
 				this._game.uiRoot.HUD.open(hud_page, () => {
 					this._game.playSound(Path.sound_hy);
@@ -161,7 +166,7 @@ module gamedating {
 				utils.Request.sendA(url, data);
 			}
 
-			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			//设置下设备类型
@@ -243,14 +248,15 @@ module gamedating {
 				// if (Laya.timer.currTimer - this._shareCd < 0) return;
 				// this._shareCd = Laya.timer.currTimer + 3000;
 				// if (Laya.timer.currTimer - this._shareContinueTime < 1000) return;	//防点击就会有回调的那种情况
-				// if (Laya.timer.currTimer - this._shareContinueTime < 3000) {
-				// 	this._game.showTips("分享失败");
-				// 	return
-				// }
+				if (Laya.timer.currTimer - this._shareContinueTime < 2000) {
+					this._game.showTips("分享失败");
+					return
+				}
 				//因为分享机制变动，所以改成延迟随机3-5秒就给奖励
-				Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
-					this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
-				});
+				// Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
+				// 	this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
+				// });
+				this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
 			}
 		}
 
@@ -270,11 +276,11 @@ module gamedating {
 				if (this._game.sceneGame.network.connected && this._isBind) {
 					WebConfig.wxDebug && WebConfig.alert("微信绑定");
 					if (WebConfig.info) {
-						this._game.sceneGame.network.call_bind(WebConfig.account, Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId, "", "", "", "", "", WebConfig.device, WebConfig.info.invite_code || "");
+						this._game.sceneGame.network.call_bind(WebConfig.account || "", Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId || "", "", "", "", "", "", WebConfig.device || "", WebConfig.info.invite_code || "");
 					}
 				} else {
 					WebConfig.wxDebug && WebConfig.alert("微信登陆");
-					this._game.sceneGame.login("UIRoot wxLoginCallBack", Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId);
+					this._game.sceneGame.login("UIRoot wxLoginCallBack", Web_operation_fields.ACCOUNT_TYPE_WEIXIN, unionId || "");
 				}
 			}
 		}
@@ -467,6 +473,7 @@ module gamedating {
 
 		private onOptHandler(optcode: number, msg: any): void {
 			if (msg.type == Operation_Fields.OPRATE_GAME) {//游戏操作错误类型
+				let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_GAME_DEVICE_PUSH_INFO:             // 推送消息
 						WebConfig.setNotificationInfo(msg.data);
@@ -474,7 +481,7 @@ module gamedating {
 					case Operation_Fields.OPRATE_GAME_READY_CLOSE:             //服务器准备更新关闭
 						WebConfig.server_close = true;
 						if (this instanceof Game) {
-							this.noticeMgr.makeNotice("亲爱的玩家，为了您更好的游戏体验，我们正在更新游戏，预计本次更新需要一分钟时间，请耐心等待。对您造成的不便，我们深表歉意！");
+							this.noticeMgr.makeNotice("亲爱的玩家，游戏服务器正在火速升级中，请稍候1分钟再进入游戏场，游戏有您更精彩~");
 						}
 						break;
 					case Operation_Fields.OPRATE_GAME_DAILY_SHARE_SUCCESS:            //每日分享成功
@@ -484,7 +491,6 @@ module gamedating {
 						break;
 					case Operation_Fields.OPRATE_GAME_FIRST_PAY_CAN_GET:     //首充可领取弹窗
 						//首充
-						let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 						if (!mainPlayer) return;
 						let is_get_fitst_pay: boolean = mainPlayer.playerInfo.is_get_fitst_pay;
 						let isOpenFirst = Number(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "isopen"));
@@ -499,7 +505,11 @@ module gamedating {
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_QIFU_ANI, (page) => {
 							page.dataSource = dataInfo;
 						});
-						this._game.uiRoot.general.close(DatingPageDef.PAGE_QIFU);
+						//判断是否是自己祈福
+						if (!mainPlayer) return;
+						if (dataInfo && dataInfo.uid == mainPlayer.GetUserId()) {
+							this._game.uiRoot.general.close(DatingPageDef.PAGE_QIFU);
+						}
 						break;
 				}
 			}
@@ -515,6 +525,15 @@ module gamedating {
 				this._flyGlodMgr = new FlyGlodMgr(this._game);
 			}
 			return this._flyGlodMgr;
+		}
+
+		//红包管理器
+		private _hongbaoMgr: HongBaoMgr;
+		public get hongbaoMgr(): HongBaoMgr {
+			if (!this._hongbaoMgr) {
+				this._hongbaoMgr = new HongBaoMgr(this._game);
+			}
+			return this._hongbaoMgr;
 		}
 
 		//红点管理器
@@ -710,7 +729,7 @@ module gamedating {
 			return this._curKey;
 		}
 		public firstAlertPage(): void {
-			if (!this._firstAlert && !WebConfig.isConnected && !WebConfig.enterGameLocked) {
+			if (!this._firstAlert && !WebConfig.isConnected && !WebConfig.enterGameLocked && !isDebug) {
 				this._alertPageIndex = this._alertPageIndex + 1;
 				if (!this.popUpData) return;
 				let popKeyData: any = this.popUpData[this._alertPageIndex];
@@ -780,6 +799,22 @@ module gamedating {
 			else if (e.keyCode == Laya.Keyboard.W) {
 				this._game.sceneGame.sceneObjectMgr.leaveStory(true);
 			}
+			// else if (e.keyCode == Laya.Keyboard.A) {
+			// 	PlayCardMgr.ins.up_show()
+			// }
+			// else if (e.keyCode == Laya.Keyboard.D) {
+			// 	PlayCardMgr.ins.init()
+			// }
+			// else if (e.keyCode == Laya.Keyboard.B) {
+			// 	PlayCardMgr.ins.down_show()
+			// }
+			//红包测试
+			else if (e.keyCode == Laya.Keyboard.E) {
+				//必须在游戏以外才弹出红包界面
+				if (this._game.sceneGame) return;
+				this._game.uiRoot.general.open(DatingPageDef.PAGE_HONGBAO);
+				this._game.datingGame.flyGlodMgr.show(1, 1, this._game.clientWidth, this._game.clientHeight);
+			}
 		}
 
 		private onKeyUp(e: LEvent): void {
@@ -788,6 +823,8 @@ module gamedating {
 
 		//打开登陆界面
 		public openLoginPage() {
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
+			if (mainPlayer) return;
 			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN, DatingPageDef.PAGE_TIPS]);
 			let isOpened = this._game.uiRoot.HUD.isOpened(DatingPageDef.PAGE_LOGIN);
 			!isOpened && this._game.uiRoot.HUD.open(DatingPageDef.PAGE_LOGIN, (page) => {
@@ -821,7 +858,7 @@ module gamedating {
 				this._exitGmeTimes++;
 				this.calculateDiffMoney(true);
 				this._game.uiRoot.top.closeAll([DatingPageDef.PAGE_GONGGAO, DatingPageDef.PAGE_TIP]);
-				this._game.uiRoot.general.closeAll();
+				this._game.uiRoot.general.closeAll([DatingPageDef.PAGE_HONGBAO]);
 				this._game.uiRoot.HUD.closeAll();
 				let pageDef = getPageDef(info);
 				if (pageDef && !pageDef["__enterMapLv"] && !pageDef["__roomcard"]) {
@@ -872,6 +909,7 @@ module gamedating {
 			if (!this._game.sceneGame.inScene) {
 				this._mailMgr && this._mailMgr.update(diff);
 				this._flyGlodMgr && this._flyGlodMgr.update(diff);
+				this._hongbaoMgr && this._hongbaoMgr.update(diff);
 				this._redPointCheckMgr && this._redPointCheckMgr.update(diff);
 			}
 			if (this._checkVesionTime < 0) {
@@ -940,13 +978,15 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			Laya.loader.load("version_h5_min.bin?v=" + MathU.randomRange(1, 1000000), Handler.create(this, (data: any) => {
+			let version_path = "version_h5_min.bin?v=" +MathU.randomRange(0,100000000);
+			Laya.loader.load(version_path, Handler.create(this, (version_h5_min,data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();
 				this._vesion_byteArray.clear();
 				this._vesion_byteArray.buffer = data;
 				let conf_url_value: any = StringU.readZlibData(this._vesion_byteArray);
+				Laya.loader.clearRes(version_h5_min);
 				let arr = conf_url_value.split("\n");
 				if (!arr || arr.length < 2) return;
 				let client_version = arr[1].replace("\r", "");
@@ -982,7 +1022,7 @@ module gamedating {
 
 				isShowTips && this._game.showTips("当前已经是最新版本");
 				this._checkLoack = false;
-			}))
+			},[version_path]))
 		}
 
 		clearMgr() {
@@ -1023,6 +1063,10 @@ module gamedating {
 			if (this._flyGlodMgr) {
 				this._flyGlodMgr.clear(true);
 				this._flyGlodMgr = null;
+			}
+			if (this._hongbaoMgr) {
+				this._hongbaoMgr.clear(true);
+				this._hongbaoMgr = null;
 			}
 
 			if (this._noticeMgr) {
