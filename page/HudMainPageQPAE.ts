@@ -9,28 +9,6 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
-				DatingPath.sk_dating + "DZ_baijiale.png",
-				DatingPath.sk_dating + "DZ_bairendezhou.png",
-				DatingPath.sk_dating + "DZ_benchibaoma.png",
-				DatingPath.sk_dating + "DZ_blackjack.png",
-				DatingPath.sk_dating + "DZ_dezhou.png",
-				DatingPath.sk_dating + "DZ_brniuniu.png",
-				DatingPath.sk_dating + "DZ_buyu.png",
-				DatingPath.sk_dating + "DZ_rddz.png",
-				DatingPath.sk_dating + "DZ_ebgang.png",
-				DatingPath.sk_dating + "DZ_honghei.png",
-				DatingPath.sk_dating + "DZ_longhu.png",
-				DatingPath.sk_dating + "DZ_niuniu.png",
-				DatingPath.sk_dating + "DZ_paijiu.png",
-				DatingPath.sk_dating + "DZ_toubao.png",
-				DatingPath.sk_dating + "DZ_sangong.png",
-				DatingPath.sk_dating + "DZ_rshisanshui.png",
-				DatingPath.sk_dating + "DZ_shuiguoji.png",
-				DatingPath.sk_dating + "DZ_tbniuniu.png",
-				DatingPath.sk_dating + "DZ_zjh.png",
-				DatingPath.sk_dating + "DZ_rpaodekuai.png",
-				DatingPath.sk_dating + "DZ_zoo.png",
-				DatingPath.sk_dating + "DZ_rniuniu.png",
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -49,10 +27,8 @@ module gamedating.page {
 			this._viewUI.list.scrollBar.elasticDistance = 100;
 			this._viewUI.list.itemRender = GameItemRender;
 			this._viewUI.list.renderHandler = new Handler(this, this.renderHandler);
+			this._viewUI.list.scrollBar.changeHandler = new Handler(this, this.onScrollChange);
 			this._viewUI.list.scrollTo(WebConfig.scrollBarValue || 0);
-
-			this._viewUI.btn_gren.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.btn_add.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
@@ -60,6 +36,12 @@ module gamedating.page {
 			this.onUpdatePlayerInfo();
 
 			this._game.playMusic(Path.music_bg);
+		}
+
+		private onScrollChange(v)
+		{
+			this._viewUI.btn_left.visible = v > this._viewUI.list.scrollBar.min;
+			this._viewUI.btn_right.visible = v < this._viewUI.list.scrollBar.max;
 		}
 
 		private _clip_money: ClipUtil;
@@ -84,22 +66,20 @@ module gamedating.page {
 			this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 		}
 
-		protected onBtnTweenEnd(e: any, target: any) {
-			switch (target) {
-				case this._viewUI.btn_gren://个人信息
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_XINXI);
-					break;
-				case this._viewUI.btn_add://刷新金币
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_CHONGZHI);
-					break;
-				default:
-					break;
-			}
-		}
-
 		private onUpdateGameList() {
 			let data = WebConfig.gamelist;
-			this._viewUI.list.dataSource = data;
+			if (!data || !data.length) {
+				this._viewUI.list.dataSource = [];
+			} else {
+				let list = [];
+				let jqqdGames = ['zoo', 'rshisanshui','mpniuniu','wxsaoleihb'];
+				for (let index = 0; index < data.length; index++) {
+					let element = data[index];
+					if (!element || element.indexOf("r_") != -1 || jqqdGames.indexOf(element) != -1) continue;
+					list.push(element);
+				}
+				this._viewUI.list.dataSource = list;
+			}
 		}
 
 		deltaUpdate() {
@@ -134,19 +114,124 @@ module gamedating.page {
 			super.close();
 		}
 
-		//--------------------游戏入口按钮列表相关---end------------------------------
 	}
 
 	/**
-	 * 大厅入口 2 级list
+	 * 大厅入口 
 	 */
 	class GameItemRender extends ui.qpae.dating.component.Hud_TUI {
 		private _game: Game;
 		private _data: string;
 		private _index: number;
+		private _gengXingTip: AnimationFrame;
+		private _loadingTip: HudLoadingTip;
+		private _waitingTip: ui.qpae.dating.component.Effect_dengdaiUI;
 		constructor() {
 			super();
+			this.btn_box.on(LEvent.CLICK, this, this.onMouseHandle);
 		}
+
+		//显示等待
+		private showWait() {
+			if (!this._waitingTip) {
+				this._waitingTip = new ui.qpae.dating.component.Effect_dengdaiUI();
+				this._waitingTip.x = 215;
+				this._waitingTip.y = 11;
+				this.addChild(this._waitingTip);
+			}
+			if (this._waitingTip.ani1.isPlaying) return;
+			this._waitingTip.ani1.play(0, true);
+		}
+
+		//清理等待
+		private clearWait() {
+			if (this._waitingTip) {
+				this._waitingTip.removeSelf();
+				this._waitingTip.destroy();
+				this._waitingTip = null;
+			}
+		}
+
+		//显示更新
+		private showGengXing() {
+			if (!this._gengXingTip) {
+				this._gengXingTip = new AnimationFrame({
+					source: 'update',
+					fileName: '',
+					interval: 12,
+					frameCount: 12,
+					start: 10000
+				});
+				this._gengXingTip.x = 200;
+				this._gengXingTip.y = 5;
+				this.addChild(this._gengXingTip);
+				this._gengXingTip.play(true);
+			}
+		}
+
+		//清理更新
+		private clearGengXing() {
+			if (this._gengXingTip) {
+				this._gengXingTip.removeSelf();
+				this._gengXingTip.destroy();
+				this._gengXingTip = null;
+			}
+		}
+
+		//显示进度
+		private showProgress(value: number) {
+			if (!this._loadingTip) {
+				this._loadingTip = new HudLoadingTip();
+				this._loadingTip.x = 215;
+				this._loadingTip.y = 11;
+				this.addChild(this._loadingTip);
+			}
+
+			this._loadingTip.progress = value;
+		}
+
+		//清理进度
+		private clearProgress() {
+			if (this._loadingTip) {
+				this._loadingTip.removeSelf();
+				this._loadingTip.destroy();
+				this._loadingTip = null;
+			}
+		}
+
+		private getProgress(gameid: string) {
+			return LoadingMgr.ins.getProgress(this._data) || JsLoader.ins.getProgress(this._data);
+		}
+
+		update() {
+			if (LoadingMgr.ins.isLoaded(this._data)) {
+				this.clearGengXing();
+				this.clearProgress();
+				this.clearWait();
+			} else {
+				let progress = this.getProgress(this._data);
+				if (progress > 0.001) {
+					this.showProgress(progress);
+					this.clearGengXing();
+					this.clearWait();
+				}
+				else {
+					this.showGengXing();
+					this.clearProgress();
+				}
+			}
+
+			if (this._gengXingTip) {
+				this._gengXingTip.onDraw();
+			}
+			if (this._loadingTip) {
+				this._loadingTip.update();
+			}
+
+			this.btn_box.x = 143;
+			this.btn_box.y = 116;
+		}
+
 
 		setData(game: Game, data: any, index: number) {
 			if (!data) {
@@ -158,20 +243,99 @@ module gamedating.page {
 			this._game = game;
 			this._data = data;
 			this._index = index;
-			this.img.skin = StringU.substitute("dating_ui/datingrk/DZ_{0}.png", data);
-			this.on(LEvent.CLICK, this, this.onMouseHandle);
+			this.img.skin = StringU.substitute("dating_ui/dating/DZ_{0}.png", data);
 		}
 
 		private onMouseHandle() {
-
+			if (!this._data) return;
+			this._game.uiRoot.btnTween(this.btn_box, this, () => {
+				let data = this._data;
+				if (LoadingMgr.ins.isLoaded(data)) {
+					JsLoader.ins.startLoad(data, Handler.create(this, (assets) => {
+						this.openPage(data);
+					}))
+				} else {
+					this.showWait();
+					JsLoader.ins.startLoad(data, Handler.create(this, (assets) => {
+						LoadingMgr.ins.load(data, assets);
+					}))
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data)));
+				}
+			});
 		}
 
-		update() {
-
+		private openPage(data) {
+			let pageDef = getPageDef(data);
+			//調試模式
+			let CLOSE_LIST = isDebug ? [] : [];
+			if (pageDef["__enterMapLv"]) {
+				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
+			}
+			else if (CLOSE_LIST.indexOf(data) == -1) {
+				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
+					this._game.uiRoot.HUD.closeAll([data + 1]);
+				}, (page: Page) => {
+					// 场次返回大厅回调
+					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
+						this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+							this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
+						}, null, 0);
+					}
+				});
+			} else {
+				this._game.showTips("开发中,敬请期待!");
+			}
 		}
 
 		destroy() {
+			this.clearGengXing();
+			this.clearProgress();
+			this.clearWait();
 			super.destroy();
+		}
+	}
+
+	class HudLoadingTip extends ui.qpae.dating.component.LoadingTipTUI {
+		private _updateEffect: AnimationFrame;
+
+		constructor() {
+			super();
+			if (!this._updateEffect) {
+				this._updateEffect = new AnimationFrame({
+					source: 'loading',
+					fileName: '',
+					interval: 12,
+					frameCount: 24,
+					start: 10000
+				});
+			}
+			this.box.addChild(this._updateEffect);
+			this._updateEffect.play(true);
+			this._updateEffect.x = -3
+			this._updateEffect.y = 30;
+			this.img.y = 30;
+			this.txt.text = "0%";
+		}
+
+		set progress(value: number) {
+			this.txt.text = Math.round(value * 100) + "%";
+			this.img.y = (1 - value) * 30 + 3;
+			this._updateEffect.y = (1 - value) * 30 - 10;
+		}
+
+		destroy(): void {
+			if (this._updateEffect) {
+				this._updateEffect.destroy();
+				this._updateEffect = null;
+			}
+			this.removeSelf();
+			super.destroy();
+		}
+
+		update(): void {
+			if (this._updateEffect) {
+				this._updateEffect.onDraw();
+			}
 		}
 	}
 }
