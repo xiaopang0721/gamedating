@@ -116,7 +116,7 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_GUEST_TIP] = GuestTipPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUIT_TIPS] = TipsQuit;
 			if (WebConfig.enterGameLocked || WebConfig.platform == 'qpae') {
-				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage_QPAE;
+				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPageQPAE;
 			} else {
 				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
 			}
