@@ -378,7 +378,7 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
 				case this._viewUI.btn_clear://清理缓存
-					this._game.alert("清理缓存将删除本地数据对此造成的损失，本平台将不承担任何责任。为了您的虚拟财产安全,我们强烈建议您先绑定帐号信息!\n是否清除缓存？", () => {
+					this._game.alert("清理缓存将删除本地数据对此造成的损失，本平台将不承担任何责任。为了您的虚拟财产安全，我们强烈建议您先绑定帐号信息！是否清除缓存？", () => {
 						localClear();
 						this._game.showTips("清理缓存成功!")
 					}, null, true);
