@@ -38,8 +38,7 @@ module gamedating.page {
 			this._game.playMusic(Path.music_bg);
 		}
 
-		private onScrollChange(v)
-		{
+		private onScrollChange(v) {
 			this._viewUI.btn_left.visible = v > this._viewUI.list.scrollBar.min;
 			this._viewUI.btn_right.visible = v < this._viewUI.list.scrollBar.max;
 		}
@@ -72,7 +71,7 @@ module gamedating.page {
 				this._viewUI.list.dataSource = [];
 			} else {
 				let list = [];
-				let jqqdGames = ['zoo', 'rshisanshui','mpniuniu','wxsaoleihb'];
+				let jqqdGames = ['zoo', 'rshisanshui', 'mpniuniu', 'wxsaoleihb'];
 				for (let index = 0; index < data.length; index++) {
 					let element = data[index];
 					if (!element || element.indexOf("r_") != -1 || jqqdGames.indexOf(element) != -1) continue;
@@ -210,14 +209,21 @@ module gamedating.page {
 				this.clearWait();
 			} else {
 				let progress = this.getProgress(this._data);
-				if (progress > 0.001) {
+				if (progress > 0) {
 					this.showProgress(progress);
 					this.clearGengXing();
 					this.clearWait();
 				}
 				else {
-					this.showGengXing();
-					this.clearProgress();
+					if (JsLoader.ins.isWaitLoad(this._data)) {
+						this.showWait();
+						this.clearGengXing();
+						this.clearProgress();
+					} else {
+						this.clearProgress();
+						this.clearWait();
+						this.showGengXing();
+					}
 				}
 			}
 
@@ -251,14 +257,11 @@ module gamedating.page {
 			this._game.uiRoot.btnTween(this.btn_box, this, () => {
 				let data = this._data;
 				if (LoadingMgr.ins.isLoaded(data)) {
-					JsLoader.ins.startLoad(data, Handler.create(this, (assets) => {
+					JsLoader.ins.startLoad(data, false, Handler.create(this, (assets) => {
 						this.openPage(data);
 					}))
 				} else {
-					this.showWait();
-					JsLoader.ins.startLoad(data, Handler.create(this, (assets) => {
-						LoadingMgr.ins.load(data, assets);
-					}))
+					JsLoader.ins.startLoad(data, true);
 					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data)));
 				}
 			});
