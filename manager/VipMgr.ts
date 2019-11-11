@@ -46,7 +46,6 @@ module gamedating.managers {
 
 		private _vipLevel: number;
 		checkVipReceivedIndex(): number {
-			if (!WebConfig.info) return 0;
 			//vip是否有未领取奖励，有的话返回true
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return 0;

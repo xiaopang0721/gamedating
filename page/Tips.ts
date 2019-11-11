@@ -1,5 +1,5 @@
 /**
-* name 提示
+* name 大厅提示
 */
 module gamedating.page {
 	export class Tips extends game.gui.base.Page {
@@ -9,6 +9,7 @@ module gamedating.page {
 				"qd": DatingPath.ui_dating_tongyong + "tu_qd.png",		//确定
 				"qx": DatingPath.ui_dating_tongyong + "tu_qx.png",		//取消
 				"cz": DatingPath.ui_dating + "chongzhi/tu_ch.png",		//充值
+				"fh": DatingPath.ui_dating + "chongzhi/tu_fh.png",		//返回
 				"wyqf": DatingPath.ui_dating + "qifu/tu_wyqf.png",	//我要祈福
 				"title_qf": DatingPath.ui_dating + "qifu/tu_qf.png",	//祈福标题
 				"title_ts": DatingPath.ui_dating_tongyong + "tit_tishi.png",	//提示标题
@@ -19,6 +20,7 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
+				DatingPath.atlas_dating_ui + 'chongzhi.atlas',
 				DatingPath.atlas_dating_ui + 'tongyong.atlas',
 			];
 			this._isNeedBlack = true;
@@ -97,6 +99,14 @@ module gamedating.page {
 				this._viewUI.lb_tip.visible = false;
 			}
 			if (okSkin) {
+				//api修改
+				if (WebConfig.enterGameLocked && okSkin == Tips.TIPS_SKIN_STR["cz"]) {
+					okSkin = Tips.TIPS_SKIN_STR["fh"];
+					//重写确定函数
+					this._ecb = () => {
+
+					};
+				}
 				this._viewUI.img_enter.skin = okSkin;
 			}
 			if (titleSkin) {

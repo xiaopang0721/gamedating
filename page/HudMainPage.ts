@@ -1155,7 +1155,9 @@ module gamedating.page {
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.nqp.dating.component.Effect_dengdaiUI;
 		private _mainView: any;
-
+		private _offset_x: number;
+		private _isJqqd:boolean;
+		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		constructor() {
 			super();
 		}
@@ -1172,7 +1174,10 @@ module gamedating.page {
 			this._gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + gameStr : gameStr;
 			this.index = index;
 			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
+			this._offset_x = (this.index % 2 == 0 ? 12 : -5) + 15;
+			this._isJqqd = GameItemRender._jqqdGames.indexOf(this._gameStr) != -1;
 			this.show();
+			this.update();
 		}
 
 		destroy() {
@@ -1216,17 +1221,28 @@ module gamedating.page {
 			if (this._updateEffect) {
 				this._updateEffect.onDraw();
 			}
-			if (!LoadingMgr.ins.isLoaded(this._gameStr)) {
-				if (this.getProgress(this._gameStr) > 0.001) {
-					this.showProgress(this.getProgress(this._gameStr));
-					this.clearUpdate();
-				} else {
-					this.clearProgress();
-				}
-			} else {
+			if (LoadingMgr.ins.isLoaded(this._gameStr) || this._isJqqd) {
 				this.clearUpdate();
 				this.clearProgress();
 				this.clearWaiting();
+			} else {
+				let progress = this.getProgress(this._gameStr);
+				if (progress > 0) {
+					this.showProgress(progress);
+					this.clearUpdate();
+					this.clearWaiting();
+				}
+				else {
+					if (JsLoader.ins.isWaitLoad(this._gameStr)) {
+						this.showWaiting();
+						this.clearUpdate();
+						this.clearProgress();
+					} else {
+						this.clearProgress();
+						this.clearWaiting();
+						this.showUpdate();
+					}
+				}
 			}
 		}
 
@@ -1246,12 +1262,11 @@ module gamedating.page {
 			return this.alpha;
 		}
 		//敬请期待
-		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		private show(): void {
-			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
+			let offset_x = this._offset_x;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
 			this.btn.x = 148 + offset_x;
-			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
+			if (this._isJqqd) {
 				if (this._mainView instanceof AvatarUIShow) {
 					this._mainView.clear();
 					this._mainView.destroy();
@@ -1264,10 +1279,6 @@ module gamedating.page {
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
 				this._mainView.y = 120;
-				this.clearUpdate();
-				this.clearProgress();
-				this.clearWaiting();
-				return;
 			} else {
 				if (this._mainView instanceof LImage) {
 					this._mainView.removeSelf();
@@ -1283,11 +1294,6 @@ module gamedating.page {
 				let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
 				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)
 			}
-			// 是否显示更新标签
-			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
-				this.showUpdate(offset_x);
-			else
-				this.clearUpdate();
 		}
 
 		private getProgress(gameid: string) {
@@ -1312,7 +1318,8 @@ module gamedating.page {
 		}
 
 		// 显示更新状态
-		private showUpdate(offset_x: number): void {
+		private showUpdate(): void {
+			let offset_x = this._offset_x;
 			if (this._waitingTip && this._waitingTip.parent)
 				return;
 			if (!this._updateEffect) {
@@ -1357,7 +1364,7 @@ module gamedating.page {
 
 		private onMouseHandle(e: LEvent) {
 			if (!this._gameStr) return;
-			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
+			if (this._isJqqd) {
 				this._game.uiRoot.btnTween(this._mainView, this, () => {
 					this._game.showTips("功能开发中，敬请期待...");
 				})
@@ -1380,14 +1387,12 @@ module gamedating.page {
 			this._game.uiRoot.btnTween(this._mainView, this, () => {
 				let gameStr = this._gameStr;
 				if (LoadingMgr.ins.isLoaded(gameStr)) {
-					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
+					JsLoader.ins.startLoad(gameStr, false, Handler.create(this, (assets) => {
 						this.openPage(gameStr);
 					}))
 				} else {
 					this.showWaiting();
-					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
-						LoadingMgr.ins.load(gameStr, assets);
-					}))
+					JsLoader.ins.startLoad(gameStr, true);
 					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
 				}
 			})
