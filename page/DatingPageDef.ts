@@ -4,12 +4,12 @@
 module gamedating.page {
 	export class DatingPageDef extends game.gui.page.PageDef {
 		static GAME_NAME: string = "dating";
+		//主界面
+		static PAGE_HUD: string = "1";
 		//登录界面
 		static PAGE_LOGIN: string = "2";
-		//主界面
-		static PAGE_HUD: string = "3";
 		//消息
-		static PAGE_XIAOXI: string = "4";
+		static PAGE_XIAOXI: string = "3";
 		//游客提示
 		static PAGE_GUEST_TIP: string = "5";
 		//取款
@@ -62,7 +62,7 @@ module gamedating.page {
 		//创建房间-跑得快
 		static PAGE_PDK_CREATE_CARDROOM: string = "32";
 		//加入房间-跑得快
-		static PAGE_PDK_JOIN_CARDROOM:string = "33";
+		static PAGE_PDK_JOIN_CARDROOM: string = "33";
 
 		//更改昵称
 		static PAGE_GENGGAINC: string = "35";
@@ -107,6 +107,7 @@ module gamedating.page {
 		static PAGE_GM: string = "999";
 
 		static myinit(str: string) {
+			if (DatingPageDef["isinit"]) return;
 			super.myinit(str);
 			DatingClip.init();
 			PageDef._pageClassMap[DatingPageDef.PAGE_VIP] = VipPage;
@@ -114,7 +115,11 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_TIPS] = TipsPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GUEST_TIP] = GuestTipPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUIT_TIPS] = TipsQuit;
-			PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
+			if (WebConfig.enterGameLocked) {
+				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPageQPAE;
+			} else {
+				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
+			}
 			PageDef._pageClassMap[DatingPageDef.PAGE_XIAOXI] = MessagePage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GENGGAINC] = GengGaiNCPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GET_REWARD] = RewardPage;
@@ -157,7 +162,7 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_CREATE_CARDROOM] = CreadRoomPDKPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_HONGBAO] = HongBaoPage;
-			
+
 
 			this["__needLoadAsset"] = [
 				DatingPath.atlas_dating_ui + 'bangding.atlas',
@@ -186,8 +191,8 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
 				DatingPath.atlas_dating_ui + "hongbao.atlas",
-				
-				
+
+
 				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 				DatingPath.ui_dating_tongyong + "mask_top.png",
 				DatingPath.ui_dating_tongyong + "mask_bottom.png",
