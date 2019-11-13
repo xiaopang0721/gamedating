@@ -1103,6 +1103,7 @@ module gamedating.page {
 				}
 			}
 			this._isShowBtnEffect && this.updateBtnAnimationFrame();
+			JsLoader.ins.onUpdate();
 		}
 
 		private _beforeArr = [];
