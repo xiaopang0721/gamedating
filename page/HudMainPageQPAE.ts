@@ -91,7 +91,6 @@ module gamedating.page {
 					}
 				}
 			}
-			JsLoader.ins.onUpdate();
 		}
 
 		private renderHandler(cell: GameItemRender, index: number) {
