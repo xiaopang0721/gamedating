@@ -84,7 +84,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = GameItemRender;
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
 			this._viewUI.list_ad.itemRender = AdItemRender;
@@ -123,7 +122,7 @@ module gamedating.page {
 			this._viewUI.box_yeb.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.box_yrbw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_enterRoom.on(LEvent.CLICK, this, this.enTerClick);
-
+			// Laya.stage.on(LEvent.KEY_DOWN, this, this.onKeyDown);
 
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
@@ -150,6 +149,18 @@ module gamedating.page {
 			this.showQiPaoKuang();
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
+
+		// public TITLE: string = "TITLEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		// public get evsssssent(): EventDispatcher {
+		// 	if (!this["xxxxxxxaaaa"])
+		// 		this["xxxxxxxaaaa"] = new EventDispatcher()
+		// 	return this["xxxxxxxaaaa"];
+		// }
+		// private onKeyDown(e) {
+		// 	if (e.keyCode == Laya.Keyboard.A) {
+		// 		this.evsssssent.event(this.TITLE);
+		// 	}
+		// }
 
 		/**按钮点击事件 带缓动 */
 		protected onBtnClickWithTween(...agrs): void {
@@ -311,6 +322,16 @@ module gamedating.page {
 				this._isFromRoom = false;
 				this._viewUI.list_btns.renderHandler.recover();
 				this._viewUI.list_btns.renderHandler = null;
+				if (this._viewUI.list_btns.scrollBar) {
+					//记录当前滚动位置
+					WebConfig.scrollBarValue = this._viewUI.list_btns.scrollBar.value;
+				} else {
+					WebConfig.scrollBarValue = 0;
+				}
+
+				this._viewUI.list_ad.renderHandler.recover();
+				this._viewUI.list_ad.renderHandler = null;
+
 				this._game.stopMusic();
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
@@ -941,11 +962,11 @@ module gamedating.page {
 			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
-			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
 			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
+				this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 				return;
 			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
@@ -969,6 +990,7 @@ module gamedating.page {
 			})
 			// 出现期间不让滑动
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = false;
+			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 		}
 
 		private resetList() {
@@ -1155,7 +1177,7 @@ module gamedating.page {
 		private _waitingTip: ui.nqp.dating.component.Effect_dengdaiUI;
 		private _mainView: any;
 		private _offset_x: number;
-		private _isJqqd:boolean;
+		private _isJqqd: boolean;
 		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		constructor() {
 			super();
@@ -1177,6 +1199,9 @@ module gamedating.page {
 			this._isJqqd = GameItemRender._jqqdGames.indexOf(this._gameStr) != -1;
 			this.show();
 			this.update();
+			// page.evsssssent.on(page.TITLE, this, () => {
+			// 	this.onMouseHandle();
+			// })
 		}
 
 		destroy() {
@@ -1361,7 +1386,7 @@ module gamedating.page {
 			}
 		}
 
-		private onMouseHandle(e: LEvent) {
+		private onMouseHandle(e?: LEvent) {
 			if (!this._gameStr) return;
 			if (this._isJqqd) {
 				this._game.uiRoot.btnTween(this._mainView, this, () => {
@@ -1390,7 +1415,6 @@ module gamedating.page {
 						this.openPage(gameStr);
 					}))
 				} else {
-					this.showWaiting();
 					JsLoader.ins.startLoad(gameStr, true);
 					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
 				}
