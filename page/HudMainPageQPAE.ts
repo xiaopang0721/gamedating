@@ -12,6 +12,9 @@ module gamedating.page {
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
+			if (!WebConfig.apicanback) {
+				this.exitGame();
+			}
 		}
 
 		// 页面初始化函数
@@ -33,8 +36,20 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 			this.onUpdateGameList();
 			this.onUpdatePlayerInfo();
-
+			this._viewUI.btn_back.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.playMusic(Path.music_bg);
+		}
+
+		protected onBtnTweenEnd(e: any, target: any) {
+			switch (target) {
+				case this._viewUI.btn_back:
+					this.exitGame();
+					break;
+			}
+		}
+
+		private exitGame() {
+			location.href = 'about:blank';
 		}
 
 		private onScrollChange(v) {
