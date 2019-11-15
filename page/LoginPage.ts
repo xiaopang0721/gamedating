@@ -16,7 +16,7 @@ module gamedating.page {
 
             this._isNeedDuang = false;
             this.mouseThrough = true;
-            if (!WebConfig.apicanback) {
+            if (WebConfig.enterGameLocked) {
                 location.href = 'about:blank';
             }
         }

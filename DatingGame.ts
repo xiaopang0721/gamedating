@@ -141,7 +141,7 @@ module gamedating {
 				} else {
 					let hud_page = WebConfig.gameid + "1";
 					//界面上什么都没有 就打开hud
-					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE, DatingPageDef.PAGE_HONGBAO]);
+					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, hud_page]);
 					if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
 						this._game.uiRoot.HUD.open(hud_page, () => {
 							this._game.playSound(Path.sound_hy);
