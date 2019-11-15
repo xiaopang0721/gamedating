@@ -182,7 +182,7 @@ module gamedating.page {
 			if (cell) {
 				cell.txt_index.text = data.rank + 1;
 				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0)
-				cell.txt_type.text = data.game_name + Web_operation_fields.client_money_logtype_table[data.type];
+				cell.txt_type.text = EnumToString.getLimitStrMiddle(data.game_name + Web_operation_fields.client_money_logtype_table[data.type],6);
 				cell.txt_time.text = Sync.getTimeShortStr(data.time * 1000);
 				cell.txt_money.text = data.shouzhi.toString();
 				cell.txt_money.color = data.shouzhi > 0 ? "#41fe69" : "#ff0000";

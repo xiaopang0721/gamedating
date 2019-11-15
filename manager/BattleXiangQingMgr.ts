@@ -27,7 +27,11 @@ module gamedating.managers {
 					if (!data.msg) {
 						return;
 					}
-					this._dataInfoList[data.msg.battle_id] = this.GetBattleInfoToString(data.msg.game_id, data.msg.battle_log);
+					if (data.msg.game_id == "wxsaoleihb") {
+						this._dataInfoList[data.msg.battle_id] = data.msg.battle_log;
+					} else {
+						this._dataInfoList[data.msg.battle_id] = this.GetBattleInfoToString(data.msg.game_id, data.msg.battle_log);
+					}
 					this.event(BattleXiangQingMgr.RECORD_CHANGE, [data.msg.battle_id, this._dataInfoList[data.msg.battle_id]]);
 				}
 			}
