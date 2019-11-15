@@ -134,15 +134,31 @@ module gamedating {
 			this._game.setIsLockGame(false, false, "UIRoot.onMPlayerData");
 			this._isLogined = true;
 
-			let hud_page = WebConfig.enterGameLocked ? (WebConfig.gameid + "1") : DatingPageDef.PAGE_HUD;
-
-			//界面上什么都没有 就打开hud
-			this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE, DatingPageDef.PAGE_HONGBAO]);
-			if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
-				this._game.uiRoot.HUD.open(hud_page, () => {
-					this._game.playSound(Path.sound_hy);
-					this._game.uiRoot.HUD.closeAll([hud_page]);
-				});
+			if (WebConfig.enterGameLocked) {
+				let pageDef = getPageDef(WebConfig.gameid);
+				if (pageDef["__enterMapLv"]) {
+					this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
+				} else {
+					let hud_page = WebConfig.gameid + "1";
+					//界面上什么都没有 就打开hud
+					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, hud_page]);
+					if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
+						this._game.uiRoot.HUD.open(hud_page, () => {
+							this._game.playSound(Path.sound_hy);
+							this._game.uiRoot.HUD.closeAll([hud_page]);
+						});
+					}
+				}
+			} else {
+				let hud_page = DatingPageDef.PAGE_HUD;
+				//界面上什么都没有 就打开hud
+				this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOADING, DatingPageDef.PAGE_LOGIN, hud_page, DatingPageDef.PAGE_BINDMONEY, DatingPageDef.PAGE_HUODONG, DatingPageDef.PAGE_VIP_UP, DatingPageDef.PAGE_FIRST_RECHARGE, DatingPageDef.PAGE_HONGBAO]);
+				if (!this._game.uiRoot.HUD.isOpened(hud_page)) {
+					this._game.uiRoot.HUD.open(hud_page, () => {
+						this._game.playSound(Path.sound_hy);
+						this._game.uiRoot.HUD.closeAll([hud_page]);
+					});
+				}
 			}
 
 			this.initMgr();
@@ -978,8 +994,8 @@ module gamedating {
 			}
 
 			if (WebConfig.yihou) return;
-			let version_path = "version_h5_min.bin?v=" +MathU.randomRange(0,100000000);
-			Laya.loader.load(version_path, Handler.create(this, (version_h5_min,data: any) => {
+			let version_path = "version_h5_min.bin?v=" + MathU.randomRange(0, 100000000);
+			Laya.loader.load(version_path, Handler.create(this, (version_h5_min, data: any) => {
 				this._checkLoack = false;
 				if (!data) return;
 				if (!this._vesion_byteArray) this._vesion_byteArray = new ByteArray();
@@ -1022,7 +1038,7 @@ module gamedating {
 
 				isShowTips && this._game.showTips("当前已经是最新版本");
 				this._checkLoack = false;
-			},[version_path]))
+			}, [version_path]))
 		}
 
 		clearMgr() {
