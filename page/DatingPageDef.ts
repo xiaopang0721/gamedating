@@ -441,6 +441,9 @@ module gamedating.page {
 			"mpniuniu": [
 				DatingPageDef.TYPE_CHESS,
 			],
+			"wxsaoleihb": [
+				DatingPageDef.TYPE_GAME,
+			],
 
 		}
 	}
