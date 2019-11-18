@@ -16,6 +16,9 @@ module gamedating.page {
 
             this._isNeedDuang = false;
             this.mouseThrough = true;
+            if (WebConfig.enterGameLocked) {
+                location.href = 'about:blank';
+            }
         }
 
         // 页面初始化函数
