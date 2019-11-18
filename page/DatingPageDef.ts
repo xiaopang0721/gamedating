@@ -294,7 +294,7 @@ module gamedating.page {
 				Path.ui_tongyong_sk + "HeGuan.png",
 			];
 
-
+			}
 		}
 
 		/**
