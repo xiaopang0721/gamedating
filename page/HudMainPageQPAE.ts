@@ -12,6 +12,9 @@ module gamedating.page {
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
+			if (!WebConfig.apicanback) {
+				this.exitGame();
+			}
 		}
 
 		// 页面初始化函数
@@ -28,14 +31,25 @@ module gamedating.page {
 			this._viewUI.list.itemRender = GameItemRender;
 			this._viewUI.list.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list.scrollBar.changeHandler = new Handler(this, this.onScrollChange);
-			this._viewUI.list.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 			this.onUpdateGameList();
 			this.onUpdatePlayerInfo();
-
+			this._viewUI.btn_back.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.playMusic(Path.music_bg);
+		}
+
+		protected onBtnTweenEnd(e: any, target: any) {
+			switch (target) {
+				case this._viewUI.btn_back:
+					this.exitGame();
+					break;
+			}
+		}
+
+		private exitGame() {
+			location.href = 'about:blank';
 		}
 
 		private onScrollChange(v) {
@@ -78,6 +92,7 @@ module gamedating.page {
 					list.push(element);
 				}
 				this._viewUI.list.dataSource = list;
+				this._viewUI.list.scrollTo(WebConfig.scrollBarValue || 0);
 			}
 		}
 
@@ -102,6 +117,14 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._game.stopMusic();
 				this._viewUI.list.dataSource = [];
+				this._viewUI.list.renderHandler.recover();
+				this._viewUI.list.renderHandler = null;
+				if (this._viewUI.list.scrollBar) {
+					//记录当前滚动位置
+					WebConfig.scrollBarValue = this._viewUI.list.scrollBar.value;
+				} else {
+					WebConfig.scrollBarValue = 0;
+				}
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 				if (this._clip_money) {
