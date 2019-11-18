@@ -112,7 +112,9 @@ module gamedating {
 		}
 
 		private onUpdateHongBao(data) {
-			this.hongbaoMgr.setInfo(JSON.parse(data));
+			if (!WebConfig.enterGameLocked){//非API
+				this.hongbaoMgr.setInfo(JSON.parse(data));
+			}
 		}
 
 		//主玩家下来了
