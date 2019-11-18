@@ -252,6 +252,10 @@ module gamedating.page {
 					DatingPath.sk_dating + "DZ_rpaodekuai.sk",
 					DatingPath.sk_dating + "DZ_zoo.png",
 					DatingPath.sk_dating + "DZ_zoo.sk",
+					DatingPath.sk_dating + "DZ_mpniuniu.png",
+					DatingPath.sk_dating + "DZ_mpniuniu.sk",
+					DatingPath.sk_dating + "DZ_wxsaoleihb.png",
+					DatingPath.sk_dating + "DZ_wxsaoleihb.sk",
 					DatingPath.sk_dating + "shouchang.png",
 					DatingPath.sk_dating + "shouchang.sk",
 					DatingPath.sk_dating + "vip.png",
@@ -260,8 +264,6 @@ module gamedating.page {
 					DatingPath.sk_dating + "bangdingsongjin.sk",
 					DatingPath.sk_dating + "caishen01.png",
 					DatingPath.sk_dating + "caishen01.sk",
-					DatingPath.sk_dating + "DZ_wxsaoleihb.png",
-					DatingPath.sk_dating + "DZ_wxsaoleihb.sk",
 					//特效部分添加
 					Path.ui_atlas_effect + "bairen.atlas",
 					Path.ui_atlas_effect + "btn_fx.atlas",
@@ -436,9 +438,10 @@ module gamedating.page {
 			"zoo": [
 				DatingPageDef.TYPE_GAME,
 			],
-			"wxsaoleihb": [
-				DatingPageDef.TYPE_GAME,
+			"mpniuniu": [
+				DatingPageDef.TYPE_CHESS,
 			],
+
 		}
 	}
 }
