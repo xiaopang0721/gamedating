@@ -83,7 +83,7 @@ module gamedating.page {
 
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
-			this.initBaoBiaoUI();			
+			this.initBaoBiaoUI();
 			DatingGame.ins.baobiaoMgr.on(BaoBiaoMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
 
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
@@ -181,8 +181,14 @@ module gamedating.page {
 			let data = this._dataInfo[index];
 			if (cell) {
 				cell.txt_index.text = data.rank + 1;
-				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0)
-				cell.txt_type.text = EnumToString.getLimitStrMiddle(data.game_name + Web_operation_fields.client_money_logtype_table[data.type],6);
+				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0);
+				let type_name = "";
+				if (data.game_name == "微信扫雷红包") {
+					type_name = EnumToString.getLimitStr(data.game_name, 2) + Web_operation_fields.client_money_logtype_table[data.type];
+				} else {
+					type_name = data.game_name + Web_operation_fields.client_money_logtype_table[data.type];
+				}
+				cell.txt_type.text = type_name;
 				cell.txt_time.text = Sync.getTimeShortStr(data.time * 1000);
 				cell.txt_money.text = data.shouzhi.toString();
 				cell.txt_money.color = data.shouzhi > 0 ? "#41fe69" : "#ff0000";
@@ -343,7 +349,7 @@ module gamedating.page {
 		private selectHandler(index: number) {
 			this._viewUI.box0.visible = index == 0;
 			this._viewUI.box1.visible = index == 1;
-			if(index == 1) this.onUpdateDataInfo();
+			if (index == 1) this.onUpdateDataInfo();
 			this._viewUI.box2.visible = index == 2;
 		}
 
@@ -386,7 +392,7 @@ module gamedating.page {
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
 					// localRemoveItem("session_key");
-					 this._game.openLoginPage();
+					this._game.openLoginPage();
 					break;
 				case this._viewUI.btn_set_psd://设置密码
 					if (WebConfig.info.isguest || !WebConfig.info.mobile) {//游客要先绑定手机
