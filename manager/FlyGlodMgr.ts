@@ -205,6 +205,7 @@ module gamedating.managers {
 			else
 				this.isDestroy = true;
 			let texture = this._curTexture;
+			if(!texture) return;
 			let tw: number = texture.sourceWidth;
 			let th: number = texture.sourceHeight;
 			let matrix = new Laya.Matrix();
