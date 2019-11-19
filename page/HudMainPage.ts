@@ -37,6 +37,7 @@ module gamedating.page {
 				DatingPath.sk_dating + "DZ_zoo.png",
 				DatingPath.sk_dating + "DZ_mpniuniu.png",
 				DatingPath.sk_dating + "DZ_rniuniu.png",
+				DatingPath.sk_dating + "DZ_wxsaoleihb.png",
 
 				Path.ui_atlas_effect + "bairen.atlas",
 				Path.ui_atlas_effect + "btn_fx.atlas",
