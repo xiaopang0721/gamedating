@@ -152,7 +152,7 @@ module gamedating.page {
 		private initBaoBiaoUI(): void {
 			this._viewUI.box_btn.visible = false;
 			this._viewUI.btn_jiantou.rotation = -180;
-			this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";;
+			this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
 			this._viewUI.list_bb.visible = false;
 			this._viewUI.txt_no.visible = false;
 			this.initList();
