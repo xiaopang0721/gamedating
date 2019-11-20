@@ -1148,8 +1148,10 @@ module gamedating.page {
 
 		saveListStatus() {
 			let listData = this._game.datingGame.createHudTabScrollData();
-			listData.tabIndex = this._viewUI.tab.selectedIndex;
-			listData.value = this._viewUI.list_btns.scrollBar.value;
+			if (listData) {
+				listData.tabIndex = this._viewUI.tab.selectedIndex;
+				listData.value = this._viewUI.list_btns.scrollBar.value;
+			}
 		}
 
 		private renderHandler(cell: GameItemRender, index: number) {

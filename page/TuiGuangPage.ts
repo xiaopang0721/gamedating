@@ -263,7 +263,7 @@ module gamedating.page {
 			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
 			//代理返利
 			for (let i = 0; i < 10; i++) {
-				this._viewUI["txt_percent" + i].text = playerrbbl + "%";
+				this._viewUI["txt_percent" + i] && (this._viewUI["txt_percent" + i].text = playerrbbl + "%");
 			}
 		}
 
