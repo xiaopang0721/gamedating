@@ -50,7 +50,13 @@ module gamedating.page {
 			this.addChild(this._viewUI);
 		}
 		// 页面初始化函数
+		private _diffY: number = -88;
 		private initUI(): void {
+			if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+				this._diffY = -120;
+			} else if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+				this._diffY = -88;
+			}
 			if (!this._viewTips) {
 				this._viewTips = [];
 			}
@@ -64,7 +70,7 @@ module gamedating.page {
 				for (let i = 0; i < this._viewTips.length; i++) {
 					let tip = this._viewTips[i];
 					if (tip) {
-						tip.centerY = -88 - (i + 1) * 44;
+						tip.centerY = this._diffY - (i + 1) * 44;
 					}
 				}
 			}
@@ -118,6 +124,10 @@ module gamedating.page {
 
 		static create(message: string, page: TipsPage): ViewTip {
 			let obj: ViewTip = ObjectPools.malloc(ViewTip) as ViewTip;
+			if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+				obj.scaleX = 1.77;
+				obj.scaleY = 1.77;
+			}
 			obj.create(message, page);
 			return obj;
 		}
@@ -220,6 +230,7 @@ module gamedating.page {
 			this._boxTip = null;
 			this._index = 0;
 			this.removeSelf();
+			this.scale(1, 1);
 			this._page.removeTip(this);
 		}
 	}
