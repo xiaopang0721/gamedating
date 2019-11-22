@@ -117,11 +117,12 @@ module gamedating.managers {
 			this._pageUI = viewUI;
 		}
 
-		openJianPan(textUI: MyTextInput, viewUI: any, centerY: number) {
+		openJianPan(textUI: MyTextInput, viewUI: any, centerY?: number) {
 			DatingGame.ins.jianPanMgr.inputTextUI = textUI;
 			if (!Browser.onPC || WebConfig.isPopJianPan) {
 				DatingGame.ins.jianPanMgr.pageUI = viewUI;
-				DatingGame.ins.jianPanMgr.pageUI.box.centerY = centerY;
+				if (centerY)
+					DatingGame.ins.jianPanMgr.pageUI.box.centerY = centerY;
 				this._game.uiRoot.top.open(DatingPageDef.PAGE_JIANPAN, (page) => {
 					page.dataSource = textUI.inputType;
 				}, () => {

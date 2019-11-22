@@ -35,6 +35,10 @@ module gamedating.page {
         protected init(): void {
             this._viewUI = this.createView("dating.DengLuBD1UI");
             this.addChild(this._viewUI);
+            if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+                this._viewUI.box.scaleX = 1.77;
+                this._viewUI.box.scaleY = 1.77;
+            }
             if (!WebConfig.isSingleEnter) {
                 if (!this._inputAccount) {
                     this._inputAccount = new MyTextInput();
