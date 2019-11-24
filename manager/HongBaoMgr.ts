@@ -28,7 +28,7 @@ module gamedating.managers {
 			}
 		}
 
-		private _nextTime: number;
+		private _nextTime: number = 0;
 		deltaUpdate() {
 			//如果还没到下个最近的红包开始时间
 			if (this._game.sync.serverTimeBys < this._nextTime) return;
@@ -45,7 +45,10 @@ module gamedating.managers {
 			if (this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HONGBAO)) return;
 			let hongbao = this._info[0];
 			//已经结束了啊喂！
-			if (this._game.sync.serverTimeBys > hongbao.end_time) return;
+			if (this._game.sync.serverTimeBys > hongbao.end_time) {
+				this._info.shift();
+				return;
+			}
 			//开始时间还没到
 			if (this._game.sync.serverTimeBys < hongbao.start_time) {
 				this._nextTime = hongbao.start_time;//把下个时间存下来
