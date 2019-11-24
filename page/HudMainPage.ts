@@ -1222,6 +1222,7 @@ module gamedating.page {
 			this.clearWaiting();
 			this.clearUpdate();
 			this.clearProgress();
+			Laya.Tween.clearAll(this);
 			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
 			this._game && this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
 			super.destroy();
