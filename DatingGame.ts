@@ -2,7 +2,7 @@
 * name 
 */
 module gamedating {
-	export class DatingGame {
+	export class DatingGame extends Laya.EventDispatcher {
 		private static _ins: DatingGame;
 		public static get ins() {
 			if (!this._ins) {
@@ -10,6 +10,8 @@ module gamedating {
 			}
 			return this._ins;
 		}
+
+		public static EVENT_APP_CLOSE_CALLBACK: string = "EVENT_APP_CLOSE_CALLBACK";
 
 		private _hudTabScrollData: HudTabScrollData;
 		get hudTabScrollData() {
@@ -63,6 +65,7 @@ module gamedating {
 		get diffMoney() { return this._diffMoney };
 		private _game: Game;
 		constructor() {
+			super();
 			this._game = main.game;
 			DatingPageDef.myinit(DatingPageDef.GAME_NAME);
 			//按鍵监听
@@ -112,7 +115,7 @@ module gamedating {
 		}
 
 		private onUpdateHongBao(data) {
-			if (!WebConfig.enterGameLocked){//非API
+			if (!WebConfig.enterGameLocked) {//非API
 				this.hongbaoMgr.setInfo(JSON.parse(data));
 			}
 		}
@@ -816,6 +819,7 @@ module gamedating {
 			}
 			else if (e.keyCode == Laya.Keyboard.W) {
 				this._game.sceneGame.sceneObjectMgr.leaveStory(true);
+				// this.event(DatingGame.EVENT_APP_CLOSE_CALLBACK);
 			}
 			// else if (e.keyCode == Laya.Keyboard.A) {
 			// 	PlayCardMgr.ins.up_show()
@@ -853,19 +857,23 @@ module gamedating {
 		//安卓游戏退出二次弹窗确认
 		public quitGame() {
 			if (WebConfig.onAndroid) {
-				let quitPage: any = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_QUIT_TIPS);
-				if (quitPage) {
-					//直接退出游戏
-					WebConfig.closeApp();
-				} else {
-					let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
-					if (!mainPlayer) return;
-					let playerInfo = mainPlayer.playerInfo;
-					if (!playerInfo) return;
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_QUIT_TIPS);
+				if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+					this.event(DatingGame.EVENT_APP_CLOSE_CALLBACK);
+				} else if (Laya.stage.screenMode == Stage.SCREEN_HORIZONTAL) {
+					//横屏
+					let quitPage: any = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_QUIT_TIPS);
+					if (quitPage) {
+						//直接退出游戏
+						WebConfig.closeApp();
+					} else {
+						let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+						if (!mainPlayer) return;
+						let playerInfo = mainPlayer.playerInfo;
+						if (!playerInfo) return;
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_QUIT_TIPS);
+					}
 				}
 			}
-
 		}
 
 		/**进入新地图 */
