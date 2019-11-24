@@ -32,7 +32,13 @@ module gamedating.page {
 			if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
 				this._viewUI.scaleX = 1.77;
 				this._viewUI.scaleY = 1.77;
-			}else if(Laya.stage.screenMode == Stage.SCREEN_HORIZONTAL){
+				let diff = 56
+				if (this._game.isFullScreen) {
+					this._viewUI.box_notice.y = 100;
+				} else {
+					this._viewUI.box_notice.y = 100 + diff;
+				}
+			} else if (Laya.stage.screenMode == Stage.SCREEN_HORIZONTAL) {
 				this._viewUI.scaleX = 1;
 				this._viewUI.scaleY = 1;
 			}
