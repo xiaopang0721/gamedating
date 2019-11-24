@@ -515,7 +515,11 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._viewUI.list_btns.width = this._clientRealWidth;
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
-				Laya.timer.frameOnce(1, this, this.updatePos);
+				Laya.timer.frameOnce(1, this, ()=>{
+					this.updatePos();
+					this._viewUI.tab.selectedIndex = 1;
+					this._viewUI.tab.selectedIndex = 0;
+				});
 			}
 		}
 
@@ -978,10 +982,10 @@ module gamedating.page {
 				this._viewUI.list_btns.cells.forEach(element => {
 					let cell = element as GameItemRender;
 					cell.setAlpha = 0;
-					cell.left += 200;
+					cell.x += 200;
 					let scale: number = Math.random() > 0.5 ? 1.1 : 0.9;
 					Laya.timer.once(100 * i, this, () => {
-						this.createTween(cell, { setAlpha: 1, left: cell.left - 200 }, 200);
+						this.createTween(cell, { setAlpha: 1, x: cell.x - 200 }, 200);
 						this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');// 波浪
 					});
 					i++;
