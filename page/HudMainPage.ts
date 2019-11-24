@@ -515,7 +515,11 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._viewUI.list_btns.width = this._clientRealWidth;
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
-				Laya.timer.frameOnce(1, this, this.updatePos);
+				Laya.timer.frameOnce(1, this, ()=>{
+					this.updatePos();
+					this._viewUI.tab.selectedIndex = 1;
+					this._viewUI.tab.selectedIndex = 0;
+				});
 			}
 		}
 

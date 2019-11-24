@@ -29,6 +29,19 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.DaTingGgUI");
 			this.addChild(this._viewUI);
+			if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+				this._viewUI.scaleX = 1.77;
+				this._viewUI.scaleY = 1.77;
+				let diff = 56
+				if (this._game.isFullScreen) {
+					this._viewUI.box_notice.y = 100;
+				} else {
+					this._viewUI.box_notice.y = 100 + diff;
+				}
+			} else if (Laya.stage.screenMode == Stage.SCREEN_HORIZONTAL) {
+				this._viewUI.scaleX = 1;
+				this._viewUI.scaleY = 1;
+			}
 			this._viewUI.mouseThrough = true;
 			this.addChild(this._viewUI);
 			this.initHtmlText();
