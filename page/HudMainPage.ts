@@ -978,10 +978,10 @@ module gamedating.page {
 				this._viewUI.list_btns.cells.forEach(element => {
 					let cell = element as GameItemRender;
 					cell.setAlpha = 0;
-					cell.x += 200;
+					cell.left += 200;
 					let scale: number = Math.random() > 0.5 ? 1.1 : 0.9;
 					Laya.timer.once(100 * i, this, () => {
-						this.createTween(cell, { setAlpha: 1, x: cell.x - 200 }, 200);
+						this.createTween(cell, { setAlpha: 1, left: cell.left - 200 }, 200);
 						this.createTween(cell, { scaleX: scale, scaleY: scale }, 500, Laya.Ease.backInOut, null, 'from');// 波浪
 					});
 					i++;

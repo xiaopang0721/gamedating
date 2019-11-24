@@ -22,10 +22,6 @@ module gamedating.page {
         // 页面打开时执行函数
         protected onOpen(): void {
             super.onOpen();
-            if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
-                this._viewUI.box_main.scaleX = 1.77;
-                this._viewUI.box_main.scaleY = 1.77;
-            }
             this._viewUI.box_desc.on(LEvent.CLICK, this, this.onClickHandle);
             this._viewUI.btn_close.on(LEvent.CLICK, this, this.onBtnClickWithTween);
             this._viewUI.btn_sure.on(LEvent.CLICK, this, this.onBtnClickWithTween);
