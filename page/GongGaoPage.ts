@@ -58,7 +58,7 @@ module gamedating.page {
 		private _total: number;
 		private onUpdateNotes() {
 			if (this._isShowNotice) return;
-			let notice = DatingGame.ins.noticeMgr.getNotice();
+			let notice = "天啊，玩家[p]眷念[/p]在[m]honghei[/m]一把赢得[n]1146.00[/n]，真是太厉害了！"//DatingGame.ins.noticeMgr.getNotice();
 			if (notice) {
 				let obj = EnumToString.getGongGaoText(notice);
 				this._htmlText.innerHTML = obj.msg;
@@ -82,13 +82,12 @@ module gamedating.page {
 			this._to = -this._txtW;
 			if (this._viewUI) {
 				if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
-					this._viewUI.box_notice.scaleX = 1.77;
-					this._viewUI.box_notice.scaleY = 1.77;
-					let diff = 56
+					this._viewUI.box_notice.scaleX = 1.67;
+					this._viewUI.box_notice.scaleY = 1.67;
 					if (this._game.isFullScreen) {
-						this._viewUI.box_notice.y = 109 + diff;;
+						this._viewUI.box_notice.y = 349;
 					} else {
-						this._viewUI.box_notice.y = 109
+						this._viewUI.box_notice.y = 269;
 					}
 				} else if (Laya.stage.screenMode == Stage.SCREEN_HORIZONTAL) {
 					this._viewUI.box_notice.y = 109
