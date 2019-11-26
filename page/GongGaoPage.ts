@@ -58,7 +58,7 @@ module gamedating.page {
 		private _total: number;
 		private onUpdateNotes() {
 			if (this._isShowNotice) return;
-			let notice = "天啊，玩家[p]眷念[/p]在[m]honghei[/m]一把赢得[n]1146.00[/n]，真是太厉害了！"//DatingGame.ins.noticeMgr.getNotice();
+			let notice = DatingGame.ins.noticeMgr.getNotice();
 			if (notice) {
 				let obj = EnumToString.getGongGaoText(notice);
 				this._htmlText.innerHTML = obj.msg;
