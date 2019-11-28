@@ -59,11 +59,11 @@ module gamedating.page {
 
 		private _clip_money: ClipUtil;
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
-			if (!this._viewUI) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
 			if (!this._clip_money) {
 				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);

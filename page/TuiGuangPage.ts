@@ -243,6 +243,7 @@ module gamedating.page {
 		}
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			if (!WebConfig.info) return;
 			// let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
 			// this._viewUI.box_share.visible = daysharegivemoney;
