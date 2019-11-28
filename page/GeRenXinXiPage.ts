@@ -117,6 +117,7 @@ module gamedating.page {
 
 		//上面信息
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;

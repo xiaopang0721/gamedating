@@ -206,6 +206,7 @@ module gamedating.page {
 		}
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			if (!WebConfig.info) return;
 			this._clipMoney.setText(WebConfig.info.savaBoxMoney, true);
 			this._zrInputMoney.maxValue = WebConfig.info.money;

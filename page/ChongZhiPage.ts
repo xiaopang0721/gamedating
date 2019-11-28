@@ -415,6 +415,7 @@ module gamedating.page {
 		// }
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			if (!WebConfig.info) return;
 			for (let i = 0; i < this._paychannel.length; i++) {
 				let rechargeType = this._paychannel[i].type;
