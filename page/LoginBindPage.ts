@@ -200,7 +200,7 @@ module gamedating.page {
 
         private _notStageClickUI: Laya.Node[]; //不响应舞台点击UI对象集合
         protected onMouseClick(e: LEvent) {
-            if (WebConfig.isSingleEnter) return;
+            if (WebConfig.isSingleEnter && this._type == LoginBindPage.TYPE_LOGIN_PASSWORD) return;
             for (let index = 0; index < this._notStageClickUI.length; index++) {
                 let v = this._notStageClickUI[index];
                 if (v.contains(e.target)) {
