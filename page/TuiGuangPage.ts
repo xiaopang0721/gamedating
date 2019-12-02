@@ -7,6 +7,7 @@ module gamedating.page {
 		static readonly TYPE_QUANMIN_DAILI = 2;//全民代理
 
 		private _viewUI: ui.nqp.dating.TuiGuangUI;
+		private _curAgencytype: number = 0;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -30,7 +31,10 @@ module gamedating.page {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
+			let showGw = txtGw.split("?")[0];
+			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
+			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -71,8 +75,6 @@ module gamedating.page {
 			this._viewUI.list_child.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_child.visible = false;
 
-			(<Button>this._viewUI.tab.getChildByName("item6")).visible = false;
-			this._viewUI.box6.visible = false;
 
 			for (let i = 0; i < 5; i++) {
 				this._tuiGuangYeJiTxt[i] = this._viewUI["txt_yeji" + i];
@@ -234,26 +236,35 @@ module gamedating.page {
 				this._viewUI.img_ewm.skin = base64;
 			}))
 			//落地页链接
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
+			let showGw = txtGw.split("?")[0];
+			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
+			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
 		}
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			if (!WebConfig.info) return;
 			// let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
 			// this._viewUI.box_share.visible = daysharegivemoney;
 			// this._viewUI.box_no_share.visible = !daysharegivemoney;
 			// this._viewUI.txt_daysharegivemoney.text = daysharegivemoney;
 			let agency_sharereward = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_sharereward");
-			this._viewUI.txt_agency_sharereward.text = agency_sharereward || "";
 			let agency_shareminpay = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_shareminpay");
-			this._viewUI.txt_agency_shareminpay.text = agency_shareminpay || "";
+			this._curAgencytype = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agencytype");
+			let agency_str = StringU.substitute("玩家通过您分享的链接下载并且充值{0}金额，您即可获得{1}现金奖励", HtmlFormat.addHtmlColor(agency_shareminpay.toString(), "#3aa4fe"), HtmlFormat.addHtmlColor(agency_sharereward.toString(), "#3aa4fe"))
+			TextFieldU.setHtmlText(this._viewUI.txt_agency, agency_str);
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
-			this._viewUI.txt_gw.text = EnumToString.getLimitStr(WebConfig.downLoadUrl, 17);
+			//落地页链接
+			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
+			let showGw = txtGw.split("?")[0];
+			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
+			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
 			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
 			//代理返利
 			for (let i = 0; i < 10; i++) {
-				this._viewUI["txt_percent" + i].text = playerrbbl + "%";
+				this._viewUI["txt_percent" + i] && (this._viewUI["txt_percent" + i].text = playerrbbl + "%");
 			}
 		}
 
@@ -288,7 +299,7 @@ module gamedating.page {
 				let btn = this._tabItems[index];
 				if (!btn || !btn.visible) continue;
 				btn.y = total_y;
-				total_y += btn.height;
+				total_y += btn.height - 7;
 			}
 		}
 
@@ -297,7 +308,7 @@ module gamedating.page {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_AGENCYREPORT) {//分享赚钱
 				if (data && data.success == 0 && data.msg && data.msg) {
 					//根据lv是否存在来判断是否显示
-					let lvbool = data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (data.msg.agencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
+					let lvbool = this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
 					if (lvbool != this._tabItems[1].visible) {
 						this._tabItems[1].visible = lvbool;
 						this.updatePos();
@@ -326,7 +337,7 @@ module gamedating.page {
 						this._viewUI.txt_w4.text = "上月其他玩家奖励："
 					}
 					//代理类型
-					this.typeDaiLi = data.msg.agencytype;
+					this.typeDaiLi = this._curAgencytype;
 					this._viewUI.img_type.visible = true;
 					this._viewUI.img_type.skin = this.typeDaiLi == TuiGuangPage.TYPE_QUANMIN_DAILI ? DatingPath.ui_dating + "tuiguang/tit_daili.png" : DatingPath.ui_dating + "tuiguang/tit_daili1.png";
 					(<Button>this._viewUI.tab.getChildByName("item1")).skin = this.typeDaiLi == TuiGuangPage.TYPE_QUANMIN_DAILI ? DatingPath.ui_dating + "tuiguang/btn_fs.png" : DatingPath.ui_dating + "tuiguang/btn_mx.png";
@@ -359,8 +370,10 @@ module gamedating.page {
 			}
 			else if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAGRLASTWEEK) {//分享奖励明细
 				if (data && data.success == 0) {
+					this._viewUI.box3_0.visible = this._curAgencytype == TuiGuangPage.TYPE_WUXIAN_DAILI;
+					this._viewUI.box3_1.visible = this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI;
 					if (data.msg && data.msg.list) {
-						if (data.msg.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
+						if (this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
 							this._viewUI.txt_name.text = data.msg.list.account;
 							data.msg.list.fsvalue && (this._viewUI.txt_validBet.text = data.msg.list.fsvalue.toString());
 							data.msg.list.fs && (this._viewUI.txt_fanshui.text = data.msg.list.fs.toString());
@@ -373,12 +386,10 @@ module gamedating.page {
 							let list = this.onFilterList(data.msg.list.child);
 							this._viewUI.list3.dataSource = list;
 						}
-						this._viewUI.box3_0.visible = data.msg.agencytype == TuiGuangPage.TYPE_WUXIAN_DAILI;
-						this._viewUI.box3_1.visible = data.msg.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI;
 					} else {
 						this._viewUI.list3.dataSource = [];
 					}
-					if (data.msg.agencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
+					if (this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
 						this._viewUI.list_child.visible = this._viewUI.list_child.dataSource && this._viewUI.list_child.dataSource.length > 0
 						this._viewUI.box_no_3.visible = !this._viewUI.list_child.visible;
 					} else {
@@ -394,6 +405,23 @@ module gamedating.page {
 					} else {
 						this._viewUI.list2.dataSource = [];
 					}
+					// this._viewUI.list2.dataSource = [{
+					// 	addtime:100,
+					// 	money:1000,
+					// 	rb_type:"你好",
+					// 	from_nikename:"测试来源"
+					// },
+					// {
+					// 	addtime:100,
+					// 	money:1000,
+					// 	rb_type:"你好",
+					// 	from_nikename:"测试来源"
+					// },{
+					// 	addtime:100,
+					// 	money:1000,
+					// 	rb_type:"你好",
+					// 	from_nikename:"测试来源"
+					// }];
 					this._viewUI.list2.visible = this._viewUI.list2.dataSource && this._viewUI.list2.dataSource.length > 0;
 					this._viewUI.box_no_2.visible = !this._viewUI.list2.visible;
 				}
@@ -537,7 +565,7 @@ module gamedating.page {
 			this.txt_title.text = "Lv." + data.agency_lv;
 			this.txt_yjed.text = StringU.substitute("{0}-{1}", data.agency_min, data.agency_max);
 			this.txt_fyvalue.text = data.agency_fytype == 2 ? StringU.substitute("返佣{0}%", data.agency_prec) : StringU.substitute("每万返佣{0}元", data.agency_prec);
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -579,7 +607,7 @@ module gamedating.page {
 			this.txt_title.text = "Lv." + data.fs_lv;
 			this.txt_yjed.text = StringU.substitute("{0}-{1}", data.fs_min, data.fs_max);
 			this.txt_fyvalue.text = StringU.substitute("{0}%", data.fs_prec);
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -654,7 +682,7 @@ module gamedating.page {
 			this.txt_money.text = data.money.toString();
 			this.txt_type.text = data.rb_type.toString();
 			this.txt_from_nickname.text = data.from_nikename;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -692,7 +720,7 @@ module gamedating.page {
 			this.txt_bet.text = data.allyj.toString();
 			this.txt_allfy.text = data.jishu.toString();
 			this.txt_selffy.text = data.fy.toString();
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -719,7 +747,7 @@ module gamedating.page {
 			this.txt_total.text = data.allyj.toString();
 			this.txt_tallage.text = data.selfyj.toString();
 			this.txt_count.text = data.regnum.toString();
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.rank % 2 == 0 ? 1 : 2)
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.rank % 2 == 0 ? 1 : 2)
 		}
 	}
 }

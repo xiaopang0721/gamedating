@@ -62,7 +62,7 @@ module gamedating.page {
             if (!this._bindSendMoney || this._bindSendMoney <= 0) {
                 this.close();
             } else {
-                this._clipBindMoney.setText(this._bindSendMoney, true)
+                this._clipBindMoney && this._clipBindMoney.setText(this._bindSendMoney, true)
             }
         }
 

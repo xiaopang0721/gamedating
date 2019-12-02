@@ -35,6 +35,10 @@ module gamedating.page {
         protected init(): void {
             this._viewUI = this.createView("dating.DengLuBD1UI");
             this.addChild(this._viewUI);
+            if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+                this._viewUI.box.scaleX = 1.77;
+                this._viewUI.box.scaleY = 1.77;
+            }
             if (!WebConfig.isSingleEnter) {
                 if (!this._inputAccount) {
                     this._inputAccount = new MyTextInput();
@@ -137,6 +141,7 @@ module gamedating.page {
                 this._viewUI.txt_psd.on(LEvent.BLUR, this, this.onBlur);
                 this._viewUI.txt_account.on(LEvent.BLUR, this, this.onBlur);
                 this._notStageClickUI = [this._inputPhone, this._inputCode, this._inputSetPsd, this._inputSetNewPsd];
+                this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._viewUI.txt_account.text.length > 0;
             } else {
                 let pname: string = localGetItem("txt_account");
                 if (!pname || pname.toLowerCase() == "null") pname = "";
@@ -149,7 +154,7 @@ module gamedating.page {
                 this._inputAccount.input.on(LEvent.INPUT, this, this.onChange);
                 this._inputAccount.on(LEvent.CLICK, this, this.onClickHandle);
                 this._inputPsd.on(LEvent.CLICK, this, this.onClickHandle);
-
+                this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._inputAccount.input.text.length > 0;
             }
             this._inputPhone.settext(this._game, this._promptColor, "请输入手机号...", this._inputColor, 26, 11, MyTextInput.TYPE_INPUT_NUMBER, false, null, true);
             this._inputCode.settext(this._game, this._promptColor, "请输入验证码...", this._inputColor, 26, 6, MyTextInput.TYPE_INPUT_NUMBER);
@@ -169,7 +174,6 @@ module gamedating.page {
             this._viewUI.btn_phone_clear.visible = false;
             this._viewUI.box_login_account.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD;
             this._viewUI.btn_see_psd.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && !WebConfig.isSingleEnter;
-            this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._inputPhone.input.text.length > 0;
             this._viewUI.box_bind.visible = this._type == LoginBindPage.TYPE_BIND_PHONE;
             this._viewUI.box_reset.visible = this._type == LoginBindPage.TYPE_RESET_PASSWORD;
             this._viewUI.btn_close.visible = true;
@@ -196,7 +200,7 @@ module gamedating.page {
 
         private _notStageClickUI: Laya.Node[]; //不响应舞台点击UI对象集合
         protected onMouseClick(e: LEvent) {
-            if (WebConfig.isSingleEnter) return;
+            if (WebConfig.isSingleEnter && this._type == LoginBindPage.TYPE_LOGIN_PASSWORD) return;
             for (let index = 0; index < this._notStageClickUI.length; index++) {
                 let v = this._notStageClickUI[index];
                 if (v.contains(e.target)) {

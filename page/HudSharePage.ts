@@ -44,6 +44,7 @@ module gamedating.page {
 		}
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
 			if (!this._clipJf) {
 				this._clipJf = new DatingClip(DatingClip.FENXIANG_FONT);

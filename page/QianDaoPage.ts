@@ -63,8 +63,10 @@ module gamedating.page {
 			}
 			if (WebConfig.info.is_can_qd) {
 				this._viewUI.img_btn.skin = DatingPath.ui_dating + "qiandao/tu_mrzl.png";
+				this._viewUI.btn_qiandao.skin = DatingPath.ui_dating + "qiandao/btn_mrzl.png";
 			}else{
 				this._viewUI.img_btn.skin = DatingPath.ui_dating + "qiandao/tu_ljqd.png";
+				this._viewUI.btn_qiandao.skin = DatingPath.ui_dating + "qiandao/btn_ljqd.png";
 			}
 			// this._isCanSign = !WebConfig.info.last_signin_time || !Sync.getIsToday(WebConfig.info.last_signin_time, this._game.sync.serverTimeBys);
 			// this._viewUI.btn_qiandao.disabled = !WebConfig.info.is_can_qd;

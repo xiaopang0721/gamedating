@@ -9,6 +9,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "chongzhi.atlas",
 				DatingPath.atlas_dating_ui + "kehu.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -414,6 +415,7 @@ module gamedating.page {
 		// }
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			if (!WebConfig.info) return;
 			for (let i = 0; i < this._paychannel.length; i++) {
 				let rechargeType = this._paychannel[i].type;

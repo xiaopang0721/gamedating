@@ -10,7 +10,7 @@ module gamedating.managers {
 		}
 
 		public agencyType() {
-			return this._agencyType;
+			return FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agencytype");
 		}
 
 		public getDataHuiZong(index: number) {

@@ -18,6 +18,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "qifu.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
 			];
 		}
 
@@ -74,7 +75,7 @@ module gamedating.page {
 		private onUpdateDataInfo(date?: any) {
 			this._dataInfo = [];
 			let value = this._game.qifuMgr.getQiFuList();
-			if (!value || value.length < 0) {
+			if (!value || value.length <= 0) {
 				for (let i = 0; i < 6; i++) {
 					this._viewUI["box_time" + i].visible = false;
 				}

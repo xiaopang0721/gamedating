@@ -138,10 +138,10 @@ module gamedating {
             this.YUEBAO_FONT = {
                 source: DatingPath.atlas_dating_ui + "yuebao.atlas",
                 url: DatingPath.ui_dating + 'yuebao/clip_1-9.png',
-                clipWidth: 39,
-                clipHeight: 60,
+                clipWidth: 47,
+                clipHeight: 70,
                 clipX: 11,
-                space: 35,
+                space: 0,
             };
             this.DATING_VIP_FONT = {
                 source: DatingPath.atlas_dating_ui + "dating.atlas",

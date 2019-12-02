@@ -27,15 +27,15 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
-			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange);
+			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange, [false]);
 			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
-			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
+			// this._viewUI.list_tab.scrollBar.elasticDistance = 100;
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TabItemRender1UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
-			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			this._viewUI.myhd0.vScrollBarSkin = "";
 			this._viewUI.myhd0.vScrollBar.changeHandler = new Handler(this, this.changeHandler_myhd0);
 
@@ -83,7 +83,7 @@ module gamedating.page {
 				= 0;
 		}
 
-		private changeHandler_list_tab(e: LEvent): void {
+		private changeHandler_list_tab(e?: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
 			let value = this._viewUI.list_tab.scrollBar.value;
 			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
@@ -96,6 +96,9 @@ module gamedating.page {
 				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
 					this._viewUI.btn_pre.visible = true;
 					this._viewUI.btn_next.visible = false;
+				}else{
+					this._viewUI.btn_pre.visible = true;
+					this._viewUI.btn_next.visible = true;
 				}
 			}
 		}
@@ -113,7 +116,7 @@ module gamedating.page {
 		}
 
 
-		private onBtnTabChange(): void {
+		private onBtnTabChange(isInit: boolean = true, e?: LEvent, ): void {
 			if (!this._curSelectTab && this._curSelectTab != 0) {
 				this._curSelectTab = 1;
 				this._viewUI.btn_tab.selected = false;
@@ -122,6 +125,7 @@ module gamedating.page {
 				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
 				this._viewUI.btn_tab.selected = !this._viewUI.btn_tab.selected;
 			}
+			if (!isInit) this._game.playSound(Path.music + "btn.mp3");
 			this.resetScrollValue();
 			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
 				//公告
@@ -238,11 +242,11 @@ module gamedating.page {
 						this._viewUI.img_myhd.skin = listData.length > 0 ? listData[0].path : '';
 						this._viewUI.txt_myhd.text = selectedItem.content;
 						this._viewUI.txt_myhd.height = this._viewUI.txt_myhd.textField.textHeight;
-						this._viewUI.myhd1.height = isShowBtn ? 243 : 323;
+						this._viewUI.myhd1.height = isShowBtn ? 236 : 332;
 					} else {
 						//纯大图
 						this._viewUI.myhd2.visible = true;
-						this._viewUI.myhd2.height = isShowBtn ? 425 : 510;
+						this._viewUI.myhd2.height = isShowBtn ? 430 : 528;
 						//排序数据
 						if (listData) {
 							listData.sort((a: any, b: any) => {
@@ -259,7 +263,7 @@ module gamedating.page {
 					this._viewUI.myhd0.visible = true;
 					this._viewUI.txt.text = selectedItem.content;
 					this._viewUI.txt.height = this._viewUI.txt.textField.textHeight;
-					this._viewUI.myhd0.height = isShowBtn ? 425 : 510;
+					this._viewUI.myhd0.height = isShowBtn ? 430 : 528;
 				}
 				this._viewUI.img_bg.visible = isShowBtn;
 				this._viewUI.btn_qiandao.visible = isShowBtn;
@@ -342,7 +346,11 @@ module gamedating.page {
 			}
 		}
 		protected onBtnTweenEnd(e: any, target: any) {
-			this.jumpPage();
+			switch (target) {
+				case this._viewUI.btn_qiandao:
+					this.jumpPage();
+					break
+			}
 		}
 		private _isMouseDown: boolean = false;
 		private _mouseDownY: number = 0;
@@ -413,10 +421,10 @@ module gamedating.page {
 		private _game: Game;
 		private _data: any;
 		/**
-		  * 
-		  * @param game 
-		  * @param data 
-		  */
+			* 
+			* @param game 
+			* @param data 
+			*/
 		setData(game: Game, data: any) {
 			if (!data || !data.title) {
 				this.visible = false;

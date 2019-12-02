@@ -4,12 +4,12 @@
 module gamedating.page {
 	export class DatingPageDef extends game.gui.page.PageDef {
 		static GAME_NAME: string = "dating";
+		//主界面
+		static PAGE_HUD: string = "1";
 		//登录界面
 		static PAGE_LOGIN: string = "2";
-		//主界面
-		static PAGE_HUD: string = "3";
 		//消息
-		static PAGE_XIAOXI: string = "4";
+		static PAGE_XIAOXI: string = "3";
 		//游客提示
 		static PAGE_GUEST_TIP: string = "5";
 		//取款
@@ -62,7 +62,7 @@ module gamedating.page {
 		//创建房间-跑得快
 		static PAGE_PDK_CREATE_CARDROOM: string = "32";
 		//加入房间-跑得快
-		static PAGE_PDK_JOIN_CARDROOM:string = "33";
+		static PAGE_PDK_JOIN_CARDROOM: string = "33";
 
 		//更改昵称
 		static PAGE_GENGGAINC: string = "35";
@@ -107,6 +107,7 @@ module gamedating.page {
 		static PAGE_GM: string = "999";
 
 		static myinit(str: string) {
+			if (DatingPageDef["isinit"]) return;
 			super.myinit(str);
 			DatingClip.init();
 			PageDef._pageClassMap[DatingPageDef.PAGE_VIP] = VipPage;
@@ -114,7 +115,11 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_TIPS] = TipsPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GUEST_TIP] = GuestTipPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUIT_TIPS] = TipsQuit;
-			PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
+			if (WebConfig.enterGameLocked) {
+				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPageQPAE;
+			} else {
+				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
+			}
 			PageDef._pageClassMap[DatingPageDef.PAGE_XIAOXI] = MessagePage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GENGGAINC] = GengGaiNCPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GET_REWARD] = RewardPage;
@@ -157,127 +162,141 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_CREATE_CARDROOM] = CreadRoomPDKPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_HONGBAO] = HongBaoPage;
-			
-
-			this["__needLoadAsset"] = [
-				DatingPath.atlas_dating_ui + 'bangding.atlas',
-				DatingPath.atlas_dating_ui + 'chongzhi.atlas',
-				DatingPath.atlas_dating_ui + 'dating.atlas',
-				DatingPath.atlas_dating_ui + 'denglu.atlas',
-				DatingPath.atlas_dating_ui + 'denglurk.atlas',
-				DatingPath.atlas_dating_ui + 'fenxiang.atlas',
-				DatingPath.atlas_dating_ui + 'geren.atlas',
-				DatingPath.atlas_dating_ui + 'huode.atlas',
-				DatingPath.atlas_dating_ui + 'huodong.atlas',
-				DatingPath.atlas_dating_ui + 'kehu.atlas',
-				DatingPath.atlas_dating_ui + 'qiandao.atlas',
-				DatingPath.atlas_dating_ui + 'qukuan.atlas',
-				DatingPath.atlas_dating_ui + 'tongyong.atlas',
-				DatingPath.atlas_dating_ui + 'tuiguang.atlas',
-				DatingPath.atlas_dating_ui + 'xinxi.atlas',
-				DatingPath.atlas_dating_ui + 'zhuanpan.atlas',
-				DatingPath.atlas_dating_ui + 'vip.atlas',
-				DatingPath.atlas_dating_ui + 'shezhi.atlas',
-				DatingPath.atlas_dating_ui + 'yuebao.atlas',
-				DatingPath.atlas_dating_ui + "shouchong.atlas",
-				DatingPath.atlas_dating_ui + "baoxianxiang.atlas",
-				DatingPath.atlas_dating_ui + "jiaru.atlas",
-				DatingPath.atlas_dating_ui + "fk.atlas",
-				DatingPath.atlas_dating_ui + "datinggg.atlas",
-				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
-				
-				DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
-				DatingPath.ui_dating_tongyong + "mask_top.png",
-				DatingPath.ui_dating_tongyong + "mask_bottom.png",
-				DatingPath.ui_dating_tongyong + "mask_middle.png",
-				DatingPath.ui_dating_tongyong + "mask_left.png",
-				DatingPath.ui_dating_tongyong + "mask_right.png",
-				//龙骨相关添加
-				DatingPath.sk_dating + "DZ_baijiale.png",
-				DatingPath.sk_dating + "DZ_baijiale.sk",
-				DatingPath.sk_dating + "DZ_bairendezhou.png",
-				DatingPath.sk_dating + "DZ_bairendezhou.sk",
-				DatingPath.sk_dating + "DZ_benchibaoma.png",
-				DatingPath.sk_dating + "DZ_benchibaoma.sk",
-				DatingPath.sk_dating + "DZ_blackjack.png",
-				DatingPath.sk_dating + "DZ_blackjack.sk",
-				DatingPath.sk_dating + "DZ_dezhou.png",
-				DatingPath.sk_dating + "DZ_dezhou.sk",
-				DatingPath.sk_dating + "DZ_brniuniu.png",
-				DatingPath.sk_dating + "DZ_brniuniu.sk",
-				DatingPath.sk_dating + "DZ_buyu.png",
-				DatingPath.sk_dating + "DZ_buyu.sk",
-				DatingPath.sk_dating + "DZ_rddz.png",
-				DatingPath.sk_dating + "DZ_rddz.sk",
-				DatingPath.sk_dating + "DZ_ebgang.png",
-				DatingPath.sk_dating + "DZ_ebgang.sk",
-				DatingPath.sk_dating + "DZ_honghei.png",
-				DatingPath.sk_dating + "DZ_honghei.sk",
-				DatingPath.sk_dating + "DZ_longhu.png",
-				DatingPath.sk_dating + "DZ_longhu.sk",
-				DatingPath.sk_dating + "DZ_niuniu.png",
-				DatingPath.sk_dating + "DZ_niuniu.sk",
-				DatingPath.sk_dating + "DZ_rniuniu.png",
-				DatingPath.sk_dating + "DZ_rniuniu.sk",
-				DatingPath.sk_dating + "DZ_paijiu.png",
-				DatingPath.sk_dating + "DZ_paijiu.sk",
-				DatingPath.sk_dating + "DZ_toubao.png",
-				DatingPath.sk_dating + "DZ_toubao.sk",
-				DatingPath.sk_dating + "DZ_sangong.png",
-				DatingPath.sk_dating + "DZ_sangong.sk",
-				DatingPath.sk_dating + "DZ_rshisanshui.png",
-				DatingPath.sk_dating + "DZ_rshisanshui.sk",
-				DatingPath.sk_dating + "DZ_shuiguoji.png",
-				DatingPath.sk_dating + "DZ_shuiguoji.sk",
-				DatingPath.sk_dating + "DZ_tbniuniu.png",
-				DatingPath.sk_dating + "DZ_tbniuniu.sk",
-				DatingPath.sk_dating + "DZ_zjh.png",
-				DatingPath.sk_dating + "DZ_zjh.sk",
-				DatingPath.sk_dating + "DZ_rpaodekuai.png",
-				DatingPath.sk_dating + "DZ_rpaodekuai.sk",
-				DatingPath.sk_dating + "DZ_zoo.png",
-				DatingPath.sk_dating + "DZ_zoo.sk",
-				DatingPath.sk_dating + "shouchang.png",
-				DatingPath.sk_dating + "shouchang.sk",
-				DatingPath.sk_dating + "vip.png",
-				DatingPath.sk_dating + "vip.sk",
-				DatingPath.sk_dating + "bangdingsongjin.png",
-				DatingPath.sk_dating + "bangdingsongjin.sk",
-				DatingPath.sk_dating + "caishen01.png",
-				DatingPath.sk_dating + "caishen01.sk",
-				//特效部分添加
-				Path.ui_atlas_effect + "bairen.atlas",
-				Path.ui_atlas_effect + "btn_fx.atlas",
-				Path.ui_atlas_effect + "btn_huodong.atlas",
-				Path.ui_atlas_effect + "btn_qiandao.atlas",
-				Path.ui_atlas_effect + "btn_shouchong.atlas",
-				Path.ui_atlas_effect + "btn_tuiguang.atlas",
-				Path.ui_atlas_effect + "btn_yeb.atlas",
-				Path.ui_atlas_effect + "btn_zhuanpan.atlas",
-				Path.ui_atlas_effect + "coin.atlas",
-				Path.ui_atlas_effect + "flycoin.atlas",
-				Path.ui_atlas_effect + "jj.atlas",
-				Path.ui_atlas_effect + "loading.atlas",
-				Path.ui_atlas_effect + "qipaiduizhan.atlas",
-				Path.ui_atlas_effect + "shuzi.atlas",
-				Path.ui_atlas_effect + "update.atlas",
-				Path.ui_atlas_effect + "btn_qf.atlas",
-				//通用预加载
-				Path.atlas_game_ui_tongyong + "dating.atlas",
-				Path.atlas_game_ui_tongyong + "general.atlas",
-				Path.atlas_game_ui_tongyong + "hud.atlas",
-				Path.atlas_game_ui_tongyong + "logo.atlas",
-				Path.atlas_game_ui_tongyong + "pai.atlas",
-				Path.atlas_game_ui_tongyong + "qz.atlas",
-				Path.atlas_game_ui_tongyong + "touxiang.atlas",
-				Path.atlas_game_ui_tongyong + "tuichu.atlas",
-				Path.atlas_game_ui_tongyong + "yq.atlas",
-				Path.atlas_game_ui_tongyong + "fk.atlas",
-				Path.ui_tongyong_sk + "HeGuan.sk",
-				Path.ui_tongyong_sk + "HeGuan.png",
-			];
 
 
+			if (WebConfig.enterGameLocked) {
+				this["__needLoadAsset"] = [
+					DatingPath.atlas_dating_ui + 'dating.atlas',
+					DatingPath.atlas_dating_ui + 'datinggg.atlas',
+					DatingPath.atlas_dating_ui + 'fk.atlas',
+					DatingPath.atlas_dating_ui + 'tongyong.atlas',
+				]
+			} else {
+				this["__needLoadAsset"] = [
+					DatingPath.atlas_dating_ui + 'bangding.atlas',
+					DatingPath.atlas_dating_ui + 'chongzhi.atlas',
+					DatingPath.atlas_dating_ui + 'dating.atlas',
+					DatingPath.atlas_dating_ui + 'denglu.atlas',
+					DatingPath.atlas_dating_ui + 'denglurk.atlas',
+					DatingPath.atlas_dating_ui + 'fenxiang.atlas',
+					DatingPath.atlas_dating_ui + 'geren.atlas',
+					DatingPath.atlas_dating_ui + 'huode.atlas',
+					DatingPath.atlas_dating_ui + 'huodong.atlas',
+					DatingPath.atlas_dating_ui + 'kehu.atlas',
+					DatingPath.atlas_dating_ui + 'qiandao.atlas',
+					DatingPath.atlas_dating_ui + 'qukuan.atlas',
+					DatingPath.atlas_dating_ui + 'tongyong.atlas',
+					DatingPath.atlas_dating_ui + 'tuiguang.atlas',
+					DatingPath.atlas_dating_ui + 'xinxi.atlas',
+					DatingPath.atlas_dating_ui + 'zhuanpan.atlas',
+					DatingPath.atlas_dating_ui + 'vip.atlas',
+					DatingPath.atlas_dating_ui + 'shezhi.atlas',
+					DatingPath.atlas_dating_ui + 'yuebao.atlas',
+					DatingPath.atlas_dating_ui + "shouchong.atlas",
+					DatingPath.atlas_dating_ui + "baoxianxiang.atlas",
+					DatingPath.atlas_dating_ui + "jiaru.atlas",
+					DatingPath.atlas_dating_ui + "fk.atlas",
+					DatingPath.atlas_dating_ui + "datinggg.atlas",
+					DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
+					DatingPath.atlas_dating_ui + "hongbao.atlas",
+
+
+					DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
+					DatingPath.ui_dating_tongyong + "mask_top.png",
+					DatingPath.ui_dating_tongyong + "mask_bottom.png",
+					DatingPath.ui_dating_tongyong + "mask_middle.png",
+					DatingPath.ui_dating_tongyong + "mask_left.png",
+					DatingPath.ui_dating_tongyong + "mask_right.png",
+					//龙骨相关添加
+					DatingPath.sk_dating + "DZ_baijiale.png",
+					DatingPath.sk_dating + "DZ_baijiale.sk",
+					DatingPath.sk_dating + "DZ_bairendezhou.png",
+					DatingPath.sk_dating + "DZ_bairendezhou.sk",
+					DatingPath.sk_dating + "DZ_benchibaoma.png",
+					DatingPath.sk_dating + "DZ_benchibaoma.sk",
+					DatingPath.sk_dating + "DZ_blackjack.png",
+					DatingPath.sk_dating + "DZ_blackjack.sk",
+					DatingPath.sk_dating + "DZ_dezhou.png",
+					DatingPath.sk_dating + "DZ_dezhou.sk",
+					DatingPath.sk_dating + "DZ_brniuniu.png",
+					DatingPath.sk_dating + "DZ_brniuniu.sk",
+					DatingPath.sk_dating + "DZ_buyu.png",
+					DatingPath.sk_dating + "DZ_buyu.sk",
+					DatingPath.sk_dating + "DZ_rddz.png",
+					DatingPath.sk_dating + "DZ_rddz.sk",
+					DatingPath.sk_dating + "DZ_ebgang.png",
+					DatingPath.sk_dating + "DZ_ebgang.sk",
+					DatingPath.sk_dating + "DZ_honghei.png",
+					DatingPath.sk_dating + "DZ_honghei.sk",
+					DatingPath.sk_dating + "DZ_longhu.png",
+					DatingPath.sk_dating + "DZ_longhu.sk",
+					DatingPath.sk_dating + "DZ_niuniu.png",
+					DatingPath.sk_dating + "DZ_niuniu.sk",
+					DatingPath.sk_dating + "DZ_rniuniu.png",
+					DatingPath.sk_dating + "DZ_rniuniu.sk",
+					DatingPath.sk_dating + "DZ_paijiu.png",
+					DatingPath.sk_dating + "DZ_paijiu.sk",
+					DatingPath.sk_dating + "DZ_toubao.png",
+					DatingPath.sk_dating + "DZ_toubao.sk",
+					DatingPath.sk_dating + "DZ_sangong.png",
+					DatingPath.sk_dating + "DZ_sangong.sk",
+					DatingPath.sk_dating + "DZ_rshisanshui.png",
+					DatingPath.sk_dating + "DZ_rshisanshui.sk",
+					DatingPath.sk_dating + "DZ_shuiguoji.png",
+					DatingPath.sk_dating + "DZ_shuiguoji.sk",
+					DatingPath.sk_dating + "DZ_tbniuniu.png",
+					DatingPath.sk_dating + "DZ_tbniuniu.sk",
+					DatingPath.sk_dating + "DZ_zjh.png",
+					DatingPath.sk_dating + "DZ_zjh.sk",
+					DatingPath.sk_dating + "DZ_rpaodekuai.png",
+					DatingPath.sk_dating + "DZ_rpaodekuai.sk",
+					DatingPath.sk_dating + "DZ_zoo.png",
+					DatingPath.sk_dating + "DZ_zoo.sk",
+					DatingPath.sk_dating + "DZ_mpniuniu.png",
+					DatingPath.sk_dating + "DZ_mpniuniu.sk",
+					DatingPath.sk_dating + "DZ_wxsaoleihb.png",
+					DatingPath.sk_dating + "DZ_wxsaoleihb.sk",
+					DatingPath.sk_dating + "shouchang.png",
+					DatingPath.sk_dating + "shouchang.sk",
+					DatingPath.sk_dating + "vip.png",
+					DatingPath.sk_dating + "vip.sk",
+					DatingPath.sk_dating + "bangdingsongjin.png",
+					DatingPath.sk_dating + "bangdingsongjin.sk",
+					DatingPath.sk_dating + "caishen01.png",
+					DatingPath.sk_dating + "caishen01.sk",
+					//特效部分添加
+					Path.ui_atlas_effect + "bairen.atlas",
+					Path.ui_atlas_effect + "btn_fx.atlas",
+					Path.ui_atlas_effect + "btn_huodong.atlas",
+					Path.ui_atlas_effect + "btn_qiandao.atlas",
+					Path.ui_atlas_effect + "btn_shouchong.atlas",
+					Path.ui_atlas_effect + "btn_tuiguang.atlas",
+					Path.ui_atlas_effect + "btn_yeb.atlas",
+					Path.ui_atlas_effect + "btn_zhuanpan.atlas",
+					Path.ui_atlas_effect + "coin.atlas",
+					Path.ui_atlas_effect + "flycoin.atlas",
+					Path.ui_atlas_effect + "jj.atlas",
+					Path.ui_atlas_effect + "loading.atlas",
+					Path.ui_atlas_effect + "qipaiduizhan.atlas",
+					Path.ui_atlas_effect + "shuzi.atlas",
+					Path.ui_atlas_effect + "update.atlas",
+					Path.ui_atlas_effect + "btn_qf.atlas",
+					//通用预加载
+					Path.atlas_game_ui_tongyong + "dating.atlas",
+					Path.atlas_game_ui_tongyong + "general.atlas",
+					Path.atlas_game_ui_tongyong + "hud.atlas",
+					Path.atlas_game_ui_tongyong + "logo.atlas",
+					Path.atlas_game_ui_tongyong + "pai.atlas",
+					Path.atlas_game_ui_tongyong + "qz.atlas",
+					Path.atlas_game_ui_tongyong + "touxiang.atlas",
+					Path.atlas_game_ui_tongyong + "tuichu.atlas",
+					Path.atlas_game_ui_tongyong + "yq.atlas",
+					Path.atlas_game_ui_tongyong + "fk.atlas",
+					Path.ui_tongyong_sk + "HeGuan.sk",
+					Path.ui_tongyong_sk + "HeGuan.png",
+				];
+
+			}
 		}
 
 		/**
@@ -417,6 +436,12 @@ module gamedating.page {
 				DatingPageDef.TYPE_CHESS,
 			],
 			"zoo": [
+				DatingPageDef.TYPE_GAME,
+			],
+			"mpniuniu": [
+				DatingPageDef.TYPE_CHESS,
+			],
+			"wxsaoleihb": [
 				DatingPageDef.TYPE_GAME,
 			],
 

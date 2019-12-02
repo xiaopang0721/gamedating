@@ -80,6 +80,21 @@ module gamedating.page {
 			super.layout();
 			this._htmlText && (this._from = this._htmlText.x);
 			this._to = -this._txtW;
+			if (this._viewUI) {
+				if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+					this._viewUI.box_notice.scaleX = 1.67;
+					this._viewUI.box_notice.scaleY = 1.67;
+					if (this._game.isFullScreen) {
+						this._viewUI.box_notice.y = 349;
+					} else {
+						this._viewUI.box_notice.y = 269;
+					}
+				} else if (Laya.stage.screenMode == Stage.SCREEN_HORIZONTAL) {
+					this._viewUI.box_notice.y = 109
+					this._viewUI.box_notice.scaleX = 1;
+					this._viewUI.box_notice.scaleY = 1;
+				}
+			}
 		}
 
 		update(diff: number) {

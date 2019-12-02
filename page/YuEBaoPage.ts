@@ -78,9 +78,8 @@ module gamedating.page {
 			super.onOpen();
 			if (!this._clipMoney) {
 				this._clipMoney = new DatingClip(DatingClip.YUEBAO_FONT);
-				this._clipMoney.scaleX = this._clipMoney.scaleY = 0.6;
-				this._clipMoney.centerX = this._viewUI.clip_money.centerX-8;
-				this._clipMoney.centerY = this._viewUI.clip_money.centerY-15;
+				this._clipMoney.centerX = this._viewUI.clip_money.centerX;
+				this._clipMoney.centerY = this._viewUI.clip_money.centerY;
 				this._viewUI.clip_money.parent.addChild(this._clipMoney);
 				this._viewUI.clip_money.removeSelf();
 			}
@@ -207,6 +206,7 @@ module gamedating.page {
 		}
 
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			if (!WebConfig.info) return;
 			this._clipMoney.setText(WebConfig.info.savaBoxMoney, true);
 			this._zrInputMoney.maxValue = WebConfig.info.money;
@@ -292,7 +292,7 @@ module gamedating.page {
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_SHEZHI_MIMA);
 						return;
 					}
-					if (this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorTimes() >= 3) {
+					if (this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorTimes() >= 3 && this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorCD() >= this._game.sync.serverTimeBys) {
 						// 打开超过错误次数界面
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_MIMA_TISHI);
 						return;
@@ -372,10 +372,10 @@ module gamedating.page {
 			this._data = data;
 			this.txt_time.text = Sync.getTimeStr(data.op_time * 1000);
 			this.txt_zt.text = (data.op_type == Web_operation_fields.USE_MONEY_LOG_TYPE_SAFEBOX_INTEREST) ? "利息" : (data.op_type == Web_operation_fields.USE_MONEY_LOG_TYPE_SAFEBOX_IN ? "存入" : "取出");
-			let color: string = data.money < 0 ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
+			let color: string = data.money < 0 ? "#03a503" : "#a20000";
 			TextFieldU.setHtmlText(this.txt_money, HtmlFormat.addHtmlColor((-data.money).toString(), color));
 			this.txt_yue.text = data.new_savebox_money;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
+			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {

@@ -70,7 +70,6 @@ module gamedating.page {
 			this.initColor();
 
 			this.initVolume();
-			this.initBaoBiaoUI();
 			this._viewUI.tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.tab.selectedIndex = this._dataSource || 0;
 			this._viewUI.btn_bindwx.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -84,9 +83,8 @@ module gamedating.page {
 
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
-
+			this.initBaoBiaoUI();
 			DatingGame.ins.baobiaoMgr.on(BaoBiaoMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
-			this.onUpdateDataInfo();
 
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
@@ -118,8 +116,8 @@ module gamedating.page {
 		}
 
 		//上面信息
-
 		private onUpdatePlayerInfo() {
+			if (!this._viewUI) return;
 			let mainPlayer = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
@@ -155,14 +153,12 @@ module gamedating.page {
 		private initBaoBiaoUI(): void {
 			this._viewUI.box_btn.visible = false;
 			this._viewUI.btn_jiantou.rotation = -180;
-			this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";;
+			this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
 			this._viewUI.list_bb.visible = false;
 			this._viewUI.txt_no.visible = false;
 			this.initList();
 			this._selectTime = this._game.sceneGame.sync.serverTimeBys;
 			this._timeSelectIndex = 6;
-			//当天的话，数据重新获取
-			DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
 			let curSelectedTimeStr = Sync.getTimeStr3(this._selectTime);
 			for (let i = 0; i < 7; i++) {
 				this._timeList[i] = this._selectTime - 86400 * (6 - i);
@@ -171,7 +167,6 @@ module gamedating.page {
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
 				this._viewUI["lb_" + i].color = (i == 6) ? this._selectColor : this._unSelectColor;
 				this._viewUI["btn_" + i].on(LEvent.CLICK, this, this.onMouseHandle, [i]);
-
 			}
 
 			this._viewUI.lb_time.text = curSelectedTimeStr;
@@ -187,8 +182,14 @@ module gamedating.page {
 			let data = this._dataInfo[index];
 			if (cell) {
 				cell.txt_index.text = data.rank + 1;
-				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0)
-				cell.txt_type.text = data.game_name + Web_operation_fields.client_money_logtype_table[data.type];
+				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0);
+				let type_name = "";
+				if (data.game_name == "微信扫雷红包") {
+					type_name = EnumToString.getLimitStr(data.game_name, 2) + Web_operation_fields.client_money_logtype_table[data.type];
+				} else {
+					type_name = data.game_name + Web_operation_fields.client_money_logtype_table[data.type];
+				}
+				cell.txt_type.text = type_name;
 				cell.txt_time.text = Sync.getTimeShortStr(data.time * 1000);
 				cell.txt_money.text = data.shouzhi.toString();
 				cell.txt_money.color = data.shouzhi > 0 ? "#41fe69" : "#ff0000";
@@ -222,7 +223,6 @@ module gamedating.page {
 				let curTimeStr = this._viewUI["lb_" + i].text;
 				this._viewUI["btn_select" + i].selected = curSelectedTimeStr == curTimeStr ? true : false;
 				this._viewUI["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
-
 			}
 			//当天的话，数据重新获取
 			if (this._timeSelectIndex == 6) DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
@@ -350,6 +350,7 @@ module gamedating.page {
 		private selectHandler(index: number) {
 			this._viewUI.box0.visible = index == 0;
 			this._viewUI.box1.visible = index == 1;
+			if (index == 1) this.onUpdateDataInfo();
 			this._viewUI.box2.visible = index == 2;
 		}
 
@@ -384,7 +385,7 @@ module gamedating.page {
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
 				case this._viewUI.btn_clear://清理缓存
-					this._game.alert("清理缓存将删除本地数据对此造成的损失，本平台将不承担任何责任。为了您的虚拟财产安全,我们强烈建议您先绑定帐号信息!\n是否清除缓存？", () => {
+					this._game.alert("清理缓存将删除本地数据对此造成的损失，本平台将不承担任何责任。为了您的虚拟财产安全，我们强烈建议您先绑定帐号信息！是否清除缓存？", () => {
 						localClear();
 						this._game.showTips("清理缓存成功!")
 					}, null, true);
@@ -392,8 +393,7 @@ module gamedating.page {
 				case this._viewUI.btn_change://切换账号
 					this._game.sceneGame.clear("SettingPage change", true)
 					// localRemoveItem("session_key");
-					DatingGame.ins.openLoginPage();
-					this._game.uiRoot.closeAll([DatingPageDef.PAGE_LOGIN]);
+					this._game.openLoginPage();
 					break;
 				case this._viewUI.btn_set_psd://设置密码
 					if (WebConfig.info.isguest || !WebConfig.info.mobile) {//游客要先绑定手机

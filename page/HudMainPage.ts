@@ -12,6 +12,7 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
 				DatingPath.atlas_dating_ui + "datinglunbotu.atlas",
 				DatingPath.sk_dating + "DZ_baijiale.png",
 				DatingPath.sk_dating + "DZ_bairendezhou.png",
@@ -34,7 +35,9 @@ module gamedating.page {
 				DatingPath.sk_dating + "DZ_zjh.png",
 				DatingPath.sk_dating + "DZ_rpaodekuai.png",
 				DatingPath.sk_dating + "DZ_zoo.png",
+				DatingPath.sk_dating + "DZ_mpniuniu.png",
 				DatingPath.sk_dating + "DZ_rniuniu.png",
+				DatingPath.sk_dating + "DZ_wxsaoleihb.png",
 
 				Path.ui_atlas_effect + "bairen.atlas",
 				Path.ui_atlas_effect + "btn_fx.atlas",
@@ -83,7 +86,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.HudOne_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 
 			this._viewUI.list_ad.hScrollBarSkin = '';
 			this._viewUI.list_ad.itemRender = this.createChildren("dating.component.HudAd_TUI", AdItemRender);
@@ -122,7 +124,7 @@ module gamedating.page {
 			this._viewUI.box_yeb.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.box_yrbw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_enterRoom.on(LEvent.CLICK, this, this.enTerClick);
-
+			// Laya.stage.on(LEvent.KEY_DOWN, this, this.onKeyDown);
 
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
@@ -149,6 +151,18 @@ module gamedating.page {
 			this.showQiPaoKuang();
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
+
+		// public TITLE: string = "TITLEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+		// public get evsssssent(): EventDispatcher {
+		// 	if (!this["xxxxxxxaaaa"])
+		// 		this["xxxxxxxaaaa"] = new EventDispatcher()
+		// 	return this["xxxxxxxaaaa"];
+		// }
+		// private onKeyDown(e) {
+		// 	if (e.keyCode == Laya.Keyboard.A) {
+		// 		this.evsssssent.event(this.TITLE);
+		// 	}
+		// }
 
 		/**按钮点击事件 带缓动 */
 		protected onBtnClickWithTween(...agrs): void {
@@ -310,6 +324,16 @@ module gamedating.page {
 				this._isFromRoom = false;
 				this._viewUI.list_btns.renderHandler.recover();
 				this._viewUI.list_btns.renderHandler = null;
+				if (this._viewUI.list_btns.scrollBar) {
+					//记录当前滚动位置
+					WebConfig.scrollBarValue = this._viewUI.list_btns.scrollBar.value;
+				} else {
+					WebConfig.scrollBarValue = 0;
+				}
+
+				this._viewUI.list_ad.renderHandler.recover();
+				this._viewUI.list_ad.renderHandler = null;
+
 				this._game.stopMusic();
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
@@ -372,6 +396,7 @@ module gamedating.page {
 			if (!mainPlayer) return;
 			let playerInfo = mainPlayer.playerInfo;
 			if (!playerInfo) return;
+			if (!this._viewUI) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
 			this._viewUI.btn_bangding.visible = !playerInfo.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			if (!this._clip_money) {
@@ -490,7 +515,11 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._viewUI.list_btns.width = this._clientRealWidth;
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
-				Laya.timer.frameOnce(1, this, this.updatePos);
+				Laya.timer.frameOnce(1, this, ()=>{
+					this.updatePos();
+					this._viewUI.tab.selectedIndex = 1;
+					this._viewUI.tab.selectedIndex = 0;
+				});
 			}
 		}
 
@@ -932,18 +961,18 @@ module gamedating.page {
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
 		private _listBarMax: number = 0;
-                                                                                                                                                                                                    
+
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
 			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
-			this._viewUI.list_btns.scrollTo(0);
 			// 如果从房间出来，不播放入场动画
-			if (this._isFromRoom){
+			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
+				this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 				return;
 			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
@@ -967,6 +996,7 @@ module gamedating.page {
 			})
 			// 出现期间不让滑动
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = false;
+			this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 		}
 
 		private resetList() {
@@ -987,25 +1017,43 @@ module gamedating.page {
 		private onViewMouseHandler(e) {
 			if (this._isPlayAd)
 				return;
+			let curAdIdx = this._curAdIndex;
 			let v = this._viewUI.list_ad.scrollBar.value;
 			this._isPlayAd = true;
 			this._adPlayDelta = 0;
 			this._curAdIndex = Math.round(v / this._adPerWidth);
+			if (curAdIdx == this._curAdIndex || curAdIdx == 0 && this._curAdIndex == this._viewUI.list_ad.dataSource.length - 1) {
+				if (v < this._markAdBar) {
+					// 往右滑动
+					this._curAdIndex--;
+				}
+				if (v > this._markAdBar) {
+					// 往左滑动
+					if (this._curAdIndex == this._viewUI.list_ad.dataSource.length - 1)
+						this._curAdIndex--;
+					else
+						this._curAdIndex++;
+				}
+			}
 			this.playNext();
 		}
 
+		private _markAdBar: number;
 		private onAdMouseHandler(e) {
 			let v = this._viewUI.list_ad.scrollBar.value;
 			switch (e.type) {
 				case LEvent.MOUSE_DOWN:
 					this._isPlayAd = false;
 					Laya.Tween.clearAll(this._viewUI.list_ad.scrollBar);
+					this._markAdBar = v;
 					break;
 				case LEvent.MOUSE_MOVE:
-					if (v <= 0) {
-						this._viewUI.list_ad.scrollBar.value = this.adListMax;
-					} else if (v >= this.adListMax) {
-						this._viewUI.list_ad.scrollBar.value = 0;
+					if (!this._isPlayAd) {
+						if (v <= 0) {
+							this._viewUI.list_ad.scrollBar.value = this.adListMax;
+						} else if (v >= this.adListMax) {
+							this._viewUI.list_ad.scrollBar.value = 0;
+						}
 					}
 					break;
 				case LEvent.MOUSE_UP:
@@ -1104,8 +1152,10 @@ module gamedating.page {
 
 		saveListStatus() {
 			let listData = this._game.datingGame.createHudTabScrollData();
-			listData.tabIndex = this._viewUI.tab.selectedIndex;
-			listData.value = this._viewUI.list_btns.scrollBar.value;
+			if (listData) {
+				listData.tabIndex = this._viewUI.tab.selectedIndex;
+				listData.value = this._viewUI.list_btns.scrollBar.value;
+			}
 		}
 
 		private renderHandler(cell: GameItemRender, index: number) {
@@ -1134,7 +1184,9 @@ module gamedating.page {
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.nqp.dating.component.Effect_dengdaiUI;
 		private _mainView: any;
-
+		private _offset_x: number;
+		private _isJqqd: boolean;
+		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		constructor() {
 			super();
 		}
@@ -1151,7 +1203,13 @@ module gamedating.page {
 			this._gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + gameStr : gameStr;
 			this.index = index;
 			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
+			this._offset_x = (this.index % 2 == 0 ? 12 : -5) + 15;
+			this._isJqqd = GameItemRender._jqqdGames.indexOf(this._gameStr) != -1;
 			this.show();
+			this.update();
+			// page.evsssssent.on(page.TITLE, this, () => {
+			// 	this.onMouseHandle();
+			// })
 		}
 
 		destroy() {
@@ -1168,6 +1226,7 @@ module gamedating.page {
 			this.clearWaiting();
 			this.clearUpdate();
 			this.clearProgress();
+			Laya.Tween.clearAll(this);
 			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
 			this._game && this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
 			super.destroy();
@@ -1195,17 +1254,28 @@ module gamedating.page {
 			if (this._updateEffect) {
 				this._updateEffect.onDraw();
 			}
-			if (!LoadingMgr.ins.isLoaded(this._gameStr)) {
-				if (this.getProgress(this._gameStr) > 0.001) {
-					this.showProgress(this.getProgress(this._gameStr));
-					this.clearUpdate();
-				} else {
-					this.clearProgress();
-				}
-			} else {
+			if (LoadingMgr.ins.isLoaded(this._gameStr) || this._isJqqd) {
 				this.clearUpdate();
 				this.clearProgress();
 				this.clearWaiting();
+			} else {
+				let progress = this.getProgress(this._gameStr);
+				if (progress > 0) {
+					this.showProgress(progress);
+					this.clearUpdate();
+					this.clearWaiting();
+				}
+				else {
+					if (JsLoader.ins.isWaitLoad(this._gameStr)) {
+						this.showWaiting();
+						this.clearUpdate();
+						this.clearProgress();
+					} else {
+						this.clearProgress();
+						this.clearWaiting();
+						this.showUpdate();
+					}
+				}
 			}
 		}
 
@@ -1225,12 +1295,11 @@ module gamedating.page {
 			return this.alpha;
 		}
 		//敬请期待
-		private static _jqqdGames: string[] = ['zoo', 'rshisanshui'];
 		private show(): void {
-			let offset_x: number = (this.index % 2 == 0 ? 12 : -5) + 15;
+			let offset_x = this._offset_x;
 			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
 			this.btn.x = 148 + offset_x;
-			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
+			if (this._isJqqd) {
 				if (this._mainView instanceof AvatarUIShow) {
 					this._mainView.clear();
 					this._mainView.destroy();
@@ -1243,10 +1312,6 @@ module gamedating.page {
 				this._mainView.anchorX = this._mainView.anchorY = 0.5;
 				this._mainView.x = 135 + offset_x;
 				this._mainView.y = 120;
-				this.clearUpdate();
-				this.clearProgress();
-				this.clearWaiting();
-				return;
 			} else {
 				if (this._mainView instanceof LImage) {
 					this._mainView.removeSelf();
@@ -1262,11 +1327,6 @@ module gamedating.page {
 				let sk_url = DatingPath.sk_dating + "DZ_" + this._gameStr;
 				this._mainView.loadSkeleton(sk_url, 135 + offset_x, 120)
 			}
-			// 是否显示更新标签
-			if (!LoadingMgr.ins.isLoaded(this._gameStr) && this.getProgress(this._gameStr) <= 0.001)
-				this.showUpdate(offset_x);
-			else
-				this.clearUpdate();
 		}
 
 		private getProgress(gameid: string) {
@@ -1292,7 +1352,8 @@ module gamedating.page {
 		}
 
 		// 显示更新状态
-		private showUpdate(offset_x: number): void {
+		private showUpdate(): void {
+			let offset_x = this._offset_x;
 			if (this._waitingTip && this._waitingTip.parent)
 				return;
 			if (!this._updateEffect) {
@@ -1335,9 +1396,9 @@ module gamedating.page {
 			}
 		}
 
-		private onMouseHandle(e: LEvent) {
+		private onMouseHandle(e?: LEvent) {
 			if (!this._gameStr) return;
-			if (GameItemRender._jqqdGames.indexOf(this._gameStr) != -1) {
+			if (this._isJqqd) {
 				this._game.uiRoot.btnTween(this._mainView, this, () => {
 					this._game.showTips("功能开发中，敬请期待...");
 				})
@@ -1360,14 +1421,12 @@ module gamedating.page {
 			this._game.uiRoot.btnTween(this._mainView, this, () => {
 				let gameStr = this._gameStr;
 				if (LoadingMgr.ins.isLoaded(gameStr)) {
-					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
+					JsLoader.ins.startLoad(gameStr, false, Handler.create(this, (assets) => {
 						this.openPage(gameStr);
 					}))
 				} else {
-					this.showWaiting();
-					JsLoader.ins.startLoad(gameStr, Handler.create(this, (assets) => {
-						LoadingMgr.ins.load(gameStr, assets);
-					}))
+					JsLoader.ins.startLoad(gameStr, true);
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
 				}
 			})
 		}
