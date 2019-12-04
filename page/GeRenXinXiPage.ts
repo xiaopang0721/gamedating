@@ -185,7 +185,7 @@ module gamedating.page {
 			let data = this._dataInfo[index];
 			if (cell) {
 				cell.txt_index.text = data.rank + 1;
-				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", data.rank % 2 == 0 ? "tu_di1" : "tu_10");
+				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.rank % 2 == 0 ? "tu_5" : "tu_6");
 				let type_name = "";
 				if (data.game_name == "微信扫雷红包") {
 					type_name = EnumToString.getLimitStr(data.game_name, 2) + Web_operation_fields.client_money_logtype_table[data.type];

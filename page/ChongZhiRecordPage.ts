@@ -116,7 +116,7 @@ module gamedating.page {
 			}
 			this.txt_money.text = data.money;
 			this.txt_type.text = data.recharge_type;
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0)
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.rank % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {

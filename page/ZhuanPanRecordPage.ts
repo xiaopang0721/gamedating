@@ -111,7 +111,7 @@ module gamedating.page {
 		setData(game: Game, data: any, index: number) {
 			this._game = game;
 			this._data = data;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", index % 2 == 0 ? "tu_di1" : "tu_10");
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", index % 2 == 0 ? "tu_5" : "tu_6");
 			this.txt_username.text = data.account;
 			this.txt_time.text = Sync.getTimeStr(data.turn_time * 1000);
 			this.txt_type.text = (data.turn_name as string).substring(0, 2);

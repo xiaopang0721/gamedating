@@ -4,6 +4,8 @@
 module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
+		private _boxItems: any[] = [];
+
 		get viewUI() {
 			return this._viewUI;
 		}
@@ -26,16 +28,10 @@ module gamedating.page {
 			this._delta = 100;
 		}
 
-		private _tabItems: any[] = [];
 		// 页面初始化函数
 		protected init(): void {
 			this._viewUI = this.createView("dating.DaTingUI");
 			this.addChild(this._viewUI);
-			for (let index = 0; index < this._viewUI.tab.numChildren; index++) {
-				let item = this._viewUI.tab.getChildByName("item" + index);
-				this._tabItems[index] = item;
-				this._tabItems[index].on(LEvent.COMPLETE, this, this.onAni1Over, [index]);
-			}
 		}
 
 		// 页面打开时执行函数
@@ -52,10 +48,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.HudOne_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-
-			// 标签按钮
-			this._viewUI.tab.selectHandler = new Handler(this, this.onSelectTab);
-			this._viewUI.tab.selectedIndex = 0;
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -77,10 +69,16 @@ module gamedating.page {
 			this._viewUI.btn_enterRoom.on(LEvent.CLICK, this, this.enTerClick);
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectTab);
+			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectItem);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 
-			// this.initTabClickPoly();
+			//标签页按钮
+			for (let index = 0; index < this._viewUI.box_items.numChildren; index++) {
+				this._boxItems[index] = this.viewUI["item" + index];
+				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
+			}
+			this.onSelectItem(0);
+			this.initTabClickPoly();
 			//hud弹窗逻辑
 			this.alertPage();
 			this.onUpdatePlayerInfo(true);
@@ -107,10 +105,6 @@ module gamedating.page {
 			if (e instanceof LEvent && (e.currentTarget == this._viewUI.img_copy_gw || e.currentTarget == this._viewUI.btn_guanwang)) {
 				e.stopPropagation();
 			}
-		}
-
-		private onAni1Over(index: number) {
-			this._tabItems[index].ani2.play(0, true);
 		}
 
 		private _qifuTypeImgUrl: string;
@@ -148,11 +142,14 @@ module gamedating.page {
 				this._game.stopMusic();
 				Laya.Tween.clearAll(this);
 				this.clearTweens();
-				this._viewUI.tab.selectHandler.recover();
-				this._viewUI.tab.selectHandler = null;
+				if (this._boxItems && this._boxItems.length) {
+					for (let index = 0; index < this._boxItems.length; index++) {
+						this._boxItems[index].off(LEvent.CLICK, this, this.onSelectItem);
+					}
+				}
 				this._game.qifuMgr.off(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectTab);
+				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectItem);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
 				if (this._clip_money) {
 					this._clip_money.removeSelf();
@@ -180,13 +177,14 @@ module gamedating.page {
 			[-142, -155, [147, 195, 365, 159, 365, 222, 148, 270]]
 		];
 		private initTabClickPoly() {
-			for (let index = 0; index < this._viewUI.tab.numChildren; index++) {
-				let item = this._viewUI.tab.getChildByName("item" + index) as Laya.Button;
-				let hitArea = new Laya.HitArea();
-				let graphics = new Laya.Graphics();
-				graphics.drawPoly(this._polyPoint[index][0], this._polyPoint[index][1], this._polyPoint[index][2], "");
-				hitArea.hit = graphics;
-				item.hitArea = hitArea;
+			if (this._boxItems && this._boxItems.length) {
+				for (let index = 0; index < this._boxItems.length; index++) {
+					let hitArea = new Laya.HitArea();
+					let graphics = new Laya.Graphics();
+					graphics.drawPoly(this._polyPoint[index][0], this._polyPoint[index][1], this._polyPoint[index][2], "");
+					hitArea.hit = graphics;
+					this._boxItems[index].hitArea = hitArea;
+				}
 			}
 		}
 
@@ -306,8 +304,7 @@ module gamedating.page {
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
 				Laya.timer.frameOnce(1, this, () => {
 					this.updatePos();
-					this._viewUI.tab.selectedIndex = 1;
-					this._viewUI.tab.selectedIndex = 0;
+					this.onSelectItem(0);
 				});
 			}
 		}
@@ -323,13 +320,13 @@ module gamedating.page {
 				this._viewUI.box_btn_top.right = 25;
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56 - 11;
-				this._viewUI.box_tabs.right = -35;
+				this._viewUI.box_tabs.left = -11;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
 				this._viewUI.box_btn_top.right = 0;
 				this._viewUI.box_bottomLeft.left = 17;
 				this._viewUI.box_bottomRight.right = 11;
-				this._viewUI.box_tabs.right = -35;
+				this._viewUI.box_tabs.left = -11;
 			}
 			this.judgeBtnShow();
 			this.updateFenXiangPos();
@@ -475,13 +472,10 @@ module gamedating.page {
 			let value = this._viewUI.list_btns.scrollBar.value;
 		}
 
-		private onSelectTab(index: number = -1) {
+		private _selectIndex: number = 0;
+		public onSelectItem(index) {
 			if (!WebConfig.gamelist)
 				return;
-			if (index == -1) {
-				this._viewUI.tab.selectedIndex = 0;
-				return;
-			}
 			// 如果有值，说明该干活了
 			let listData = this._game.datingGame.hudTabScrollData;
 			if (listData) {
@@ -489,7 +483,7 @@ module gamedating.page {
 				let value: number = listData.value;
 				let tabIndex: number = listData.tabIndex;
 				this._game.datingGame.clearHudTabScrollData();
-				// this._viewUI.tab.selectedIndex = tabIndex;
+				this._selectIndex = tabIndex;
 				Laya.timer.once(100, this, () => {
 					this._viewUI.list_btns.scrollBar.value = value;
 					this._isFromRoom = false;
@@ -498,17 +492,18 @@ module gamedating.page {
 					return;
 				}
 			}
-			for (let i = 0; i < this._tabItems.length; i++) {
+			for (let i = 0; i < this._boxItems.length; i++) {
 				if (i == index) {
-					this._tabItems[i].ani1.play(0, false);
-					this._tabItems[i].clip.index = 2;
-					this._tabItems[i].img1.visible = true;
-					this._tabItems[i].img2.visible = true;
+					this._boxItems[i].ani1.play(0, false);
+					this._boxItems[i].ani2.play(0, true);
+					this._boxItems[i].clip.index = 2;
+					this._boxItems[i].img1.visible = true;
+					this._boxItems[i].img2.visible = true;
 				} else {
-					this._tabItems[i].ani2.gotoAndStop(0);
-					this._tabItems[i].clip.index = 1;
-					this._tabItems[i].img1.visible = false;
-					this._tabItems[i].img2.visible = false;
+					this._boxItems[i].ani2.gotoAndStop(0);
+					this._boxItems[i].clip.index = 1;
+					this._boxItems[i].img1.visible = false;
+					this._boxItems[i].img2.visible = false;
 				}
 			}
 			Laya.timer.clearAll(this);
@@ -702,7 +697,7 @@ module gamedating.page {
 		saveListStatus() {
 			let listData = this._game.datingGame.createHudTabScrollData();
 			if (listData) {
-				listData.tabIndex = this._viewUI.tab.selectedIndex;
+				listData.tabIndex = this._selectIndex;
 				listData.value = this._viewUI.list_btns.scrollBar.value;
 			}
 		}
@@ -833,14 +828,14 @@ module gamedating.page {
 
 		// 显示等待状态
 		private showWaiting() {
-			// if (!this._waitingTip) {
-			// 	let cla = Page.FindClass("dating.component.Effect_dengdaiUI");
-			// 	this._waitingTip = new cla();
-			// }
-			// let offset_x: number = 15;
-			// this._waitingTip.x = offset_x;
-			// this.tip.addChild(this._waitingTip);
-			// this.clearUpdate();
+			if (!this._waitingTip) {
+				let cla = Page.FindClass("dating.component.Effect_dengdaiUI");
+				this._waitingTip = new cla();
+			}
+			let offset_x: number = 15;
+			this._waitingTip.x = offset_x;
+			this.tip.addChild(this._waitingTip);
+			this.clearUpdate();
 		}
 		private clearWaiting() {
 			if (this._waitingTip) {

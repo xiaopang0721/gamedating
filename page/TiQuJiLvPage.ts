@@ -123,7 +123,7 @@ module gamedating.page {
 				this.txt_zt.color = "#fdfd40";
 			}
 			this.txt_money.text = data.money || "0";
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", data.rank % 2 == 0 ? "tu_di1" : "tu_10");
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.rank % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {

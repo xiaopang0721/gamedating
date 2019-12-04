@@ -27,10 +27,10 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdateData);
 
 			if (!this._avatar) {
-                this._avatar = new AvatarUIShow();
-                this._viewUI.box_sk.addChild(this._avatar);
-            }
-            this._avatar.loadSkeleton(DatingPath.sk_dating + "qiandao", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 20, 2);
+				this._avatar = new AvatarUIShow();
+				this._viewUI.box_sk.addChild(this._avatar);
+			}
+			this._avatar.loadSkeleton(DatingPath.sk_dating + "qiandao", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 20, 2);
 			for (let i = 0; i < this._viewUI.box_qiandao.numChildren; i++) {
 				this._qiandaos[i] = this._viewUI["qiandao" + i];
 				this._qiandaos[i].visible = false;
@@ -40,11 +40,11 @@ module gamedating.page {
 			}
 		}
 
-        update(diff): void {
-            if (this._avatar) {
-                this._avatar.onDraw();
-            }
-        }
+		update(diff): void {
+			if (this._avatar) {
+				this._avatar.onDraw();
+			}
+		}
 
 		protected onOptHandler(optcode: number, msg: any) {
 			if (msg.type == Operation_Fields.OPRATE_GAME) {
@@ -75,10 +75,8 @@ module gamedating.page {
 			}
 			if (WebConfig.info.is_can_qd) {
 				this._viewUI.img_btn.skin = DatingPath.ui_dating + "qiandao/tu_mrzl.png";
-				this._viewUI.btn_qiandao.skin = DatingPath.ui_dating + "qiandao/btn_mrzl.png";
-			}else{
+			} else {
 				this._viewUI.img_btn.skin = DatingPath.ui_dating + "qiandao/tu_ljqd.png";
-				this._viewUI.btn_qiandao.skin = DatingPath.ui_dating + "qiandao/btn_ljqd.png";
 			}
 		}
 
@@ -107,10 +105,10 @@ module gamedating.page {
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdateData);
 				if (this._avatar) {
-                this._avatar.clear();
-                this._avatar.destroy();
-                this._avatar = null;
-            }
+					this._avatar.clear();
+					this._avatar.destroy();
+					this._avatar = null;
+				}
 			}
 			super.close();
 		}

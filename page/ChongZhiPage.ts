@@ -286,19 +286,19 @@ module gamedating.page {
 		}
 
 		private tabChangeHandler() {
-			let value = this._viewUI.list_tab.scrollBar.value;
-			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
-				this._viewUI.btn_pre_tab.visible = false;
-				this._viewUI.btn_next_tab.visible = false;
-			} else {
-				if (value <= this._viewUI.list_tab.scrollBar.min) {
-					this._viewUI.btn_pre_tab.visible = false;
-					this._viewUI.btn_next_tab.visible = true;
-				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
-					this._viewUI.btn_pre_tab.visible = true;
-					this._viewUI.btn_next_tab.visible = false;
-				}
-			}
+			// let value = this._viewUI.list_tab.scrollBar.value;
+			// if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
+			// 	this._viewUI.btn_pre_tab.visible = false;
+			// 	this._viewUI.btn_next_tab.visible = false;
+			// } else {
+			// 	if (value <= this._viewUI.list_tab.scrollBar.min) {
+			// 		this._viewUI.btn_pre_tab.visible = false;
+			// 		this._viewUI.btn_next_tab.visible = true;
+			// 	} else if (value >= this._viewUI.list_tab.scrollBar.max) {
+			// 		this._viewUI.btn_pre_tab.visible = true;
+			// 		this._viewUI.btn_next_tab.visible = false;
+			// 	}
+			// }
 		}
 
 		private _clip_money: DatingClip;
@@ -318,8 +318,8 @@ module gamedating.page {
 				}
 			}
 			this._viewUI.list_tab.dataSource = this._paychannel;
-			this._viewUI.btn_pre_tab.visible = false;
-			this._viewUI.btn_next_tab.visible = this._paychannel && this._paychannel && this._paychannel.length > 6;
+			// this._viewUI.btn_pre_tab.visible = false;
+			// this._viewUI.btn_next_tab.visible = this._paychannel && this._paychannel && this._paychannel.length > 6;
 			if (this._viewUI.list_tab && this._viewUI.list_tab.length > 1) {
 				this._viewUI.list_tab.selectedIndex = 0;
 			}

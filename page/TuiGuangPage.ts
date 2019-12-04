@@ -565,7 +565,7 @@ module gamedating.page {
 			this.txt_title.text = "Lv." + data.agency_lv;
 			this.txt_yjed.text = StringU.substitute("{0}-{1}", data.agency_min, data.agency_max);
 			this.txt_fyvalue.text = data.agency_fytype == 2 ? StringU.substitute("返佣{0}%", data.agency_prec) : StringU.substitute("每万返佣{0}元", data.agency_prec);
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
+			StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.index % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -607,7 +607,7 @@ module gamedating.page {
 			this.txt_title.text = "Lv." + data.fs_lv;
 			this.txt_yjed.text = StringU.substitute("{0}-{1}", data.fs_min, data.fs_max);
 			this.txt_fyvalue.text = StringU.substitute("{0}%", data.fs_prec);
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
+			StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.index % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -682,7 +682,7 @@ module gamedating.page {
 			this.txt_money.text = data.money.toString();
 			this.txt_type.text = data.rb_type.toString();
 			this.txt_from_nickname.text = data.from_nikename;
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
+			StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.index % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -720,7 +720,7 @@ module gamedating.page {
 			this.txt_bet.text = data.allyj.toString();
 			this.txt_allfy.text = data.jishu.toString();
 			this.txt_selffy.text = data.fy.toString();
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2);
+			StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.index % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
@@ -747,7 +747,7 @@ module gamedating.page {
 			this.txt_total.text = data.allyj.toString();
 			this.txt_tallage.text = data.selfyj.toString();
 			this.txt_count.text = data.regnum.toString();
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.rank % 2 == 0 ? 1 : 2)
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.rank % 2 == 0 ? "tu_5" : "tu_6");
 		}
 	}
 }

@@ -388,7 +388,7 @@ module gamedating.page {
 				this.txt_money_zr.text = (-data.money).toString();
 			}
 			this.txt_yue.text = data.new_savebox_money;
-			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.index % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {

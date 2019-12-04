@@ -397,7 +397,7 @@ module gamedating.page {
 			TextFieldU.createHtmlText(this.txt_zt, HtmlFormat.addHtmlColor(data.status, color));
 			this.txt_money.text = data.money;
 			this.txt_type.text = data.drawtype;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong+ "tu_bb{0}.png", data.rank % 2 == 0 ? 1 : 2)
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.rank % 2 == 0 ? "tu_5" : "tu_6");
 			this.visible = true;
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {

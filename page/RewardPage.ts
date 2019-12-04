@@ -9,6 +9,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "huode.atlas",
 				DatingPath.atlas_dating_ui + "vip.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "huode.atlas",
 			];
 
 			this._isNeedBlack = true;
@@ -21,8 +22,7 @@ module gamedating.page {
 			this.addChild(this._viewUI);
 		}
 
-		setData(data:any,skin?:string)
-		{
+		setData(data: any, skin?: string) {
 			this._viewUI.txt_num.text = data + "金币";
 			// this._viewUI.img.skin = skin || this._viewUI.img.skin;
 		}
@@ -30,16 +30,17 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			this._viewUI.ani2.play(0, false);
 		}
 
 		public close(): void {
 
 			if (this._viewUI) {
-				
+
 			}
 			super.close();
 		}
 	}
 
-	
+
 }

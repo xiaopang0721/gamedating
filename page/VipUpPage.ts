@@ -9,6 +9,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "vip.atlas",
 				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "huode.atlas",
 			];
 			this._isNeedDuang = false;
 			this._isNeedBlack = true;
@@ -41,6 +42,7 @@ module gamedating.page {
 			// this._lvNum.setText(10,true);
 			this._lvNum.setText(mainPlayer.playerInfo.vip_level, true);
 			this._viewUI.btn_goto.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.ani2.play(0, false);
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {

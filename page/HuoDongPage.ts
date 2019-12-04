@@ -367,7 +367,7 @@ module gamedating.page {
 				} else if (cc.topopup == Web_operation_fields.GAME_GONGGAO_OPENPAGE_TYPE_FANGKA) {	//房卡标签
 					let page: HudMainPage = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
 					if (page) {
-						page.viewUI.tab.selectedIndex = Number(DatingPageDef.TYPE_CARD);
+						page.onSelectItem(Number(DatingPageDef.TYPE_CARD));
 					}
 					this.close();
 				} else {
