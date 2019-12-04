@@ -5,7 +5,7 @@ module gamedating.page {
 	export class HuoDongPage extends game.gui.base.Page {
 		static readonly TYPE_HUODONG = 1; //活动类型
 		static readonly TYPE_GONGGAO = 2; //公告类型
-		private _viewUI: ui.nqp.dating.HuoDongUI;
+		private _viewUI: ui.ajqp.dating.HuoDongUI;
 		private _curSelectTab: number;
 		private _curSelectData: any;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
@@ -13,6 +13,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "huodong.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -85,22 +86,6 @@ module gamedating.page {
 
 		private changeHandler_list_tab(e?: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
-			let value = this._viewUI.list_tab.scrollBar.value;
-			if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
-				this._viewUI.btn_pre.visible = false;
-				this._viewUI.btn_next.visible = false;
-			} else {
-				if (value <= this._viewUI.list_tab.scrollBar.min) {
-					this._viewUI.btn_pre.visible = false;
-					this._viewUI.btn_next.visible = true;
-				} else if (value >= this._viewUI.list_tab.scrollBar.max) {
-					this._viewUI.btn_pre.visible = true;
-					this._viewUI.btn_next.visible = false;
-				}else{
-					this._viewUI.btn_pre.visible = true;
-					this._viewUI.btn_next.visible = true;
-				}
-			}
 		}
 		private changeHandler_myhd0(e: LEvent): void {
 			DisplayU.onScrollChange(this._viewUI.myhd0, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
@@ -134,8 +119,6 @@ module gamedating.page {
 				this._viewUI.box_gg.visible = true;
 				this._viewUI.list_tab.dataSource = this._activeList && this._activeList.length > 0 ? this._activeList : [];
 				this._viewUI.list_tab.visible = this._activeList && this._activeList.length > 0;
-				this._viewUI.btn_pre.visible = false;
-				this._viewUI.btn_next.visible = this._activeList && this._activeList.length > 6;
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				//活动
 				this._curSelectData = this._curHDData;
@@ -143,8 +126,6 @@ module gamedating.page {
 				this._viewUI.box_gg.visible = false;
 				this._viewUI.list_tab.dataSource = this._curHDData && this._curHDData.length > 0 ? this._curHDData : [];
 				this._viewUI.list_tab.visible = this._curHDData && this._curHDData.length > 0;
-				this._viewUI.btn_pre.visible = false;
-				this._viewUI.btn_next.visible = this._curHDData && this._curHDData.length > 6;
 			}
 			this._viewUI.list_tab.selectedIndex = 0;
 			this.selectHandler(0);
@@ -246,7 +227,7 @@ module gamedating.page {
 					} else {
 						//纯大图
 						this._viewUI.myhd2.visible = true;
-						this._viewUI.myhd2.height = isShowBtn ? 430 : 528;
+						this._viewUI.myhd2.height = isShowBtn ? 430 : 505;
 						//排序数据
 						if (listData) {
 							listData.sort((a: any, b: any) => {
@@ -263,7 +244,7 @@ module gamedating.page {
 					this._viewUI.myhd0.visible = true;
 					this._viewUI.txt.text = selectedItem.content;
 					this._viewUI.txt.height = this._viewUI.txt.textField.textHeight;
-					this._viewUI.myhd0.height = isShowBtn ? 430 : 528;
+					this._viewUI.myhd0.height = isShowBtn ? 430 : 505;
 				}
 				this._viewUI.img_bg.visible = isShowBtn;
 				this._viewUI.btn_qiandao.visible = isShowBtn;
@@ -417,7 +398,7 @@ module gamedating.page {
 		}
 	}
 
-	class TabItemRender extends ui.nqp.dating.component.TabItemRender1UI {
+	class TabItemRender extends ui.ajqp.dating.component.TabItemRender1UI {
 		private _game: Game;
 		private _data: any;
 		/**

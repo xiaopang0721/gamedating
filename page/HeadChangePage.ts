@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class HeadChangePage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.TouXiangUI;
+		private _viewUI: ui.ajqp.dating.TouXiangUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -101,13 +101,13 @@ module gamedating.page {
 		}
 	}
 
-	class HeadItemRender extends ui.nqp.dating.component.HeadRenderTUI {
+	class HeadItemRender extends ui.ajqp.dating.component.HeadRenderTUI {
 		private _game: Game;
 		private _data: any;
 		private _selectIndex: number;
-		private _viewUI: ui.nqp.dating.TouXiangUI;
+		private _viewUI: ui.ajqp.dating.TouXiangUI;
 		private _mainPlayer: PlayerData;
-		setData(game: Game, data: any, index: number, view: ui.nqp.dating.TouXiangUI, selectedIndex: number) {
+		setData(game: Game, data: any, index: number, view: ui.ajqp.dating.TouXiangUI, selectedIndex: number) {
 			this._game = game;
 			this._data = data;
 			this._viewUI = view;

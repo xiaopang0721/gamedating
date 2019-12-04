@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class QiFuPlayAniPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.QiFuSuccessUI;
+		private _viewUI: ui.ajqp.dating.QiFuSuccessUI;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);

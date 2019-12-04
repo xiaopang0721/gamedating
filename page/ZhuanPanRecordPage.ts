@@ -3,11 +3,13 @@
 */
 module gamedating.page {
 	export class ZhuanPanRecordPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.ZhuanPan_jlUI;
+		private _viewUI: ui.ajqp.dating.ZhuanPan_jlUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "zhuanpan.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -102,14 +104,14 @@ module gamedating.page {
 		}
 	}
 
-	class ZhuanPanGrT extends ui.nqp.dating.component.ZhuanPanT2UI {
+	class ZhuanPanGrT extends ui.ajqp.dating.component.ZhuanPanT2UI {
 		private _game: Game;
 		private _data: any;//"ddz","niuniu","zjh"
 		private _isTween: boolean;
 		setData(game: Game, data: any, index: number) {
 			this._game = game;
 			this._data = data;
-			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", index % 2 == 0 ? "" : 0);
+			this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", index % 2 == 0 ? "tu_di1" : "tu_10");
 			this.txt_username.text = data.account;
 			this.txt_time.text = Sync.getTimeStr(data.turn_time * 1000);
 			this.txt_type.text = (data.turn_name as string).substring(0, 2);

@@ -9,7 +9,7 @@ module gamedating.page {
 		private static readonly SUB_PAGE_ZHUANCHU: number = 2;	// 转出
 		private static readonly SUB_PAGE_JILU: number = 3;	// 记录
 
-		private _viewUI: ui.nqp.dating.YuEBaoUI;
+		private _viewUI: ui.ajqp.dating.YuEBaoUI;
 		private _clipMoney: DatingClip;
 		private _zrInputMoney: MyTextInput;
 		private _zcInputMoney: MyTextInput;
@@ -21,6 +21,8 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "baoxianxiang.atlas",
 				DatingPath.atlas_dating_ui + "yuebao.atlas",
 				DatingPath.atlas_dating_ui + "chongzhi.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 			this._isClickBlack = true;
@@ -78,16 +80,19 @@ module gamedating.page {
 			super.onOpen();
 			if (!this._clipMoney) {
 				this._clipMoney = new DatingClip(DatingClip.YUEBAO_FONT);
+				// this._clipMoney.anchorX = this._viewUI.clip_money.anchorX;
+				// this._clipMoney.anchorY = this._viewUI.clip_money.anchorY;
 				this._clipMoney.centerX = this._viewUI.clip_money.centerX;
 				this._clipMoney.centerY = this._viewUI.clip_money.centerY;
 				this._viewUI.clip_money.parent.addChild(this._clipMoney);
 				this._viewUI.clip_money.removeSelf();
 			}
 
-			this._zrInputMoney.settext(this._game, TeaStyle.COLOR_INPUT_DEFAULT, "请输入金额…", TeaStyle.COLOR_WHITE, 24, 11, [MyTextInput.TYPE_INPUT_NUMBER_WITH_POINT, WebConfig.info.money], false, Handler.create(this, this.onInputUpdate, ['zr'], false));
-			this._zcInputMoney.settext(this._game, TeaStyle.COLOR_INPUT_DEFAULT, "请输入金额…", TeaStyle.COLOR_WHITE, 24, 11, [MyTextInput.TYPE_INPUT_NUMBER_WITH_POINT, WebConfig.info.savaBoxMoney], false, Handler.create(this, this.onInputUpdate, ['zc'], false));
+			this._zrInputMoney.settext(this._game, TeaStyle.COLOR_INPUT_PROMPT, "请输入金额…", TeaStyle.COLOR_INPUT_CONTENT, 24, 11, [MyTextInput.TYPE_INPUT_NUMBER_WITH_POINT, WebConfig.info.money], false, Handler.create(this, this.onInputUpdate, ['zr'], false));
+			this._zcInputMoney.settext(this._game, TeaStyle.COLOR_INPUT_PROMPT, "请输入金额…", TeaStyle.COLOR_INPUT_CONTENT, 24, 11, [MyTextInput.TYPE_INPUT_NUMBER_WITH_POINT, WebConfig.info.savaBoxMoney], false, Handler.create(this, this.onInputUpdate, ['zc'], false));
 			let lixi = EnumToString.getPointBackNum(this.getLixi(WebConfig.info.savaBoxMoney), 2);
-			TextFieldU.setHtmlText(this._viewUI.txt_zr_lixi, "明天24:00可产生利息：" + HtmlFormat.addHtmlColor(lixi.toString(), lixi <= 0 ? TeaStyle.COLOR_WHITE : TeaStyle.COLOR_GREEN));
+			this._viewUI.txt_zr_lixi.text = "明天24:00可产生利息：" + lixi.toString();
+			TextFieldU.setHtmlText(this._viewUI.txt_zr_lixi, "明天24:00可产生利息：" + HtmlFormat.addHtmlColor(lixi.toString(), lixi <= 0 ? TeaStyle.COLOR_WHITE : TeaStyle.COLOR_GREEN), false);
 
 			this._viewUI.btn_help.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_zc_cancle.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -175,6 +180,7 @@ module gamedating.page {
 			}
 			this._viewUI.btn_zr_cancle.visible = value != 0;
 			let lixi = EnumToString.getPointBackNum(this.getLixi(WebConfig.info.savaBoxMoney + value), 2);
+			this._viewUI.txt_zr_lixi.text = "明天24:00可产生利息：" + lixi.toString();
 			TextFieldU.setHtmlText(this._viewUI.txt_zr_lixi, "明天24:00可产生利息：" + HtmlFormat.addHtmlColor(lixi.toString(), lixi <= 0 ? TeaStyle.COLOR_WHITE : TeaStyle.COLOR_GREEN));
 		}
 
@@ -197,6 +203,7 @@ module gamedating.page {
 			if (index == YuEBaoPage.SUB_PAGE_ZHUANRU) {
 				let value = parseFloat(this._zrInputMoney.input.text) || 0;
 				let lixi = EnumToString.getPointBackNum(this.getLixi(WebConfig.info.savaBoxMoney + value), 2);
+				this._viewUI.txt_zr_lixi.text = "明天24:00可产生利息：" + lixi.toString();
 				TextFieldU.setHtmlText(this._viewUI.txt_zr_lixi, "明天24:00可产生利息：" + HtmlFormat.addHtmlColor(lixi.toString(), lixi <= 0 ? TeaStyle.COLOR_WHITE : TeaStyle.COLOR_GREEN));
 			}
 			this._zcInputMoney.clearInput();
@@ -222,6 +229,7 @@ module gamedating.page {
 			if (this._viewUI.btn_tabs.selectedIndex == YuEBaoPage.SUB_PAGE_ZHUANRU) {
 				let value = parseFloat(this._zrInputMoney.input.text) || 0;
 				let lixi = EnumToString.getPointBackNum(this.getLixi(WebConfig.info.savaBoxMoney + value), 2);
+				this._viewUI.txt_zr_lixi.text = "明天24:00可产生利息：" + lixi.toString();
 				TextFieldU.setHtmlText(this._viewUI.txt_zr_lixi, "明天24:00可产生利息：" + HtmlFormat.addHtmlColor(lixi.toString(), lixi <= 0 ? TeaStyle.COLOR_WHITE : TeaStyle.COLOR_GREEN));
 			}
 		}
@@ -329,7 +337,7 @@ module gamedating.page {
 			}
 			if (this._viewUI == this._game.datingGame.jianPanMgr.pageUI) {
 				this._game.datingGame.jianPanMgr.closeJianPan();
-			}else if(e.target instanceof Box && e.target.parent == this._viewUI){
+			} else if (e.target instanceof Box && e.target.parent == this._viewUI) {
 				this.close();
 			}
 		}
@@ -348,7 +356,7 @@ module gamedating.page {
 		}
 	}
 
-	class BaoXianXiangT extends ui.nqp.dating.component.YuEBaoTUI {
+	class BaoXianXiangT extends ui.ajqp.dating.component.YuEBaoTUI {
 		private _game: Game;
 		private _data: any;
 		private _isTween: boolean;
@@ -372,8 +380,13 @@ module gamedating.page {
 			this._data = data;
 			this.txt_time.text = Sync.getTimeStr(data.op_time * 1000);
 			this.txt_zt.text = (data.op_type == Web_operation_fields.USE_MONEY_LOG_TYPE_SAFEBOX_INTEREST) ? "利息" : (data.op_type == Web_operation_fields.USE_MONEY_LOG_TYPE_SAFEBOX_IN ? "存入" : "取出");
-			let color: string = data.money < 0 ? "#03a503" : "#a20000";
-			TextFieldU.setHtmlText(this.txt_money, HtmlFormat.addHtmlColor((-data.money).toString(), color));
+			this.txt_money_zc.visible = data.money < 0;
+			this.txt_money_zr.visible = !this.txt_money_zc.visible;
+			if (data.money < 0) {
+				this.txt_money_zc.text = (-data.money).toString();
+			} else {
+				this.txt_money_zr.text = (-data.money).toString();
+			}
 			this.txt_yue.text = data.new_savebox_money;
 			// this.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_bb{0}.png", data.index % 2 == 0 ? 1 : 2)
 			this.visible = true;

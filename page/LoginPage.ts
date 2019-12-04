@@ -3,7 +3,7 @@ module gamedating.page {
      * 登陆界面
      */
     export class LoginPage extends game.gui.base.Page {
-        private _viewUI: ui.nqp.dating.DengLuUI;
+        private _viewUI: ui.ajqp.dating.DengLuUI;
         private _bgView: LoadingDH;
         constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
             super(v, onOpenFunc, onCloseFunc);
@@ -12,6 +12,7 @@ module gamedating.page {
                 DatingPath.atlas_dating_ui + "denglurk.atlas",
                 DatingPath.atlas_dating_ui + "tongyong.atlas",
                 DatingPath.atlas_dating_ui + "chongzhi.atlas",
+                DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
             ];
 
             this._isNeedDuang = false;

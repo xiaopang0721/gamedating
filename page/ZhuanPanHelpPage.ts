@@ -3,11 +3,12 @@
 */
 module gamedating.page {
 	export class ZhuanPanHelpPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.ZhuanPan_bzUI;
+		private _viewUI: ui.ajqp.dating.ZhuanPan_bzUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "zhuanpan.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -22,7 +23,7 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			// this._viewUI.btn_bylp.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			
+
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {

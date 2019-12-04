@@ -3,9 +3,10 @@
 */
 module gamedating.page {
 	export class QianDaoPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.QianDaoUI;
-		private _qiandaos: ui.nqp.dating.component.Effect_qdUI[] = [];
+		private _viewUI: ui.ajqp.dating.QianDaoUI;
+		private _qiandaos: ui.ajqp.dating.component.Effect_qdUI[] = [];
 		private _awards: LImage[] = [];
+		private _avatar: AvatarUIShow;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -25,6 +26,11 @@ module gamedating.page {
 			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdateData);
 
+			if (!this._avatar) {
+                this._avatar = new AvatarUIShow();
+                this._viewUI.box_sk.addChild(this._avatar);
+            }
+            this._avatar.loadSkeleton(DatingPath.sk_dating + "qiandao", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 20, 2);
 			for (let i = 0; i < this._viewUI.box_qiandao.numChildren; i++) {
 				this._qiandaos[i] = this._viewUI["qiandao" + i];
 				this._qiandaos[i].visible = false;
@@ -33,6 +39,12 @@ module gamedating.page {
 				this._awards[i] = this._viewUI["award" + i];
 			}
 		}
+
+        update(diff): void {
+            if (this._avatar) {
+                this._avatar.onDraw();
+            }
+        }
 
 		protected onOptHandler(optcode: number, msg: any) {
 			if (msg.type == Operation_Fields.OPRATE_GAME) {
@@ -68,8 +80,6 @@ module gamedating.page {
 				this._viewUI.img_btn.skin = DatingPath.ui_dating + "qiandao/tu_ljqd.png";
 				this._viewUI.btn_qiandao.skin = DatingPath.ui_dating + "qiandao/btn_ljqd.png";
 			}
-			// this._isCanSign = !WebConfig.info.last_signin_time || !Sync.getIsToday(WebConfig.info.last_signin_time, this._game.sync.serverTimeBys);
-			// this._viewUI.btn_qiandao.disabled = !WebConfig.info.is_can_qd;
 		}
 
 
@@ -86,7 +96,6 @@ module gamedating.page {
 					return;
 				}
 				if (WebConfig.info.is_can_qd) {
-					// this._game.showTips("今日已成功签到，请明日再来！")
 					return;
 				}
 				this._game.network.call_signin();
@@ -97,6 +106,11 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdateData);
+				if (this._avatar) {
+                this._avatar.clear();
+                this._avatar.destroy();
+                this._avatar = null;
+            }
 			}
 			super.close();
 		}

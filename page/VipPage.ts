@@ -3,7 +3,7 @@
 */
 module gamedating.page {
     export class VipPage extends game.gui.base.Page {
-        private _viewUI: ui.nqp.dating.VIPUI;
+        private _viewUI: ui.ajqp.dating.VIPUI;
         private _htmlText: laya.html.dom.HTMLDivElement;
         private _avatar: AvatarUIShow;
 
@@ -193,7 +193,7 @@ module gamedating.page {
         //更换下半部分UI
         private updateSwitchUI(index: number): void {
             this._switchIndex = index;
-            let curShowView: ui.nqp.dating.component.VipSlideTUI = this._curShowIndex == 1 ? this._viewUI.box_info1 : this._viewUI.box_info;
+            let curShowView: ui.ajqp.dating.component.VipSlideTUI = this._curShowIndex == 1 ? this._viewUI.box_info1 : this._viewUI.box_info;
             let curLvData: any = this._vipList[index];
             if (!curLvData) return;
             let lvNum: DatingClip = this._curShowIndex == 1 ? this._lvNum1 : this._lvNum;
@@ -259,8 +259,8 @@ module gamedating.page {
         private _slideTime: number = 700;
         private _isSliding: boolean = false;
         private slideBox(isLeft: boolean = false): void {
-            let curShowView: ui.nqp.dating.component.VipSlideTUI;
-            let curHideView: ui.nqp.dating.component.VipSlideTUI;
+            let curShowView: ui.ajqp.dating.component.VipSlideTUI;
+            let curHideView: ui.ajqp.dating.component.VipSlideTUI;
             if (this._curShowIndex == 0) {
                 curShowView = this._viewUI.box_info;
                 curHideView = this._viewUI.box_info1;

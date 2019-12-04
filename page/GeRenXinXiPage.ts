@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class GeRenXinXiPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.GeRenUI;
+		private _viewUI: ui.ajqp.dating.GeRenUI;
 		private _inputOldKey: MyTextInput;
 		private _inputNewKey: MyTextInput;
 		private _inputQueRenNewKey: MyTextInput;
@@ -19,6 +19,9 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "geren.atlas",
 				DatingPath.atlas_dating_ui + "shezhi.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -153,7 +156,7 @@ module gamedating.page {
 		private initBaoBiaoUI(): void {
 			this._viewUI.box_btn.visible = false;
 			this._viewUI.btn_jiantou.rotation = -180;
-			this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
+			// this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
 			this._viewUI.list_bb.visible = false;
 			this._viewUI.txt_no.visible = false;
 			this.initList();
@@ -178,11 +181,11 @@ module gamedating.page {
 			this._viewUI.list_bb.renderHandler = new Handler(this, this.renderHandler);
 		}
 
-		private renderHandler(cell: ui.nqp.dating.GeRen1UI, index: number) {
+		private renderHandler(cell: ui.ajqp.dating.GeRen1UI, index: number) {
 			let data = this._dataInfo[index];
 			if (cell) {
 				cell.txt_index.text = data.rank + 1;
-				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "tu_di{0}.png", data.rank % 2 == 0 ? "" : 0);
+				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", data.rank % 2 == 0 ? "tu_di1" : "tu_10");
 				let type_name = "";
 				if (data.game_name == "微信扫雷红包") {
 					type_name = EnumToString.getLimitStr(data.game_name, 2) + Web_operation_fields.client_money_logtype_table[data.type];
@@ -232,7 +235,7 @@ module gamedating.page {
 
 		private updateBoxBtnStatus() {
 			this._viewUI.box_btn.visible = false;
-			this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
+			// this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
 			this._viewUI.btn_jiantou.rotation = -180;
 		}
 
@@ -432,7 +435,7 @@ module gamedating.page {
 				case this._viewUI.btn_select:
 					this._viewUI.box_btn.visible = !this._viewUI.box_btn.visible;
 					this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
-					this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + (this._viewUI.box_btn.visible ? "tu_di10" : "tu_di11") + ".png";
+					// this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + (this._viewUI.box_btn.visible ? "tu_di10" : "tu_di11") + ".png";
 					// for (let index = 0; index < 7; index++) {
 					// 	let target = index == 6 ? this._viewUI.btn_select : this._viewUI["btn_" + (index + 1)];
 					// 	Laya.Tween.from(this._viewUI["btn_" + index], { y: target.y }, 200, null, null, (6 - index) * 200);

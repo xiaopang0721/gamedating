@@ -7,7 +7,7 @@ module gamedating.page {
 		static readonly TYPE_INPUT_ENGLISH = 2; //英文类型
 		static readonly TYPE_INPUT_NUMBER_WITH_POINT = 3; //数字有小数点类型
 
-		private _viewUI: ui.nqp.dating.JianPanUI;
+		private _viewUI: ui.ajqp.dating.JianPanUI;
 		private _letterCase: number;//字母大小写
 		public _str: string;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {

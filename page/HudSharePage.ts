@@ -3,14 +3,13 @@
 */
 module gamedating.page {
 	export class HudSharePage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.FenXiangUI;
-		private _avatar: AvatarUIShow;
+		private _viewUI: ui.ajqp.dating.FenXiangUI;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "fenxiang.atlas",
-				DatingPath.sk_dating + "caishen01.png",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -20,10 +19,6 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.FenXiangUI");
 			this.addChild(this._viewUI);
-			if (!this._avatar) {
-				this._avatar = new AvatarUIShow();
-				this._viewUI.box_sk.addChild(this._avatar);
-			}
 		}
 
 		// 页面打开时执行函数
@@ -32,15 +27,7 @@ module gamedating.page {
 			this._viewUI.btn_wxhy.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_fxq.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
-			this._avatar.loadSkeleton(DatingPath.sk_dating + "caishen01", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 3, 2);
 			this.onUpdatePlayerInfo();
-		}
-
-		update(diff): void {
-			if (this._avatar) {
-				this._avatar.onDraw();
-				this._viewUI.box_sk.addChild(this._avatar);
-			}
 		}
 
 		private onUpdatePlayerInfo() {
@@ -48,7 +35,7 @@ module gamedating.page {
 			let daysharegivemoney = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "daysharegivemoney");
 			if (!this._clipJf) {
 				this._clipJf = new DatingClip(DatingClip.FENXIANG_FONT);
-				this._clipJf.x = this._viewUI.clip_money.x + (daysharegivemoney > 9 ? -60 : 0);
+				this._clipJf.x = this._viewUI.clip_money.x + (daysharegivemoney > 9 ? -35 : 0);
 				this._clipJf.y = this._viewUI.clip_money.y;
 				this._viewUI.clip_money.parent && this._viewUI.clip_money.parent.addChild(this._clipJf);
 				this._viewUI.clip_money.removeSelf();
@@ -81,11 +68,6 @@ module gamedating.page {
 					this._clipJf.removeSelf();
 					this._clipJf.destroy();
 					this._clipJf = null;
-				}
-				if (this._avatar) {
-					this._avatar.clear();
-					this._avatar.destroy();
-					this._avatar = null;
 				}
 			}
 			super.close();

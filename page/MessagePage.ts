@@ -6,12 +6,14 @@ module gamedating.page {
 		static readonly TYPE_GONGGAO = 1; //公告类型
 		static readonly TYPE_MAIL = 2; //邮件类型
 
-		private _viewUI: ui.nqp.dating.XinXiUI;
+		private _viewUI: ui.ajqp.dating.XinXiUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "xinxi.atlas",
 				DatingPath.atlas_dating_ui + "chongzhi.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedDuang = true;
 			this._isNeedBlack = true;
@@ -62,7 +64,7 @@ module gamedating.page {
 		}
 	}
 
-	class MailItemRender extends ui.nqp.dating.component.XinXi_lbUI {
+	class MailItemRender extends ui.ajqp.dating.component.XinXi_lbUI {
 		private _game: Game;
 		private _data: MailData;
 		setData(game: Game, data: any) {

@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class CreadRoomPDKPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.ChuangJianUI;
+		private _viewUI: ui.ajqp.dating.ChuangJianUI;
 		private _round_count = [5, 10, 15, 20];	// 游戏局数
 		private _pay_money = [3, 6, 9, 12];	// 不同局数的支付金额
 		private _playersTemp = [3, 4];	//可选人数

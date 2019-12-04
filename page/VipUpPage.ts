@@ -3,13 +3,12 @@
 */
 module gamedating.page {
 	export class VipUpPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.VipUpUI;
-		private _avatar: AvatarUIShow;
+		private _viewUI: ui.ajqp.dating.VipUpUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "vip.atlas",
-				DatingPath.sk_dating + "vip.png",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedDuang = false;
 			this._isNeedBlack = true;
@@ -37,22 +36,11 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
-			if (!this._avatar) {
-				this._avatar = new AvatarUIShow();
-				this._viewUI.box_sk.addChild(this._avatar);
-			}
-			this._avatar.loadSkeleton(DatingPath.sk_dating + "vip", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2, 2);
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
 			// this._lvNum.setText(10,true);
 			this._lvNum.setText(mainPlayer.playerInfo.vip_level, true);
 			this._viewUI.btn_goto.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-		}
-
-		update(diff): void {
-			if (this._avatar) {
-				this._avatar.onDraw();
-			}
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
@@ -72,17 +60,11 @@ module gamedating.page {
 
 		public close(): void {
 			if (this._viewUI) {
-
-			}
-			if (this._avatar) {
-				this._avatar.clear();
-				this._avatar.destroy();
-				this._avatar = null;
-			}
-			if (this._lvNum) {
-				this._lvNum.removeSelf();
-				this._lvNum.destroy();
-				this._lvNum = null;
+				if (this._lvNum) {
+					this._lvNum.removeSelf();
+					this._lvNum.destroy();
+					this._lvNum = null;
+				}
 			}
 			super.close();
 		}

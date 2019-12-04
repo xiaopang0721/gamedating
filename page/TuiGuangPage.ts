@@ -6,7 +6,7 @@ module gamedating.page {
 		static readonly TYPE_WUXIAN_DAILI = 1;//无限代理
 		static readonly TYPE_QUANMIN_DAILI = 2;//全民代理
 
-		private _viewUI: ui.nqp.dating.TuiGuangUI;
+		private _viewUI: ui.ajqp.dating.TuiGuangUI;
 		private _curAgencytype: number = 0;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -16,6 +16,8 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "shouchong.atlas",
 				DatingPath.atlas_dating_ui + "chongzhi.atlas",
 				DatingPath.atlas_dating_ui + "geren.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedDuang = true;
 			this._isNeedBlack = true;
@@ -33,8 +35,7 @@ module gamedating.page {
 			//落地页链接
 			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
 			let showGw = txtGw.split("?")[0];
-			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
-			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
+			this._viewUI.txt_gw.text = "微信推广链接：" + showGw;
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
@@ -83,6 +84,7 @@ module gamedating.page {
 				this._fanYongMoneyTxt[i] = this._viewUI["txt_fanyongmoney" + i];
 			}
 
+			this._viewUI.panel_tab.vScrollBarSkin = "";
 			for (let index = 0; index < this._viewUI.tab.numChildren; index++) {
 				let item = this._viewUI.tab.getChildByName("item" + index) as Laya.Button;
 				this._tabItems[index] = item;
@@ -238,8 +240,7 @@ module gamedating.page {
 			//落地页链接
 			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
 			let showGw = txtGw.split("?")[0];
-			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
-			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
+			this._viewUI.txt_gw.text = "微信推广链接：" + showGw;
 		}
 
 		private onUpdatePlayerInfo() {
@@ -252,15 +253,14 @@ module gamedating.page {
 			let agency_sharereward = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_sharereward");
 			let agency_shareminpay = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agency_shareminpay");
 			this._curAgencytype = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "agencytype");
-			let agency_str = StringU.substitute("玩家通过您分享的链接下载并且充值{0}金额，您即可获得{1}现金奖励", HtmlFormat.addHtmlColor(agency_shareminpay.toString(), "#3aa4fe"), HtmlFormat.addHtmlColor(agency_sharereward.toString(), "#3aa4fe"))
-			TextFieldU.setHtmlText(this._viewUI.txt_agency, agency_str);
+			let agency_str = StringU.substitute("玩家通过您分享的链接下载并且充值{0}金额，您即可获得{1}现金奖励", HtmlFormat.addHtmlColor(agency_shareminpay.toString(), "#fff9bb"), HtmlFormat.addHtmlColor(agency_sharereward.toString(), "#fff9bb"))
+			TextFieldU.setHtmlText(this._viewUI.txt_agency, agency_str, false);
 			this._viewUI.txt_ktq.text = WebConfig.info.yongjin + "元";
 			this._viewUI.txt_record.text = WebConfig.info.history_yongjin + "元";
 			//落地页链接
 			let txtGw = EnumToString.getLimitUrl(WebConfig.downLoadUrl);
 			let showGw = txtGw.split("?")[0];
-			let tuiguangUrl = "微信推广链接：" + HtmlFormat.addHtmlSize(showGw.toString(), 22);
-			TextFieldU.setHtmlText(this._viewUI.txt_gw, tuiguangUrl);
+			this._viewUI.txt_gw.text = "微信推广链接：" + showGw;
 			let playerrbbl = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "playerrbbl");
 			//代理返利
 			for (let i = 0; i < 10; i++) {
@@ -540,7 +540,7 @@ module gamedating.page {
 		}
 	}
 
-	class TuiGuangMX extends ui.nqp.dating.component.TuiGuangMX_TUI {
+	class TuiGuangMX extends ui.ajqp.dating.component.TuiGuangMX_TUI {
 		private _game: Game;
 		private _data: any;
 		private _isTween: boolean;
@@ -582,7 +582,7 @@ module gamedating.page {
 		}
 	}
 
-	class FanShuiMX extends ui.nqp.dating.component.TuiGuangMX_TUI {
+	class FanShuiMX extends ui.ajqp.dating.component.TuiGuangMX_TUI {
 		private _game: Game;
 		private _data: any;
 		private _isTween: boolean;
@@ -625,7 +625,7 @@ module gamedating.page {
 	}
 
 	//上周记录
-	class FenXiangLastWeekT extends ui.nqp.dating.component.FenXiangT6UI {
+	class FenXiangLastWeekT extends ui.ajqp.dating.component.FenXiangT6UI {
 		private _game: Game;
 		private _data: any;
 		private _isTween: boolean;
@@ -662,7 +662,7 @@ module gamedating.page {
 	}
 
 	//记录(无限代理)
-	class FenXiangRecord extends ui.nqp.dating.component.FenXiangT5UI {
+	class FenXiangRecord extends ui.ajqp.dating.component.FenXiangT5UI {
 		private _game: Game;
 		private _data: any;
 		private _isTween: boolean;
@@ -700,7 +700,7 @@ module gamedating.page {
 	}
 
 	//记录(全民代理)
-	class FenXiangRecord1 extends ui.nqp.dating.component.FenXiangT6UI {
+	class FenXiangRecord1 extends ui.ajqp.dating.component.FenXiangT6UI {
 		private _game: Game;
 		private _data: any;
 		private _isTween: boolean;
@@ -737,7 +737,7 @@ module gamedating.page {
 		}
 	}
 
-	class YongHuItemRender extends ui.nqp.dating.component.YongHuTUI {
+	class YongHuItemRender extends ui.ajqp.dating.component.YongHuTUI {
 		private _game: Game;
 		private _data: any;
 		setData(game: Game, data: any) {

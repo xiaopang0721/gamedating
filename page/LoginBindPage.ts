@@ -8,7 +8,7 @@ module gamedating.page {
         static readonly TYPE_BIND_PHONE = 3; //手机绑定
         static readonly TYPE_RESET_PASSWORD = 4; //重置密码
 
-        private _viewUI: ui.nqp.dating.DengLuBD1UI;
+        private _viewUI: ui.ajqp.dating.DengLuBD1UI;
         private _inputPhone: MyTextInput;
         private _inputCode: MyTextInput;
         private _inputAccount: MyTextInput;
@@ -24,6 +24,8 @@ module gamedating.page {
             this._asset = [
                 DatingPath.atlas_dating_ui + "denglu.atlas",
                 DatingPath.atlas_dating_ui + "qukuan.atlas",
+                DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+                DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
             ];
             this._delta = 1000;
             this._isNeedDuang = true;
@@ -43,7 +45,7 @@ module gamedating.page {
                 if (!this._inputAccount) {
                     this._inputAccount = new MyTextInput();
                     this._inputAccount.x = this._viewUI.txt_account.x;
-                    this._inputAccount.y = this._viewUI.txt_account.y + 3;
+                    this._inputAccount.y = this._viewUI.txt_account.y;
                     this._inputAccount.width = this._viewUI.txt_account.width;
                     this._viewUI.txt_account.parent.addChild(this._inputAccount);
                     this._viewUI.txt_account.removeSelf();
@@ -60,7 +62,7 @@ module gamedating.page {
             if (!this._inputPhone) {
                 this._inputPhone = new MyTextInput();
                 this._inputPhone.x = this._viewUI.txt_phone.x;
-                this._inputPhone.y = this._viewUI.txt_phone.y + 3;
+                this._inputPhone.y = this._viewUI.txt_phone.y;
                 this._inputPhone.width = this._viewUI.txt_phone.width;
                 this._viewUI.txt_phone.parent.addChild(this._inputPhone);
                 this._viewUI.txt_phone.removeSelf();
@@ -90,8 +92,8 @@ module gamedating.page {
                 this._viewUI.txt_set_newpsd.removeSelf();
             }
 
-            this._promptColor = "#b4b6b9";
-            this._inputColor = "#ffffff";
+            this._promptColor = TeaStyle.COLOR_INPUT_PROMPT;
+            this._inputColor = TeaStyle.COLOR_INPUT_CONTENT;
         }
 
         private _type: number;

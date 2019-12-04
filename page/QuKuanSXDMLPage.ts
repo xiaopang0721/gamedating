@@ -3,7 +3,7 @@
 */
 module gamedating.page{
 	export class QuKuanSXDMLPage extends game.gui.base.Page{
-		private _viewUI: ui.nqp.dating.Qukuan_sxdmlUI;
+		private _viewUI: ui.ajqp.dating.Qukuan_sxdmlUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [

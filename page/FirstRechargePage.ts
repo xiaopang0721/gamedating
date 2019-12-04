@@ -3,13 +3,14 @@
 */
 module gamedating.page {
     export class FirstRechargePage extends game.gui.base.Page {
-        private _viewUI: ui.nqp.dating.ShouChongUI;
+        private _viewUI: ui.ajqp.dating.ShouChongUI;
         constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
             super(v, onOpenFunc, onCloseFunc);
             this._asset = [
                 DatingPath.atlas_dating_ui + "shouchong.atlas",
                 DatingPath.atlas_dating_ui + "tongyong.atlas",
                 DatingPath.sk_dating + "shouchang.png",
+                DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
             ];
             this._isNeedBlack = true;
         }
@@ -79,11 +80,12 @@ module gamedating.page {
         private _pay_min: string;
         private getData(): void {
             this._gift_type = Number(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "gift_type"));  //1是百分比 2是固定值
-            this._viewUI.img_yuan.visible = this._gift_type == 1;
-            this._viewUI.img_percent.visible = this._gift_type == 2;
+            this._viewUI.img_yuan.visible = this._gift_type == 2;
+            this._viewUI.img_percent.visible = this._gift_type == 1;
             this._gift_val = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "gift_val");  //赠送金额或者比例
             this._isopen = Number(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "isopen"));  //是否开启首充 0是关闭 1开启
             this._pay_min = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_FIRSTPAYCONFIG_C, "pay_min");    //单笔首充最低金额
+            this._clipBack.x = this._clipBack.x + (parseInt(this._gift_val) > 9 ? -40 : 0);
             this._clipBack.setText(this._gift_val, true);
             this._clipCZ.setText(this._pay_min, true);
             this.updateUI();

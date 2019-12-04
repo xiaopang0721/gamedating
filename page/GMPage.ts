@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class GMPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.GMPageUI;
+		private _viewUI: ui.ajqp.dating.GMPageUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [

@@ -46,9 +46,9 @@ module gamedating {
             this.MONEY_FONT2 = {
                 source: DatingPath.atlas_dating_ui + "tongyong.atlas",
                 url: DatingPath.ui_dating + 'tongyong/clip_money1.png',
-                clipWidth: 23,
-                clipHeight: 32,
-                clipX: 10,
+                clipWidth: 22,
+                clipHeight: 28,
+                clipX: 11,
                 space: 0
             };
 
@@ -64,9 +64,9 @@ module gamedating {
             this.FENXIANG_FONT = {
                 source: DatingPath.atlas_dating_ui + "fenxiang.atlas",
                 url: DatingPath.ui_dating + 'fenxiang/clip_yuan.png',
-                clipWidth: 110,
-                clipHeight: 139,
-                clipX: 10,
+                clipWidth: 91,
+                clipHeight: 91,
+                clipX: 11,
                 space: -25
             };
 
@@ -89,24 +89,24 @@ module gamedating {
             this.VIP_FONT = {
                 source: DatingPath.atlas_dating_ui + "vip.atlas",
                 url: DatingPath.ui_dating + 'vip/clip_1-11.png',
-                clipWidth: 23,
+                clipWidth: 43,
                 clipHeight: 31,
                 clipX: 11,
-                space: 0,
+                space: -20,
             };
             this.VIP_FONT0 = {
                 source: DatingPath.atlas_dating_ui + "vip.atlas",
                 url: DatingPath.ui_dating + 'vip/clip_1-9.png',
-                clipWidth: 39,
-                clipHeight: 60,
+                clipWidth: 40,
+                clipHeight: 51,
                 clipX: 10,
                 space: 0,
             };
             this.VIP_UP_FONT = {
                 source: DatingPath.atlas_dating_ui + "vip.atlas",
                 url: DatingPath.ui_dating + 'vip/clip_1-10.png',
-                clipWidth: 75,
-                clipHeight: 119,
+                clipWidth: 58,
+                clipHeight: 75,
                 clipX: 10,
                 space: -5,
             };
@@ -129,11 +129,11 @@ module gamedating {
             };
             this.SHOUCHONG_FONT0 = {
                 source: DatingPath.atlas_dating_ui + "shouchong.atlas",
-                url: DatingPath.ui_dating + 'shouchong/clip_sz02.png',
-                clipWidth: 45,
-                clipHeight: 60,
+                url: DatingPath.ui_dating + 'shouchong/clip_sz.png',
+                clipWidth: 61,
+                clipHeight: 64,
                 clipX: 10,
-                space: 0,
+                space: -20,
             };
             this.YUEBAO_FONT = {
                 source: DatingPath.atlas_dating_ui + "yuebao.atlas",

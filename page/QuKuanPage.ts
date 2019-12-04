@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class QuKuanPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.QuKuanUI;
+		private _viewUI: ui.ajqp.dating.QuKuanUI;
 		private _inputMoney: MyTextInput;
 		private _drawchannel: any;
 		private _damaLeft:number;
@@ -12,6 +12,8 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "qukuan.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -54,7 +56,7 @@ module gamedating.page {
 				this._viewUI.view_money.parent.addChild(this._inputMoney);
 				this._viewUI.view_money.removeSelf();
 			}
-			this._inputMoney.settext(this._game, TeaStyle.COLOR_INPUT_DEFAULT, "请输入提现的金额", TeaStyle.COLOR_WHITE, 24, 11, MyTextInput.TYPE_INPUT_NUMBER, false, Handler.create(this, this.onInputUpdate, null, false));
+			this._inputMoney.settext(this._game, TeaStyle.COLOR_INPUT_PROMPT, "请输入提现的金额", TeaStyle.COLOR_INPUT_CONTENT, 24, 11, MyTextInput.TYPE_INPUT_NUMBER, false, Handler.create(this, this.onInputUpdate, null, false));
 			this._bankMinDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawbankmin');
 			this._alipayMinDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawalipaymin');	
 			this._bankMaxDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawbankmax');
@@ -367,7 +369,7 @@ module gamedating.page {
 		}		
 	}
 
-	class CunQuT extends ui.nqp.dating.component.QuKuanTUI {
+	class CunQuT extends ui.ajqp.dating.component.QuKuanTUI {
 
 		private _isTween: boolean;
 		private _game: Game;
@@ -412,7 +414,7 @@ module gamedating.page {
 		}
 	}
 
-	class TabItemRender extends ui.nqp.dating.component.TabItemRender1UI {
+	class TabItemRender extends ui.ajqp.dating.component.TabItemRender1UI {
 		private _game: Game;
 		private _data: any;
 		/**

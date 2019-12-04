@@ -16,7 +16,7 @@ module gamedating.page {
 			}
 		}
 
-		private _viewUI: ui.nqp.dating.TipsUI;
+		private _viewUI: ui.ajqp.dating.TipsUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [

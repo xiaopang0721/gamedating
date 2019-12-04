@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class ZhuanPanPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.ZhuanPanUI;
+		private _viewUI: ui.ajqp.dating.ZhuanPanUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -32,7 +32,7 @@ module gamedating.page {
 			this._viewUI.list_bojin.dataSource = [0, 0, 0, 0, 0, 0, 0, 0];
 		}
 
-		private renderHandler(cell: ui.nqp.dating.component.ZhuanPanTUI, index: number) {
+		private renderHandler(cell: ui.ajqp.dating.component.ZhuanPanTUI, index: number) {
 			if (cell) {
 				cell.txt_num.text = cell.dataSource.award_value;
 				cell.img_reward.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", cell.dataSource.award_icon || "tu_05");
@@ -215,7 +215,7 @@ module gamedating.page {
 			//按钮图片
 			this._viewUI.btn_pan_name.skin = DatingPath.ui_dating + "zhuanpan/" + (flag ? "tu_baijin01.png" : "tu_zuanshi01.png");
 			this._viewUI.img_pan_di.skin = DatingPath.ui_dating + "zhuanpan/" + (flag ? "tu_bj.png" : "tu_qh.png");
-			this._viewUI.btn_pan_name.x = flag ? 69 : 63;
+			// this._viewUI.btn_pan_name.x = flag ? 69 : 63;
 			//按钮显示动画
 			this._viewUI.ani5.play(0, false);
 			this._viewUI.ani4.off(LEvent.COMPLETE, this, this.ani4Complete);
@@ -358,20 +358,16 @@ module gamedating.page {
 				case 1:
 					viewRunBox = this._viewUI.box_run_bojin;
 					curData = this._boJinData;
-					// aniBorder = this._viewUI.ani8;
 					aniGet = this._viewUI.ani10;
 					imgGet = this._viewUI.img_get_bojin;
 					aniGo = this._viewUI.ani6;
-					// img_effect = this._viewUI.img_effect_bojin;
 					break
 				case 2:
 					viewRunBox = this._viewUI.box_run_zuanshi;
 					curData = this._zuanShiData;
-					// aniBorder = this._viewUI.ani9;
 					aniGet = this._viewUI.ani11;
 					imgGet = this._viewUI.img_get_zs;
 					aniGo = this._viewUI.ani12;
-					// img_effect = this._viewUI.img_effect_zs;
 					break
 			}
 			imgGet.alpha = 0;

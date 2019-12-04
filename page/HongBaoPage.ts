@@ -6,7 +6,7 @@ module gamedating.page {
 		static readonly TYPE_OPERATE_QIANG_HONGBAO: number = 0;
 		static readonly TYPE_OPERATE_LING_HONGBAO: number = 1;
 
-		private _viewUI: ui.nqp.dating.HongbaoUI;
+		private _viewUI: ui.ajqp.dating.HongbaoUI;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [

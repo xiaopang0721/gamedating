@@ -7,13 +7,15 @@ module gamedating.page {
 		static readonly TYPE_WEIXIN_KEFU = 1;//微信/QQ客服
 		static readonly TYPE_LIANXI_KEFU = 2;//联系客服
 
-		private _viewUI: ui.nqp.dating.KeHuUI;
+		private _viewUI: ui.ajqp.dating.KeHuUI;
 		private _scrollBarValue: number;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "kehu.atlas",
 				DatingPath.atlas_dating_ui + "chongzhi.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 		}
@@ -37,6 +39,9 @@ module gamedating.page {
 			this._viewUI.tab_kefu.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.tab_kefu.selectedIndex = KeFuPage.TYPE_CHANGJIAN_WENTI;
 
+			this._viewUI.panel_wenti.vScrollBarSkin = "";
+			this._viewUI.panel_wenti.vScrollBar.autoHide = true;
+			this._viewUI.panel_wenti.vScrollBar.elasticDistance = 100;
 		}
 
 		private _tabItems: Button[] = [];
@@ -101,7 +106,7 @@ module gamedating.page {
 				let btn = this._tabItems[index];
 				if (!btn || !btn.visible) continue;
 				btn.y = total_y;
-				total_y += btn.height + 4;
+				total_y += btn.height - 3;
 			}
 		}
 
@@ -187,7 +192,7 @@ module gamedating.page {
 		}
 	}
 
-	class KeFuItemRender extends ui.nqp.dating.component.KeFuRenderUI {
+	class KeFuItemRender extends ui.ajqp.dating.component.KeFuRenderUI {
 		private _game: Game;
 		private _data: any;
 		constructor() {

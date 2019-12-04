@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class QuKuanBindYHKPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.QuKuan_yhkUI;
+		private _viewUI: ui.ajqp.dating.QuKuan_yhkUI;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);

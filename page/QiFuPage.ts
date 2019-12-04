@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class QiFuPage extends game.gui.base.Page {
-		protected _viewUI: ui.nqp.dating.QiFuUI;
+		protected _viewUI: ui.ajqp.dating.QiFuUI;
 		private _boxQifuUI: Box[];
 		private _txtMoneyUI: Label[];
 		private _mainplayer: PlayerData;
@@ -19,6 +19,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "qifu.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 		}
 

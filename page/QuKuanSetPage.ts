@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	export class QuKuanSetPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.QuKuan_shezhiMMUI;
+		private _viewUI: ui.ajqp.dating.QuKuan_shezhiMMUI;
 		private _inputKey: MyTextInput;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -34,7 +34,7 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
-			this._inputKey.settext(this._game, TeaStyle.COLOR_INPUT_DEFAULT, "请输入6位数字取款密码", TeaStyle.COLOR_WHITE, 24, 6, MyTextInput.TYPE_INPUT_NUMBER, false, Handler.create(this, this.onUpdateInput, null, false));
+			this._inputKey.settext(this._game, TeaStyle.COLOR_INPUT_PROMPT, "请输入6位数字取款密码", TeaStyle.COLOR_INPUT_CONTENT, 24, 6, MyTextInput.TYPE_INPUT_NUMBER, false, Handler.create(this, this.onUpdateInput, null, false));
 
 			this._inputKey.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.img_eyes.on(LEvent.CLICK, this, this.onBtnClickWithTween);

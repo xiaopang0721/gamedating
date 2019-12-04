@@ -3,7 +3,7 @@
 */
 module gamedating.page {
     export class BindMoneyPage extends game.gui.base.Page {
-        private _viewUI: ui.nqp.dating.BangDingUI;
+        private _viewUI: ui.ajqp.dating.BangDingUI;
         private _bindSendMoney: number = 0;
         private _avatar: AvatarUIShow;
 
@@ -12,6 +12,7 @@ module gamedating.page {
             this._asset = [
                 DatingPath.atlas_dating_ui + "bangding.atlas",
                 DatingPath.sk_dating + "bangdingsongjin.png",
+                DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
             ];
             this._isNeedBlack = true;
         }

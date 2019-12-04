@@ -3,7 +3,7 @@
 // */
 // module gamedating.page {
 // 	export class ChongZhiQuDaoPage extends game.gui.base.Page {
-// 		private _viewUI: ui.nqp.dating.ChongZhi_1UI;
+// 		private _viewUI: ui.ajqp.dating.ChongZhi_1UI;
 // 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 // 			super(v, onOpenFunc, onCloseFunc);
 // 			this._asset = [
@@ -95,7 +95,7 @@
 
 // 	}
 
-// 	class MoneyItemRender extends ui.nqp.dating.component.MoneyItemRenderUI {
+// 	class MoneyItemRender extends ui.ajqp.dating.component.MoneyItemRenderUI {
 // 		private _game: Game;
 // 		private _data: any;//"ddz","niuniu","zjh"
 // 		setData(game: Game, data: any) {

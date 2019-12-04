@@ -4,7 +4,7 @@ module gamedating.page {
 	 * name 
 	 */
 	export class TipsPage extends game.gui.base.Page {
-		private _viewUI: ui.nqp.dating.TipsXiaLaUI;//UI
+		private _viewUI: ui.ajqp.dating.TipsXiaLaUI;//UI
 		private _viewTips: Array<ViewTip>;
 		private static MIN_CHECKTIME: number = 1000;//最小检测时间间隔(毫秒)
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
