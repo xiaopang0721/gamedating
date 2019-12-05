@@ -204,6 +204,12 @@ module gamedating.page {
 					DatingPath.atlas_dating_ui_dating_effect + "cz.atlas",
 					DatingPath.atlas_dating_ui_dating_effect + "tx.atlas",
 					DatingPath.atlas_dating_ui_dating_effect + "anniu.atlas",
+					DatingPath.atlas_dating_ui_dating_effect + "gxz.atlas",
+					DatingPath.atlas_dating_ui_dating_effect + "tj.atlas",
+					DatingPath.atlas_dating_ui_dating_effect + "new.atlas",
+					DatingPath.atlas_dating_ui_dating_effect + "dd.atlas",
+					DatingPath.atlas_dating_ui_dating_effect + "huore.atlas",
+					DatingPath.atlas_dating_ui_dating_effect + "update.atlas",
 
 					DatingPath.ui_dating + "tuiguang/tu_tg3.jpg",
 					DatingPath.ui_dating_tongyong + "mask_top.png",
@@ -218,9 +224,9 @@ module gamedating.page {
 					//特效部分添加
 					Path.ui_atlas_effect + "coin.atlas",
 					Path.ui_atlas_effect + "flycoin.atlas",
+					Path.ui_atlas_effect + "hongbao.atlas",
 					Path.ui_atlas_effect + "loading.atlas",
 					Path.ui_atlas_effect + "shuzi.atlas",
-					Path.ui_atlas_effect + "update.atlas",
 					//通用预加载
 					Path.atlas_game_ui_tongyong + "dating.atlas",
 					Path.atlas_game_ui_tongyong + "general.atlas",

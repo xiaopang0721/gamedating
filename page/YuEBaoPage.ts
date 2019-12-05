@@ -80,8 +80,6 @@ module gamedating.page {
 			super.onOpen();
 			if (!this._clipMoney) {
 				this._clipMoney = new DatingClip(DatingClip.YUEBAO_FONT);
-				// this._clipMoney.anchorX = this._viewUI.clip_money.anchorX;
-				// this._clipMoney.anchorY = this._viewUI.clip_money.anchorY;
 				this._clipMoney.centerX = this._viewUI.clip_money.centerX;
 				this._clipMoney.centerY = this._viewUI.clip_money.centerY;
 				this._viewUI.clip_money.parent.addChild(this._clipMoney);

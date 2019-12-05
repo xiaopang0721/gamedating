@@ -6,6 +6,7 @@ module gamedating.page {
 		private _viewUI: ui.ajqp.dating.QianDaoUI;
 		private _qiandaos: ui.ajqp.dating.component.Effect_qdUI[] = [];
 		private _awards: LImage[] = [];
+		private _effs: any[] = [];
 		private _avatar: AvatarUIShow;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
@@ -38,6 +39,9 @@ module gamedating.page {
 			for (let i = 0; i < this._viewUI.box_award.numChildren; i++) {
 				this._awards[i] = this._viewUI["award" + i];
 			}
+			for (let i = 0; i < this._viewUI.box_award.numChildren; i++) {
+				this._effs[i] = this._viewUI["eff" + i];
+			}
 		}
 
 		update(diff): void {
@@ -62,7 +66,6 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
-
 			this.onUpdateData();
 		}
 
@@ -72,6 +75,12 @@ module gamedating.page {
 			this._days = WebConfig.info.sign_in_days;
 			for (let i = 0; i < this._qiandaos.length; i++) {
 				this._qiandaos[i].visible = this._days > i;
+				this._awards[i].disabled = this._days > i;
+				this._effs[i].visible = this._days == i;
+				this._effs[i].ani1.gotoAndStop(0);
+				if (this._days == i) {
+					this._effs[i].ani1.play(0, true);
+				}
 			}
 			if (WebConfig.info.is_can_qd) {
 				this._viewUI.img_btn.skin = DatingPath.ui_dating + "qiandao/tu_mrzl.png";

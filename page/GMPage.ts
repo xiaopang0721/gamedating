@@ -7,6 +7,7 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 		}
 

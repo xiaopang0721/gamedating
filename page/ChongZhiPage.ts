@@ -64,7 +64,7 @@ module gamedating.page {
 			this._viewUI.list_sm.itemRender = this.createChildren("dating.component.YingHangKaUI", SMItemRender);
 			this._viewUI.list_sm.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_sm.visible = false;
-			this._viewUI.list_yh.scrollBar.changeHandler = new Handler(this, this.smChangeHandler);
+			this._viewUI.list_sm.scrollBar.changeHandler = new Handler(this, this.smChangeHandler);
 
 			this._viewUI.list_money.itemRender = this.createChildren("dating.component.ChongZhiJingEUI", MoneyItemRender);
 			this._viewUI.list_money.renderHandler = new Handler(this, this.renderHandler);
@@ -92,7 +92,8 @@ module gamedating.page {
 			this._viewUI.btn_back_sm.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_clear.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_pay.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			// this._viewUI.btn_kj.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_gotokefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_kj.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 
 			this._viewUI.btn_yh_copy0.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_yh_copy1.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -143,6 +144,12 @@ module gamedating.page {
 		//按钮点击
 		protected onBtnTweenEnd(e: LEvent, target: any) {
 			switch (target) {
+				case this._viewUI.btn_gotokefu:
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
+					break;
+				case this._viewUI.btn_kj:
+					this._data.list[0].kc_url && WebConfig.openUrl(this._data.list[0].kc_url);
+					break;
 				case this._viewUI.btn_clear:
 					this._viewUI.txt_input.text = "";
 					break;
@@ -197,21 +204,27 @@ module gamedating.page {
 					this._game.network.call_recharge_confirm(WebConfig.account, parseFloat(this._viewUI.ingput_yh0.text) * 100, this._data.type, yhDataStr)
 					break;
 				case this._viewUI.btn_yh_copy0:
+					this._game.showTips("复制成功");
 					WebConfig.copyTxt(this._viewUI.txt_yh0.text);
 					break;
 				case this._viewUI.btn_yh_copy1:
+					this._game.showTips("复制成功");
 					WebConfig.copyTxt(this._viewUI.txt_yh1.text);
 					break;
 				case this._viewUI.btn_yh_copy2:
+					this._game.showTips("复制成功");
 					WebConfig.copyTxt(this._viewUI.txt_yh2.text);
 					break;
 				case this._viewUI.btn_yh_copy3:
+					this._game.showTips("复制成功");
 					WebConfig.copyTxt(this._viewUI.txt_yh3.text);
 					break;
 				case this._viewUI.btn_sm_copy0:
+					this._game.showTips("复制成功");
 					WebConfig.copyTxt(this._viewUI.txt_sm0.text);
 					break;
 				case this._viewUI.btn_sm_copy1:
+					this._game.showTips("复制成功");
 					WebConfig.copyTxt(this._viewUI.txt_sm1.text);
 					break;
 				case this._viewUI.btn_back:
@@ -286,6 +299,7 @@ module gamedating.page {
 		}
 
 		private tabChangeHandler() {
+			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
 			// let value = this._viewUI.list_tab.scrollBar.value;
 			// if (!this._viewUI.list_tab.scrollBar.min && !this._viewUI.list_tab.scrollBar.max) {
 			// 	this._viewUI.btn_pre_tab.visible = false;
@@ -337,11 +351,12 @@ module gamedating.page {
 				this._game.showTips("无效操作")
 				return;
 			}
-
-			this._viewUI.box_yh.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK;
+			this._viewUI.txt_input.text = "";
+			this._viewUI.box_kj.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_FAST;
+			this._viewUI.box_yh.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK;
 			this._viewUI.box_sm.visible = data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_YSFSM;
-			this._viewUI.box_zhuanzhang.visible = !this._viewUI.box_yh.visible && !this._viewUI.box_sm.visible;
-			if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK) {
+			this._viewUI.box_zhuanzhang.visible = !this._viewUI.box_yh.visible && !this._viewUI.box_sm.visible && !this._viewUI.box_kj.visible;
+			if (data.type == Web_operation_fields.GAME_PAYIMG_TYPE_BANKHK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_WXBANK || data.type == Web_operation_fields.GAME_PAYIMG_TYPE_ZFBBANK) {
 				this._viewUI.box_yh_cz.visible = false;
 				this._viewUI.box_yh_type.visible = true;
 				this._viewUI.list_yh.visible = true;
@@ -439,7 +454,7 @@ module gamedating.page {
 
 		private qudaoChangeHandler(): void {
 			DisplayU.onScrollChange(this._viewUI.list_qudao, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_V);
-			let value = this._viewUI.list_qudao.scrollBar.value;
+			// let value = this._viewUI.list_qudao.scrollBar.value;
 			// if (!this._viewUI.list_qudao.scrollBar.min && !this._viewUI.list_qudao.scrollBar.max) {
 			// 	this._viewUI.btn_left_qudao.visible = false;
 			// 	this._viewUI.btn_right_qudao.visible = false;
@@ -456,7 +471,7 @@ module gamedating.page {
 
 		private yhkChangeHandler(): void {
 			DisplayU.onScrollChange(this._viewUI.list_yh, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
-			let value = this._viewUI.list_yh.scrollBar.value;
+			// let value = this._viewUI.list_yh.scrollBar.value;
 			// if (!this._viewUI.list_yh.scrollBar.min && !this._viewUI.list_yh.scrollBar.max) {
 			// 	this._viewUI.btn_left_yh.visible = false;
 			// 	this._viewUI.btn_right_yh.visible = false;
@@ -473,7 +488,7 @@ module gamedating.page {
 
 		private smChangeHandler(): void {
 			DisplayU.onScrollChange(this._viewUI.list_sm, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
-			let value = this._viewUI.list_sm.scrollBar.value;
+			// let value = this._viewUI.list_sm.scrollBar.value;
 			// if (!this._viewUI.list_sm.scrollBar.min && !this._viewUI.list_sm.scrollBar.max) {
 			// 	this._viewUI.btn_left_sm.visible = false;
 			// 	this._viewUI.btn_right_sm.visible = false;
@@ -492,6 +507,7 @@ module gamedating.page {
 			if (this._viewUI) {
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
+				DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.list_yh, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.list_sm, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.list_qudao, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_V);
@@ -671,12 +687,12 @@ module gamedating.page {
 					this._viewUI.txt_sm0.text = this._data.alipayname;
 					this._viewUI.txt_sm1.text = this._data.alipaynum;
 					this._viewUI.img_sm_ewm.skin = this._data.alipay_ewm_url;
-					this._viewUI.btn_open_wx.label = "打开支付宝";
-					this._viewUI.btn_open_wx.visible = false;
+					// this._viewUI.btn_open_wx.label = "打开支付宝";
+					// this._viewUI.btn_open_wx.visible = false;
 					this._viewUI.txt_sm_zh.text = "支付宝账号：";
 					this._viewUI.txt_zfbsm4.text = this._data.min_limit > 0 ? StringU.substitute("支付宝最低{0}元起充，低于{1}元充值不受理", this._data.min_limit, this._data.min_limit) : '';
-					this._viewUI.btn_save_ewm.left = undefined;
-					this._viewUI.btn_save_ewm.centerX = 0;
+					// this._viewUI.btn_save_ewm.left = undefined;
+					// this._viewUI.btn_save_ewm.centerX = 0;
 					this._viewUI.box_zfb.visible = true;
 					this._viewUI.box_wx.visible = !this._viewUI.box_zfb.visible;
 					this._viewUI.box_ysf.visible = !this._viewUI.box_zfb.visible;
@@ -685,12 +701,12 @@ module gamedating.page {
 					this._viewUI.txt_sm0.text = this._data.ysfpayname;
 					this._viewUI.txt_sm1.text = this._data.ysfpaynum;
 					this._viewUI.img_sm_ewm.skin = this._data.ysfpay_ewm_url;
-					this._viewUI.btn_open_wx.label = "打开云闪付";
-					this._viewUI.btn_open_wx.visible = false;
+					// this._viewUI.btn_open_wx.label = "打开云闪付";
+					// this._viewUI.btn_open_wx.visible = false;
 					this._viewUI.txt_sm_zh.text = "云闪付账号：";
 					this._viewUI.txt_ysfsm4.text = this._data.min_limit > 0 ? StringU.substitute("云闪付最低{0}元起充，低于{1}元充值不受理", this._data.min_limit, this._data.min_limit) : '';
-					this._viewUI.btn_save_ewm.left = undefined;
-					this._viewUI.btn_save_ewm.centerX = 0;
+					// this._viewUI.btn_save_ewm.left = undefined;
+					// this._viewUI.btn_save_ewm.centerX = 0;
 					this._viewUI.box_ysf.visible = true;
 					this._viewUI.box_wx.visible = !this._viewUI.box_ysf.visible;
 					this._viewUI.box_zfb.visible = !this._viewUI.box_ysf.visible;
@@ -699,12 +715,12 @@ module gamedating.page {
 					this._viewUI.txt_sm0.text = this._data.wxname;
 					this._viewUI.txt_sm1.text = this._data.wxnum;
 					this._viewUI.img_sm_ewm.skin = this._data.wx_ewm_url;
-					this._viewUI.btn_open_wx.label = "打开微信";
-					this._viewUI.btn_open_wx.visible = true;
+					// this._viewUI.btn_open_wx.label = "打开微信";
+					// this._viewUI.btn_open_wx.visible = true;
 					this._viewUI.txt_sm_zh.text = "微信账号：";
 					this._viewUI.txt_wxsm4.text = this._data.min_limit > 0 ? StringU.substitute("微信最低{0}元起充，低于{1}元充值不受理", this._data.min_limit, this._data.min_limit) : '';
-					this._viewUI.btn_save_ewm.centerX = undefined;
-					this._viewUI.btn_save_ewm.left = 0;
+					// this._viewUI.btn_save_ewm.centerX = undefined;
+					// this._viewUI.btn_save_ewm.left = 0;
 					this._viewUI.box_wx.visible = true;
 					this._viewUI.box_zfb.visible = !this._viewUI.box_wx.visible;
 					this._viewUI.box_ysf.visible = !this._viewUI.box_wx.visible;

@@ -16,13 +16,19 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
 				DatingPath.atlas_dating_ui_dating_effect + "cz.atlas",
 				DatingPath.atlas_dating_ui_dating_effect + "tx.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "gxz.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "tj.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "dd.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "new.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "huore.atlas",
 				DatingPath.atlas_dating_ui_dating_effect + "anniu.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "update.atlas",
 
 				Path.ui_atlas_effect + "coin.atlas",
 				Path.ui_atlas_effect + "flycoin.atlas",
+				Path.ui_atlas_effect + "hongbao.atlas",
 				Path.ui_atlas_effect + "loading.atlas",
 				Path.ui_atlas_effect + "shuzi.atlas",
-				Path.ui_atlas_effect + "update.atlas",
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -46,7 +52,7 @@ module gamedating.page {
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.list_btns.hScrollBarSkin = "";
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
-			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.HudOne_TUI", GameItemRender);
+			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.Hud_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -472,9 +478,9 @@ module gamedating.page {
 			let value = this._viewUI.list_btns.scrollBar.value;
 		}
 
-		private _selectIndex: number = 0;
-		public onSelectItem(index) {
-			if (!WebConfig.gamelist)
+		private _selectIndex: number = -1;
+		public onSelectItem(index: number = -1) {
+			if (!WebConfig.gamelist || this._selectIndex == index)
 				return;
 			// 如果有值，说明该干活了
 			let listData = this._game.datingGame.hudTabScrollData;
@@ -509,6 +515,7 @@ module gamedating.page {
 			Laya.timer.clearAll(this);
 			this.clearTweens();
 			this.resetList();
+			this._selectIndex = index;
 			let b = this.onDealGameData(index);
 			if (b)
 				return;
@@ -524,6 +531,7 @@ module gamedating.page {
 			}
 		}
 
+		private _gameNoNeed: string[] = ["zoo", "shisanshui"];
 		private onDealGameData(index: number) {
 			let game_list: any[] = []
 			let webPower: number = 0;
@@ -550,10 +558,8 @@ module gamedating.page {
 				if (type > -1) {
 					//热门游戏 或 对应类型的游戏
 					if (index == DatingPageDef.TYPE_HOT || index == type) {
-						// 房卡不放进热门游戏里面
-						if (index == DatingPageDef.TYPE_HOT && type == DatingPageDef.TYPE_CARD)
-							continue;
-						game_list.push([str.replace('r_', ''), type, webPower, times]);
+						if (this._gameNoNeed.indexOf(str1) != -1) continue;
+						game_list.push([str.replace('_', ''), type, webPower, times]);
 						webPower++;
 					}
 				}
@@ -704,253 +710,165 @@ module gamedating.page {
 
 		private renderHandler(cell: GameItemRender, index: number) {
 			if (!cell) return;
-			cell.setData(this, this._game, cell.dataSource[0], cell.dataSource[1], index);
+			cell.setData(this._game, cell.dataSource, index);
 		}
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
 	}
 
 	/**
-	 * 大厅入口 2 级list
+	 * 大厅入口
 	 */
-	class GameItemRender extends ui.ajqp.dating.component.HudOne_TUI {
-		public index: number;
-		private _page: HudMainPage;
+	class GameItemRender extends ui.ajqp.dating.component.Hud_TUI {
 		private _game: Game;
 		private _gameStr: string;
-		private _type: number;
-		private _updateEffect: AnimationFrame;
+		private _type: string;
+		private _index: number;
+		private _updateTip: ui.ajqp.dating.component.Effect_gxUI;
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.ajqp.dating.component.Effect_dengdaiUI;
-		private _mainView: any;
-		private _offset_x: number;
-		private _isJqqd: boolean;
-		private static _jqqdGames: string[] = ['zoo', 'rshisanshui', 'elslp'];
 		constructor() {
 			super();
-		}
-		setData(page: HudMainPage, game: Game, gameStr: any, type: number, index: number) {
-			if (!gameStr) {
-				this.visible = false;
-				return;
-			}
-			this.visible = true;
-			this._page = page;
-			this._game = game;
-			this._type = type;
-			this._gameStr = this._type == DatingPageDef.TYPE_CARD ? "r" + gameStr : gameStr;
-			this.index = index;
-			this._game.sceneObjectMgr.on(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
-			this._offset_x = 15;
-			this._isJqqd = GameItemRender._jqqdGames.indexOf(this._gameStr) != -1;
-			this.show();
-			this.update();
+			this.btn_box.on(LEvent.CLICK, this, this.onMouseHandle);
 		}
 
-		destroy() {
-			if (this._mainView instanceof LImage) {
-				this._mainView.removeSelf();
-				this._mainView.destroy();
-				this._mainView = null;
+		//显示等待
+		private showWait() {
+			if (!this._waitingTip) {
+				this._waitingTip = new ui.ajqp.dating.component.Effect_dengdaiUI();
+				this._waitingTip.x = 208;
+				this._waitingTip.y = 23;
+				this.addChild(this._waitingTip);
 			}
-			this.clearWaiting();
-			this.clearUpdate();
-			this.clearProgress();
-			Laya.Tween.clearAll(this);
-			this.btn.off(LEvent.CLICK, this, this.onMouseHandle);
-			this._game && this._game.sceneObjectMgr.off(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameStr, this, this.showWaiting);
-			super.destroy();
+			if (this._waitingTip.ani1.isPlaying) return;
+			this._waitingTip.ani1.play(0, true);
 		}
 
-		update(): void {
-			if (!this._gameStr || !this.alpha) return;
-			if (this._updateEffect) {
-				this._updateEffect.onDraw();
-			}
-			if (LoadingMgr.ins.isLoaded(this._gameStr) || this._isJqqd) {
-				this.clearUpdate();
-				this.clearProgress();
-				this.clearWaiting();
-			} else {
-				let progress = this.getProgress(this._gameStr);
-				if (progress > 0) {
-					this.showProgress(progress);
-					this.clearUpdate();
-					this.clearWaiting();
-				}
-				else {
-					if (JsLoader.ins.isWaitLoad(this._gameStr)) {
-						this.showWaiting();
-						this.clearUpdate();
-						this.clearProgress();
-					} else {
-						this.clearProgress();
-						this.clearWaiting();
-						this.showUpdate();
-					}
-				}
+		//清理等待
+		private clearWait() {
+			if (this._waitingTip) {
+				this._waitingTip.removeSelf();
+				this._waitingTip.destroy();
+				this._waitingTip = null;
 			}
 		}
 
-		set setAlpha(v: number) {
-			this.alpha = v;
-			if (this._mainView instanceof LImage) {
-				this._mainView.visible = v != 0;
+		//显示更新
+		private showGengXing() {
+			if (!this._updateTip) {
+				this._updateTip = new ui.ajqp.dating.component.Effect_gxUI();
+				this._updateTip.x = 195;
+				this._updateTip.y = -2;
+				this.addChild(this._updateTip);
 			}
-			if (this._updateEffect) {
-				this._updateEffect.visible = v != 0;
+		}
+
+		//清理更新
+		private clearGengXing() {
+			if (this._updateTip) {
+				this._updateTip.removeSelf();
+				this._updateTip.destroy();
+				this._updateTip = null;
 			}
+		}
+
+		//显示进度
+		private showProgress(value: number) {
+			if (!this._loadingTip) {
+				this._loadingTip = new HudLoadingTip();
+				this._loadingTip.x = 208;
+				this._loadingTip.y = 22;
+				this.addChild(this._loadingTip);
+			}
+
+			this._loadingTip.progress = value;
+		}
+
+		//清理进度
+		private clearProgress() {
 			if (this._loadingTip) {
-				this._loadingTip.visible = v != 0;
+				this._loadingTip.removeSelf();
+				this._loadingTip.destroy();
+				this._loadingTip = null;
 			}
-		}
-		get setAlpha(): number {
-			return this.alpha;
-		}
-
-		private show(): void {
-			let offset_x = this._offset_x;
-			this.btn.on(LEvent.CLICK, this, this.onMouseHandle);
-			this.btn.x = 148 + offset_x;
-			if (!this._mainView) {
-				this._mainView = new LImage();
-			}
-			this._mainView.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + '.png';
-			this.box.addChild(this._mainView);
-			this._mainView.anchorX = this._mainView.anchorY = 0.5;
-			this._mainView.x = 85 + offset_x;
-			this._mainView.y = 120;
 		}
 
 		private getProgress(gameid: string) {
 			return LoadingMgr.ins.getProgress(this._gameStr) || JsLoader.ins.getProgress(this._gameStr);
 		}
 
-		// 显示等待状态
-		private showWaiting() {
-			if (!this._waitingTip) {
-				let cla = Page.FindClass("dating.component.Effect_dengdaiUI");
-				this._waitingTip = new cla();
-			}
-			let offset_x: number = 15;
-			this._waitingTip.x = offset_x;
-			this.tip.addChild(this._waitingTip);
-			this.clearUpdate();
-		}
-		private clearWaiting() {
-			if (this._waitingTip) {
-				this._waitingTip.destroy();
-				this._waitingTip = null;
-			}
-		}
-
-		// 显示更新状态
-		private showUpdate(): void {
-			let offset_x = this._offset_x;
-			if (this._waitingTip && this._waitingTip.parent)
-				return;
-			if (!this._updateEffect) {
-				this._updateEffect = new AnimationFrame({
-					source: 'update',
-					fileName: '',
-					interval: 12,
-					frameCount: 12,
-					start: 10000
-				});
-			}
-			this._updateEffect.x = -30;
-			this._updateEffect.y = -15;
-			this.tip.addChild(this._updateEffect);
-			this._updateEffect.play(true);
-		}
-		private clearUpdate(): void {
-			if (this._updateEffect) {
-				this._updateEffect.destroy();
-				this._updateEffect = null;
-			}
-		}
-
-		// 显示加载进度条		
-		private showProgress(value: number) {
-			if (!this._loadingTip) {
-				this._loadingTip = new HudLoadingTip();
-				this.tip.addChild(this._loadingTip);
-				let offset_x: number = 15;
-				this._loadingTip.x = offset_x;
-			}
-			this._loadingTip.progress = value;
-			this._loadingTip.update();
-			this.clearWaiting();
-		}
-		private clearProgress() {
-			if (this._loadingTip) {
-				this._loadingTip.destroy();
-				this._loadingTip = null;
-			}
-		}
-
-		private onMouseHandle(e?: LEvent) {
-			if (!this._gameStr) return;
-			if (this._isJqqd) {
-				this._game.uiRoot.btnTween(this._mainView, this, () => {
-					this._game.showTips("功能开发中，敬请期待...");
-				})
-				return;
-			}
+		update() {
+			this.showProgress(0);
+			this.showWait();
+			this.showGengXing();
 			if (LoadingMgr.ins.isLoaded(this._gameStr)) {
-				if (this._page.isOpenPage) {
-					this._game.showTips("正在进游戏，请耐心等待...")
-					return;
+				this.clearGengXing();
+				this.clearProgress();
+				this.clearWait();
+			} else {
+				let progress = this.getProgress(this._gameStr);
+				if (progress > 0) {
+					this.showProgress(progress);
+					this.clearGengXing();
+					this.clearWait();
 				}
-				this._page.isOpenPage = true;
-				Laya.timer.once(5000, this, () => {
-					this._page.isOpenPage = false;
-				})
+				else {
+					if (JsLoader.ins.isWaitLoad(this._gameStr)) {
+						this.showWait();
+						this.clearGengXing();
+						this.clearProgress();
+					} else {
+						this.clearProgress();
+						this.clearWait();
+						this.showGengXing();
+					}
+				}
 			}
-			if (this._loadingTip) {
-				this._game.showTips("正在更新中...")
+
+			this.btn_box.x = 143;
+			this.btn_box.y = 116;
+		}
+
+
+		setData(game: Game, data: any, index: number) {
+			if (!data) {
+				this.visible = false;
 				return;
 			}
-			this._game.uiRoot.btnTween(this._mainView, this, () => {
-				let gameStr = this._gameStr;
-				if (LoadingMgr.ins.isLoaded(gameStr)) {
-					JsLoader.ins.startLoad(gameStr, false, Handler.create(this, (assets) => {
-						this.openPage(gameStr);
+			if (this._gameStr == data[0]) return;
+			this.visible = true;
+			this._game = game;
+			this._gameStr = data[0];
+			this._type = data[1];
+			this._index = index;
+			this.img.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + ".png";
+		}
+
+		private onMouseHandle() {
+			if (!this._gameStr) return;
+			this._game.uiRoot.btnTween(this.btn_box, this, () => {
+				let data = this._gameStr;
+				if (LoadingMgr.ins.isLoaded(data)) {
+					JsLoader.ins.startLoad(data, false, Handler.create(this, (assets) => {
+						this.openPage(data);
 					}))
 				} else {
-					JsLoader.ins.startLoad(gameStr, true);
-					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameStr)));
+					JsLoader.ins.startLoad(data, true);
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data)));
 				}
-			})
+			});
 		}
 
-		private openPage(gameStr) {
-			if (this._type == DatingPageDef.TYPE_CARD) {
-				if (gameStr == "r" + "paodekuai") {
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreateCardRoomBase) => {
-						page.game_id = gameStr;
-						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
-					});
-				} else {
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
-						page.game_id = gameStr;
-						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
-					});
-				}
-				return;
-			}
-			let pageDef = getPageDef(gameStr);
+		private openPage(data) {
+			let pageDef = getPageDef(data);
 			//調試模式
 			let CLOSE_LIST = isDebug ? [] : [];
 			if (pageDef["__enterMapLv"]) {
 				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
-				this._page.saveListStatus();
 			}
-			else if (CLOSE_LIST.indexOf(gameStr) == -1) {
-				this._page.saveListStatus();
-				this._game.uiRoot.HUD.open(gameStr + 1, (page: Page) => {
-					page.dataSource = WebConfig.hudgametype = this._type;// 等于type
-					this._game.uiRoot.HUD.closeAll([gameStr + 1]);
+			else if (CLOSE_LIST.indexOf(data) == -1) {
+				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
+					this._game.uiRoot.HUD.closeAll([data + 1]);
 				}, (page: Page) => {
 					// 场次返回大厅回调
 					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
@@ -963,51 +881,44 @@ module gamedating.page {
 				this._game.showTips("开发中,敬请期待!");
 			}
 		}
+
+		destroy() {
+			this.clearGengXing();
+			this.clearProgress();
+			this.clearWait();
+			super.destroy();
+		}
+		set setAlpha(v: number) {
+			this.alpha = v;
+			if (this._updateTip) {
+				this._updateTip.visible = v != 0;
+			}
+			if (this._loadingTip) {
+				this._loadingTip.visible = v != 0;
+			}
+		}
+		get setAlpha(): number {
+			return this.alpha;
+		}
+
+
 	}
 
 	class HudLoadingTip extends ui.ajqp.dating.component.LoadingTipTUI {
-		private _updateEffect: AnimationFrame;
-
 		constructor() {
 			super();
-			if (!this._updateEffect) {
-				this._updateEffect = new AnimationFrame({
-					source: 'loading',
-					fileName: '',
-					interval: 12,
-					frameCount: 24,
-					start: 10000
-				});
-			}
-			this.box.addChild(this._updateEffect);
-			this._updateEffect.play(true);
-			this._updateEffect.x = -3
-			this._updateEffect.y = 30;
 			this.img.y = 30;
 			this.txt.text = "0%";
 		}
 
 		set progress(value: number) {
 			this.txt.text = Math.round(value * 100) + "%";
-			this.img.y = (1 - value) * 30 + 3;
-			this._updateEffect.y = (1 - value) * 30 - 10;
+			this.img.y = (1 - value) * 31 + 30;
 		}
 
 		destroy(): void {
-			if (this._updateEffect) {
-				this._updateEffect.destroy();
-				this._updateEffect = null;
-			}
 			this.removeSelf();
 			super.destroy();
 		}
-
-		update(): void {
-			if (this._updateEffect) {
-				this._updateEffect.onDraw();
-			}
-		}
 	}
-
-
 }
