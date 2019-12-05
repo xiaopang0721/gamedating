@@ -740,8 +740,9 @@ module gamedating.page {
 				this._waitingTip.y = 23;
 				this.addChild(this._waitingTip);
 			}
-			if (this._waitingTip.ani1.isPlaying) return;
-			this._waitingTip.ani1.play(0, true);
+			this.clearUpdate();
+			// if (this._waitingTip.ani1.isPlaying) return;
+			// this._waitingTip.ani1.play(0, true);
 		}
 
 		//清理等待
@@ -754,7 +755,7 @@ module gamedating.page {
 		}
 
 		//显示更新
-		private showGengXing() {
+		private showUpdate() {
 			if (!this._updateTip) {
 				this._updateTip = new ui.ajqp.dating.component.Effect_gxUI();
 				this._updateTip.x = 195;
@@ -764,7 +765,7 @@ module gamedating.page {
 		}
 
 		//清理更新
-		private clearGengXing() {
+		private clearUpdate() {
 			if (this._updateTip) {
 				this._updateTip.removeSelf();
 				this._updateTip.destroy();
@@ -799,25 +800,25 @@ module gamedating.page {
 
 		update() {
 			if (LoadingMgr.ins.isLoaded(this._gameStr)) {
-				this.clearGengXing();
+				this.clearUpdate();
 				this.clearProgress();
 				this.clearWait();
 			} else {
 				let progress = this.getProgress(this._gameStr);
 				if (progress > 0) {
 					this.showProgress(progress);
-					this.clearGengXing();
+					this.clearUpdate();
 					this.clearWait();
 				}
 				else {
 					if (JsLoader.ins.isWaitLoad(this._gameStr)) {
 						this.showWait();
-						this.clearGengXing();
+						this.clearUpdate();
 						this.clearProgress();
 					} else {
 						this.clearProgress();
 						this.clearWait();
-						this.showGengXing();
+						this.showUpdate();
 					}
 				}
 			}
@@ -880,7 +881,7 @@ module gamedating.page {
 		}
 
 		destroy() {
-			this.clearGengXing();
+			this.clearUpdate();
 			this.clearProgress();
 			this.clearWait();
 			super.destroy();
