@@ -798,9 +798,6 @@ module gamedating.page {
 		}
 
 		update() {
-			this.showProgress(0);
-			this.showWait();
-			this.showGengXing();
 			if (LoadingMgr.ins.isLoaded(this._gameStr)) {
 				this.clearGengXing();
 				this.clearProgress();
