@@ -741,8 +741,6 @@ module gamedating.page {
 				this.addChild(this._waitingTip);
 			}
 			this.clearUpdate();
-			// if (this._waitingTip.ani1.isPlaying) return;
-			// this._waitingTip.ani1.play(0, true);
 		}
 
 		//清理等待
@@ -756,6 +754,7 @@ module gamedating.page {
 
 		//显示更新
 		private showUpdate() {
+			if (this._waitingTip || this._loadingTip) return;
 			if (!this._updateTip) {
 				this._updateTip = new ui.ajqp.dating.component.Effect_gxUI();
 				this._updateTip.x = 195;
@@ -816,9 +815,9 @@ module gamedating.page {
 						this.clearUpdate();
 						this.clearProgress();
 					} else {
+						this.showUpdate();
 						this.clearProgress();
 						this.clearWait();
-						this.showUpdate();
 					}
 				}
 			}
@@ -886,6 +885,7 @@ module gamedating.page {
 			this.clearWait();
 			super.destroy();
 		}
+
 		set setAlpha(v: number) {
 			this.alpha = v;
 			if (this._updateTip) {
@@ -895,11 +895,10 @@ module gamedating.page {
 				this._loadingTip.visible = v != 0;
 			}
 		}
+
 		get setAlpha(): number {
 			return this.alpha;
 		}
-
-
 	}
 
 	class HudLoadingTip extends ui.ajqp.dating.component.LoadingTipTUI {

@@ -147,7 +147,7 @@ module gamedating {
                 source: DatingPath.atlas_dating_ui + "dating.atlas",
                 url: DatingPath.ui_dating + 'dating/clip_vip.png',
                 clipWidth: 39,
-                clipHeight: 41,
+                clipHeight: 36,
                 clipX: 10,
                 space: -15,
             };

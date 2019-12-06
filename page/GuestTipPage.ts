@@ -7,9 +7,9 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
-				DatingPath.atlas_dating_ui + 'tongyong.atlas',
 				DatingPath.atlas_dating_ui + 'denglu.atlas',
-				DatingPath.atlas_dating_ui + 'shezhi.atlas',
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedBlack = true;
 			this._isNeedDuang = false;
