@@ -235,7 +235,6 @@ module gamedating.page {
 					Path.atlas_game_ui_tongyong + "pai.atlas",
 					Path.atlas_game_ui_tongyong + "qz.atlas",
 					Path.atlas_game_ui_tongyong + "touxiang.atlas",
-					Path.atlas_game_ui_tongyong + "tuichu.atlas",
 					Path.atlas_game_ui_tongyong + "yq.atlas",
 					Path.atlas_game_ui_tongyong + "fk.atlas",
 					Path.ui_tongyong_sk + "HeGuan.sk",

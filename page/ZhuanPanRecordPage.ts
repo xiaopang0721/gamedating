@@ -24,6 +24,7 @@ module gamedating.page {
 			this._viewUI.list_gr.renderHandler = new Handler(this, this.renderHandler);
 			// this._viewUI.check_self.on(LEvent.CLICK, this, this.updateView);
 			this._viewUI.check_self.mouseEnabled = false;
+			this._viewUI.list_gr.visible = false;
 			this._viewUI.box_check.on(LEvent.CLICK, this, this.boxUpdateView);
 		}
 

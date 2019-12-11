@@ -104,6 +104,12 @@ module gamedating.page {
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
 
+		protected onMouseClick(e: LEvent) {
+			if (e.target != this._viewUI.btn_guanwang) {
+				this.gwQiPaoTween(false);
+			}
+		}
+
 		/**按钮点击事件 带缓动 */
 		protected onBtnClickWithTween(...agrs): void {
 			super.onBtnClickWithTween.apply(this, agrs);
@@ -310,7 +316,7 @@ module gamedating.page {
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
 				Laya.timer.frameOnce(1, this, () => {
 					this.updatePos();
-					this.onSelectItem(0);
+					this.onSelectItem(this._selectIndex);
 				});
 			}
 		}
@@ -489,15 +495,36 @@ module gamedating.page {
 				let value: number = listData.value;
 				let tabIndex: number = listData.tabIndex;
 				this._game.datingGame.clearHudTabScrollData();
-				this._selectIndex = tabIndex;
 				Laya.timer.once(100, this, () => {
 					this._viewUI.list_btns.scrollBar.value = value;
 					this._isFromRoom = false;
 				})
 				if (tabIndex != index) {
+					this.onSelectItem(tabIndex);
 					return;
 				}
 			}
+			this._selectIndex = index;
+			this.selectBoxItems(index);
+			Laya.timer.clearAll(this);
+			this.clearTweens();
+			this.resetList();
+			let b = this.onDealGameData(index);
+			if (b)
+				return;
+			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
+				this._viewUI.btn_enterRoom.visible = true;
+				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
+				this._viewUI.btn_enterRoom.alpha = 0;
+				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
+			} else {
+				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
+					this._viewUI.btn_enterRoom.visible = false;
+				});
+			}
+		}
+
+		private selectBoxItems(index: number) {
 			for (let i = 0; i < this._boxItems.length; i++) {
 				if (i == index) {
 					this._boxItems[i].ani1.play(0, false);
@@ -511,23 +538,6 @@ module gamedating.page {
 					this._boxItems[i].img1.visible = false;
 					this._boxItems[i].img2.visible = false;
 				}
-			}
-			Laya.timer.clearAll(this);
-			this.clearTweens();
-			this.resetList();
-			this._selectIndex = index;
-			let b = this.onDealGameData(index);
-			if (b)
-				return;
-			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
-				this._viewUI.btn_enterRoom.visible = true;
-				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
-				this._viewUI.btn_enterRoom.alpha = 0;
-				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
-			} else {
-				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
-					this._viewUI.btn_enterRoom.visible = false;
-				});
 			}
 		}
 
@@ -710,7 +720,7 @@ module gamedating.page {
 
 		private renderHandler(cell: GameItemRender, index: number) {
 			if (!cell) return;
-			cell.setData(this._game, cell.dataSource, index);
+			cell.setData(this, this._game, cell.dataSource, index);
 		}
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
@@ -721,6 +731,7 @@ module gamedating.page {
 	 */
 	class GameItemRender extends ui.ajqp.dating.component.Hud_TUI {
 		private _game: Game;
+		private _page: HudMainPage;
 		private _gameStr: string;
 		private _type: string;
 		private _index: number;
@@ -827,13 +838,14 @@ module gamedating.page {
 		}
 
 
-		setData(game: Game, data: any, index: number) {
+		setData(page: HudMainPage, game: Game, data: any, index: number) {
 			if (!data) {
 				this.visible = false;
 				return;
 			}
 			if (this._gameStr == data[0]) return;
 			this.visible = true;
+			this._page = page;
 			this._game = game;
 			this._gameStr = data[0];
 			this._type = data[1];
@@ -862,8 +874,10 @@ module gamedating.page {
 			let CLOSE_LIST = isDebug ? [] : [];
 			if (pageDef["__enterMapLv"]) {
 				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
+				this._page.saveListStatus();
 			}
 			else if (CLOSE_LIST.indexOf(data) == -1) {
+				this._page.saveListStatus();
 				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
 					this._game.uiRoot.HUD.closeAll([data + 1]);
 				}, (page: Page) => {

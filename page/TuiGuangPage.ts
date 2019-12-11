@@ -38,12 +38,14 @@ module gamedating.page {
 			this._viewUI.txt_gw.text = "微信推广链接：" + showGw;
 			//推广明细
 			this._viewUI.list_mx.vScrollBarSkin = "";
+			this._viewUI.list_mx.dataSource = [];
 			this._viewUI.list_mx.scrollBar.elasticDistance = 100;
 			this._viewUI.list_mx.itemRender = this.createChildren("dating.component.TuiGuangMX_TUI", TuiGuangMX);
 			this._viewUI.list_mx.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_mx.visible = false;
 			//返水明细
 			this._viewUI.list_fsmx.vScrollBarSkin = "";
+			this._viewUI.list_fsmx.dataSource = [];
 			this._viewUI.list_fsmx.scrollBar.elasticDistance = 100;
 			this._viewUI.list_fsmx.itemRender = this.createChildren("dating.component.TuiGuangMX_TUI", FanShuiMX);
 			this._viewUI.list_fsmx.renderHandler = new Handler(this, this.renderHandler);
@@ -51,6 +53,7 @@ module gamedating.page {
 
 			//我的用户
 			this._viewUI.list_yonghu.vScrollBarSkin = "";
+			this._viewUI.list_yonghu.dataSource = [];
 			this._viewUI.list_yonghu.scrollBar.elasticDistance = 100;
 			this._viewUI.list_yonghu.itemRender = this.createChildren("dating.component.YongHuTUI", YongHuItemRender);
 			this._viewUI.list_yonghu.renderHandler = new Handler(this, this.renderHandler);
@@ -58,6 +61,7 @@ module gamedating.page {
 
 			//上周记录
 			this._viewUI.list3.vScrollBarSkin = "";
+			this._viewUI.list3.dataSource = [];
 			this._viewUI.list3.scrollBar.elasticDistance = 100;
 			this._viewUI.list3.itemRender = this.createChildren("dating.component.FenXiangT6UI", FenXiangLastWeekT);
 			this._viewUI.list3.renderHandler = new Handler(this, this.renderHandler);
@@ -65,12 +69,14 @@ module gamedating.page {
 
 			//奖励记录(无限代理)
 			this._viewUI.list2.vScrollBarSkin = "";
+			this._viewUI.list2.dataSource = [];
 			this._viewUI.list2.scrollBar.elasticDistance = 100;
 			this._viewUI.list2.itemRender = this.createChildren("dating.component.FenXiangT5UI", FenXiangRecord);
 			this._viewUI.list2.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list2.visible = false;
 			//奖励记录(全民代理)
 			this._viewUI.list_child.vScrollBarSkin = "";
+			this._viewUI.list_child.dataSource = [];
 			this._viewUI.list_child.scrollBar.elasticDistance = 100;
 			this._viewUI.list_child.itemRender = this.createChildren("dating.component.FenXiangT6UI", FenXiangRecord1);
 			this._viewUI.list_child.renderHandler = new Handler(this, this.renderHandler);
