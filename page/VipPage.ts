@@ -275,22 +275,22 @@ module gamedating.page {
             if (isLeft) {
                 //向左滑动,
                 //调整隐藏界面的UI
-                curHideView.x = 582;
+                curHideView.x = 640;
                 //统一向左移
-                Laya.Tween.to(curShowView, { x: -582, alpha: 0 }, this._slideTime, null, Handler.create(this, this.completeSlide, [curHideView]))
+                Laya.Tween.to(curShowView, { x: -640, alpha: 0 }, this._slideTime, null, Handler.create(this, this.completeSlide, [curShowView]))
                 Laya.Tween.to(curHideView, { x: 0, alpha: 1 }, this._slideTime, null, Handler.create(this, this.completeSlide, [curHideView]))
             } else {
                 //向右滑动
                 //调整隐藏界面的UI
-                curHideView.x = -582;
+                curHideView.x = -640;
                 //统一向左移
-                Laya.Tween.to(curShowView, { x: 582, alpha: 0 }, this._slideTime, null, Handler.create(this, this.completeSlide, [curHideView]))
+                Laya.Tween.to(curShowView, { x: 640, alpha: 0 }, this._slideTime, null, Handler.create(this, this.completeSlide, [curShowView]))
                 Laya.Tween.to(curHideView, { x: 0, alpha: 1 }, this._slideTime, null, Handler.create(this, this.completeSlide, [curHideView]))
             }
         }
         //滑动动画完成时
-        private completeSlide(curHideView): void {
-            Laya.Tween.clearAll(curHideView);
+        private completeSlide(curSlideView): void {
+            Laya.Tween.clearAll(curSlideView);
             this._isSliding = false;
         }
 
