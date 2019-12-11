@@ -30,6 +30,7 @@ module gamedating.page {
 			this._viewUI.list_record.itemRender = this.createChildren("dating.component.ChongZhiJLUI", CZRecordRender);
 			this._viewUI.list_record.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_record.visible = false;
+			this._viewUI.list_record.dataSource = [];
 
 			this.onUpdateDataInfo();
 		}

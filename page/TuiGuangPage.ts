@@ -314,7 +314,7 @@ module gamedating.page {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_AGENCYREPORT) {//分享赚钱
 				if (data && data.success == 0 && data.msg && data.msg) {
 					//根据lv是否存在来判断是否显示
-					let lvbool = this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv);
+					let lvbool = this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_WXDL || (this._curAgencytype == Web_operation_fields.GAME_AGENT_TYPE_QMDL && data.msg.lv) ? true : false;
 					if (lvbool != this._tabItems[1].visible) {
 						this._tabItems[1].visible = lvbool;
 						this.updatePos();

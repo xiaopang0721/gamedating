@@ -13,7 +13,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
 				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
-			this._isNeedBlack = true;
+			this._isNeedBlack = false;
 			this._isClickBlack = false;
 			this._delta = MathU.randomRange(3000, 10000);
 		}
