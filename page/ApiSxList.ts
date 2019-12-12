@@ -22,6 +22,17 @@ module gamedating.page {
 		*/
 		setdata(data: any) {
 			this.list.dataSource = data;
+			// Laya.timer.frameOnce(3, this, () => {
+			// 	if (data) {
+			// 		let maxVal = 0
+			// 		for (let i = 0; i < data.length; i++) {
+			// 			let num = data[i][1].length;
+			// 			let real_width = 314 + 297 * num + 10 * (num - 1);
+			// 			maxVal += real_width + 15;
+			// 		}
+			// 		this.list.scrollBar.max = maxVal;
+			// 	}
+			// })
 		}
 
 		//把屏幕实际宽度设进来
@@ -36,7 +47,7 @@ module gamedating.page {
 				let real_x: number = 0;
 				if (this._real_width.length > 0) {
 					for (let i = 0; i < this._real_width.length; i++) {
-						if (index > i){
+						if (index > i) {
 							real_x += this._real_width[i];
 						}
 					}
@@ -92,7 +103,7 @@ module gamedating.page {
 			this.width = 314 + real_width;
 			this.x = real_x;
 			console.log("index=", index, "cell.x=", this.x, "cell.width", this.width)
-			return this.width
+			return this.width + 15
 		}
 
 		destroy() {
