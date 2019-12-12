@@ -256,27 +256,16 @@ module gamedating {
 			//月入百万弹框标志位
 			if (!this._isShareBack) {
 				this._isShareBack = true;
-				let page: any = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD);
-				if (page) {
-					page.showQiPaoKuang();
-				}
 			}
 			if (!WebConfig.info) {
 				return;
 			}
 			if (success && WebConfig.info.isCanFenXiang)//可以分享 
 			{
-				// if (Laya.timer.currTimer - this._shareCd < 0) return;
-				// this._shareCd = Laya.timer.currTimer + 3000;
-				// if (Laya.timer.currTimer - this._shareContinueTime < 1000) return;	//防点击就会有回调的那种情况
-				if (Laya.timer.currTimer - this._shareContinueTime < 2000) {
+				if (!isDebug && Laya.timer.currTimer - this._shareContinueTime < 2000) {
 					this._game.showTips("分享失败");
 					return
 				}
-				//因为分享机制变动，所以改成延迟随机3-5秒就给奖励
-				// Laya.timer.once(MathU.randomRange(2000, 3000), this, () => {
-				// 	this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
-				// });
 				this._game.sceneGame.network && this._game.sceneGame.network.call_new_dailyshare();
 			}
 		}
@@ -326,6 +315,8 @@ module gamedating {
 			WebConfig.wxDebug && WebConfig.alert("微信注册1");
 			WebConfig.wxDebug && WebConfig.alert("微信分享图文");
 			WebConfig.wxShareImage(url, title, description, scene - 1);
+
+			isDebug && this.update_wxShareCallBack(true);
 		}
 
 		/**
@@ -362,6 +353,7 @@ module gamedating {
 			QRCodeSprite.createQRCodeBase64(WebConfig.downLoadUrl, 140, 140, Handler.create(this, (base64) => {
 				WebConfig.wxShareQrcodeImg(Laya.URL.formatURL(DatingPath.ui_dating + "tuiguang/tu_tg3.jpg"), 405, 720, base64, 233, 461, 140, 140, title, description, scene - 1);
 			}))
+			isDebug && this.update_wxShareCallBack(true);
 		}
 
 		//更新配置密码

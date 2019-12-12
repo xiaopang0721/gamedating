@@ -23,7 +23,7 @@ module gamedating.page {
 
 		// 页面打开时执行函数
 		private _index: number;
-		private _nameInfo: string[] = ["洗洗手", "拜貔貅", "拜观世音", "拜关公", "拜财神", "拜土地公"];
+		private _nameInfo: string[] = ["洗洗手", "摸貔貅", "拜观世音", "拜关公", "拜财神", "拜土地公"];
 		protected onOpen(): void {
 			super.onOpen();
 			this._index = this.dataSource.qf_id - 1;
