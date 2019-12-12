@@ -5,6 +5,7 @@ module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
 		private _boxItems: any[] = [];
+		private _apiSxList: ApiSxList;
 
 		get viewUI() {
 			return this._viewUI;
@@ -318,6 +319,7 @@ module gamedating.page {
 					this.updatePos();
 					this.onSelectItem(this._selectIndex);
 				});
+				this._apiSxList && this._apiSxList.layout(this._clientRealWidth);
 			}
 		}
 
@@ -462,6 +464,13 @@ module gamedating.page {
 					this.gwQiPaoTween(false);
 					break;
 			}
+		}
+
+		private addApiList() {
+			this._apiSxList = new ApiSxList(this._game);
+			let data = [[1, [1, 2, 3, 4]], [1, [1, 2]], [1, [1, 2, 3]], [1, [1, 2, 3]], [1, [1]], [1, [1, 2, 3, 4]]];
+			this._apiSxList.setdata(data);
+			this.viewUI.addChild(this._apiSxList);
 		}
 
 		//官网气泡框tween运动

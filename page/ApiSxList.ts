@@ -8,42 +8,47 @@ module gamedating.page {
 		constructor(game: Game) {
 			super();
 			this._game = game;
-			
+
+			this.list.dataSource = [];
 			this.list.hScrollBarSkin = "";
 			this.list.scrollBar.autoHide = true;
 			this.list.scrollBar.elasticDistance = 100;
 			this.list.itemRender = ListApiRender;
 			this.list.renderHandler = new Handler(this, this.renderHandler);
-			this.list.dataSource = [];
 		}
 		/**
 		* 
 		* @param data 二维数组[[大图标,[小图标1,小图标2..]],[...]]
 		*/
 		setdata(data: any) {
-			this._real_width = 0;
-			this._real_x = 0;
 			this.list.dataSource = data;
 		}
 
 		//把屏幕实际宽度设进来
 		layout(clientRealWidth: number) {
-			this.list.width = clientRealWidth;
+			this.list.width = clientRealWidth ? clientRealWidth : 1280;
 		}
 
-		private _real_width: number = 0;
-		private _real_x: number = 0;
+		private _real_width: number[] = [];
 		private renderHandler(cell: ListApiRender, index: number) {
-			if (!cell) return;
-			cell.setData(this._game, cell.dataSource);
-			let real_width = cell.resizeList();
-			cell.x = this._real_x;
-			cell.width = real_width;
-			this._real_x += this._real_width + 10;
+			if (cell) {
+				cell.setData(this._game, cell.dataSource);
+				let real_x: number = 0;
+				if (this._real_width.length > 0) {
+					for (let i = 0; i < this._real_width.length; i++) {
+						if (index > i){
+							real_x += this._real_width[i];
+						}
+					}
+				}
+				let realwidth = cell.resizeList(index, real_x);
+				this._real_width[index] = realwidth
+			};
 		}
 
 		destroy(): void {
 			this.list.dataSource = [];
+			Laya.timer.clearAll(this);
 			super.destroy();
 		}
 	}
@@ -59,11 +64,6 @@ module gamedating.page {
 		}
 
 		setData(game: Game, data: any) {
-			if (!data) {
-				this.visible = false;
-				return;
-			}
-			this.visible = true;
 			this._game = game;
 			this._data_img = data[0];
 			this._data_list = data[1];
@@ -74,7 +74,7 @@ module gamedating.page {
 			this.list_sx.scrollBar.elasticDistance = 100;
 			this.list_sx.itemRender = HudSxApiRender;
 			this.list_sx.renderHandler = new Handler(this, this.renderHandler);
-			this.list_sx.dataSource = [];
+			this.list_sx.dataSource = this._data_list;
 
 		}
 
@@ -84,11 +84,15 @@ module gamedating.page {
 			}
 		}
 
-		resizeList() {
-			let num = Math.ceil(this._data_list / 2); //列数，每两个一列，单数也算一列
-			let real_width = 296 * num + 10 * (num - 1);
+		private _real_x: number = 0;
+		resizeList(index: number, real_x: number) {
+			let num = Math.ceil(this._data_list.length / 2); //列数，每两个一列，单数也算一列
+			let real_width = 297 * num + 10 * (num - 1);
 			this.list_sx.width = real_width;
-			return real_width;
+			this.width = 314 + real_width;
+			this.x = real_x;
+			console.log("index=", index, "cell.x=", this.x, "cell.width", this.width)
+			return this.width
 		}
 
 		destroy() {
@@ -105,13 +109,14 @@ module gamedating.page {
 		setData(game: Game, data: any) {
 			this._game = game;
 			this._data = data;
-			if (!this._data) {
-				this.visible = false;
-				return;
-			}
-			this.visible = true;
 			this.img.skin = DatingPath.sk_dating + "SX/SX_bjl.png"//data;
+			this.on(LEvent.CLICK, this, this.onClickHandle);
 		}
+
+		private onClickHandle(e: LEvent) {
+
+		}
+
 		destroy() {
 			super.destroy();
 		}
