@@ -16,6 +16,7 @@ import QiFuMgr = gamedating.managers.QiFuMgr;
 import VipMgr = gamedating.managers.VipMgr;
 import CodeMgr = gamedating.managers.CodeMgr;
 import MyTextInput = gamedating.page.MyTextInput;
+import ApiSxList = gamedating.page.ApiSxList;
 import DatingGame = gamedating.DatingGame;
 import Tips = gamedating.page.Tips;
 import TipsPage = gamedating.page.TipsPage;

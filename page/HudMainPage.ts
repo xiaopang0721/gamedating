@@ -410,7 +410,11 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_QIANDAO);
 					break;
 				case this._viewUI.btn_vip:
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_VIP);
+					let apilist: ApiSxList = new ApiSxList(this._game);
+					let data = [[1, [1, 2, 3, 4, 5, 6, 7, 8, 9]], [1, [1, 2]], [1, [1, 2, 3]], [1, [1, 2, 3, 4, 5]], [1, [1]], [1, [1, 2, 3, 4, 5, 6, 7, 8, 9, 0]]];
+					apilist.setdata(data);
+					this.viewUI.addChild(apilist);
+					// this._game.uiRoot.general.open(DatingPageDef.PAGE_VIP);
 					break;
 				case this._viewUI.btn_remen://活动
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_HUODONG);
