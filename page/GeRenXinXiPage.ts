@@ -80,7 +80,8 @@ module gamedating.page {
 			this._viewUI.btn_head.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_recharge.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_select.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.list_bb.on(LEvent.CLICK, this, this.updateBoxBtnStatus);
+			this._viewUI.list_bb.on(LEvent.CLICK, this, this.menuTween, [false]);
+			this._viewUI.list_bb.dataSource = [];
 
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
@@ -227,14 +228,8 @@ module gamedating.page {
 			}
 			//当天的话，数据重新获取
 			if (this._timeSelectIndex == 6) DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
-			this.updateBoxBtnStatus();
+			this.menuTween(false);
 			this.onUpdateDataInfo();
-		}
-
-		private updateBoxBtnStatus() {
-			this._viewUI.box_btn.visible = false;
-			// this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + "tu_di11.png";
-			this._viewUI.btn_jiantou.rotation = -180;
 		}
 
 		private _dataInfo: any[];
@@ -262,8 +257,9 @@ module gamedating.page {
 			}
 			this._viewUI.txt_no.visible = !count;
 			this._viewUI.list_bb.visible = count > 0;
-			if (!count) {
-				!data && DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
+			if ((!count && !data) || !this._isUpdated) {
+				DatingGame.ins.baobiaoMgr.getData(1, this._selectTime, this._timeSelectIndex);
+				this._isUpdated = true;
 				return;
 			}
 
@@ -348,10 +344,14 @@ module gamedating.page {
 			this._dataSource = v;
 		}
 
+		private _isUpdated: boolean;
 		private selectHandler(index: number) {
 			this._viewUI.box0.visible = index == 0;
 			this._viewUI.box1.visible = index == 1;
-			if (index == 1) this.onUpdateDataInfo();
+			if (index == 1) {
+				this._isUpdated = false;
+				this.onUpdateDataInfo();
+			}
 			this._viewUI.box2.visible = index == 2;
 		}
 
@@ -431,13 +431,7 @@ module gamedating.page {
 					})
 					break;
 				case this._viewUI.btn_select:
-					this._viewUI.box_btn.visible = !this._viewUI.box_btn.visible;
-					this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
-					// this._viewUI.img_select.skin = DatingPath.ui_dating_tongyong + (this._viewUI.box_btn.visible ? "tu_di10" : "tu_di11") + ".png";
-					// for (let index = 0; index < 7; index++) {
-					// 	let target = index == 6 ? this._viewUI.btn_select : this._viewUI["btn_" + (index + 1)];
-					// 	Laya.Tween.from(this._viewUI["btn_" + index], { y: target.y }, 200, null, null, (6 - index) * 200);
-					// }
+					this.menuTween(!this._viewUI.box_btn.visible);
 					break;
 				case this._inputCode:
 					this.openJianPan(this._inputCode, this._viewUI, -65);
@@ -464,7 +458,21 @@ module gamedating.page {
 			DatingGame.ins.jianPanMgr.openJianPan(textUI, viewUI, centerY);
 		}
 
-
+		//菜单栏
+		private menuTween(isOpen: boolean) {
+			if (isOpen) {
+				this._viewUI.box_btn.visible = true;
+				this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
+				this._viewUI.box_btn.scale(0.2, 0.2);
+				this._viewUI.box_btn.alpha = 0;
+				Laya.Tween.to(this._viewUI.box_btn, { scaleX: 1, scaleY: 1, alpha: 1 }, 300, Laya.Ease.backInOut);
+			} else {
+				Laya.Tween.to(this._viewUI.box_btn, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 300, Laya.Ease.backInOut, Handler.create(this, () => {
+					this._viewUI.box_btn.visible = false;
+					this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
+				}));
+			}
+		}
 
 		public close(): void {
 			if (this._viewUI) {

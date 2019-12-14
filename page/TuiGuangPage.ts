@@ -91,6 +91,7 @@ module gamedating.page {
 			}
 
 			this._viewUI.panel_tab.vScrollBarSkin = "";
+			this._viewUI.panel_tab.vScrollBar.elasticDistance = 100;
 			for (let index = 0; index < this._viewUI.tab.numChildren; index++) {
 				let item = this._viewUI.tab.getChildByName("item" + index) as Laya.Button;
 				this._tabItems[index] = item;
