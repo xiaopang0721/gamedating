@@ -2,10 +2,12 @@
 * name 主界面
 */
 module gamedating.page {
+	import ApiListPT = gamedating.component.ApiListPT;
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
 		private _boxItems: any[] = [];
 		private _apiSxList: ApiSxList;
+		private _apiPTList: ApiListPT;
 
 		get viewUI() {
 			return this._viewUI;
@@ -78,7 +80,7 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectItem);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
-
+			// this.updateApiUI()
 			//标签页按钮
 			for (let index = 0; index < this._viewUI.box_items.numChildren; index++) {
 				this._boxItems[index] = this.viewUI["item" + index];
@@ -397,6 +399,7 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_XIAOXI)
 					break;
 				case this._viewUI.btn_kefu://客服
+					this._game.network.call_api_login_game(1, 620)
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_KEFU);
 					break;
 				case this._viewUI.btn_gren://个人信息
@@ -467,10 +470,8 @@ module gamedating.page {
 		}
 
 		private addApiList() {
-			this._apiSxList = new ApiSxList(this._game);
-			let data = [[1, [1, 2, 3, 4]], [1, [1, 2]], [1, [1, 2, 3]], [1, [1, 2, 3]], [1, [1]], [1, [1, 2, 3, 4]]];
-			this._apiSxList.setdata(data);
-			this.viewUI.addChild(this._apiSxList);
+			this._apiPTList = new ApiListPT(this._game, this);
+			this._viewUI.box_qp.addChild(this._apiPTList);
 		}
 
 		//官网气泡框tween运动
@@ -678,6 +679,7 @@ module gamedating.page {
 					}
 				}
 			}
+			this._apiPTList && this._apiPTList.update()
 		}
 
 		private _beforeArr = [];
@@ -733,6 +735,32 @@ module gamedating.page {
 		}
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
+
+		//--------------------API版本相关-----------start-------------
+		private updateApiUI(): void {
+			this._game.datingGame.apiMgr.init();
+			this._viewUI.list_sx.visible = false
+			this._viewUI.list_jdb.visible = false;
+			this.addApiList();
+			// this.updateDBDJUI()
+		}
+		// }
+
+		//夺宝电竞UI
+		private updateDBDJUI(): void {
+			this._viewUI.list_jdb.hScrollBarSkin = ""
+			this._viewUI.list_jdb.itemRender = DBDZ_ItemMain
+			this._viewUI.list_jdb.renderHandler = new Handler(this, this.renderHandlerDBMain)
+			this._viewUI.list_jdb.dataSource = [1]
+
+		}
+
+		private renderHandlerDBMain(cell: DBDZ_ItemMain, index: number): void {
+			cell.setData(index);
+		}
+
+
+		//--------------------API版本相关-----------end-------------
 	}
 
 	/**
@@ -941,4 +969,35 @@ module gamedating.page {
 			super.destroy();
 		}
 	}
+
+	//----------夺宝电子组件start---------------
+	class DBDZ_ItemMain extends ui.ajqp.dating.component.Hud_Jdb_APIUI {
+		constructor() {
+			super()
+			this.list_db.itemRender = DBDZ_Item
+			this.list_db.renderHandler = new Handler(this, this.renderHandlerDB)
+			this.list_db.dataSource = [1, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 7]
+			this.list_db.repeatX = Math.ceil(this.list_db.dataSource.length / 2)
+			this.list_db.width = 230 * this.list_db.repeatX;
+			this.width = 20 + 247 + 23 + this.list_db.width;
+		}
+
+		private renderHandlerDB(cell: DBDZ_Item, index: number): void {
+			cell.setData(index)
+		}
+
+		setData(index) {
+		}
+	}
+
+	class DBDZ_Item extends ui.ajqp.dating.component.Hud_Jbd1_APIUI {
+		constructor() {
+			super()
+		}
+
+		setData(index) {
+
+		}
+	}
+	//----------夺宝电子组件end---------------
 }

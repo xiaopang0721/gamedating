@@ -136,7 +136,6 @@ module gamedating.component {
 
 		private onBtnClick(): void {
 			if (this._mainView.isMoveAni) return;
-			console.log("--------", this._mainView.isMoveAni);
 			this.view_pt.btn_box.mouseEnabled = false
 			this._mainView.isShow = !this._mainView.isShow;
 			if (this._mainView.isShow) {

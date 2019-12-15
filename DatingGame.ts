@@ -675,6 +675,15 @@ module gamedating {
 			return this._codeMgr;
 		}
 
+		//验证码管理器
+		private _apiMgr: ApiMgr;
+		public get apiMgr(): ApiMgr {
+			if (!this._apiMgr) {
+				this._apiMgr = new ApiMgr(this._game);
+			}
+			return this._apiMgr;
+		}
+
 		//是否首次登陆游戏
 		private _firstAlert: boolean = false;
 		public get firstAlert() {
