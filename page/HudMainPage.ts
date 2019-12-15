@@ -328,6 +328,8 @@ module gamedating.page {
 		private _box_btn_top: { [key: number]: Button } = {};
 		private _box_btn_bottom: { [key: number]: Button } = {};
 		updatePos() {
+			if (this._viewUI.list_btns.dataSource)
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 			this._viewUI.list_btns.width = this._clientWidth - 250;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
@@ -503,10 +505,10 @@ module gamedating.page {
 				let value: number = listData.value;
 				let tabIndex: number = listData.tabIndex;
 				this._game.datingGame.clearHudTabScrollData();
-				// Laya.timer.once(100, this, () => {
-				// 	this._viewUI.list_btns.scrollBar.value = value;
-				// 	this._isFromRoom = false;
-				// })
+				Laya.timer.once(100, this, () => {
+					this._viewUI.list_btns.scrollBar.value = value;
+					this._isFromRoom = false;
+				})
 				if (tabIndex != index) {
 					this.onSelectItem(tabIndex);
 					return;
@@ -617,24 +619,25 @@ module gamedating.page {
 
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
+		private _listBarMax: number = 0;
 
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
+			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
-			this._viewUI.list_btns.visible = false;
 			// 如果从房间出来，不播放入场动画
 			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
-				this._viewUI.list_btns.visible = true;
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
-				this._isFromRoom = false;
 				return;
 			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
-				this._viewUI.list_btns.visible = true;
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.cells.forEach(element => {
 					let cell = element as GameItemRender;
 					cell.setAlpha = 0;
@@ -741,7 +744,6 @@ module gamedating.page {
 			this.addApiList();
 			// this.updateDBDJUI()
 		}
-		// }
 
 		//夺宝电竞UI
 		private updateDBDJUI(): void {
