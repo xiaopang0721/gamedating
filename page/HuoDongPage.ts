@@ -32,7 +32,7 @@ module gamedating.page {
 			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
 			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
-			// this._viewUI.list_tab.scrollBar.elasticDistance = 100;
+			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TabItemRender1UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);

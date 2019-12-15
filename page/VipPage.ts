@@ -250,6 +250,8 @@ module gamedating.page {
                 index = 0
                 return;
             }
+            this._viewUI.btn_left.visible = index > 0;
+            this._viewUI.btn_right.visible = index < 9;
             this._isSliding = true;
             this._switchIndex = index;
             this.slideBox(isLeft);
