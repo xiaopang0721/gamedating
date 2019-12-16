@@ -938,6 +938,7 @@ module gamedating {
 				this._flyGlodMgr && this._flyGlodMgr.update(diff);
 				this._hongbaoMgr && this._hongbaoMgr.update(diff);
 				this._redPointCheckMgr && this._redPointCheckMgr.update(diff);
+				this._apiMgr&&this._apiMgr.update(diff);
 			}
 			if (this._checkVesionTime < 0) {
 				this._checkVesionTime = 60000;

@@ -16,7 +16,11 @@ module gamedating.component {
 			this.list_qp.hScrollBarSkin = ""
 			this.list_qp.itemRender = QPLB_Item_One
 			this.list_qp.renderHandler = new Handler(this, this.renderHandlerQP);
-			this.list_qp.dataSource = [1, 2, 3, 4, 5]
+		}
+
+		setData(v: any): void {
+			if (!v) return;
+			this.list_qp.dataSource = v;
 		}
 
 		update() {
@@ -101,7 +105,7 @@ module gamedating.component {
 		}
 
 		private renderHandlerQP(cell: QPLB_Item_One, index: number) {
-			cell.setData(this.page, this, index);
+			cell.setData(this.page, this, index, this._game);
 		}
 	}
 	class QPLB_Item_One extends ui.ajqp.dating.component.Hud_Qp_API1UI {
@@ -111,13 +115,19 @@ module gamedating.component {
 		private _selfWidth: number;
 		public index: number;
 		private _page: any;
-		private _mainView:ApiListPT;
+		private _mainView: ApiListPT;
+		private _game: Game;
+		private _type: number;
 		constructor() {
 			super()
 			this.panel_pt.hScrollBarSkin = ""
 			this.view_pt.list_yx.itemRender = QPLB_Item_Two
 			this.view_pt.list_yx.renderHandler = new Handler(this, this.renderHandlerQPYX);
-			this.view_pt.list_yx.dataSource = [1, 2, 3, 4, 5, 6, 7, 781, 2, 3, 4, 5, 6, 7, 781, 2, 3, 4, 5, 6, 7, 781, 2, 3, 4, 5, 6, 7, 781, 2, 3, 4, 5, 6, 7, 781, 2, 3, 4, 5, 6, 7, 78]
+		}
+
+		set dataSource(v) {
+			if (!v) return;
+			this.view_pt.list_yx.dataSource = v;
 			this.view_pt.list_yx.repeatX = Math.ceil(this.view_pt.list_yx.dataSource.length / 2)
 			this.view_pt.list_yx.width = 225 * this.view_pt.list_yx.repeatX;
 			this._selfWidthList = 23 + 332 + 5 + this.view_pt.list_yx.width;
@@ -131,11 +141,12 @@ module gamedating.component {
 
 		private renderHandlerQPYX(cell: QPLB_Item_Two, index: number): void {
 			cell.setAlpha = 0;
-			cell.setData(index)
+			cell.setData(this._page, this._mainView, index, this._game, this._type)
 		}
 
 		private onBtnClick(): void {
 			if (this._mainView.isMoveAni) return;
+			if (this._type == ApiMgr.TYPE_QP_NONE) return;
 			this.view_pt.btn_box.mouseEnabled = false
 			this._mainView.isShow = !this._mainView.isShow;
 			if (this._mainView.isShow) {
@@ -198,19 +209,45 @@ module gamedating.component {
 			}
 		}
 
-		setData(page: any, mainView: ApiListPT, index: number): void {
+		setData(page: any, mainView: ApiListPT, index: number, game: Game): void {
 			this.index = index;
 			this._page = page;
 			this._mainView = mainView;
+			this._game = game;
+			this.updateUI();
 		}
 
+		private updateUI(): void {
+			let strSkin = "";
+			if (this.index == ApiMgr.TYPE_QP_AE) {
+				strSkin = DatingPath.sk_dating + "QP/QP_ae.png";
+				this._type = ApiMgr.TYPE_QP_AE;
+			} else if (this.index == ApiMgr.TYPE_QP_KY) {
+				strSkin = DatingPath.sk_dating + "QP/QP_ky.png";
+				this._type = ApiMgr.TYPE_QP_KY;
+			} else if (this.index == ApiMgr.TYPE_QP_NONE) {
+				strSkin = DatingPath.sk_dating + "QP/QP_qd.png";
+				this._type = ApiMgr.TYPE_QP_NONE;
+			}
+			this.view_pt.img_pt.skin = strSkin;
+		}
 	}
 
 	class QPLB_Item_Two extends ui.ajqp.dating.component.Hud_T_APIUI {
 		public index: number;
+		private _page: any;
+		private _mainView: ApiListPT;
+		private _game: Game;
+		private _data: any;
+		private _type: number;
 		constructor() {
-			super()
+			super();
+			this.on(LEvent.CLICK, this, this.onMouseHandle);
+		}
 
+		set dataSource(v) {
+
+			this._data = v;
 		}
 
 		set setAlpha(v: number) {
@@ -220,8 +257,64 @@ module gamedating.component {
 			return this.alpha;
 		}
 
-		setData(index: number): void {
-			this.index = index
+		setData(page: any, mainView: ApiListPT, index: number, game: Game, type: number): void {
+			this.index = index;
+			this._mainView = mainView;
+			this._game = game;
+			this._page = page;
+			this._type = type;
+			let strSkin = ""
+			if (this._type == ApiMgr.TYPE_QP_KY) {
+				strSkin = DatingPath.sk_dating + "KY/KY_" + this._data.strName + ".png";
+			} else if (this._type == ApiMgr.TYPE_QP_AE) {
+				let gamestr = this._data.replace("r_", "r");
+				strSkin = DatingPath.sk_dating + "DZ_" + gamestr + ".png";
+			}
+			this.img.skin = strSkin;
+		}
+
+		private onMouseHandle() {
+			if (this._type == ApiMgr.TYPE_QP_KY) {
+				this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, this._data.kindID)
+			} else if (this._type == ApiMgr.TYPE_QP_AE) {
+				if (!this._data) return;
+				this._game.uiRoot.btnTween(this.btn_box, this, () => {
+					let data = this._data;
+					if (LoadingMgr.ins.isLoaded(data)) {
+						JsLoader.ins.startLoad(data, false, Handler.create(this, (assets) => {
+							this.openPage(data);
+						}))
+					} else {
+						JsLoader.ins.startLoad(data, true);
+						this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data)));
+					}
+				});
+			}
+		}
+
+		private openPage(data) {
+			let pageDef = getPageDef(data);
+			//調試模式
+			let CLOSE_LIST = isDebug ? [] : [];
+			if (pageDef["__enterMapLv"]) {
+				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
+				this._page.saveListStatus();
+			}
+			else if (CLOSE_LIST.indexOf(data) == -1) {
+				this._page.saveListStatus();
+				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
+					this._game.uiRoot.HUD.closeAll([data + 1]);
+				}, (page: Page) => {
+					// 场次返回大厅回调
+					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
+						this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+							this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
+						}, null, 0);
+					}
+				});
+			} else {
+				this._game.showTips("开发中,敬请期待!");
+			}
 		}
 	}
 }
