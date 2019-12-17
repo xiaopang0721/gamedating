@@ -116,22 +116,22 @@ module gamedating.page {
         set dataSource(v: any) {
             this._data = v;
             if (this._data == TuiGuangFanYongPage.TYPE_QP) {
-                this.lb_name.text = "棋牌投注记录";
+                this.lb_name.text = "棋牌代理";
             }
             else if (this._data == TuiGuangFanYongPage.TYPE_DZ) {
-                this.lb_name.text = "电子投注记录";
+                this.lb_name.text = "电子代理";
             }
             else if (this._data == TuiGuangFanYongPage.TYPE_BY) {
-                this.lb_name.text = "捕鱼投注记录";
+                this.lb_name.text = "捕鱼代理";
             }
             else if (this._data == TuiGuangFanYongPage.TYPE_SX) {
-                this.lb_name.text = "视讯投注记录";
+                this.lb_name.text = "视讯代理";
             }
             else if (this._data == TuiGuangFanYongPage.TYPE_TY) {
-                this.lb_name.text = "体育投注记录";
+                this.lb_name.text = "体育代理";
             }
             else if (this._data == TuiGuangFanYongPage.TYPE_DJ) {
-                this.lb_name.text = "电竞投注记录";
+                this.lb_name.text = "电竞代理";
             }
         }
     }
