@@ -13,6 +13,8 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "fk.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
 			];
 			this._isNeedBlack = true;
 

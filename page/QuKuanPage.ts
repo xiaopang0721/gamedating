@@ -6,7 +6,7 @@ module gamedating.page {
 		private _viewUI: ui.ajqp.dating.QuKuanUI;
 		private _inputMoney: MyTextInput;
 		private _drawchannel: any;
-		private _damaLeft:number;
+		private _damaLeft: number;
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
@@ -36,9 +36,9 @@ module gamedating.page {
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._drawchannel = [];
 			if (FreeStyle.getData('baseconfig_c', 'drawbankuse') == '1')
-				this._drawchannel.push({bindtype: Web_operation_fields.BANK});
+				this._drawchannel.push({ bindtype: Web_operation_fields.BANK });
 			if (FreeStyle.getData('baseconfig_c', 'drawalipayuse') == '1')
-				this._drawchannel.push({bindtype: Web_operation_fields.ALIPAY});
+				this._drawchannel.push({ bindtype: Web_operation_fields.ALIPAY });
 			this._drawchannel.push({ title: "提现记录" });
 			this._viewUI.list_tab.dataSource = this._drawchannel;
 
@@ -58,7 +58,7 @@ module gamedating.page {
 			}
 			this._inputMoney.settext(this._game, TeaStyle.COLOR_INPUT_PROMPT, "请输入提现的金额", TeaStyle.COLOR_INPUT_CONTENT, 24, 11, MyTextInput.TYPE_INPUT_NUMBER, false, Handler.create(this, this.onInputUpdate, null, false));
 			this._bankMinDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawbankmin');
-			this._alipayMinDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawalipaymin');	
+			this._alipayMinDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawalipaymin');
 			this._bankMaxDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawbankmax');
 			this._alipayMaxDraw = FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, 'drawalipaymax');
 
@@ -67,14 +67,14 @@ module gamedating.page {
 			this._viewUI.list_tab.selectedIndex = -1;
 			this._viewUI.list_tab.selectedIndex = 0;
 		}
-		private _bankMinDraw:number;
-		private _alipayMinDraw:number;
-		private _bankMaxDraw:number;
-		private _alipayMaxDraw:number;
+		private _bankMinDraw: number;
+		private _alipayMinDraw: number;
+		private _bankMaxDraw: number;
+		private _alipayMaxDraw: number;
 		// 页面打开时执行函数
 		protected onOpen(): void {
-			super.onOpen();					
-			
+			super.onOpen();
+
 			this._viewUI.txt_zhanghao.on(LEvent.CLICK, this, this.onMouseClick);
 			this._inputMoney.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_clear.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -83,18 +83,18 @@ module gamedating.page {
 			this._viewUI.btn_duihuan.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onPlayerInfoUpdate);
-			this._notStageClickUI = [this._inputMoney];		
+			this._notStageClickUI = [this._inputMoney];
 
-			this._viewUI.btn_clear.visible = false;	
+			this._viewUI.btn_clear.visible = false;
 		}
 
 		public close(): void {
 			if (this._viewUI) {
 				DatingGame.ins.cunQuMgr.clear();
 				DatingGame.ins.cunQuMgr.off(CunQuMgr.EVENT_CHANGE, this, this.onUpdateDataInfo);
-				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);				
+				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onPlayerInfoUpdate);
-				if (this._inputMoney){
+				if (this._inputMoney) {
 					this._inputMoney.off(LEvent.CLICK, this, this.onBtnClickWithTween);
 					this._inputMoney.destroy();
 					this._inputMoney = null;
@@ -103,15 +103,15 @@ module gamedating.page {
 			super.close();
 		}
 
-		private onInputUpdate(){			
+		private onInputUpdate() {
 			let value = parseInt(this._inputMoney.input.text) || 0;
-			if (value == 0) 
+			if (value == 0)
 				this._inputMoney.clearInput();
 			this._viewUI.hslider.value = value;
 			this._viewUI.btn_clear.visible = value > 0;
 		}
 
-		private onPlayerInfoUpdate():void{
+		private onPlayerInfoUpdate(): void {
 			let maxValue;
 			let money = WebConfig.info.money;
 			if (money < 0) money = 0;
@@ -138,7 +138,7 @@ module gamedating.page {
 					this._viewUI.txt_zhanghao.mouseEnabled = true;
 				}
 				moneyCanDraw = money > this._bankMaxDraw ? this._bankMaxDraw : money;
-			} 
+			}
 			else if (data.bindtype == Web_operation_fields.ALIPAY)//支付宝
 			{
 				if (WebConfig.info.zhifubao) {
@@ -155,7 +155,7 @@ module gamedating.page {
 			this._inputMoney.maxValue = moneyCanDraw;
 			this._viewUI.hslider.max = Math.floor(moneyCanDraw);
 			this._viewUI.hslider.value = 0;
-		}		
+		}
 
 		protected onSucessHandler(data: any) {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_DRAWING) {
@@ -165,7 +165,7 @@ module gamedating.page {
 					this._game.showTips("提取成功");
 					this._game.uiRoot.general.close(DatingPageDef.PAGE_SHURU_MIMA);
 				}
-			} 
+			}
 		}
 
 		private _dataInfo: any[];
@@ -225,14 +225,14 @@ module gamedating.page {
 			} else {
 				if (data.bindtype == Web_operation_fields.BANK)//银行卡
 					this._inputMoney.setPrompt = '请输入提现的金额(最低' + this._bankMinDraw + ')';
-				else 
+				else
 					this._inputMoney.setPrompt = '请输入提现的金额(最低' + this._alipayMinDraw + ')';
 				this._viewUI.box_shoubang.visible = true;
 				this._viewUI.box_record.visible = false;
 				this._viewUI.btn_clear.visible = false;
 				this._inputMoney.clearInput();
 
-				this.onPlayerInfoUpdate();				
+				this.onPlayerInfoUpdate();
 			}
 		}
 
@@ -254,8 +254,8 @@ module gamedating.page {
 		private _notStageClickUI: Laya.Node[]; //不响应舞台点击UI对象集合
 		protected onMouseClick(e: LEvent) {
 			if (e.currentTarget == this._viewUI.txt_zhanghao) {
-				let pwd:string = this._game.sceneObjectMgr.mainPlayer.GetTakePassword();
-				if (!pwd || pwd.length == 0){
+				let pwd: string = this._game.sceneObjectMgr.mainPlayer.GetTakePassword();
+				if (!pwd || pwd.length == 0) {
 					// 打开设置密码界面
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_SHEZHI_MIMA);
 					return;
@@ -268,7 +268,7 @@ module gamedating.page {
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_BINDZFB);
 				}
 			}
-			
+
 			for (let index = 0; index < this._notStageClickUI.length; index++) {
 				let v = this._notStageClickUI[index];
 				if (v.contains(e.target)) {
@@ -280,7 +280,7 @@ module gamedating.page {
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
-			let money:number;
+			let money: number;
 			let data = this._viewUI.list_tab.dataSource[this._viewUI.list_tab.selectedIndex];
 			switch (target) {
 				case this._viewUI.btn_help://帮助
@@ -299,15 +299,15 @@ module gamedating.page {
 					this._viewUI.hslider.value = money;
 					this._inputMoney.setText_0(money.toString());
 					this._viewUI.btn_clear.visible = money > 0;
-					break;				
+					break;
 				case this._viewUI.btn_duihuan://取出
-					let pwd:string = this._game.sceneObjectMgr.mainPlayer.GetTakePassword();
-					if (!pwd || pwd.length == 0){
+					let pwd: string = this._game.sceneObjectMgr.mainPlayer.GetTakePassword();
+					if (!pwd || pwd.length == 0) {
 						// 打开设置密码界面
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_SHEZHI_MIMA);
 						return;
 					}
-					
+
 					money = parseFloat(this._inputMoney.input.text);
 					if (data.bindtype == Web_operation_fields.BANK) {
 						if (!WebConfig.info.yinhangka) {
@@ -318,7 +318,7 @@ module gamedating.page {
 						if (money < this._bankMinDraw) {
 							this._game.showTips("小于最低提现金额");
 							return;
-						}						
+						}
 					} else if (data.bindtype == Web_operation_fields.ALIPAY) {
 						if (!WebConfig.info.zhifubao) {
 							this._game.showTips("未绑定支付宝");
@@ -328,7 +328,7 @@ module gamedating.page {
 						if (money < this._alipayMinDraw) {
 							this._game.showTips("小于最低提现金额");
 							return;
-						}						
+						}
 					}
 
 					if (!this._inputMoney.input.text) {
@@ -347,13 +347,13 @@ module gamedating.page {
 						this._game.showTips("只能取出整数金额");
 						return;
 					}
-					
-					if (this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorTimes() >= 3 && this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorCD() >= this._game.sync.serverTimeBys){
+
+					if (this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorTimes() >= 3 && this._game.sceneObjectMgr.mainPlayer.GetDrawMoneyErrorCD() >= this._game.sync.serverTimeBys) {
 						// 打开超过错误次数界面
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_MIMA_TISHI);
 						return;
 					}
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_SHURU_MIMA, (page)=>{
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_SHURU_MIMA, (page) => {
 						page.dataSource = [data.bindtype, money];
 					});
 					break;
@@ -366,7 +366,7 @@ module gamedating.page {
 
 		private openJianPan(textUI: MyTextInput, viewUI: any, centerY: number) {
 			DatingGame.ins.jianPanMgr.openJianPan(textUI, viewUI, centerY);
-		}		
+		}
 	}
 
 	class CunQuT extends ui.ajqp.dating.component.QuKuanTUI {
@@ -393,7 +393,7 @@ module gamedating.page {
 		setData(game: Game, data: any) {
 			this.dataSource = data;
 			this.txt_time.text = Sync.getTimeStr(data.create_time * 1000);
-			let color:string = data.status == '审核中' ? TeaStyle.COLOR_YELLOW : data.status == '成功' ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
+			let color: string = data.status == '审核中' ? TeaStyle.COLOR_YELLOW : data.status == '成功' ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
 			TextFieldU.createHtmlText(this.txt_zt, HtmlFormat.addHtmlColor(data.status, color));
 			this.txt_money.text = data.money;
 			this.txt_type.text = data.drawtype;
@@ -430,12 +430,14 @@ module gamedating.page {
 		 */
 		setData(game: Game, data: any) {
 			this.dataSource = data;
+			this.visible = true;
+			let clip: any = this.getChildByName("selectBox");
 			if (data.bindtype == Web_operation_fields.BANK) {
-				this.txt_name.text = "银行卡";
+				clip.skin = DatingPath.ui_dating + "qukuan/btn_yhk.png";
 			} else if (data.bindtype == Web_operation_fields.ALIPAY) {
-				this.txt_name.text = "支付宝";
+				clip.skin = DatingPath.ui_dating + "qukuan/btn_zfb.png";
 			} else {
-				this.txt_name.text = data.title;
+				clip.skin = DatingPath.ui_dating + "qukuan/btn_txjl.png";
 			}
 		}
 	}

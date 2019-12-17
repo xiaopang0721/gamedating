@@ -317,7 +317,7 @@ module gamedating.page {
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
 				Laya.timer.frameOnce(1, this, () => {
 					this.updatePos();
-					this.onSelectItem(this._selectIndex);
+					this.onSelectItem(0);
 				});
 				this._apiSxList && this._apiSxList.layout(this._clientRealWidth);
 			}
@@ -861,6 +861,10 @@ module gamedating.page {
 
 		private onMouseHandle() {
 			if (!this._gameStr) return;
+			if (this._loadingTip) {
+				this._game.showTips("正在更新中...")
+				return;
+			}
 			this._game.uiRoot.btnTween(this.btn_box, this, () => {
 				let data = this._gameStr;
 				if (LoadingMgr.ins.isLoaded(data)) {
@@ -875,6 +879,22 @@ module gamedating.page {
 		}
 
 		private openPage(data) {
+			//房卡类型打开创建房间界面
+			if (this._type == DatingPageDef.TYPE_CARD) {
+				if (this._gameStr == "r" + "paodekuai") {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreadRoomPDKPage) => {
+						page.game_id = this._gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
+					});
+				} else {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
+						page.game_id = this._gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
+					});
+				}
+				return;
+			}
+			//非房卡类型打开游戏场次界面
 			let pageDef = getPageDef(data);
 			//調試模式
 			let CLOSE_LIST = isDebug ? [] : [];

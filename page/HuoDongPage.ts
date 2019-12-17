@@ -33,7 +33,7 @@ module gamedating.page {
 			this._viewUI.list_tab.vScrollBarSkin = "";
 			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
-			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TabItemRender1UI", TabItemRender);
+			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TeblteRender4UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
@@ -104,16 +104,15 @@ module gamedating.page {
 		private onBtnTabChange(isInit: boolean = true, e?: LEvent, ): void {
 			if (!this._curSelectTab && this._curSelectTab != 0) {
 				this._curSelectTab = 1;
-				this._viewUI.btn_tab.selected = false;
 			}
 			else {
 				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
-				this._viewUI.btn_tab.selected = !this._viewUI.btn_tab.selected;
 			}
 			if (!isInit) this._game.playSound(Path.music + "btn.mp3");
 			this.resetScrollValue();
 			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
 				//公告
+				this._viewUI.btn_tab.index = 2;
 				this._curSelectData = this._activeList;
 				this._viewUI.box_hd.visible = false;
 				this._viewUI.box_gg.visible = true;
@@ -121,6 +120,7 @@ module gamedating.page {
 				this._viewUI.list_tab.visible = this._activeList && this._activeList.length > 0;
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				//活动
+				this._viewUI.btn_tab.index = 1;
 				this._curSelectData = this._curHDData;
 				this._viewUI.box_hd.visible = true;
 				this._viewUI.box_gg.visible = false;
@@ -398,7 +398,7 @@ module gamedating.page {
 		}
 	}
 
-	class TabItemRender extends ui.ajqp.dating.component.TabItemRender1UI {
+	class TabItemRender extends ui.ajqp.dating.component.TeblteRender4UI {
 		private _game: Game;
 		private _data: any;
 		/**
