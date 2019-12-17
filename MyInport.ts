@@ -25,6 +25,7 @@ import RedCheckMgr = gamedating.managers.RedCheckMgr;
 import RedPointCheckMgr = gamedating.managers.RedPointCheckMgr;
 import FlyGlodMgr = gamedating.managers.FlyGlodMgr;
 import HongBaoMgr = gamedating.managers.HongBaoMgr;
+import ApiMgr = gamedating.managers.ApiMgr;
 
 
 

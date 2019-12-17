@@ -2,10 +2,12 @@
 * name 主界面
 */
 module gamedating.page {
+	import ApiListPT = gamedating.component.ApiListPT;
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
 		private _boxItems: any[] = [];
 		private _apiSxList: ApiSxList;
+		private _apiPTList: ApiListPT;
 
 		get viewUI() {
 			return this._viewUI;
@@ -78,13 +80,14 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectItem);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.onFreeStyle);
-
 			//标签页按钮
 			for (let index = 0; index < this._viewUI.box_items.numChildren; index++) {
 				this._boxItems[index] = this.viewUI["item" + index];
 				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
 			}
 			this.onSelectItem(0);
+			if (this._isapi)
+				this.updateApiUI()
 			this.initTabClickPoly();
 			//hud弹窗逻辑
 			this.alertPage();
@@ -326,6 +329,8 @@ module gamedating.page {
 		private _box_btn_top: { [key: number]: Button } = {};
 		private _box_btn_bottom: { [key: number]: Button } = {};
 		updatePos() {
+			if (this._viewUI.list_btns.dataSource)
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 			this._viewUI.list_btns.width = this._clientWidth - 250;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
@@ -464,11 +469,19 @@ module gamedating.page {
 			}
 		}
 
+		public ky_data =
+		[{ kindID: 600, strName: "21dian" }, { kindID: 1960, strName: "bcbm" }, { kindID: 910, strName: "bjl" }, { kindID: 930, strName: "brnn" },
+		{ kindID: 610, strName: "ddz" }, { kindID: 620, strName: "dzpk" }, { kindID: 720, strName: "ebg" }, { kindID: 740, strName: "ermj" }
+			, { kindID: 1940, strName: "jsys" }, { kindID: 230, strName: "jszjh" }, { kindID: 890, strName: "kpqznn" }, { kindID: 830, strName: "qznn" }
+			, { kindID: 730, strName: "qzpj" }, { kindID: 860, strName: "sg" }, { kindID: 920, strName: "slwh" }, { kindID: 630, strName: "sss" }
+			, { kindID: 870, strName: "tbnn" }, { kindID: 1950, strName: "wrzjh" }, { kindID: 650, strName: "xlch" }, { kindID: 900, strName: "yzlh" }
+			, { kindID: 220, strName: "zjh" }]
+
 		private addApiList() {
-			this._apiSxList = new ApiSxList(this._game);
-			let data = [[1, [1, 2, 3, 4]], [1, [1, 2]], [1, [1, 2, 3]], [1, [1, 2, 3]], [1, [1]], [1, [1, 2, 3, 4]]];
-			this._apiSxList.setdata(data);
-			this.viewUI.addChild(this._apiSxList);
+			this._apiPTList = new ApiListPT(this._game, this);
+			this._viewUI.box_qp.addChild(this._apiPTList);
+			let pt_data = [WebConfig.gamelist, this.ky_data, []]
+			this._apiPTList.setData(pt_data);
 		}
 
 		//官网气泡框tween运动
@@ -495,39 +508,58 @@ module gamedating.page {
 		public onSelectItem(index: number = -1) {
 			if (!WebConfig.gamelist || this._selectIndex == index)
 				return;
-			// 如果有值，说明该干活了
-			let listData = this._game.datingGame.hudTabScrollData;
-			if (listData) {
-				this._isFromRoom = true;
-				let value: number = listData.value;
-				let tabIndex: number = listData.tabIndex;
-				this._game.datingGame.clearHudTabScrollData();
-				// Laya.timer.once(100, this, () => {
-				// 	this._viewUI.list_btns.scrollBar.value = value;
-				// 	this._isFromRoom = false;
-				// })
-				if (tabIndex != index) {
-					this.onSelectItem(tabIndex);
-					return;
-				}
-			}
-			this._selectIndex = index;
 			this.selectBoxItems(index);
-			Laya.timer.clearAll(this);
-			this.clearTweens();
-			this.resetList();
-			let b = this.onDealGameData(index);
-			if (b)
-				return;
-			if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
-				this._viewUI.btn_enterRoom.visible = true;
-				this._viewUI.btn_enterRoom.scale(0.2, 0.2);
-				this._viewUI.btn_enterRoom.alpha = 0;
-				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
+			if (this._isapi) {
+				this._selectIndex = index;
+				this._apiPTList && (this._apiPTList.visible = false);
+				if (index == ApiMgr.TYPE_HOT - 1) {
+					//热门
+				} else if (index == ApiMgr.TYPE_QP - 1) {
+					//棋牌
+					if (!this._apiPTList)
+						this.addApiList()
+					this._apiPTList.visible = true;
+				} else if (index == ApiMgr.TYPE_BY - 1) {
+					//捕鱼游戏
+				} else if (index == ApiMgr.TYPE_DZYY - 1) {
+					//电子游艺
+				} else if (index == ApiMgr.TYPE_ZRSX - 1) {
+					//真人视讯
+				}
 			} else {
-				this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
-					this._viewUI.btn_enterRoom.visible = false;
-				});
+				// 如果有值，说明该干活了
+				let listData = this._game.datingGame.hudTabScrollData;
+				if (listData) {
+					this._isFromRoom = true;
+					let value: number = listData.value;
+					let tabIndex: number = listData.tabIndex;
+					this._game.datingGame.clearHudTabScrollData();
+					Laya.timer.once(100, this, () => {
+						this._viewUI.list_btns.scrollBar.value = value;
+						this._isFromRoom = false;
+					})
+					if (tabIndex != index) {
+						this.onSelectItem(tabIndex);
+						return;
+					}
+				}
+				this._selectIndex = index;
+				Laya.timer.clearAll(this);
+				this.clearTweens();
+				this.resetList();
+				let b = this.onDealGameData(index);
+				if (b)
+					return;
+				if (index == DatingPageDef.TYPE_CARD && this._viewUI.list_btns.dataSource.length != 0) {
+					this._viewUI.btn_enterRoom.visible = true;
+					this._viewUI.btn_enterRoom.scale(0.2, 0.2);
+					this._viewUI.btn_enterRoom.alpha = 0;
+					this.createTween(this._viewUI.btn_enterRoom, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
+				} else {
+					this.createTween(this._viewUI.btn_enterRoom, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
+						this._viewUI.btn_enterRoom.visible = false;
+					});
+				}
 			}
 		}
 
@@ -616,24 +648,25 @@ module gamedating.page {
 
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
+		private _listBarMax: number = 0;
 
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
+			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
-			this._viewUI.list_btns.visible = false;
 			// 如果从房间出来，不播放入场动画
 			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
-				this._viewUI.list_btns.visible = true;
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
-				this._isFromRoom = false;
 				return;
 			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
-				this._viewUI.list_btns.visible = true;
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.cells.forEach(element => {
 					let cell = element as GameItemRender;
 					cell.setAlpha = 0;
@@ -675,6 +708,7 @@ module gamedating.page {
 					}
 				}
 			}
+			this._apiPTList && this._apiPTList.update()
 		}
 
 		private _beforeArr = [];
@@ -730,6 +764,41 @@ module gamedating.page {
 		}
 
 		//--------------------游戏入口按钮列表相关---end------------------------------
+
+		//--------------------API版本相关-----------start-------------
+		private _isapi: boolean = true;
+		private tabData: any = [
+			{ index: 1, skin: "btn_rm" },//热门游戏
+			{ index: 2, skin: "btn_qp" },//棋牌游戏
+			{ index: 3, skin: "btn_byyx" },//捕鱼游戏
+			{ index: 4, skin: "btn_dzyy" },//电子游艺
+			{ index: 5, skin: "btn_xbsx" },//真人视讯
+		];
+		private updateApiUI(): void {
+			this._game.datingGame.apiMgr.init();
+			this._viewUI.list_btns.visible = false;
+			this._viewUI.list_sx.visible = false
+			this._viewUI.list_jdb.visible = false;
+			for (let i = 0; i < this._boxItems.length; i++) {
+				let data: any = this.tabData[i];
+				this._boxItems[i].clip.skin = DatingPath.ui_dating + "dating/effect/anniu/" + data.skin + ".png";
+			}
+		}
+
+		//夺宝电竞UI
+		private updateDBDJUI(): void {
+			this._viewUI.list_jdb.hScrollBarSkin = ""
+			this._viewUI.list_jdb.itemRender = DBDZ_ItemMain
+			this._viewUI.list_jdb.renderHandler = new Handler(this, this.renderHandlerDBMain)
+			this._viewUI.list_jdb.dataSource = [1]
+		}
+
+		private renderHandlerDBMain(cell: DBDZ_ItemMain, index: number): void {
+			cell.setData(index);
+		}
+
+
+		//--------------------API版本相关-----------end-------------
 	}
 
 	/**
@@ -958,4 +1027,35 @@ module gamedating.page {
 			super.destroy();
 		}
 	}
+
+	//----------夺宝电子组件start---------------
+	class DBDZ_ItemMain extends ui.ajqp.dating.component.Hud_Jdb_APIUI {
+		constructor() {
+			super()
+			this.list_db.itemRender = DBDZ_Item
+			this.list_db.renderHandler = new Handler(this, this.renderHandlerDB)
+			this.list_db.dataSource = [1, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 7]
+			this.list_db.repeatX = Math.ceil(this.list_db.dataSource.length / 2)
+			this.list_db.width = 230 * this.list_db.repeatX;
+			this.width = 20 + 247 + 23 + this.list_db.width;
+		}
+
+		private renderHandlerDB(cell: DBDZ_Item, index: number): void {
+			cell.setData(index)
+		}
+
+		setData(index) {
+		}
+	}
+
+	class DBDZ_Item extends ui.ajqp.dating.component.Hud_Jbd1_APIUI {
+		constructor() {
+			super()
+		}
+
+		setData(index) {
+
+		}
+	}
+	//----------夺宝电子组件end---------------
 }

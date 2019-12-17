@@ -675,6 +675,15 @@ module gamedating {
 			return this._codeMgr;
 		}
 
+		//api管理器
+		private _apiMgr: ApiMgr;
+		public get apiMgr(): ApiMgr {
+			if (!this._apiMgr) {
+				this._apiMgr = new ApiMgr(this._game);
+			}
+			return this._apiMgr;
+		}
+
 		//是否首次登陆游戏
 		private _firstAlert: boolean = false;
 		public get firstAlert() {
@@ -929,6 +938,7 @@ module gamedating {
 				this._flyGlodMgr && this._flyGlodMgr.update(diff);
 				this._hongbaoMgr && this._hongbaoMgr.update(diff);
 				this._redPointCheckMgr && this._redPointCheckMgr.update(diff);
+				this._apiMgr&&this._apiMgr.update(diff);
 			}
 			if (this._checkVesionTime < 0) {
 				this._checkVesionTime = 60000;
