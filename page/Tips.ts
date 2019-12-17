@@ -22,6 +22,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + 'chongzhi.atlas',
 				DatingPath.atlas_dating_ui + 'tongyong.atlas',
+				DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
 			];
 			this._isNeedBlack = true;
 			this._isNeedDuang = false;

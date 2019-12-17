@@ -182,7 +182,7 @@ module gamedating.page {
 
 		private renderHandler(cell: ui.ajqp.dating.GeRen1UI, index: number) {
 			let data = this._dataInfo[index];
-			if (cell) {
+			if (cell && data) {
 				cell.txt_index.text = data.rank + 1;
 				cell.img_bg.skin = StringU.substitute(DatingPath.ui_dating_tongyong + "di/{0}.png", data.rank % 2 == 0 ? "tu_5" : "tu_6");
 				let type_name = "";
