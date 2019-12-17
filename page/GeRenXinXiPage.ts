@@ -3,7 +3,7 @@
 */
 module gamedating.page {
 	import GeRenApiBaoBiao = gamedating.component.GeRenApiBaoBiao;
-	import GeRenApiTouZhuPage = gamedating.component.GeRenApiTouZhuPage;
+	import GeRenApiTouZhu = gamedating.component.GeRenApiTouZhu;
 	export class GeRenXinXiPage extends game.gui.base.Page {
 		//个人中心
 		static readonly TYPE_GRZX: number = 1;
@@ -27,8 +27,8 @@ module gamedating.page {
 		private _selectColor: string;	//选中颜色
 		private _unSelectColor: string;	//未选中颜色
 		private _api_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_YXSZ, GeRenXinXiPage.TYPE_TZJL, GeRenXinXiPage.TYPE_GRBB]	//api标题数据
-		private _api_bb;
-		private _api_tz;
+		private _api_bb: GeRenApiBaoBiao;
+		private _api_tz: GeRenApiTouZhu;
 		private _normal_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_YXSZ]	//正常版数据
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
@@ -107,7 +107,7 @@ module gamedating.page {
 			this._viewUI.btn_select.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.list_bb.on(LEvent.CLICK, this, this.menuTween, [false]);
 			this._viewUI.list_bb.dataSource = [];
-
+			
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
 			this.initBaoBiaoUI();
@@ -143,7 +143,27 @@ module gamedating.page {
 			this._viewUI.box2.visible = index == GeRenXinXiPage.TYPE_YXSZ - 1;
 			this._viewUI.box3.visible = index == GeRenXinXiPage.TYPE_TZJL - 1;
 			this._viewUI.box4.visible = index == GeRenXinXiPage.TYPE_GRBB - 1;
+			if (this._viewUI.box3.visible) {
+				if (!this._api_tz) {
+					this.addApiTZUI();
+				}
+			} else if (this._viewUI.box4.visible) {
+				if (!this._api_bb) {
+					this.addApiBBUI();
+				}
+			}
+		}
 
+		//投注ui
+		private addApiTZUI(): void {
+			this._api_tz = new GeRenApiTouZhu(this._game);
+			this._viewUI.box3.addChild(this._api_tz);
+		}
+
+		//报表UI
+		private addApiBBUI(): void {
+			this._api_bb = new GeRenApiBaoBiao(this._game);
+			this._viewUI.box4.addChild(this._api_bb);
 		}
 
 		//===================个人信息=================

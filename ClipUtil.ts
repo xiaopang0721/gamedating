@@ -151,7 +151,6 @@ module gamedating {
                 clipX: 10,
                 space: -15,
             };
-
         }
         private _clip: ClipCell;
         constructor(font: any) {
