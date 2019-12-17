@@ -675,7 +675,7 @@ module gamedating {
 			return this._codeMgr;
 		}
 
-		//验证码管理器
+		//api管理器
 		private _apiMgr: ApiMgr;
 		public get apiMgr(): ApiMgr {
 			if (!this._apiMgr) {

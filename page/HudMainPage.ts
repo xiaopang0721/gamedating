@@ -766,7 +766,7 @@ module gamedating.page {
 		//--------------------游戏入口按钮列表相关---end------------------------------
 
 		//--------------------API版本相关-----------start-------------
-		private _isapi: boolean = false;
+		private _isapi: boolean = true;
 		private tabData: any = [
 			{ index: 1, skin: "btn_rm" },//热门游戏
 			{ index: 2, skin: "btn_qp" },//棋牌游戏
@@ -791,7 +791,6 @@ module gamedating.page {
 			this._viewUI.list_jdb.itemRender = DBDZ_ItemMain
 			this._viewUI.list_jdb.renderHandler = new Handler(this, this.renderHandlerDBMain)
 			this._viewUI.list_jdb.dataSource = [1]
-
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_ItemMain, index: number): void {

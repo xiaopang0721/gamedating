@@ -21,6 +21,8 @@ module gamedating.managers {
         //敬请期待
         public static TYPE_QP_NONE:number = 2;
 
+        //是否处于api中
+        public isApi:boolean = false;
         private _iframe: any;
         constructor(game: Game) {
             super(game)
@@ -41,6 +43,7 @@ module gamedating.managers {
                             let info = JSON.parse(json_data.info);
                             //自定义拼接
                             let url = info.d.url + "&backUrl=about:blank&jumpType=2";
+                            this._game.datingGame.apiMgr.isApi = true;
                             this._game.uiRoot.showIframe(url, 0, 0, Laya.stage.width, Laya.stage.height);
                         }
                         break
