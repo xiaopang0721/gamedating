@@ -1156,9 +1156,11 @@ module ui.ajqp.dating.component {
 module ui.ajqp.dating.component {
     export class TuiGuang_DaiLiUI extends View {
 		public img_bg:Laya.Image;
-		public txt_time:Laya.Label;
+		public lb_jb:Laya.Label;
+		public lb_yj:Laya.Label;
+		public lb_ed:Laya.Label;
 
-        public static  uiView:any ={"type":"View","props":{"width":820,"height":40},"child":[{"type":"Image","props":{"y":0,"x":0,"width":648,"var":"img_bg","skin":"dating_ui/tongyong/di/tu_5.png"}},{"type":"Label","props":{"y":20,"x":91,"width":125,"var":"txt_time","text":"代理V1","height":27,"fontSize":20,"color":"#ffffff","anchorY":0.5,"anchorX":0.5,"align":"center"}},{"type":"Label","props":{"y":20,"x":414,"width":163,"text":"0+","overflow":"hidden","height":27,"fontSize":20,"color":"#ffffff","anchorY":0.5,"anchorX":0.5,"align":"center"}},{"type":"Label","props":{"y":7,"x":643,"width":153,"text":"每万返佣888元","overflow":"hidden","height":27,"fontSize":20,"color":"#ffffff","bold":true,"align":"center"}}]};
+        public static  uiView:any ={"type":"View","props":{"width":820,"height":40},"child":[{"type":"Image","props":{"y":0,"x":0,"width":820,"var":"img_bg","skin":"dating_ui/tongyong/di/tu_5.png"}},{"type":"Label","props":{"y":20,"x":91,"width":125,"var":"lb_jb","text":"代理V1","height":27,"fontSize":20,"color":"#ffffff","anchorY":0.5,"anchorX":0.5,"align":"center"}},{"type":"Label","props":{"y":20,"x":414,"width":163,"var":"lb_yj","text":"0+","overflow":"hidden","height":27,"fontSize":20,"color":"#ffffff","anchorY":0.5,"anchorX":0.5,"align":"center"}},{"type":"Label","props":{"y":7,"x":643,"width":153,"var":"lb_ed","text":"每万返佣888元","overflow":"hidden","height":27,"fontSize":20,"color":"#ffffff","bold":true,"align":"center"}}]};
         constructor(){ super()}
         createChildren():void {
         
@@ -1170,8 +1172,10 @@ module ui.ajqp.dating.component {
 
 module ui.ajqp.dating.component {
     export class TuiGuang_FanYongUI extends View {
+		public clip_bg:Laya.Clip;
+		public lb_name:Laya.Label;
 
-        public static  uiView:any ={"type":"View","props":{"width":133,"height":58},"child":[{"type":"Clip","props":{"y":0,"x":0,"skin":"dating_ui/tuiguang/btn_dl.png","clipY":2}},{"type":"Label","props":{"y":20,"x":22,"text":"棋牌代理","fontSize":22,"color":"#ffffff","bold":true}}]};
+        public static  uiView:any ={"type":"View","props":{"width":133,"height":58},"child":[{"type":"Clip","props":{"y":0,"x":0,"var":"clip_bg","skin":"dating_ui/tuiguang/btn_dl.png","clipY":2}},{"type":"Label","props":{"y":20,"x":22,"var":"lb_name","text":"棋牌代理","fontSize":22,"color":"#ffffff","bold":true}}]};
         constructor(){ super()}
         createChildren():void {
         
@@ -2564,9 +2568,11 @@ module ui.ajqp.dating {
 
 module ui.ajqp.dating {
     export class TuiGuang_FanUI extends View {
+		public list_title:Laya.List;
 		public btn_close:Laya.Button;
+		public list_dl:Laya.List;
 
-        public static  uiView:any ={"type":"View","props":{"width":1280,"height":720},"child":[{"type":"Box","props":{"width":842,"height":533,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"ZhongKuang1","props":{"y":-93,"x":-219,"runtime":"ui.ajqp.dating.component.ZhongKuang1UI"}},{"type":"List","props":{"y":71,"x":12,"width":819,"spaceX":5,"height":58},"child":[{"type":"TuiGuang_FanYong","props":{"renderType":"render","runtime":"ui.ajqp.dating.component.TuiGuang_FanYongUI"}}]},{"type":"Image","props":{"y":28,"x":334,"skin":"dating_ui/tuiguang/tu_fyjeb.png"}},{"type":"Button","props":{"y":28,"x":816,"var":"btn_close","stateNum":1,"skin":"dating_ui/tongyong/anniu/btn_gb.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":124,"x":11,"width":820,"skin":"dating_ui/tongyong/di/tu_di1.png","sizeGrid":"0,10,0,10","height":47}}]},{"type":"Label","props":{"y":233,"x":278,"text":"代理级别","fontSize":22,"color":"#f2f3ff"}},{"type":"Label","props":{"y":233,"x":585,"text":"团队业绩/日","fontSize":22,"color":"#f2f3ff"}},{"type":"Label","props":{"y":233,"x":908,"text":"返佣额度","fontSize":22,"color":"#f2f3ff"}},{"type":"List","props":{"y":263,"x":231,"width":819,"height":353},"child":[{"type":"TuiGuang_DaiLi","props":{"y":0,"x":0,"renderType":"render","runtime":"ui.ajqp.dating.component.TuiGuang_DaiLiUI"}}]}]};
+        public static  uiView:any ={"type":"View","props":{"width":1280,"height":720},"child":[{"type":"Box","props":{"width":842,"height":533,"centerY":0,"centerX":0,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"ZhongKuang1","props":{"y":-93,"x":-219,"runtime":"ui.ajqp.dating.component.ZhongKuang1UI"}},{"type":"List","props":{"y":71,"x":12,"width":819,"var":"list_title","spaceX":5,"height":58},"child":[{"type":"TuiGuang_FanYong","props":{"renderType":"render","runtime":"ui.ajqp.dating.component.TuiGuang_FanYongUI"}}]},{"type":"Image","props":{"y":28,"x":334,"skin":"dating_ui/tuiguang/tu_fyjeb.png"}},{"type":"Button","props":{"y":28,"x":816,"var":"btn_close","stateNum":1,"skin":"dating_ui/tongyong/anniu/btn_gb.png","anchorY":0.5,"anchorX":0.5}},{"type":"Image","props":{"y":124,"x":11,"width":820,"skin":"dating_ui/tongyong/di/tu_di1.png","sizeGrid":"0,10,0,10","height":47}}]},{"type":"Label","props":{"y":233,"x":278,"text":"代理级别","fontSize":22,"color":"#f2f3ff"}},{"type":"Label","props":{"y":233,"x":585,"text":"团队业绩/日","fontSize":22,"color":"#f2f3ff"}},{"type":"Label","props":{"y":233,"x":908,"text":"返佣额度","fontSize":22,"color":"#f2f3ff"}},{"type":"List","props":{"y":263,"x":231,"width":819,"var":"list_dl","height":353},"child":[{"type":"TuiGuang_DaiLi","props":{"y":0,"x":0,"renderType":"render","runtime":"ui.ajqp.dating.component.TuiGuang_DaiLiUI"}}]}]};
         constructor(){ super()}
         createChildren():void {
         			View.regComponent("ui.ajqp.dating.component.ZhongKuang1UI",ui.ajqp.dating.component.ZhongKuang1UI);
