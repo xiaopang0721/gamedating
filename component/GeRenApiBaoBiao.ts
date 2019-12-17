@@ -1,28 +1,16 @@
 /**
 * name 个人信息api报表组件
 */
-module gamedating.page {
-    export class GeRenApiPage extends game.gui.base.Page {
-        private _viewUI: ui.ajqp.dating.component.GeRen_ApiUI;
-
-        constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
-            super(v, onOpenFunc, onCloseFunc);
-            this._asset = [
-            ];
-            this._isNeedBlack = true;
+module gamedating.component {
+    export class GeRenApiBaoBiao extends ui.ajqp.dating.component.GeRen_ApiUI {
+        constructor() {
+            super()
         }
 
-        private _clipBindMoney: DatingClip;
         // 页面初始化函数
         protected init(): void {
-            this._viewUI = this.createView("dating.component.GeRen_ApiUI");
-            this.addChild(this._viewUI);
         }
 
-        // 页面打开时执行函数
-        protected onOpen(): void {
-            super.onOpen();
-        }
 
         update(diff): void {
         }
@@ -48,9 +36,6 @@ module gamedating.page {
         }
 
         public close(): void {
-            if (this._viewUI) {
-            }
-            super.close();
         }
     }
 }

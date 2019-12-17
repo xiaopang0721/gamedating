@@ -2,7 +2,21 @@
 * name 个人信息
 */
 module gamedating.page {
+	import GeRenApiBaoBiao = gamedating.component.GeRenApiBaoBiao;
+	import GeRenApiTouZhuPage = gamedating.component.GeRenApiTouZhuPage;
 	export class GeRenXinXiPage extends game.gui.base.Page {
+		//个人中心
+		static readonly TYPE_GRZX: number = 1;
+		//收支报表
+		static readonly TYPE_SZBB: number = 2;
+		//游戏设置
+		static readonly TYPE_YXSZ: number = 3;
+		//投注记录
+		static readonly TYPE_TZJL: number = 4;
+		//个人报表
+		static readonly TYPE_GRBB: number = 5;
+
+
 		private _viewUI: ui.ajqp.dating.GeRenUI;
 		private _inputOldKey: MyTextInput;
 		private _inputNewKey: MyTextInput;
@@ -12,8 +26,11 @@ module gamedating.page {
 		private _inputKey1: MyTextInput;
 		private _selectColor: string;	//选中颜色
 		private _unSelectColor: string;	//未选中颜色
+		private _api_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_YXSZ, GeRenXinXiPage.TYPE_TZJL, GeRenXinXiPage.TYPE_GRBB]	//api标题数据
+		private _api_bb;
+		private _api_tz;
+		private _normal_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_YXSZ]	//正常版数据
 
-		public static readonly TYPE_SHEZHI: number = 4;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -71,8 +88,16 @@ module gamedating.page {
 			this.initColor();
 
 			this.initVolume();
-			this._viewUI.tab.selectHandler = new Handler(this, this.selectHandler);
-			this._viewUI.tab.selectedIndex = this._dataSource || 0;
+			this._viewUI.list_tab.vScrollBarSkin = "";
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
+			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
+			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.GeRen_TabRenderUI", TabItemRender);
+			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderTabHandler);
+			this._viewUI.list_tab.dataSource = WebConfig.isApiDJ ? this._api_data : this._normal_data;
+			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
+			this._viewUI.list_tab.selectedIndex = 0;
+			this.selectHandler(0);
+
 			this._viewUI.btn_bindwx.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_bind_phone.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_copy.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -93,9 +118,32 @@ module gamedating.page {
 			this.onUpdatePlayerInfo()
 		}
 
+		private renderTabHandler(cell: TabItemRender, index: number): void {
+			cell.setData(this._game, index, this._viewUI.list_tab.selectedIndex);
+		}
+
+		private changeHandler_list_tab(e?: LEvent): void {
+			DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
+		}
+
 		private initColor(): void {
 			this._selectColor = this._viewUI.lb_0.color;
 			this._unSelectColor = this._viewUI.lb_time.color;
+		}
+
+		private _isUpdated: boolean;
+		private selectHandler(index: number) {
+			this._viewUI.list_tab.selectedIndex = index;
+			this._viewUI.box0.visible = index == GeRenXinXiPage.TYPE_GRZX - 1;
+			this._viewUI.box1.visible = index == GeRenXinXiPage.TYPE_SZBB - 1;
+			if (index == 1) {
+				this._isUpdated = false;
+				this.onUpdateDataInfo();
+			}
+			this._viewUI.box2.visible = index == GeRenXinXiPage.TYPE_YXSZ - 1;
+			this._viewUI.box3.visible = index == GeRenXinXiPage.TYPE_TZJL - 1;
+			this._viewUI.box4.visible = index == GeRenXinXiPage.TYPE_GRBB - 1;
+
 		}
 
 		//===================个人信息=================
@@ -269,6 +317,7 @@ module gamedating.page {
 					if (cc) {
 						for (let index = 0; index < cc.length; index++) {
 							let aa = cc[index];
+
 							aa["rank"] = index + parseInt(key) * BaoBiaoMgr.PAGE_MAX - BaoBiaoMgr.PAGE_MAX;
 						}
 						this._dataInfo = this._dataInfo.concat(cc);
@@ -344,16 +393,6 @@ module gamedating.page {
 			this._dataSource = v;
 		}
 
-		private _isUpdated: boolean;
-		private selectHandler(index: number) {
-			this._viewUI.box0.visible = index == 0;
-			this._viewUI.box1.visible = index == 1;
-			if (index == 1) {
-				this._isUpdated = false;
-				this.onUpdateDataInfo();
-			}
-			this._viewUI.box2.visible = index == 2;
-		}
 
 		private onCheckClick(e: LEvent): void {
 			switch (e.currentTarget) {
@@ -476,6 +515,7 @@ module gamedating.page {
 
 		public close(): void {
 			if (this._viewUI) {
+				DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				this._viewUI.btn_clear.off(LEvent.CLICK, this, this.onBtnClickWithTween);
 				this._viewUI.btn_check.off(LEvent.CLICK, this, this.onBtnClickWithTween);
 				this._viewUI.btn_change.off(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -491,6 +531,41 @@ module gamedating.page {
 			super.close();
 		}
 	}
+	class TabItemRender extends ui.ajqp.dating.component.GeRen_TabRenderUI {
+		private _game: Game;
+		public index: number;
+		private _data: any;
+		/**
+			* 
+			* @param game 
+			* @param data 
+			*/
+		setData(game: Game, index: number, selectIndex: number) {
+			this.visible = true;
+			this.index = index;
+			this.clip_name.index = this.index == selectIndex ? 1 : 0;
+		}
 
+		set dataSource(v: any) {
+			let skinStr = "";
+			this._data = v;
+			if (this._data == GeRenXinXiPage.TYPE_GRZX) {
+				skinStr = DatingPath.ui_dating + "geren/btn_xx1.png"
+			}
+			else if (this._data == GeRenXinXiPage.TYPE_SZBB) {
+				skinStr = DatingPath.ui_dating + "geren/btn_xx2.png"
+			}
+			else if (this._data == GeRenXinXiPage.TYPE_YXSZ) {
+				skinStr = DatingPath.ui_dating + "geren/btn_sz.png"
+			}
+			else if (this._data == GeRenXinXiPage.TYPE_TZJL) {
+				skinStr = DatingPath.ui_dating + "geren/btn_tzjl.png"
+			}
+			else if (this._data == GeRenXinXiPage.TYPE_GRBB) {
+				skinStr = DatingPath.ui_dating + "geren/btn_grbb.png"
+			}
+			this.clip_name.skin = skinStr;
+		}
+	}
 
 }

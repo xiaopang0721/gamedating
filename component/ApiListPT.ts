@@ -73,11 +73,11 @@ module gamedating.component {
 						//其他的挪走
 						let offset_X: number = this._moveValue + this.list_qp.width
 						offset_X = cell.index > index ? offset_X : -(offset_X)
-						Laya.Tween.to(cell, { x: offset_X, alpha: 0 }, 1000, null, Handler.create(this, () => {
+						Laya.Tween.to(cell, { x: offset_X, alpha: 0 }, 500, null, Handler.create(this, () => {
 							this.isMoveAni = false
 						}))
 					} else {
-						Laya.Tween.to(myCell, { x: 0 }, 1000, null, Handler.create(this, () => {
+						Laya.Tween.to(myCell, { x: 0 }, 500, null, Handler.create(this, () => {
 							this.isMoveAni = false
 						}))
 					}
@@ -89,7 +89,7 @@ module gamedating.component {
 					let cell = element as QPLB_Item_One
 					for (let i = 0; i < this._moveCellPos.length; i++) {
 						if (cell.index == this._moveCellPos[i].index) {
-							Laya.Tween.to(cell, { x: this._moveCellPos[i].x, alpha: 1 }, 1000, null, Handler.create(this, () => {
+							Laya.Tween.to(cell, { x: this._moveCellPos[i].x, alpha: 1 }, 500, null, Handler.create(this, () => {
 								this.isMoveAni = false
 							}))
 							break

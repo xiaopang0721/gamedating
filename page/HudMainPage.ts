@@ -86,7 +86,7 @@ module gamedating.page {
 				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
 			}
 			this.onSelectItem(0);
-			if (this._isapi)
+			if (WebConfig.isApiDJ)
 				this.updateApiUI()
 			this.initTabClickPoly();
 			//hud弹窗逻辑
@@ -509,7 +509,7 @@ module gamedating.page {
 			if (!WebConfig.gamelist || this._selectIndex == index)
 				return;
 			this.selectBoxItems(index);
-			if (this._isapi) {
+			if (WebConfig.isApiDJ) {
 				this._selectIndex = index;
 				this._apiPTList && (this._apiPTList.visible = false);
 				if (index == ApiMgr.TYPE_HOT - 1) {
@@ -766,7 +766,6 @@ module gamedating.page {
 		//--------------------游戏入口按钮列表相关---end------------------------------
 
 		//--------------------API版本相关-----------start-------------
-		private _isapi: boolean = true;
 		private tabData: any = [
 			{ index: 1, skin: "btn_rm" },//热门游戏
 			{ index: 2, skin: "btn_qp" },//棋牌游戏
