@@ -766,7 +766,7 @@ module gamedating.page {
 		//--------------------游戏入口按钮列表相关---end------------------------------
 
 		//--------------------API版本相关-----------start-------------
-		private _isapi: boolean = true;
+		private _isapi: boolean = false;
 		private tabData: any = [
 			{ index: 1, skin: "btn_rm" },//热门游戏
 			{ index: 2, skin: "btn_qp" },//棋牌游戏
