@@ -13,7 +13,7 @@ module gamedating.component {
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_ItemMain, index: number): void {
-			cell.setData(index);
+			cell.setData(this.page, this, index, this._game);
 		}
 
 		private init(): void {
@@ -53,11 +53,14 @@ module gamedating.component {
 			, { gTYPE: 0, mTYPE: 15006, strName: "yjdg" }, { gTYPE: 0, mTYPE: 14007, strName: "yqcr" }, { gTYPE: 0, mTYPE: 14006, strName: "ywfw" }, { gTYPE: 0, mTYPE: 8014, strName: "zcs" }
 			, { gTYPE: 0, mTYPE: 8020, strName: "zmkm" }, { gTYPE: 0, mTYPE: 8048, strName: "zmkm2" }
 		];
+		private _page: any;
+		private _mainView; ApiListJDB;
+		private _index: number;
+		private _game: Game;
 		constructor() {
 			super()
 			this.list_jdb.itemRender = DBDZ_Item
 			this.list_jdb.renderHandler = new Handler(this, this.renderHandlerDB)
-
 			this.list_jdb.dataSource = this.jdb_data;
 			this.list_jdb.repeatX = Math.ceil(this.list_jdb.dataSource.length / 2)
 			this.list_jdb.width = 230 * this.list_jdb.repeatX;
@@ -65,20 +68,35 @@ module gamedating.component {
 		}
 
 		private renderHandlerDB(cell: DBDZ_Item, index: number): void {
-			cell.setData(index)
+			cell.setData(this._page, this._mainView, this._index, this._game)
 		}
 
-		setData(index) {
+		setData(page: any, mainView: ApiListJDB, index: number, game: Game) {
+			this._page = page;
+			this._mainView = mainView;
+			this._index = index;
+			this._game = game;
 		}
 	}
 
 	class DBDZ_Item extends ui.ajqp.dating.component.Hud_Jbd1_APIUI {
+		private _page: any;
+		private _mainView; ApiListJDB;
+		private _index: number;
+		private _game: Game;
 		constructor() {
 			super()
 		}
+		set dataSource(v: any) {
+			let strSkin = DatingPath.sk_dating + "JDB/JDB_" + v.strName + ".png";
+			this.img.skin = strSkin;
+		}
 
-		setData(index) {
-
+		setData(page: any, mainView: ApiListJDB, index: number, game: Game) {
+			this._page = page;
+			this._mainView = mainView;
+			this._index = index;
+			this._game = game;
 		}
 	}
 }

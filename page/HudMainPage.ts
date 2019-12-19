@@ -3,11 +3,13 @@
 */
 module gamedating.page {
 	import ApiListPT = gamedating.component.ApiListPT;
+	import ApiListJDB = gamedating.component.ApiListJDB;
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
 		private _boxItems: any[] = [];
 		private _apiSxList: ApiSxList;
 		private _apiPTList: ApiListPT;
+		private _apiJDBList: ApiListJDB;
 
 		get viewUI() {
 			return this._viewUI;
@@ -484,6 +486,11 @@ module gamedating.page {
 			this._apiPTList.setData(pt_data);
 		}
 
+		private addJDBList() {
+			this._apiJDBList = new ApiListJDB(this._game, this);
+			this._viewUI.box_jdb.addChild(this._apiJDBList);
+		}
+
 		//官网气泡框tween运动
 		private gwQiPaoTween(isOpen: boolean) {
 			if (isOpen) {
@@ -512,6 +519,7 @@ module gamedating.page {
 			if (WebConfig.isApiDJ) {
 				this._selectIndex = index;
 				this._apiPTList && (this._apiPTList.visible = false);
+				this._apiJDBList && (this._apiJDBList.visible = false);
 				if (index == ApiMgr.TYPE_HOT - 1) {
 					//热门
 				} else if (index == ApiMgr.TYPE_QP - 1) {
@@ -523,6 +531,9 @@ module gamedating.page {
 					//捕鱼游戏
 				} else if (index == ApiMgr.TYPE_DZYY - 1) {
 					//电子游艺
+					if (!this._apiJDBList)
+						this.addJDBList()
+					this._apiJDBList.visible = true;
 				} else if (index == ApiMgr.TYPE_ZRSX - 1) {
 					//真人视讯
 				}
@@ -1013,5 +1024,5 @@ module gamedating.page {
 		}
 	}
 
-	
+
 }
