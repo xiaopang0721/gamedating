@@ -779,25 +779,11 @@ module gamedating.page {
 			this._game.datingGame.apiMgr.init();
 			this._viewUI.list_btns.visible = false;
 			this._viewUI.list_sx.visible = false
-			this._viewUI.list_jdb.visible = false;
 			for (let i = 0; i < this._boxItems.length; i++) {
 				let data: any = this.tabData[i];
 				this._boxItems[i].clip.skin = DatingPath.ui_dating + "dating/effect/anniu/" + data.skin + ".png";
 			}
 		}
-
-		//夺宝电竞UI
-		private updateDBDJUI(): void {
-			this._viewUI.list_jdb.hScrollBarSkin = ""
-			this._viewUI.list_jdb.itemRender = DBDZ_ItemMain
-			this._viewUI.list_jdb.renderHandler = new Handler(this, this.renderHandlerDBMain)
-			this._viewUI.list_jdb.dataSource = [1]
-		}
-
-		private renderHandlerDBMain(cell: DBDZ_ItemMain, index: number): void {
-			cell.setData(index);
-		}
-
 
 		//--------------------API版本相关-----------end-------------
 	}
@@ -1029,34 +1015,5 @@ module gamedating.page {
 		}
 	}
 
-	//----------夺宝电子组件start---------------
-	class DBDZ_ItemMain extends ui.ajqp.dating.component.Hud_Jdb_APIUI {
-		constructor() {
-			super()
-			this.list_db.itemRender = DBDZ_Item
-			this.list_db.renderHandler = new Handler(this, this.renderHandlerDB)
-			this.list_db.dataSource = [1, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 71, 2, 3, 4, 5, 6, 7]
-			this.list_db.repeatX = Math.ceil(this.list_db.dataSource.length / 2)
-			this.list_db.width = 230 * this.list_db.repeatX;
-			this.width = 20 + 247 + 23 + this.list_db.width;
-		}
-
-		private renderHandlerDB(cell: DBDZ_Item, index: number): void {
-			cell.setData(index)
-		}
-
-		setData(index) {
-		}
-	}
-
-	class DBDZ_Item extends ui.ajqp.dating.component.Hud_Jbd1_APIUI {
-		constructor() {
-			super()
-		}
-
-		setData(index) {
-
-		}
-	}
-	//----------夺宝电子组件end---------------
+	
 }

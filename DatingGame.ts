@@ -192,6 +192,9 @@ module gamedating {
 			let playerInfo = mainPlayer.playerInfo;
 			//设置下设备类型
 			this._game.network.call_set_info(playerInfo.headimg || "", playerInfo.sex || "", WebConfig.deviceToken || "", WebConfig.device || "", "", playerInfo.nickname || "");
+			if (playerInfo.apiData.length > 0) {
+				this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, parseInt(playerInfo.apiData[1]))
+			}
 		}
 
 		//键盘隐藏
@@ -938,7 +941,7 @@ module gamedating {
 				this._flyGlodMgr && this._flyGlodMgr.update(diff);
 				this._hongbaoMgr && this._hongbaoMgr.update(diff);
 				this._redPointCheckMgr && this._redPointCheckMgr.update(diff);
-				this._apiMgr&&this._apiMgr.update(diff);
+				this._apiMgr && this._apiMgr.update(diff);
 			}
 			if (this._checkVesionTime < 0) {
 				this._checkVesionTime = 60000;
