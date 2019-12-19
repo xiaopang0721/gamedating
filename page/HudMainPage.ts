@@ -87,7 +87,7 @@ module gamedating.page {
 				this._boxItems[index] = this.viewUI["item" + index];
 				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
 			}
-			this.onSelectItem(0);
+			this.onSelectItem(0, this._game.datingGame.hudTabScrollData ? false : true);
 			if (WebConfig.isApiDJ)
 				this.updateApiUI()
 			this.initTabClickPoly();
@@ -99,8 +99,8 @@ module gamedating.page {
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(60, -15), 1, null, [this._viewUI.btn_bangding]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(55, -15), 1, null, [this._viewUI.btn_vip]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(50, -15), 1, null, [this._viewUI.btn_xiaoxi]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(43, -15), 1, null, [this._viewUI.btn_fenxiang]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(55, -15), 1, null, [this._viewUI.btn_xiaoxi]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(53, -15), 1, null, [this._viewUI.btn_fenxiang]);
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(70, -5), 1, null, [this._viewUI.btn_daili]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(82, -5), 1, null, [this._viewUI.btn_qiandao]);
@@ -209,22 +209,24 @@ module gamedating.page {
 		private checkout(btn: any) {
 			if (!WebConfig.info) return;
 			switch (btn) {
-				case this._viewUI.btn_xiaoxi:
-					return this._game.datingGame.mailMgr.isShowRed;
-				case this._viewUI.btn_bangding:
-					return WebConfig.info.isguest;
-				case this._viewUI.btn_qiandao:
-					return !WebConfig.info.is_can_qd;
-				case this._viewUI.btn_zhuanpan:
-					return WebConfig.info.is_can_lp;
-				case this._viewUI.btn_daili:
-					return WebConfig.info.is_can_qmdl_lq;
-				case this._viewUI.btn_vip:
-					return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
-				case this._viewUI.btn_shouchong:
-					return WebConfig.info.is_can_first_get;
-				case this._viewUI.btn_fenxiang:
-					return !WebConfig.info.is_shared;
+				// case this._viewUI.btn_xiaoxi:
+				// 	return this._game.datingGame.mailMgr.isShowRed;
+				// case this._viewUI.btn_bangding:
+				// 	return WebConfig.info.isguest;
+				// case this._viewUI.btn_qiandao:
+				// 	return !WebConfig.info.is_can_qd;
+				// case this._viewUI.btn_zhuanpan:
+				// 	return WebConfig.info.is_can_lp;
+				// case this._viewUI.btn_daili:
+				// 	return WebConfig.info.is_can_qmdl_lq;
+				// case this._viewUI.btn_vip:
+				// 	return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
+				// case this._viewUI.btn_shouchong:
+				// 	return WebConfig.info.is_can_first_get;
+				// case this._viewUI.btn_fenxiang:
+				// 	return !WebConfig.info.is_shared;
+				default:
+					return true;
 			}
 		}
 
@@ -336,7 +338,7 @@ module gamedating.page {
 			this._viewUI.list_btns.width = this._clientWidth - 250;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
-				this._viewUI.box_btn_top.right = 25;
+				this._viewUI.box_btn_top.right = 56;
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56 - 11;
 				this._viewUI.box_tabs.left = -11;
@@ -359,8 +361,8 @@ module gamedating.page {
 				}
 				item = this._box_btn_top[i];
 				if (!item || !item.visible) continue;
-				item.x = total_x1;
-				total_x1 -= item.width + 30;
+				// item.x = total_x1;
+				// total_x1 -= item.width + 30;
 			}
 		}
 
@@ -512,10 +514,10 @@ module gamedating.page {
 		}
 
 		private _selectIndex: number = -1;
-		public onSelectItem(index: number = -1) {
+		public onSelectItem(index: number = -1, isplay: boolean = true) {
 			if (!WebConfig.gamelist || this._selectIndex == index)
 				return;
-			this.selectBoxItems(index);
+			this.selectBoxItems(index, isplay);
 			if (WebConfig.isApiDJ) {
 				this._selectIndex = index;
 				this._apiPTList && (this._apiPTList.visible = false);
@@ -574,11 +576,11 @@ module gamedating.page {
 			}
 		}
 
-		private selectBoxItems(index: number) {
+		private selectBoxItems(index: number, isplay: boolean = true) {
 			for (let i = 0; i < this._boxItems.length; i++) {
 				if (i == index) {
-					this._boxItems[i].ani1.play(0, false);
-					this._boxItems[i].ani2.play(0, true);
+					isplay && this._boxItems[i].ani1.play(0, false);
+					isplay && this._boxItems[i].ani2.play(0, true);
 					this._boxItems[i].clip.index = 2;
 					this._boxItems[i].img1.visible = true;
 					this._boxItems[i].img2.visible = true;
