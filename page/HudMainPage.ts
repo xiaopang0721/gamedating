@@ -522,6 +522,8 @@ module gamedating.page {
 				this._selectIndex = index;
 				this._apiPTList && (this._apiPTList.visible = false);
 				this._apiJDBList && (this._apiJDBList.visible = false);
+				this._viewUI.box_jdb.visible = index == ApiMgr.TYPE_DZYY - 1;
+				this._viewUI.box_qp.visible = index == ApiMgr.TYPE_QP - 1;
 				if (index == ApiMgr.TYPE_HOT - 1) {
 					//热门
 				} else if (index == ApiMgr.TYPE_QP - 1) {

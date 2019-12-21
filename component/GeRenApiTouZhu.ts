@@ -3,24 +3,6 @@
 */
 module gamedating.component {
     export class GeRenApiTouZhu extends ui.ajqp.dating.component.GeRen1_ApiUI {
-        //棋牌
-        static readonly TYPE_QP: number = 1;
-        //电子
-        static readonly TYPE_DZ: number = 2;
-        //捕鱼
-        static readonly TYPE_BY: number = 3;
-        //视讯
-        static readonly TYPE_SX: number = 4;
-        //体育
-        static readonly TYPE_TY: number = 5;
-        //电竞
-        static readonly TYPE_DJ: number = 6;
-
-        //平台商 AE,开元，JDB，AG
-        static readonly TYPE_AE: number = 1;
-        static readonly TYPE_KY: number = 2;
-        static readonly TYPE_JDB: number = 3;
-        static readonly TYPE_AG: number = 4;
         private _game: Game;
         constructor(game: Game) {
             super()
@@ -35,16 +17,16 @@ module gamedating.component {
             this.list_title.scrollBar.elasticDistance = 100;
             this.list_title.itemRender = TitleItemRender;
             this.list_title.renderHandler = new Handler(this, this.renderTabHandler);
-            this.list_title.dataSource = [GeRenApiTouZhu.TYPE_QP, GeRenApiTouZhu.TYPE_DZ, GeRenApiTouZhu.TYPE_BY,
-            GeRenApiTouZhu.TYPE_SX, GeRenApiTouZhu.TYPE_TY, GeRenApiTouZhu.TYPE_DJ];
+            this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleTZHandler);
             this.list_title.selectedIndex = 0;
             this.selectTitleTZHandler(0);
 
             this.initDate();
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
-            this.initPT();
             this.initMiddle();
+            this.box_pt.visible = false;
+            this.box_select.visible = false;
         }
 
         //-----------------中间数据strat---------
@@ -142,30 +124,30 @@ module gamedating.component {
         //------------------日期end---------
 
         //----------------平台start---------------
-        private initPT(): void {
-            this.box_pt.visible = false;
-            this.list_pt.itemRender = PTItemRender;
-            this.list_pt.dataSource = [GeRenApiTouZhu.TYPE_AE, GeRenApiTouZhu.TYPE_KY, GeRenApiTouZhu.TYPE_JDB, GeRenApiTouZhu.TYPE_AG];
-            this.list_pt.repeatY = this.list_pt.dataSource.length;
-            this.list_pt.height = 40 * this.list_pt.repeatY;
-            this.img_bg.height = this.list_pt.height + 20;
-            this.box_pt.height = this.img_bg.height + 10;
+        // private initPT(): void {
+        //     this.box_pt.visible = false;
+        //     this.list_pt.itemRender = PTItemRender;
+        //     this.list_pt.dataSource = [GeRenApiTouZhu.TYPE_AE, GeRenApiTouZhu.TYPE_KY, GeRenApiTouZhu.TYPE_JDB, GeRenApiTouZhu.TYPE_AG];
+        //     this.list_pt.repeatY = this.list_pt.dataSource.length;
+        //     this.list_pt.height = 40 * this.list_pt.repeatY;
+        //     this.img_bg.height = this.list_pt.height + 20;
+        //     this.box_pt.height = this.img_bg.height + 10;
 
-            //计算位置
-            this.box_pt.y = (this.height - this.box_select.height) - this.box_pt.height + this.box_pt.height / 2 + 15;
+        //     //计算位置
+        //     this.box_pt.y = (this.height - this.box_select.height) - this.box_pt.height + this.box_pt.height / 2 + 15;
 
-            this.box_select.on(LEvent.CLICK, this, this.onBtnClick)
-            this.list_pt.selectHandler = new Handler(this, this.selectPTHandler);
-            this.list_pt.renderHandler = new Handler(this, this.renderPTHandler);
-        }
+        //     this.box_select.on(LEvent.CLICK, this, this.onBtnClick)
+        //     this.list_pt.selectHandler = new Handler(this, this.selectPTHandler);
+        //     this.list_pt.renderHandler = new Handler(this, this.renderPTHandler);
+        // }
 
-        private selectPTHandler(index: number): void {
-            this.menuTween(!this.box_pt.visible, this.box_pt, this.btn_jt);
-        }
+        // private selectPTHandler(index: number): void {
+        //     this.menuTween(!this.box_pt.visible, this.box_pt, this.btn_jt);
+        // }
 
-        private renderPTHandler(cell: PTItemRender, index: number): void {
-            cell.setData(this._game, index, this.list_pt.selectedIndex);
-        }
+        // private renderPTHandler(cell: PTItemRender, index: number): void {
+        //     cell.setData(this._game, index, this.list_pt.selectedIndex);
+        // }
 
         //----------------平台end---------------
         private changeHandler_list_tab(e?: LEvent): void {
@@ -179,17 +161,13 @@ module gamedating.component {
         private selectTitleTZHandler(index: number) {
             this.list_title.selectedIndex = index;
             switch (index) {
-                case GeRenApiTouZhu.TYPE_QP - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP - 1:
                     break
-                case GeRenApiTouZhu.TYPE_DZ - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP - 1:
                     break
-                case GeRenApiTouZhu.TYPE_BY - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP - 1:
                     break
-                case GeRenApiTouZhu.TYPE_SX - 1:
-                    break
-                case GeRenApiTouZhu.TYPE_TY - 1:
-                    break
-                case GeRenApiTouZhu.TYPE_DJ - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP - 1:
                     break
             }
         }
@@ -226,56 +204,50 @@ module gamedating.component {
 
         set dataSource(v: any) {
             this._data = v;
-            if (this._data == GeRenApiTouZhu.TYPE_QP) {
-                this.txt_name.text = "棋牌投注记录";
+            if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) {
+                this.txt_name.text = "AE棋牌";
             }
-            else if (this._data == GeRenApiTouZhu.TYPE_DZ) {
-                this.txt_name.text = "电子投注记录";
+            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+                this.txt_name.text = "开源棋牌";
             }
-            else if (this._data == GeRenApiTouZhu.TYPE_BY) {
-                this.txt_name.text = "捕鱼投注记录";
+            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+                this.txt_name.text = "JDB电子";
             }
-            else if (this._data == GeRenApiTouZhu.TYPE_SX) {
-                this.txt_name.text = "视讯投注记录";
-            }
-            else if (this._data == GeRenApiTouZhu.TYPE_TY) {
-                this.txt_name.text = "体育投注记录";
-            }
-            else if (this._data == GeRenApiTouZhu.TYPE_DJ) {
-                this.txt_name.text = "电竞投注记录";
+            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
+                this.txt_name.text = "AG视讯";
             }
         }
     }
 
-    class PTItemRender extends ui.ajqp.dating.component.TZPTRenderUI {
-        private _game: Game;
-        public index: number;
-        private _data: any;
-		/**
-			* 
-			* @param game 
-			* @param data 
-			*/
-        setData(game: Game, index: number, selectIndex: number) {
-            this.visible = true;
-            this.index = index;
-            this.btn_select.selected = this.index == selectIndex ? true : false;
-        }
+    // class PTItemRender extends ui.ajqp.dating.component.TZPTRenderUI {
+    //     private _game: Game;
+    //     public index: number;
+    //     private _data: any;
+	// 	/**
+	// 		* 
+	// 		* @param game 
+	// 		* @param data 
+	// 		*/
+    //     setData(game: Game, index: number, selectIndex: number) {
+    //         this.visible = true;
+    //         this.index = index;
+    //         this.btn_select.selected = this.index == selectIndex ? true : false;
+    //     }
 
-        set dataSource(v: any) {
-            this._data = v;
-            if (this._data == GeRenApiTouZhu.TYPE_AE) {
-                this.lb_name.text = "AE平台";
-            }
-            else if (this._data == GeRenApiTouZhu.TYPE_KY) {
-                this.lb_name.text = "开源平台";
-            }
-            else if (this._data == GeRenApiTouZhu.TYPE_JDB) {
-                this.lb_name.text = "JDB平台";
-            }
-            else if (this._data == GeRenApiTouZhu.TYPE_AG) {
-                this.lb_name.text = "AG平台";
-            }
-        }
-    }
+    //     set dataSource(v: any) {
+    //         this._data = v;
+    //         if (this._data == GeRenApiTouZhu.TYPE_AE) {
+    //             this.lb_name.text = "AE平台";
+    //         }
+    //         else if (this._data == GeRenApiTouZhu.TYPE_KY) {
+    //             this.lb_name.text = "开源平台";
+    //         }
+    //         else if (this._data == GeRenApiTouZhu.TYPE_JDB) {
+    //             this.lb_name.text = "JDB平台";
+    //         }
+    //         else if (this._data == GeRenApiTouZhu.TYPE_AG) {
+    //             this.lb_name.text = "AG平台";
+    //         }
+    //     }
+    // }
 }
