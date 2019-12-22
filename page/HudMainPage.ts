@@ -52,11 +52,11 @@ module gamedating.page {
 			}))
 			//官网链接
 			this._viewUI.txt_gw_url.text = EnumToString.getLimitUrl(WebConfig.gwUrl);
-			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.list_btns.hScrollBarSkin = "";
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.Hud_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
+			this._viewUI.list_btns.dataSource = [];
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -75,6 +75,7 @@ module gamedating.page {
 			this._viewUI.btn_vip.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_shouchong.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_guanwang.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickHandle);
 			this._viewUI.btn_enterRoom.on(LEvent.CLICK, this, this.enTerClick);
 
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
@@ -96,9 +97,9 @@ module gamedating.page {
 			this._game.playMusic(Path.music_bg);
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(60, -15), 1, null, [this._viewUI.btn_bangding]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(55, -15), 1, null, [this._viewUI.btn_vip]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(55, -15), 1, null, [this._viewUI.btn_xiaoxi]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(53, -15), 1, null, [this._viewUI.btn_fenxiang]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(57, -15), 1, null, [this._viewUI.btn_vip]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(67, -10), 1, null, [this._viewUI.btn_xiaoxi]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(67, -10), 1, null, [this._viewUI.btn_fenxiang]);
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(70, -5), 1, null, [this._viewUI.btn_daili]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(82, -5), 1, null, [this._viewUI.btn_qiandao]);
@@ -109,7 +110,7 @@ module gamedating.page {
 		}
 
 		protected onMouseClick(e: LEvent) {
-			if (e.target != this._viewUI.btn_guanwang) {
+			if (e.target != this._viewUI.btn_guanwang && e.target != this._viewUI.img_copy_gw) {
 				this.gwQiPaoTween(false);
 			}
 		}
@@ -163,6 +164,8 @@ module gamedating.page {
 						this._boxItems[index].off(LEvent.CLICK, this, this.onSelectItem);
 					}
 				}
+				this._viewUI.img_copy_gw.off(LEvent.CLICK, this, this.onBtnClickHandle);
+				this._viewUI.btn_enterRoom.off(LEvent.CLICK, this, this.enTerClick);
 				this._game.qifuMgr.off(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onSelectItem);
@@ -207,24 +210,22 @@ module gamedating.page {
 		private checkout(btn: any) {
 			if (!WebConfig.info) return;
 			switch (btn) {
-				// case this._viewUI.btn_xiaoxi:
-				// 	return this._game.datingGame.mailMgr.isShowRed;
-				// case this._viewUI.btn_bangding:
-				// 	return WebConfig.info.isguest;
-				// case this._viewUI.btn_qiandao:
-				// 	return !WebConfig.info.is_can_qd;
-				// case this._viewUI.btn_zhuanpan:
-				// 	return WebConfig.info.is_can_lp;
-				// case this._viewUI.btn_daili:
-				// 	return WebConfig.info.is_can_qmdl_lq;
-				// case this._viewUI.btn_vip:
-				// 	return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
-				// case this._viewUI.btn_shouchong:
-				// 	return WebConfig.info.is_can_first_get;
-				// case this._viewUI.btn_fenxiang:
-				// 	return !WebConfig.info.is_shared;
-				default:
-					return true;
+				case this._viewUI.btn_xiaoxi:
+					return this._game.datingGame.mailMgr.isShowRed;
+				case this._viewUI.btn_bangding:
+					return WebConfig.info.isguest;
+				case this._viewUI.btn_qiandao:
+					return !WebConfig.info.is_can_qd;
+				case this._viewUI.btn_zhuanpan:
+					return WebConfig.info.total_turn_point > 1000;
+				case this._viewUI.btn_daili:
+					return WebConfig.info.is_can_qmdl_lq;
+				case this._viewUI.btn_vip:
+					return this._game.datingGame.vipMgr.checkVipReceivedIndex() != 0;
+				case this._viewUI.btn_shouchong:
+					return WebConfig.info.is_can_first_get;
+				case this._viewUI.btn_fenxiang:
+					return !WebConfig.info.is_shared;
 			}
 		}
 
@@ -391,6 +392,18 @@ module gamedating.page {
 			}
 		}
 
+		private onBtnClickHandle(e: LEvent): void {
+			switch (e.currentTarget) {
+				case this._viewUI.img_copy_gw:
+					WebConfig.copyTxt(WebConfig.gwUrl);
+					this._game.showTips("复制成功");
+					//音效
+					this._game.playSound(Path.music_copy);
+					this.gwQiPaoTween(false);
+					break;
+			}
+		}
+
 		private enTerClick(): void {
 			this.saveListStatus();
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM);
@@ -461,13 +474,6 @@ module gamedating.page {
 					//显示气泡框
 					this.gwQiPaoTween(!this._viewUI.img_copy_gw.visible);
 					break;
-				case this._viewUI.img_copy_gw:
-					WebConfig.copyTxt(WebConfig.gwUrl);
-					this._game.showTips("复制成功");
-					//音效
-					this._game.playSound(Path.music_copy);
-					this.gwQiPaoTween(false);
-					break;
 			}
 		}
 
@@ -487,15 +493,19 @@ module gamedating.page {
 		}
 
 		//官网气泡框tween运动
+		private _qipaoTweening: boolean = false;
 		private gwQiPaoTween(isOpen: boolean) {
+			if(this._qipaoTweening) return;
 			if (isOpen) {
 				this._viewUI.img_copy_gw.visible = true;
 				this._viewUI.img_copy_gw.scale(0.2, 0.2);
 				this._viewUI.img_copy_gw.alpha = 0;
 				this.createTween(this._viewUI.img_copy_gw, { scaleX: 1, scaleY: 1, alpha: 1 }, 500, Laya.Ease.backInOut);
 			} else {
+				this._qipaoTweening = true;
 				this.createTween(this._viewUI.img_copy_gw, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 500, Laya.Ease.backInOut, () => {
 					this._viewUI.img_copy_gw.visible = false;
+					this._qipaoTweening = false;
 				});
 			}
 		}
@@ -1015,5 +1025,5 @@ module gamedating.page {
 		}
 	}
 
-	
+
 }

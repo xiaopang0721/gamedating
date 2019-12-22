@@ -220,6 +220,8 @@ module gamedating.page {
 			this._viewUI.bar_zc.max = WebConfig.info.savaBoxMoney;
 			this._viewUI.txt_zc_curMoney.text = this._viewUI.txt_zr_curMoney.text = WebConfig.info.money.toString();// 携带金额
 			this._viewUI.txt_zc_yuebao.text = this._viewUI.txt_zr_yuebao.text = WebConfig.info.savaBoxMoney.toString();//余额宝
+			this._viewUI.bar_zc.disabled = WebConfig.info.savaBoxMoney == 0;
+			this._viewUI.bar_zr.disabled = WebConfig.info.money == 0;
 			this._viewUI.txt_evGet.text = EnumToString.getPointBackNum(this.getLixi(WebConfig.info.savaBoxMoney), 2).toString();//每日收益	
 			this._viewUI.txt_preGet.text = "昨日收益" + EnumToString.getPointBackNum(WebConfig.info.savebox_last_profit / 100, 2) + "元";//昨日收益
 			this._viewUI.txt_totalGet.text = EnumToString.getPointBackNum(WebConfig.info.savebox_total_profit / 100, 2).toString();//累计收益
@@ -395,7 +397,7 @@ module gamedating.page {
 				this.x = this.width + 10;
 				Laya.Tween.to(this, {
 					x: x
-				}, 500, Laya.Ease.linearIn, null, data.index * 200)
+				}, 300, Laya.Ease.linearIn, null, data.index * 200)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;

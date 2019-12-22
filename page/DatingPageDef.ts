@@ -43,8 +43,7 @@ module gamedating.page {
 		static PAGE_ZHUANPAN: string = "21";
 		//大转盘记录
 		static PAGE_ZHUANPAN_RECORD: string = "22";
-		//大转盘帮助
-		static PAGE_ZHUANPAN_HELP: string = "23";
+
 		//签到
 		static PAGE_QIANDAO: string = "24";
 		//祈福动画
@@ -144,7 +143,6 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_TUIGUANGHELP] = TuiGuangHelpPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_ZHUANPAN] = ZhuanPanPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_ZHUANPAN_RECORD] = ZhuanPanRecordPage;
-			PageDef._pageClassMap[DatingPageDef.PAGE_ZHUANPAN_HELP] = ZhuanPanHelpPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QIANDAO] = QianDaoPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GONGGAO] = GongGaoPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_YUEBAO] = YuEBaoPage;

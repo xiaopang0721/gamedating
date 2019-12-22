@@ -32,35 +32,49 @@ module gamedating.page {
 			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
 			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
+			this._viewUI.list_tab.scrollBar.autoHide = true;
 			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TeblteRender4UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
 			this._viewUI.list_tab.dataSource = [];
+
 			this._viewUI.myhd0.vScrollBarSkin = "";
+			this._viewUI.myhd0.vScrollBar.autoHide = true;
+			this._viewUI.myhd0.vScrollBar.elasticDistance = 100;
 			this._viewUI.myhd0.vScrollBar.changeHandler = new Handler(this, this.changeHandler_myhd0);
 
 			this._viewUI.myhd1.vScrollBarSkin = "";
+			this._viewUI.myhd1.vScrollBar.autoHide = true;
+			this._viewUI.myhd1.vScrollBar.elasticDistance = 100;
 			this._viewUI.myhd1.vScrollBar.changeHandler = new Handler(this, this.changeHandler_myhd1);
 
 			this._viewUI.myhd2.vScrollBarSkin = "";
-
+			this._viewUI.myhd2.vScrollBar.autoHide = true;
+			this._viewUI.myhd2.vScrollBar.elasticDistance = 100;
 			this._viewUI.myhd2.on(LEvent.MOUSE_DOWN, this, this.judgeIsJump);
 			this._viewUI.myhd2.on(LEvent.MOUSE_UP, this, this.judgeIsJump);
+
 			this._viewUI.txt.text = "";
 			this._viewUI.txt_myhd.text = "";
 			this._viewUI.btn_qiandao.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 
 			//公告区
 			this._viewUI.panel_tu.visible = false;
-			this._viewUI.panel_wenzi.visible = false;
-			this._viewUI.panel_wenzitu.visible = false;
 			this._viewUI.panel_tu.vScrollBarSkin = "";
+			this._viewUI.panel_tu.vScrollBar.autoHide = true;
+			this._viewUI.panel_tu.vScrollBar.elasticDistance = 100;
 
+			this._viewUI.panel_wenzi.visible = false;
 			this._viewUI.panel_wenzi.vScrollBarSkin = "";
+			this._viewUI.panel_wenzi.vScrollBar.autoHide = true;
+			this._viewUI.panel_wenzi.vScrollBar.elasticDistance = 100;
 			this._viewUI.panel_wenzi.vScrollBar.changeHandler = new Handler(this, this.changeHandler_panel_wenzi);
 
+			this._viewUI.panel_wenzitu.visible = false;
 			this._viewUI.panel_wenzitu.vScrollBarSkin = "";
+			this._viewUI.panel_wenzitu.vScrollBar.autoHide = true;
+			this._viewUI.panel_wenzitu.vScrollBar.elasticDistance = 100;
 			this._viewUI.panel_wenzitu.vScrollBar.changeHandler = new Handler(this, this.changeHandler_panel_wenzitu);
 
 			this._viewUI.lab_wenzi.on(LEvent.LINK, this, this.onLinkHandle);
