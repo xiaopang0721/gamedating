@@ -7,7 +7,6 @@ module gamedating.page {
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
 		private _boxItems: any[] = [];
-		private _apiSxList: ApiSxList;
 		private _apiPTList: ApiListPT;
 		private _apiJDBList: ApiListJDB;
 		private _apiSXList: ApiListSx;
@@ -328,7 +327,6 @@ module gamedating.page {
 					this.updatePos();
 					this.onSelectItem(0);
 				});
-				this._apiSxList && this._apiSxList.layout(this._clientRealWidth);
 			}
 		}
 
