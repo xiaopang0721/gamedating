@@ -10,6 +10,7 @@ module gamedating.page {
 		private _apiSxList: ApiSxList;
 		private _apiPTList: ApiListPT;
 		private _apiJDBList: ApiListJDB;
+		private _apiSXList: ApiListSx;
 
 		get viewUI() {
 			return this._viewUI;
@@ -499,10 +500,15 @@ module gamedating.page {
 			this._viewUI.box_jdb.addChild(this._apiJDBList);
 		}
 
+		private addSXList(){
+			this._apiSXList = new ApiListSx(this._game, this);
+			this._viewUI.box_sx.addChild(this._apiSXList);
+		}
+
 		//官网气泡框tween运动
 		private _qipaoTweening: boolean = false;
 		private gwQiPaoTween(isOpen: boolean) {
-			if(this._qipaoTweening) return;
+			if (this._qipaoTweening) return;
 			if (isOpen) {
 				this._viewUI.img_copy_gw.visible = true;
 				this._viewUI.img_copy_gw.scale(0.2, 0.2);
@@ -534,6 +540,7 @@ module gamedating.page {
 				this._apiJDBList && (this._apiJDBList.visible = false);
 				this._viewUI.box_jdb.visible = index == ApiMgr.TYPE_DZYY - 1;
 				this._viewUI.box_qp.visible = index == ApiMgr.TYPE_QP - 1;
+				this._viewUI.box_qp.visible = index == ApiMgr.TYPE_ZRSX - 1;
 				if (index == ApiMgr.TYPE_HOT - 1) {
 					//热门
 				} else if (index == ApiMgr.TYPE_QP - 1) {
@@ -550,6 +557,9 @@ module gamedating.page {
 					this._apiJDBList.visible = true;
 				} else if (index == ApiMgr.TYPE_ZRSX - 1) {
 					//真人视讯
+					if (!this._apiSXList)
+						this.addSXList()
+					this._apiSXList.visible = true;
 				}
 			} else {
 				// 如果有值，说明该干活了
@@ -801,7 +811,6 @@ module gamedating.page {
 		private updateApiUI(): void {
 			this._game.datingGame.apiMgr.init();
 			this._viewUI.list_btns.visible = false;
-			this._viewUI.list_sx.visible = false
 			for (let i = 0; i < this._boxItems.length; i++) {
 				let data: any = this.tabData[i];
 				this._boxItems[i].clip.skin = DatingPath.ui_dating + "dating/effect/anniu/" + data.skin + ".png";
