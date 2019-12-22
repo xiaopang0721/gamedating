@@ -200,12 +200,13 @@ module gamedating {
 		private checkApiGameQuit(): void {
 			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
-			let playerInfo = mainPlayer.playerInfo;
-			if (playerInfo.apiData.length > 0) {
-				if (playerInfo.apiData[0] == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
-					this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, parseInt(playerInfo.apiData[1]))
-				} else if (playerInfo.apiData[0] == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
-					let data = playerInfo.apiData[1] + "&" + playerInfo.apiData[2] + "&" + "about:blank";
+			let apiDataStr = mainPlayer.GetLoginApiData();
+			let apiData = apiDataStr ? apiDataStr.split("&") : [];
+			if (apiData.length > 0) {
+				if (parseFloat(apiData[0]) == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+					this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, parseFloat(apiData[1]))
+				} else if (parseFloat(apiData[0]) == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+					let data = parseFloat(apiData[1]) + "&" + parseFloat(apiData[2]) + "&" + "about:blank";
 					this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)
 				}
 			}
