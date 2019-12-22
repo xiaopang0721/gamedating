@@ -843,11 +843,14 @@ module gamedating {
 			// 	PlayCardMgr.ins.up_show()
 			// }
 			// else if (e.keyCode == Laya.Keyboard.D) {
-			// 	PlayCardMgr.ins.init()
+			// 	PlayCardMgr.ins.initCard()
 			// }
 			// else if (e.keyCode == Laya.Keyboard.B) {
 			// 	PlayCardMgr.ins.down_show()
 			// }
+			else if (e.keyCode == Laya.Keyboard.Q) {
+				PlayCardMgr.ins.initChip()
+			}
 			//红包测试
 			else if (e.keyCode == Laya.Keyboard.E) {
 				//必须在游戏以外才弹出红包界面

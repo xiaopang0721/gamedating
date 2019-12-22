@@ -16,6 +16,7 @@ module gamedating.page {
 		protected init(): void {
 			this._viewUI = this.createView("dating.GeRenNCUI");
 			this.addChild(this._viewUI);
+			this._viewUI.btn_clear.visible = false;
 		}
 
 		// 页面打开时执行函数
@@ -45,6 +46,7 @@ module gamedating.page {
 			//长度
 			this._viewUI.btn_enter.visible = false;
 			this._viewUI.box_lb.visible = true;
+			this._viewUI.btn_clear.visible = this._viewUI.txt_name.text.length > 0;
 			let len = getTextLength(this._viewUI.txt_name.text, 2);
 			if (len <= 0 || len > this._viewUI.txt_name.maxChars) {
 				// this._game.showTips("名字超过最大限度！")

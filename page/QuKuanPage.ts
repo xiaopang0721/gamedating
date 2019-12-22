@@ -406,7 +406,7 @@ module gamedating.page {
 				this.x = this.width + 10;
 				Laya.Tween.to(this, {
 					x: x
-				}, 500, Laya.Ease.linearIn, null, data.rank * 200)
+				}, 300, Laya.Ease.linearIn, null, data.rank * 200)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;

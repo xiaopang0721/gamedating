@@ -187,6 +187,8 @@ module gamedating.page {
             }
             //满级保持在10级情况
             this._switchIndex = inNoGetLv > 9 ? 9 : inNoGetLv;
+            this._viewUI.btn_right.visible = this._switchIndex != 9;
+            this._viewUI.btn_left.visible = this._switchIndex != 0;
             this.updateSwitchUI(this._switchIndex);
         }
 
@@ -258,7 +260,7 @@ module gamedating.page {
         }
         //切换动画
         private _curShowIndex: number = 0;
-        private _slideTime: number = 700;
+        private _slideTime: number = 350;
         private _isSliding: boolean = false;
         private slideBox(isLeft: boolean = false): void {
             let curShowView: ui.ajqp.dating.component.VipSlideTUI;

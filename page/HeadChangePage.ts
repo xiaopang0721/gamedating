@@ -197,7 +197,7 @@ module gamedating.page {
 				//是否获得
 				//vip获得的头像 
 				isGet = mainPlayer.GetVipAwardReceived(dataIndex - 1);
-				this.img_jb.visible = this._selectIndex == 1 ? false : true;
+				this.img_jb.visible = true;
 				this.img_jb.skin = StringU.substitute(DatingPath.ui_dating + "touxiang/tu_jb{0}.png", dataIndex);
 			}
 			return isGet;

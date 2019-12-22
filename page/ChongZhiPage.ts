@@ -13,6 +13,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
 				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
+			this._isNeedDuang = false;
 			this._isNeedBlack = false;
 			this._isClickBlack = false;
 			this._delta = MathU.randomRange(3000, 10000);
@@ -107,6 +108,22 @@ module gamedating.page {
 			this._game.network.call_get_paychannel("apppay");
 			this.onUpdatePlayerInfo();
 		}
+
+        protected layout(): void {
+            super.layout();
+            if (this._viewUI) {
+                //全面屏
+                if (this._game.isFullScreen) {
+                    this._viewUI.box_top_left.left = 56;
+                    this._viewUI.box_top_right.right = 56;
+                    this._viewUI.list_tab.left = 56;
+                } else {
+                    this._viewUI.box_top_left.left = 0;
+                    this._viewUI.box_top_right.right = 0;
+                    this._viewUI.list_tab.left = 0;
+                }
+            }
+        }
 
 		private onTextChange() {
 			this._viewUI.btn_clear.visible = this._viewUI.txt_input.text.length > 0;
