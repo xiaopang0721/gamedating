@@ -123,6 +123,7 @@ module gamedating.component {
 			this.panel_pt.hScrollBarSkin = ""
 			this.view_pt.list_yx.itemRender = QPLB_Item_Two
 			this.view_pt.list_yx.renderHandler = new Handler(this, this.renderHandlerQPYX);
+			this.view_pt.img_bz.visible = false;
 		}
 
 		set dataSource(v) {
@@ -154,10 +155,12 @@ module gamedating.component {
 				this.view_pt.width = this.width;
 				this.view_pt.list_yx.visible = true;
 				this.itemTwoAni()
+				this.view_pt.img_bz.visible = true;
 			} else {
 				this.width = this._selfWidth;
 				this.view_pt.width = this.width;
 				this.itemTwoAni()
+				this.view_pt.img_bz.visible = false;
 			}
 			this._mainView.onBtnClick(this.index);
 		}

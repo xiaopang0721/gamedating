@@ -40,7 +40,7 @@ module gamedating.component {
             cell.txt_time.text;
             cell.lb_zd.text;
             cell.lb_money.text;
-            cell.lb_status.text;
+            cell.lb_num.text;
         }
 
         //----------------中间数据end-----------
