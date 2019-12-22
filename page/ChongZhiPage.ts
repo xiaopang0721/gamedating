@@ -114,13 +114,13 @@ module gamedating.page {
             if (this._viewUI) {
                 //全面屏
                 if (this._game.isFullScreen) {
-                    this._viewUI.box_bop_left.left = 56;
+                    this._viewUI.box_top_left.left = 56;
+                    this._viewUI.box_top_right.right = 56;
                     this._viewUI.list_tab.left = 56;
-                    this._viewUI.box_btn_top.right = 56;
                 } else {
-                    this._viewUI.box_bop_left.left = 0;
+                    this._viewUI.box_top_left.left = 0;
+                    this._viewUI.box_top_right.right = 0;
                     this._viewUI.list_tab.left = 0;
-                    this._viewUI.box_btn_top.right = 0;
                 }
             }
         }
