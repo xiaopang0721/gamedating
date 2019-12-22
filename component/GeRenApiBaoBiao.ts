@@ -4,17 +4,18 @@
 module gamedating.component {
     export class GeRenApiBaoBiao extends ui.ajqp.dating.component.GeRen_ApiUI {
         //棋牌
-        static readonly TYPE_QP: number = 1;
-        //电子
-        static readonly TYPE_DZ: number = 2;
-        //捕鱼
-        static readonly TYPE_BY: number = 3;
-        //视讯
-        static readonly TYPE_SX: number = 4;
-        //体育
-        static readonly TYPE_TY: number = 5;
-        //电竞
-        static readonly TYPE_DJ: number = 6;
+        // static readonly TYPE_QP: number = 1;
+        // //电子
+        // static readonly TYPE_DZ: number = 2;
+        // //捕鱼
+        // static readonly TYPE_BY: number = 3;
+        // //视讯
+        // static readonly TYPE_SX: number = 4;
+        // //体育
+        // static readonly TYPE_TY: number = 5;
+        // //电竞
+        // static readonly TYPE_DJ: number = 6;
+
         private _game: Game;
         constructor(game: Game) {
             super()
@@ -37,13 +38,14 @@ module gamedating.component {
             this.list_title.scrollBar.elasticDistance = 100;
             this.list_title.itemRender = TitleItemRender;
             this.list_title.renderHandler = new Handler(this, this.renderTabHandler);
-            this.list_title.dataSource = [GeRenApiBaoBiao.TYPE_QP, GeRenApiBaoBiao.TYPE_DZ, GeRenApiBaoBiao.TYPE_BY,
-            GeRenApiBaoBiao.TYPE_SX, GeRenApiBaoBiao.TYPE_TY, GeRenApiBaoBiao.TYPE_DJ];
+            this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP
+                , Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleBBHandler);
             this.list_title.selectedIndex = 0;
             this.selectTitleBBHandler(0);
             this.initDate();
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
+            this.onUpdateDataInfo();
         }
 
         private onBtnClick(): void {
@@ -148,17 +150,13 @@ module gamedating.component {
         private selectTitleBBHandler(index: number) {
             this.list_title.selectedIndex = index;
             switch (index) {
-                case GeRenApiBaoBiao.TYPE_QP - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP - 1:
                     break
-                case GeRenApiBaoBiao.TYPE_DZ - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP - 1:
                     break
-                case GeRenApiBaoBiao.TYPE_BY - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP - 1:
                     break
-                case GeRenApiBaoBiao.TYPE_SX - 1:
-                    break
-                case GeRenApiBaoBiao.TYPE_TY - 1:
-                    break
-                case GeRenApiBaoBiao.TYPE_DJ - 1:
+                case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP - 1:
                     break
             }
         }
@@ -195,23 +193,17 @@ module gamedating.component {
 
         set dataSource(v: any) {
             this._data = v;
-            if (this._data == GeRenApiBaoBiao.TYPE_QP) {
-                this.txt_name.text = "棋牌报表";
+            if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) {
+                this.txt_name.text = "AE棋牌";
             }
-            else if (this._data == GeRenApiBaoBiao.TYPE_DZ) {
-                this.txt_name.text = "电子报表";
+            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+                this.txt_name.text = "开源棋牌";
             }
-            else if (this._data == GeRenApiBaoBiao.TYPE_BY) {
-                this.txt_name.text = "捕鱼报表";
+            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+                this.txt_name.text = "JDB电子";
             }
-            else if (this._data == GeRenApiBaoBiao.TYPE_SX) {
-                this.txt_name.text = "视讯报表";
-            }
-            else if (this._data == GeRenApiBaoBiao.TYPE_TY) {
-                this.txt_name.text = "体育报表";
-            }
-            else if (this._data == GeRenApiBaoBiao.TYPE_DJ) {
-                this.txt_name.text = "电竞报表";
+            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
+                this.txt_name.text = "AG视讯";
             }
         }
     }

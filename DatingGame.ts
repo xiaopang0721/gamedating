@@ -192,8 +192,22 @@ module gamedating {
 			let playerInfo = mainPlayer.playerInfo;
 			//设置下设备类型
 			this._game.network.call_set_info(playerInfo.headimg || "", playerInfo.sex || "", WebConfig.deviceToken || "", WebConfig.device || "", "", playerInfo.nickname || "");
+			//检测api游戏退出机制
+			this.checkApiGameQuit()
+		}
+
+		//api游戏检测
+		private checkApiGameQuit(): void {
+			let mainPlayer: PlayerData = this._game.sceneObjectMgr.mainPlayer;
+			if (!mainPlayer) return;
+			let playerInfo = mainPlayer.playerInfo;
 			if (playerInfo.apiData.length > 0) {
-				this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, parseInt(playerInfo.apiData[1]))
+				if (playerInfo.apiData[0] == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+					this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, parseInt(playerInfo.apiData[1]))
+				} else if (playerInfo.apiData[0] == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+					let data = playerInfo.apiData[1] + "&" + playerInfo.apiData[2] + "&" + "about:blank";
+					this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)
+				}
 			}
 		}
 

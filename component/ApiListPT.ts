@@ -275,7 +275,7 @@ module gamedating.component {
 
 		private onMouseHandle() {
 			if (this._type == ApiMgr.TYPE_QP_KY) {
-				this._game.network.call_api_login_game(ApiMgr.TYPE_QP_KY, this._data.kindID)
+				this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, this._data.kindID.toString())
 			} else if (this._type == ApiMgr.TYPE_QP_AE) {
 				if (!this._data) return;
 				this._game.uiRoot.btnTween(this.btn_box, this, () => {

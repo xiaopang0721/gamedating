@@ -15,14 +15,14 @@ module gamedating.managers {
         public static TYPE_ZRSX: number = 5;
 
         //AE棋牌
-        public static TYPE_QP_AE:number = 0;
+        public static TYPE_QP_AE: number = 0;
         //开元棋牌
-        public static TYPE_QP_KY:number = 1;
+        public static TYPE_QP_KY: number = 1;
         //敬请期待
-        public static TYPE_QP_NONE:number = 2;
+        public static TYPE_QP_NONE: number = 2;
 
         //是否处于api中
-        public isApi:boolean = false;
+        public isApi: boolean = false;
         private _iframe: any;
         constructor(game: Game) {
             super(game)
@@ -39,10 +39,22 @@ module gamedating.managers {
                 switch (msg.reason) {
                     case Operation_Fields.OPRATE_API_API_LOGIN_GAME_RESULT:
                         let json_data = JSON.parse(msg.data);
-                        if (json_data && json_data.info) {
-                            let info = JSON.parse(json_data.info);
-                            //自定义拼接
-                            let url = info.d.url + "&backUrl=about:blank&jumpType=2";
+                        if (json_data) {
+                            let json_rep;
+                            let info
+                            let url;
+                            if (json_data.type == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+                                json_rep = JSON.parse(json_data.rep);
+                                if (!json_rep.info) return;
+                                info = JSON.parse(json_rep.info);
+                                //自定义拼接
+                                url = info.d.url + "&backUrl=about:blank&jumpType=2";
+                            } else if (json_data.type == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+                                json_rep = JSON.parse(json_data.rep);
+                                if (!json_rep.info) return;
+                                info = JSON.parse(json_rep.info);
+                                url = info.path
+                            }
                             this._game.datingGame.apiMgr.isApi = true;
                             this._game.uiRoot.showIframe(url, 0, 0, Laya.stage.width, Laya.stage.height);
                         }
