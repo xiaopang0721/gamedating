@@ -46,16 +46,13 @@ module gamedating.page {
 
 		constructor() {
 			super();
-			this.list_sx.hScrollBarSkin = "";
-			this.list_sx.scrollBar.autoHide = true;
-			this.list_sx.scrollBar.elasticDistance = 100;
 			this.list_sx.itemRender = HudSxApiRender;
 			this.list_sx.renderHandler = new Handler(this, this.renderHandler);
 		}
 
 		set dataSource(v: any) {
 			if (!v) return;
-			this.list_sx.dataSource = v;
+			this.list_sx.dataSource = [1,2,3,4,5,6];
 			this.list_sx.repeatX = Math.ceil(this.list_sx.dataSource.length / 2)
 			this.list_sx.width = 296 * this.list_sx.repeatX;
 			this.width = 299 + 15 + this.list_sx.width;
