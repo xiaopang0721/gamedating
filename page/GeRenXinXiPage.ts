@@ -547,6 +547,8 @@ module gamedating.page {
 				}
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
+				this._api_tz&&this._api_tz.close();
+				this._api_bb&&this._api_bb.close();
 			}
 			super.close();
 		}

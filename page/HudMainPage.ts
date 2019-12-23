@@ -185,6 +185,9 @@ module gamedating.page {
 				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
 				this._box_btn_top = null;
 				this._box_btn_bottom = null;
+				this._apiPTList && this._apiPTList.close();
+				this._apiJDBList && this._apiJDBList.close();
+				this._apiSXList && this._apiSXList.close();
 			}
 			super.close();
 		}
@@ -478,29 +481,22 @@ module gamedating.page {
 			}
 		}
 
-		public ky_data =
-		[{ kindID: 600, strName: "21dian" }, { kindID: 1960, strName: "bcbm" }, { kindID: 910, strName: "bjl" }, { kindID: 930, strName: "brnn" },
-		{ kindID: 610, strName: "ddz" }, { kindID: 620, strName: "dzpk" }, { kindID: 720, strName: "ebg" }, { kindID: 740, strName: "ermj" }
-			, { kindID: 1940, strName: "jsys" }, { kindID: 230, strName: "jszjh" }, { kindID: 890, strName: "kpqznn" }, { kindID: 830, strName: "qznn" }
-			, { kindID: 730, strName: "qzpj" }, { kindID: 860, strName: "sg" }, { kindID: 920, strName: "slwh" }, { kindID: 630, strName: "sss" }
-			, { kindID: 870, strName: "tbnn" }, { kindID: 1950, strName: "wrzjh" }, { kindID: 650, strName: "xlch" }, { kindID: 900, strName: "yzlh" }
-			, { kindID: 220, strName: "zjh" }]
-
 		private addApiList() {
 			this._apiPTList = new ApiListPT(this._game, this);
 			this._viewUI.box_qp.addChild(this._apiPTList);
-			let pt_data = [WebConfig.gamelist, this.ky_data, []]
-			this._apiPTList.setData(pt_data);
+			this._apiPTList.setData();
 		}
 
 		private addJDBList() {
 			this._apiJDBList = new ApiListJDB(this._game, this);
 			this._viewUI.box_jdb.addChild(this._apiJDBList);
+			this._apiJDBList.setData();
 		}
 
-		private addSXList(){
+		private addSXList() {
 			this._apiSXList = new ApiListSx(this._game, this);
 			this._viewUI.box_sx.addChild(this._apiSXList);
+			this._apiSXList.setData();
 		}
 
 		//官网气泡框tween运动
@@ -534,11 +530,9 @@ module gamedating.page {
 			this.selectBoxItems(index, isplay);
 			if (WebConfig.isApiDJ) {
 				this._selectIndex = index;
-				this._apiPTList && (this._apiPTList.visible = false);
-				this._apiJDBList && (this._apiJDBList.visible = false);
 				this._viewUI.box_jdb.visible = index == ApiMgr.TYPE_DZYY - 1;
 				this._viewUI.box_qp.visible = index == ApiMgr.TYPE_QP - 1;
-				this._viewUI.box_qp.visible = index == ApiMgr.TYPE_ZRSX - 1;
+				this._viewUI.box_sx.visible = index == ApiMgr.TYPE_ZRSX - 1;
 				if (index == ApiMgr.TYPE_HOT - 1) {
 					//热门
 				} else if (index == ApiMgr.TYPE_QP - 1) {
@@ -819,8 +813,8 @@ module gamedating.page {
 	}
 
 	/**
-	 * 大厅入口
-	 */
+	  * 大厅入口
+	  */
 	class GameItemRender extends ui.ajqp.dating.component.Hud_TUI {
 		private _game: Game;
 		private _page: HudMainPage;

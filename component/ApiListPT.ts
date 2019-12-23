@@ -5,6 +5,14 @@ module gamedating.component {
 	export class ApiListPT extends ui.ajqp.dating.component.List_QP_APIUI {
 		private _game: Game;
 		public page: any;
+		public ky_data =
+		[{ kindID: 600, strName: "21dian" }, { kindID: 1960, strName: "bcbm" }, { kindID: 910, strName: "bjl" }, { kindID: 930, strName: "brnn" },
+		{ kindID: 610, strName: "ddz" }, { kindID: 620, strName: "dzpk" }, { kindID: 720, strName: "ebg" }, { kindID: 740, strName: "ermj" }
+			, { kindID: 1940, strName: "jsys" }, { kindID: 230, strName: "jszjh" }, { kindID: 890, strName: "kpqznn" }, { kindID: 830, strName: "qznn" }
+			, { kindID: 730, strName: "qzpj" }, { kindID: 860, strName: "sg" }, { kindID: 920, strName: "slwh" }, { kindID: 630, strName: "sss" }
+			, { kindID: 870, strName: "tbnn" }, { kindID: 1950, strName: "wrzjh" }, { kindID: 650, strName: "xlch" }, { kindID: 900, strName: "yzlh" }
+			, { kindID: 220, strName: "zjh" }]
+
 		constructor(game: Game, page: any) {
 			super();
 			this._game = game;
@@ -18,9 +26,9 @@ module gamedating.component {
 			this.list_qp.renderHandler = new Handler(this, this.renderHandlerQP);
 		}
 
-		setData(v: any): void {
-			if (!v) return;
-			this.list_qp.dataSource = v;
+		setData(): void {
+			let pt_data = [WebConfig.gamelist, this.ky_data, []]
+			this.list_qp.dataSource = pt_data;
 		}
 
 		update() {
@@ -106,6 +114,10 @@ module gamedating.component {
 
 		private renderHandlerQP(cell: QPLB_Item_One, index: number) {
 			cell.setData(this.page, this, index, this._game);
+		}
+
+		public close(): void {
+
 		}
 	}
 	class QPLB_Item_One extends ui.ajqp.dating.component.Hud_Qp_API1UI {
