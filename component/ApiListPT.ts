@@ -6,12 +6,12 @@ module gamedating.component {
 		private _game: Game;
 		public page: any;
 		public ky_data =
-		[{ kindID: 600, strName: "21dian" }, { kindID: 1960, strName: "bcbm" }, { kindID: 910, strName: "bjl" }, { kindID: 930, strName: "brnn" },
-		{ kindID: 610, strName: "ddz" }, { kindID: 620, strName: "dzpk" }, { kindID: 720, strName: "ebg" }, { kindID: 740, strName: "ermj" }
-			, { kindID: 1940, strName: "jsys" }, { kindID: 230, strName: "jszjh" }, { kindID: 890, strName: "kpqznn" }, { kindID: 830, strName: "qznn" }
-			, { kindID: 730, strName: "qzpj" }, { kindID: 860, strName: "sg" }, { kindID: 920, strName: "slwh" }, { kindID: 630, strName: "sss" }
-			, { kindID: 870, strName: "tbnn" }, { kindID: 1950, strName: "wrzjh" }, { kindID: 650, strName: "xlch" }, { kindID: 900, strName: "yzlh" }
-			, { kindID: 220, strName: "zjh" }]
+		[{ kindID: 600, strName: "21dian", gameName: "21点" }, { kindID: 1960, strName: "bcbm", gameName: "奔驰宝马" }, { kindID: 910, strName: "bjl", gameName: "百家乐" }, { kindID: 930, strName: "brnn", gameName: "百人牛牛" },
+		{ kindID: 610, strName: "ddz", gameName: "斗地主" }, { kindID: 620, strName: "dzpk", gameName: "德州扑克" }, { kindID: 720, strName: "ebg", gameName: "二八杠" }, { kindID: 740, strName: "ermj", gameName: "二人麻将" }
+			, { kindID: 1940, strName: "jsys", gameName: "金鲨银鲨" }, { kindID: 230, strName: "jszjh", gameName: "极速炸金花" }, { kindID: 890, strName: "kpqznn", gameName: "看牌抢庄牛牛" }, { kindID: 830, strName: "qznn", gameName: "抢庄牛牛" }
+			, { kindID: 730, strName: "qzpj", gameName: "抢庄牌九" }, { kindID: 860, strName: "sg", gameName: "三公" }, { kindID: 920, strName: "slwh", gameName: "森林舞会" }, { kindID: 630, strName: "sss", gameName: "十三水" }
+			, { kindID: 870, strName: "tbnn", gameName: "通比牛牛" }, { kindID: 1950, strName: "wrzjh", gameName: "万人炸金花" }, { kindID: 650, strName: "xlch", gameName: "血流成河" }, { kindID: 900, strName: "yzlh", gameName: "押注龙虎" }
+			, { kindID: 220, strName: "zjh", gameName: "炸金花" }]
 
 		constructor(game: Game, page: any) {
 			super();
@@ -290,6 +290,9 @@ module gamedating.component {
 
 		private onMouseHandle() {
 			if (this._type == ApiMgr.TYPE_QP_KY) {
+				this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+					page && page.playAni()
+				})
 				this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, this._data.kindID.toString())
 			} else if (this._type == ApiMgr.TYPE_QP_AE) {
 				if (!this._data) return;

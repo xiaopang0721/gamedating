@@ -21,11 +21,10 @@ module gamedating.component {
             this.list_title.renderHandler = new Handler(this, this.renderTabHandler);
             this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleTZHandler);
-            this.list_title.selectedIndex = 0;
-            this.selectTitleTZHandler(0);
 
             this.initDate();
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
+            this.list_title.selectedIndex = 0;
             this.initMiddle();
             this.box_pt.visible = false;
             this.box_select.visible = false;
@@ -42,10 +41,15 @@ module gamedating.component {
         }
 
         private renderDataHandler(cell: ui.ajqp.dating.component.GeRen_TouZhuJLUI, index: number): void {
-            cell.txt_time.text;
-            cell.lb_zd.text;
-            cell.lb_money.text;
-            cell.lb_num.text;
+            let data = this.list_bb.dataSource[index];
+            if (!data) {
+                return;
+            }
+            cell.txt_time.text = Sync.getTimeShortStr(data.end_time);
+            cell.lb_zd.text = data.battle_id;
+            cell.lb_money.text = data.all_bet;
+            cell.lb_num.text = data.profit;
+            cell.lb_num.color = data.profit > 0 ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
         }
 
         //----------------中间数据end-----------
@@ -103,7 +107,6 @@ module gamedating.component {
                 this["btn_" + i].on(LEvent.CLICK, this, this.onMouseHandle, [i]);
             }
             this.lb_time.text = curSelectedTimeStr;
-            this.onUpdateDataInfo();
         }
 
         private _lastIndex: number;
@@ -191,11 +194,11 @@ module gamedating.component {
                     this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP;
                     break
             }
-
+            this.onUpdateDataInfo();
         }
 
         protected onSucessHandler(data: any) {
-            if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAPIGAMERECORD) {//报表返回
+            if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAPIGAMERECORD) {//游戏记录返回
                 if (data && data.success == 0) {
                     this._data = data.list;
                     if (this._data.length <= 0) {
