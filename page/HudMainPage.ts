@@ -4,12 +4,17 @@
 module gamedating.page {
 	import ApiListPT = gamedating.component.ApiListPT;
 	import ApiListJDB = gamedating.component.ApiListJDB;
+	import ApiListSx = gamedating.component.ApiListSx;
+	import ApiListBY = gamedating.component.ApiListBY;
+	import ApiListRM = gamedating.component.ApiListRM;
 	export class HudMainPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.DaTingUI;
 		private _boxItems: any[] = [];
 		private _apiPTList: ApiListPT;
 		private _apiJDBList: ApiListJDB;
 		private _apiSXList: ApiListSx;
+		private _apiRMList: ApiListRM;
+		private _apiBYList: ApiListBY;
 
 		get viewUI() {
 			return this._viewUI;
@@ -481,24 +486,6 @@ module gamedating.page {
 			}
 		}
 
-		private addApiList() {
-			this._apiPTList = new ApiListPT(this._game, this);
-			this._viewUI.box_qp.addChild(this._apiPTList);
-			this._apiPTList.setData();
-		}
-
-		private addJDBList() {
-			this._apiJDBList = new ApiListJDB(this._game, this);
-			this._viewUI.box_jdb.addChild(this._apiJDBList);
-			this._apiJDBList.setData();
-		}
-
-		private addSXList() {
-			this._apiSXList = new ApiListSx(this._game, this);
-			this._viewUI.box_sx.addChild(this._apiSXList);
-			this._apiSXList.setData();
-		}
-
 		//官网气泡框tween运动
 		private _qipaoTweening: boolean = false;
 		private gwQiPaoTween(isOpen: boolean) {
@@ -533,15 +520,21 @@ module gamedating.page {
 				this._viewUI.box_jdb.visible = index == ApiMgr.TYPE_DZYY - 1;
 				this._viewUI.box_qp.visible = index == ApiMgr.TYPE_QP - 1;
 				this._viewUI.box_sx.visible = index == ApiMgr.TYPE_ZRSX - 1;
+				this._viewUI.box_by.visible = index == ApiMgr.TYPE_BY - 1;
+				this._viewUI.box_rm.visible = index == ApiMgr.TYPE_HOT - 1;
 				if (index == ApiMgr.TYPE_HOT - 1) {
 					//热门
+					if (!this._apiRMList)
+						this.addRMList()
 				} else if (index == ApiMgr.TYPE_QP - 1) {
 					//棋牌
 					if (!this._apiPTList)
-						this.addApiList()
+						this.addPTList()
 					this._apiPTList.visible = true;
 				} else if (index == ApiMgr.TYPE_BY - 1) {
 					//捕鱼游戏
+					if (!this._apiPTList)
+						this.addBYList()
 				} else if (index == ApiMgr.TYPE_DZYY - 1) {
 					//电子游艺
 					if (!this._apiJDBList)
@@ -807,6 +800,36 @@ module gamedating.page {
 				let data: any = this.tabData[i];
 				this._boxItems[i].clip.skin = DatingPath.ui_dating + "dating/effect/anniu/" + data.skin + ".png";
 			}
+		}
+
+		private addPTList() {
+			this._apiPTList = new ApiListPT(this._game, this);
+			this._viewUI.box_qp.addChild(this._apiPTList);
+			this._apiPTList.setData();
+		}
+
+		private addJDBList() {
+			this._apiJDBList = new ApiListJDB(this._game, this);
+			this._viewUI.box_jdb.addChild(this._apiJDBList);
+			this._apiJDBList.setData();
+		}
+
+		private addSXList() {
+			this._apiSXList = new ApiListSx(this._game, this);
+			this._viewUI.box_sx.addChild(this._apiSXList);
+			this._apiSXList.setData();
+		}
+
+		private addBYList() {
+			this._apiBYList = new ApiListBY(this._game, this);
+			this._viewUI.box_by.addChild(this._apiBYList);
+			this._apiBYList.setData();
+		}
+
+		private addRMList() {
+			this._apiRMList = new ApiListRM(this._game, this);
+			this._viewUI.box_rm.addChild(this._apiRMList);
+			this._apiRMList.setData();
 		}
 
 		//--------------------API版本相关-----------end-------------

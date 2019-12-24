@@ -30,11 +30,9 @@ module gamedating.component {
             this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP
                 , Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleBBHandler);
-            this.list_title.selectedIndex = 0;
-            this.selectTitleBBHandler(0);
             this.initDate();
+            this.list_title.selectedIndex = 0;
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
-            this.onUpdateDataInfo();
             this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
         }
 
@@ -84,7 +82,7 @@ module gamedating.component {
                 this["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
             }
             this.menuTween(false);
-            this.onUpdateDataInfo();
+            this.updateUI();
         }
 
         //菜单栏
@@ -120,10 +118,36 @@ module gamedating.component {
 
         //更新界面
         private updateUI(): void {
-            this._clipMoney.setText(this._data.sy + this._data.xm, true);
-            this.lb_yxtz.text = this._data.dm;
-            this.lb_pc.text = this._data.sy;
-            this.lb_fd.text = this._data.xm;;
+            if (this._data.length > 0) {
+                let isUpdate = false;
+                for (let i = 0; i < this._data.length; i++) {
+                    let cur_data = this._data[i]
+                    for (let j = 0; j < 7; j++) {
+                        if (cur_data.days == this["lb_" + j].text) {
+                            if (cur_data.sy != 0) {
+                                this["btn_day" + j].visible = true;
+                            } else {
+                                this["btn_day" + j].visible = false;
+                            }
+                        } else {
+                            this["btn_day" + j].visible = false;
+                        }
+                    }
+                    if (cur_data.days == this.lb_time.text) {
+                        this._clipMoney.setText(cur_data.sy + cur_data.xm, true);
+                        this.lb_yxtz.text = cur_data.dm;
+                        this.lb_pc.text = cur_data.sy;
+                        this.lb_fd.text = cur_data.xm;
+                        isUpdate = true;
+                    }
+                }
+                if (!isUpdate) {
+                    this._clipMoney.setText(0, true);
+                    this.lb_yxtz.text = '0';
+                    this.lb_pc.text = '0';
+                    this.lb_fd.text = '0';
+                }
+            }
         }
 
         private changeHandler_list_tab(e?: LEvent): void {
@@ -150,12 +174,13 @@ module gamedating.component {
                     this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP
                     break
             }
+            this.onUpdateDataInfo();
         }
 
         protected onSucessHandler(data: any) {
             if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAPIGAMEBAOBIAO) {//报表返回
                 if (data && data.success == 0) {
-                    this._data = data.info;
+                    this._data = data.list;
                     this.updateUI();
                 }
             }

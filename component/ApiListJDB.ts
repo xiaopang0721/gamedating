@@ -112,6 +112,9 @@ module gamedating.component {
 		}
 
 		private onBtnClick(): void {
+			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+				page && page.playAni()
+			})
 			let data = this._data.gTYPE + "&" + this._data.mTYPE + "&" + "about:blank";
 			this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)
 		}

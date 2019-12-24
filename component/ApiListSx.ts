@@ -1,7 +1,7 @@
 /**
 *API-AG游戏list组件
 */
-module gamedating.page {
+module gamedating.component {
 	export class ApiListSx extends ui.ajqp.dating.component.List_Sx_APIUI {
 		private _game: Game;
 		public page: any;
@@ -104,7 +104,9 @@ module gamedating.page {
 		}
 
 		private onClickHandle(e: LEvent) {
-
+			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+				page && page.playAni()
+			})
 		}
 
 		destroy() {

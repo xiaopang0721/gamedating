@@ -282,8 +282,8 @@ module gamedating.component {
 			if (this._type == ApiMgr.TYPE_QP_KY) {
 				strSkin = DatingPath.sk_dating + "KY/KY_" + this._data.strName + ".png";
 			} else if (this._type == ApiMgr.TYPE_QP_AE) {
-				let gamestr = this._data.replace("r_", "r");
-				strSkin = DatingPath.sk_dating + "DZ_" + gamestr + ".png";
+				this._data = this._data.replace("r_", "r");
+				strSkin = DatingPath.sk_dating + "DZ_" + this._data + ".png";
 			}
 			this.img.skin = strSkin;
 		}
@@ -311,6 +311,22 @@ module gamedating.component {
 		}
 
 		private openPage(data) {
+			//房卡类型打开创建房间界面
+			if (this._data.indexOf("r") > -1) {
+				if (this._data == "r" + "paodekuai") {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: any) => {
+						page.game_id = this._data;
+						page.dataSource = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;// 等于type
+					});
+				} else {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: any) => {
+						page.game_id = this._data;
+						page.dataSource = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;// 等于type
+					});
+				}
+				return;
+			}
+			//非房卡类型打开游戏场次界面
 			let pageDef = getPageDef(data);
 			//調試模式
 			let CLOSE_LIST = isDebug ? [] : [];
