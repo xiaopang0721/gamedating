@@ -36,7 +36,7 @@ module gamedating.page {
 					)
 				}, () => {
 
-				}, false)
+				}, true)
 			}
 		}
 

@@ -42,7 +42,7 @@ module gamedating.page {
             if (!this._avatar) {
                 this._avatar = new AvatarUIShow();
                 this._viewUI.box_sk.addChild(this._avatar);
-                this._avatar.loadSkeleton(DatingPath.sk_dating + "bangdingsongjin", 0, 0, 2);
+                this._avatar.loadSkeleton(DatingPath.sk_dating + "bangdingsongjin", 0, 0);
             }
 
             this._game.playSound(Path.music + "money.mp3")

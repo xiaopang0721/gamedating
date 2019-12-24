@@ -95,13 +95,13 @@ module gamedating.page {
 		private onGameUpdate() {
 			if (!this._gameid) return;
 			if (LoadingMgr.ins.isLoaded(this._gameid)) {
-				JsLoader.ins.startLoad(this._gameid,false, Handler.create(this, (assets) => {
+				JsLoader.ins.startLoad(this._gameid, false, Handler.create(this, (assets) => {
 					this._game.sceneObjectMgr.intoStory(this._gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
 				}))
 			} else {
 				this._game.showTips(StringU.substitute("{0}需要更新，先为您更新游戏", PageDef.getNameById(this._gameid)));
 				this._game.sceneObjectMgr.event(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameid);
-				JsLoader.ins.startLoad(this._gameid,true);
+				JsLoader.ins.startLoad(this._gameid, true);
 			}
 		}
 
@@ -150,13 +150,17 @@ module gamedating.page {
 						WebConfig.hudgametype = DatingPageDef.TYPE_CARD;
 						this._gameid = msg.data;
 						if (LoadingMgr.ins.isLoaded(this._gameid)) {
-							JsLoader.ins.startLoad(this._gameid,false, Handler.create(this, (assets) => {
+							JsLoader.ins.startLoad(this._gameid, false, Handler.create(this, (assets) => {
+								let page = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+								if (page.isOpened){
+									page.saveListStatus();
+								}
 								this._game.sceneObjectMgr.intoStory(this._gameid, Web_operation_fields.GAME_ROOM_CONFIG_CARD_ROOM.toString(), true, this._game.cardRoomMgr);
 							}))
 						} else {
 							this._game.showTips(StringU.substitute("{0}需要更新，先为您更新游戏", PageDef.getNameById(this._gameid)));
 							this._game.sceneObjectMgr.event(SceneObjectMgr.__EVENT_JOIN_CARDROOM_GAME_UPDATE + this._gameid);
-							JsLoader.ins.startLoad(this._gameid,true)
+							JsLoader.ins.startLoad(this._gameid, true)
 						}
 						break;
 				}

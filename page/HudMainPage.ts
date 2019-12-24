@@ -406,7 +406,6 @@ module gamedating.page {
 		}
 
 		private enTerClick(): void {
-			this.saveListStatus();
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_JOIN_CARD_ROOM);
 		}
 
@@ -694,6 +693,7 @@ module gamedating.page {
 				//重新校正一下滚动条最大值
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
+				this._isFromRoom = false;
 				return;
 			}
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;

@@ -33,7 +33,7 @@ module gamedating.page {
                 this._avatar = new AvatarUIShow();
                 this._viewUI.box_sk.addChild(this._avatar);
             }
-            this._avatar.loadSkeleton(DatingPath.sk_dating + "vip", this._viewUI.box_sk.width / 2 - 30, this._viewUI.box_sk.height / 2 - 30, 2);
+            this._avatar.loadSkeleton(DatingPath.sk_dating + "vip", this._viewUI.box_sk.width / 2 - 30, this._viewUI.box_sk.height / 2 - 30);
             DatingGame.ins.vipMgr.on(VipMgr.EVENT_VIP_CHANGE, this, this.onVipUpdate);
             this._viewUI.btn_close.on(LEvent.CLICK, this, this.onBtnClickWithTween);
             this._viewUI.btn_left.on(LEvent.CLICK, this, this.onBtnClickWithTween);

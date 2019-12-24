@@ -28,12 +28,11 @@ module gamedating.page {
 		protected onOpen(): void {
 			super.onOpen();
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
-			this._viewUI.btn_tab.on(LEvent.CLICK, this, this.onBtnTabChange, [false]);
 			//活动区
 			this._viewUI.list_tab.vScrollBarSkin = "";
-			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			this._viewUI.list_tab.scrollBar.autoHide = true;
 			this._viewUI.list_tab.scrollBar.elasticDistance = 100;
+			this._viewUI.list_tab.scrollBar.changeHandler = new Handler(this, this.changeHandler_list_tab);
 			this._viewUI.list_tab.itemRender = this.createChildren("dating.component.TeblteRender4UI", TabItemRender);
 			this._viewUI.list_tab.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list_tab.selectHandler = new Handler(this, this.selectHandler);
@@ -76,6 +75,9 @@ module gamedating.page {
 			this._viewUI.panel_wenzitu.vScrollBar.autoHide = true;
 			this._viewUI.panel_wenzitu.vScrollBar.elasticDistance = 100;
 			this._viewUI.panel_wenzitu.vScrollBar.changeHandler = new Handler(this, this.changeHandler_panel_wenzitu);
+			//tab
+			this._viewUI.clip_remen.on(LEvent.CLICK, this, this.onClickHandle);
+			this._viewUI.clip_gonggao.on(LEvent.CLICK, this, this.onClickHandle);
 
 			this._viewUI.lab_wenzi.on(LEvent.LINK, this, this.onLinkHandle);
 			this._viewUI.lab_wenzitu.on(LEvent.LINK, this, this.onLinkHandle);
@@ -84,7 +86,7 @@ module gamedating.page {
 			this._game.network.call_get_bulletin_list();
 			//获取数据
 			this.getHuoDongData();
-			this.onBtnTabChange();
+			this.onBtnTabChange(1);
 		}
 
 		//重置滚动条参数
@@ -114,19 +116,27 @@ module gamedating.page {
 			DisplayU.onScrollChange(this._viewUI.panel_wenzitu, DisplayU.MASK_TYPE_NORMAL, DisplayU.SLIDE_H);
 		}
 
+		private onClickHandle(e: LEvent) {
+			switch (e.currentTarget) {
+				case this._viewUI.clip_remen:
+					this._viewUI.clip_remen.index = 2;
+					this._viewUI.clip_gonggao.index = 1;
+					this.onBtnTabChange(1);
+					break;
+				case this._viewUI.clip_gonggao:
+					this._viewUI.clip_gonggao.index = 2;
+					this._viewUI.clip_remen.index = 1;
+					this.onBtnTabChange(2);
+					break;
+			}
+		}
 
-		private onBtnTabChange(isInit: boolean = true, e?: LEvent, ): void {
-			if (!this._curSelectTab && this._curSelectTab != 0) {
-				this._curSelectTab = 1;
-			}
-			else {
-				this._curSelectTab = this._curSelectTab == HuoDongPage.TYPE_GONGGAO ? HuoDongPage.TYPE_HUODONG : HuoDongPage.TYPE_GONGGAO;
-			}
-			if (!isInit) this._game.playSound(Path.music + "btn.mp3");
+		private onBtnTabChange(index: number): void {
+			if (this._curSelectTab == index) return;
+			this._curSelectTab = index;
 			this.resetScrollValue();
 			if (this._curSelectTab == HuoDongPage.TYPE_GONGGAO) {
 				//公告
-				this._viewUI.btn_tab.index = 2;
 				this._curSelectData = this._activeList;
 				this._viewUI.box_hd.visible = false;
 				this._viewUI.box_gg.visible = true;
@@ -134,7 +144,6 @@ module gamedating.page {
 				this._viewUI.list_tab.visible = this._activeList && this._activeList.length > 0;
 			} else if (this._curSelectTab == HuoDongPage.TYPE_HUODONG) {
 				//活动
-				this._viewUI.btn_tab.index = 1;
 				this._curSelectData = this._curHDData;
 				this._viewUI.box_hd.visible = true;
 				this._viewUI.box_gg.visible = false;
@@ -302,7 +311,7 @@ module gamedating.page {
 				for (let i = 0; i < this._listData.length; i++) {
 					let img = new LImage(this._listData[i].path);
 					this._imgArr.push(img);
-					img.width = 837;
+					img.width = 854;
 					img.pos(0, y)
 					this._viewUI.myhd2.addChild(img);
 					y += img.height;
@@ -403,6 +412,8 @@ module gamedating.page {
 				DisplayU.onScrollChange(this._viewUI.myhd1, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.panel_wenzi, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.panel_wenzitu, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
+				this._viewUI.clip_remen.off(LEvent.CLICK, this, this.onClickHandle);
+				this._viewUI.clip_gonggao.off(LEvent.CLICK, this, this.onClickHandle);
 				this._viewUI.lab_wenzi.off(LEvent.LINK, this, this.onLinkHandle);
 				this._viewUI.lab_wenzitu.off(LEvent.LINK, this, this.onLinkHandle);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);

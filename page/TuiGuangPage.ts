@@ -509,10 +509,20 @@ module gamedating.page {
 					})
 					break;
 				case this._viewUI.btn_lq://领取
+					if (WebConfig.info && !WebConfig.info.mobile) {
+						this._game.uiRoot.general.open(DatingPageDef.PAGE_BINDPHONE, (page) => {
+							page.dataSource = 3;//绑定手机类型
+						})
+						return;
+					}
 					if (!this._viewUI.txt_ktq.text || !parseInt(this._viewUI.txt_ktq.text)) {
 						this._game.showTips("当前剩余可领取金额不足")
 						return;
 					}
+					let money = parseFloat(this._viewUI.txt_ktq.text);
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: RewardPage) => {
+						page.setData(money, DatingPath.ui_dating + "/qiandao/jl_4.png");
+					})
 					this._game.network.call_get_commission();
 					break;
 				case this._viewUI.btn_wxhy://分享微信好友
