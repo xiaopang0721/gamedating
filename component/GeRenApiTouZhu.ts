@@ -4,6 +4,8 @@
 module gamedating.component {
     export class GeRenApiTouZhu extends ui.ajqp.dating.component.GeRen1_ApiUI {
         private _game: Game;
+        private _curPt: number;
+        private _data: any;
         constructor(game: Game) {
             super()
             this._game = game;
@@ -19,14 +21,14 @@ module gamedating.component {
             this.list_title.renderHandler = new Handler(this, this.renderTabHandler);
             this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleTZHandler);
-            this.list_title.selectedIndex = 0;
-            this.selectTitleTZHandler(0);
 
             this.initDate();
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
+            this.list_title.selectedIndex = 0;
             this.initMiddle();
             this.box_pt.visible = false;
             this.box_select.visible = false;
+            this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
         }
 
         //-----------------中间数据strat---------
@@ -34,20 +36,38 @@ module gamedating.component {
             this.list_bb.vScrollBarSkin = "";
             this.list_bb.scrollBar.elasticDistance = 100;
             this.list_bb.renderHandler = new Handler(this, this.renderDataHandler);
+            this.txt_no.visible = false;
+            this.list_bb.visible = false;
         }
 
         private renderDataHandler(cell: ui.ajqp.dating.component.GeRen_TouZhuJLUI, index: number): void {
-            cell.txt_time.text;
-            cell.lb_zd.text;
-            cell.lb_money.text;
-            cell.lb_num.text;
+            let data = this.list_bb.dataSource[index];
+            if (!data) {
+                return;
+            }
+            cell.txt_time.text = Sync.getTimeShortStr(data.end_time);
+            cell.lb_zd.text = data.battle_id;
+            cell.lb_money.text = data.all_bet;
+            cell.lb_num.text = data.profit;
+            cell.lb_num.color = data.profit > 0 ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
         }
 
         //----------------中间数据end-----------
 
         //------------------日期start---------
-        private onUpdateDayInfo() {
-
+        private onUpdateDataInfo(data?: any) {
+            //如果是当天的话，取今天零点到当前时间，如果是别的，就去那天零点，到下一天的零点
+            let isToday = Sync.getIsToday(this._selectTime, this._game.sceneGame.sync.serverTimeBys)
+            let startTime;
+            let endTime;
+            if (isToday) {
+                startTime = Sync.getDayZeroTime(this._selectTime);
+                endTime = this._selectTime;
+            } else {
+                startTime = Sync.getDayZeroTime(this._selectTime);
+                endTime = startTime + 24 * 60 * 60;
+            }
+            this._game.network.call_api_get_game_record(startTime, endTime, this._curPt);
         }
 
         private onBtnClick(e: LEvent): void {
@@ -103,7 +123,7 @@ module gamedating.component {
                 this["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
             }
             this.menuTween(false, this.box_btn, this.btn_jiantou);
-            this.onUpdateDayInfo();
+            this.onUpdateDataInfo();
         }
 
         //菜单栏
@@ -162,28 +182,40 @@ module gamedating.component {
             this.list_title.selectedIndex = index;
             switch (index) {
                 case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AEQP;
                     break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_KYQP;
                     break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP;
                     break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP;
                     break
             }
+            this.onUpdateDataInfo();
         }
 
         protected onSucessHandler(data: any) {
-            if (data.code == Web_operation_fields.CLIENT_IRCODE_PLAYERBIND) {//手机绑定成功
+            if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAPIGAMERECORD) {//游戏记录返回
                 if (data && data.success == 0) {
-                    if (data.msg.type == Web_operation_fields.ACCOUNT_TYPE_USERNAME) {
-                        this.close();
+                    this._data = data.list;
+                    if (this._data.length <= 0) {
+                        this.txt_no.visible = true;
+                        this.list_bb.visible = false;
+                    } else {
+                        this.txt_no.visible = false;
+                        this.list_bb.visible = true;
                     }
+                    this.list_bb.dataSource = this._data;
                 }
             }
         }
 
         public close(): void {
             DisplayU.onScrollChange(this.list_title, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_V);
+            this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
         }
     }
 
@@ -223,11 +255,11 @@ module gamedating.component {
     //     private _game: Game;
     //     public index: number;
     //     private _data: any;
-	// 	/**
-	// 		* 
-	// 		* @param game 
-	// 		* @param data 
-	// 		*/
+    // 	/**
+    // 		* 
+    // 		* @param game 
+    // 		* @param data 
+    // 		*/
     //     setData(game: Game, index: number, selectIndex: number) {
     //         this.visible = true;
     //         this.index = index;

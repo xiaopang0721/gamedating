@@ -1,7 +1,7 @@
 /**
 *API-AG游戏list组件
 */
-module gamedating.page {
+module gamedating.component {
 	export class ApiListSx extends ui.ajqp.dating.component.List_Sx_APIUI {
 		private _game: Game;
 		public page: any;
@@ -19,6 +19,9 @@ module gamedating.page {
 			this.list_ag.scrollBar.elasticDistance = 100;
 			this.list_ag.itemRender = ListApiRender;
 			this.list_ag.renderHandler = new Handler(this, this.renderHandler);
+		}
+
+		setData(): void {
 			this.list_ag.dataSource = [1];
 		}
 
@@ -29,7 +32,7 @@ module gamedating.page {
 			};
 		}
 
-		destroy(): void {
+		close(): void {
 			this.list_ag.dataSource = [];
 			Laya.timer.clearAll(this);
 			super.destroy();
@@ -42,20 +45,17 @@ module gamedating.page {
 		private _mainView; ApiListJDB;
 		private _index: number;
 		private _game: Game;
-		private _data: any;
+		private _data: any = [{ strName: "bjl" }, { strName: "lh" }, { strName: "lp" }, { strName: "tb" }];
 
 		constructor() {
 			super();
-			this.list_sx.hScrollBarSkin = "";
-			this.list_sx.scrollBar.autoHide = true;
-			this.list_sx.scrollBar.elasticDistance = 100;
 			this.list_sx.itemRender = HudSxApiRender;
 			this.list_sx.renderHandler = new Handler(this, this.renderHandler);
 		}
 
 		set dataSource(v: any) {
 			if (!v) return;
-			this.list_sx.dataSource = v;
+			this.list_sx.dataSource = this._data;
 			this.list_sx.repeatX = Math.ceil(this.list_sx.dataSource.length / 2)
 			this.list_sx.width = 296 * this.list_sx.repeatX;
 			this.width = 299 + 15 + this.list_sx.width;
@@ -89,17 +89,24 @@ module gamedating.page {
 		constructor() {
 			super();
 		}
+		set dataSource(v: any) {
+			if (!v) return;
+			this._data = v;
+			let strSkin = DatingPath.sk_dating + "SX/SX_" + v.strName + ".png";
+			this.img.skin = strSkin;
+		}
 		setData(page: any, mainView: ApiListSx, index: number, game: Game) {
 			this._page = page;
 			this._mainView = mainView;
 			this._index = index;
 			this._game = game;
-			this.img.skin = DatingPath.sk_dating + "SX/SX_bjl.png";
 			this.on(LEvent.CLICK, this, this.onClickHandle);
 		}
 
 		private onClickHandle(e: LEvent) {
-
+			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+				page && page.playAni()
+			})
 		}
 
 		destroy() {

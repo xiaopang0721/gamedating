@@ -39,6 +39,7 @@ module gamedating.managers {
                 switch (msg.reason) {
                     case Operation_Fields.OPRATE_API_API_LOGIN_GAME_RESULT:
                         let json_data = JSON.parse(msg.data);
+                        this._game.uiRoot.general.close(PageDef.PAGE_WAITEFFECT)
                         if (json_data) {
                             let json_rep;
                             let info

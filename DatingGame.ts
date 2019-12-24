@@ -850,7 +850,7 @@ module gamedating {
 			// 	PlayCardMgr.ins.down_show()
 			// }
 			else if (e.keyCode == Laya.Keyboard.Q) {
-				PlayCardMgr.ins.initChip()
+				// PlayCardMgr.ins.initChip()
 			}
 			//红包测试
 			else if (e.keyCode == Laya.Keyboard.E) {

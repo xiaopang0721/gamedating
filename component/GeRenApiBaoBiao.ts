@@ -3,20 +3,9 @@
 */
 module gamedating.component {
     export class GeRenApiBaoBiao extends ui.ajqp.dating.component.GeRen_ApiUI {
-        //棋牌
-        // static readonly TYPE_QP: number = 1;
-        // //电子
-        // static readonly TYPE_DZ: number = 2;
-        // //捕鱼
-        // static readonly TYPE_BY: number = 3;
-        // //视讯
-        // static readonly TYPE_SX: number = 4;
-        // //体育
-        // static readonly TYPE_TY: number = 5;
-        // //电竞
-        // static readonly TYPE_DJ: number = 6;
-
+        private _curPt: number;
         private _game: Game;
+        private _data: any;
         constructor(game: Game) {
             super()
             this._game = game;
@@ -41,20 +30,14 @@ module gamedating.component {
             this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP
                 , Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleBBHandler);
-            this.list_title.selectedIndex = 0;
-            this.selectTitleBBHandler(0);
             this.initDate();
+            this.list_title.selectedIndex = 0;
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
-            this.onUpdateDataInfo();
+            this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
         }
 
         private onBtnClick(): void {
             this.menuTween(!this.box_btn.visible);
-        }
-
-        //日期切换
-        private onUpdateDayInfo() {
-            this._clipMoney.setText(0, true);
         }
 
         private initColor(): void {
@@ -99,7 +82,7 @@ module gamedating.component {
                 this["lb_" + i].color = (i == index) ? this._selectColor : this._unSelectColor;
             }
             this.menuTween(false);
-            this.onUpdateDataInfo();
+            this.updateUI();
         }
 
         //菜单栏
@@ -118,24 +101,52 @@ module gamedating.component {
             }
         }
 
-        private _isInitDaysUI: boolean = false;
         private onUpdateDataInfo(data?: any) {
-            let value = DatingGame.ins.baobiaoMgr.getDataInfo(this._timeSelectIndex);
-            let count: number = 0;
-            //日期图标显隐,不必重复做
-            if (DatingGame.ins.baobiaoMgr.timeTotalNumArr) {
-                if (!this._isInitDaysUI) {
-                    this._isInitDaysUI = true;
-                    for (let i = 0; i < 7; i++) {
-                        let curTimeStr = Sync.getTimeStr3(this._timeList[i]);
-                        this["btn_day" + i].visible = DatingGame.ins.baobiaoMgr.isCurDayHaveNum(curTimeStr) ? true : false;
+            //如果是当天的话，取今天零点到当前时间，如果是别的，就去那天零点，到下一天的零点
+            let isToday = Sync.getIsToday(this._selectTime, this._game.sceneGame.sync.serverTimeBys)
+            let startTime;
+            let endTime;
+            if (isToday) {
+                startTime = Sync.getDayZeroTime(this._selectTime);
+                endTime = this._selectTime;
+            } else {
+                startTime = Sync.getDayZeroTime(this._selectTime);
+                endTime = startTime + 24 * 60 * 60;
+            }
+            this._game.network.call_api_get_game_baobiao(startTime, endTime, this._curPt);
+        }
+
+        //更新界面
+        private updateUI(): void {
+            if (this._data.length > 0) {
+                let isUpdate = false;
+                for (let i = 0; i < this._data.length; i++) {
+                    let cur_data = this._data[i]
+                    for (let j = 0; j < 7; j++) {
+                        if (cur_data.days == this["lb_" + j].text) {
+                            if (cur_data.sy != 0) {
+                                this["btn_day" + j].visible = true;
+                            } else {
+                                this["btn_day" + j].visible = false;
+                            }
+                        } else {
+                            this["btn_day" + j].visible = false;
+                        }
+                    }
+                    if (cur_data.days == this.lb_time.text) {
+                        this._clipMoney.setText(cur_data.sy + cur_data.xm, true);
+                        this.lb_yxtz.text = cur_data.dm;
+                        this.lb_pc.text = cur_data.sy;
+                        this.lb_fd.text = cur_data.xm;
+                        isUpdate = true;
                     }
                 }
-            }
-
-            for (let key in value) {
-                if (value[key] && value[key].length > 0)
-                    count++;
+                if (!isUpdate) {
+                    this._clipMoney.setText(0, true);
+                    this.lb_yxtz.text = '0';
+                    this.lb_pc.text = '0';
+                    this.lb_fd.text = '0';
+                }
             }
         }
 
@@ -151,28 +162,33 @@ module gamedating.component {
             this.list_title.selectedIndex = index;
             switch (index) {
                 case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AEQP
                     break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_KYQP
                     break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP
                     break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP - 1:
+                    this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP
                     break
             }
+            this.onUpdateDataInfo();
         }
 
         protected onSucessHandler(data: any) {
-            if (data.code == Web_operation_fields.CLIENT_IRCODE_PLAYERBIND) {//手机绑定成功
+            if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAPIGAMEBAOBIAO) {//报表返回
                 if (data && data.success == 0) {
-                    if (data.msg.type == Web_operation_fields.ACCOUNT_TYPE_USERNAME) {
-                        this.close();
-                    }
+                    this._data = data.list;
+                    this.updateUI();
                 }
             }
         }
 
         public close(): void {
             DisplayU.onScrollChange(this.list_title, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_V);
+            this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
         }
     }
 
