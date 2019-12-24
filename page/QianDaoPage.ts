@@ -31,7 +31,7 @@ module gamedating.page {
 				this._avatar = new AvatarUIShow();
 				this._viewUI.box_sk.addChild(this._avatar);
 			}
-			this._avatar.loadSkeleton(DatingPath.sk_dating + "qiandao", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 20, 2);
+			this._avatar.loadSkeleton(DatingPath.sk_dating + "qiandao", this._viewUI.box_sk.width / 2, this._viewUI.box_sk.height / 2 + 20);
 			for (let i = 0; i < this._viewUI.box_qiandao.numChildren; i++) {
 				this._qiandaos[i] = this._viewUI["qiandao" + i];
 				this._qiandaos[i].visible = false;

@@ -338,7 +338,7 @@ module gamedating.page {
 			if (this._viewUI == this._game.datingGame.jianPanMgr.pageUI) {
 				this._game.datingGame.jianPanMgr.closeJianPan();
 			} else if (e.target instanceof Box && e.target.parent == this._viewUI) {
-				this.close();
+				this.onBlackSpriteClick();
 			}
 		}
 
@@ -350,7 +350,7 @@ module gamedating.page {
 				if (this._view == this._game.datingGame.jianPanMgr.pageUI) {
 					this._game.datingGame.jianPanMgr.closeJianPan();
 				} else {
-					this.close();
+					super.onBlackSpriteClick();
 				}
 			}
 		}

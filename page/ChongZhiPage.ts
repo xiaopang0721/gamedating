@@ -109,21 +109,23 @@ module gamedating.page {
 			this.onUpdatePlayerInfo();
 		}
 
-        protected layout(): void {
-            super.layout();
-            if (this._viewUI) {
-                //全面屏
-                if (this._game.isFullScreen) {
-                    this._viewUI.box_top_left.left = 56;
-                    this._viewUI.box_top_right.right = 56;
-                    this._viewUI.list_tab.left = 56;
-                } else {
-                    this._viewUI.box_top_left.left = 0;
-                    this._viewUI.box_top_right.right = 0;
-                    this._viewUI.list_tab.left = 0;
-                }
-            }
-        }
+		protected layout(): void {
+			super.layout();
+			if (this._viewUI) {
+				//全面屏
+				if (this._game.isFullScreen) {
+					this._viewUI.img_bgleft.width = 266 + 56;
+					this._viewUI.box_top_left.left = 56;
+					this._viewUI.box_top_right.right = 56;
+					this._viewUI.list_tab.left = 56;
+				} else {
+					this._viewUI.img_bgleft.width = 266;
+					this._viewUI.box_top_left.left = 0;
+					this._viewUI.box_top_right.right = 0;
+					this._viewUI.list_tab.left = 0;
+				}
+			}
+		}
 
 		private onTextChange() {
 			this._viewUI.btn_clear.visible = this._viewUI.txt_input.text.length > 0;
