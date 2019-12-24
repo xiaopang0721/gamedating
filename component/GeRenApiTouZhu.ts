@@ -50,6 +50,24 @@ module gamedating.component {
             cell.lb_money.text = data.all_bet;
             cell.lb_num.text = data.profit;
             cell.lb_num.color = data.profit > 0 ? TeaStyle.COLOR_GREEN : TeaStyle.COLOR_RED;
+            //游戏名字
+            cell.lb_name.text = this.getGameName(this._curPt, data.game_id);
+        }
+
+        private getGameName(pf_code, gameId: string): string {
+            let gameName = ""
+            switch (pf_code) {
+                case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP:
+                    gameName = ApiListPT.GetGameName(gameId)
+                    break
+                case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP:
+                    gameName = ApiListJDB.GetGameName(gameId)
+                    break
+                case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP:
+                    gameName
+                    break
+            }
+            return gameName
         }
 
         //----------------中间数据end-----------

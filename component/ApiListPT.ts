@@ -5,7 +5,7 @@ module gamedating.component {
 	export class ApiListPT extends ui.ajqp.dating.component.List_QP_APIUI {
 		private _game: Game;
 		public page: any;
-		public ky_data =
+		public static KY_DATA =
 		[{ kindID: 600, strName: "21dian", gameName: "21点" }, { kindID: 1960, strName: "bcbm", gameName: "奔驰宝马" }, { kindID: 910, strName: "bjl", gameName: "百家乐" }, { kindID: 930, strName: "brnn", gameName: "百人牛牛" },
 		{ kindID: 610, strName: "ddz", gameName: "斗地主" }, { kindID: 620, strName: "dzpk", gameName: "德州扑克" }, { kindID: 720, strName: "ebg", gameName: "二八杠" }, { kindID: 740, strName: "ermj", gameName: "二人麻将" }
 			, { kindID: 1940, strName: "jsys", gameName: "金鲨银鲨" }, { kindID: 230, strName: "jszjh", gameName: "极速炸金花" }, { kindID: 890, strName: "kpqznn", gameName: "看牌抢庄牛牛" }, { kindID: 830, strName: "qznn", gameName: "抢庄牛牛" }
@@ -20,6 +20,17 @@ module gamedating.component {
 			this.init();
 		}
 
+		public static GetGameName(gameid: string) {
+			let game_id = parseFloat(gameid);
+			for (let i = 0; i < ApiListPT.KY_DATA.length; i++) {
+				let cur_data = ApiListPT.KY_DATA[i]
+				if (cur_data.kindID == game_id) {
+					return cur_data.gameName
+				}
+			}
+			return ""
+		}
+
 		private init(): void {
 			this.list_qp.hScrollBarSkin = ""
 			this.list_qp.itemRender = QPLB_Item_One
@@ -27,7 +38,7 @@ module gamedating.component {
 		}
 
 		setData(): void {
-			let pt_data = [WebConfig.gamelist, this.ky_data, []]
+			let pt_data = [WebConfig.gamelist, ApiListPT.KY_DATA, []]
 			this.list_qp.dataSource = pt_data;
 		}
 
