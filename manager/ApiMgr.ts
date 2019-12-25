@@ -55,6 +55,10 @@ module gamedating.managers {
                                 if (!json_rep.info) return;
                                 info = JSON.parse(json_rep.info);
                                 url = info.path
+                            } else if (json_data.type == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
+                                json_rep = JSON.parse(json_data.rep);
+                                if (!json_rep.url) return;
+                                url = json_rep.url
                             }
                             this._game.datingGame.apiMgr.isApi = true;
                             this._game.uiRoot.showIframe(url, 0, 0, Laya.stage.width, Laya.stage.height);
