@@ -47,7 +47,7 @@ module gamedating.page {
 			this._viewUI.list_jilu.scrollBar.elasticDistance = 100;
 			this._viewUI.list_jilu.itemRender = this.createChildren("dating.component.YuEBaoTUI", BaoXianXiangT);
 			this._viewUI.list_jilu.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_jilu.visible = false;
+			this._viewUI.list_jilu.dataSource = [];
 
 			this._viewUI.btn_tabs.selectHandler = new Handler(this, this.selectHandler);
 
@@ -397,7 +397,7 @@ module gamedating.page {
 				this.x = this.width + 10;
 				Laya.Tween.to(this, {
 					x: x
-				}, 300, Laya.Ease.linearIn, null, data.index * 200)
+				}, 300, Laya.Ease.linearIn, null, data.index * 100)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;
