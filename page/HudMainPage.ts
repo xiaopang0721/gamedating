@@ -683,9 +683,11 @@ module gamedating.page {
 				this._isFromRoom = false;
 				return;
 			}
+			this._viewUI.list_btns.visible = false;
 			this._viewUI.list_btns.scrollBar.touchScrollEnable = true;
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
+				this._viewUI.list_btns.visible = true;
 				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.cells.forEach(element => {
 					let cell = element as GameItemRender;
