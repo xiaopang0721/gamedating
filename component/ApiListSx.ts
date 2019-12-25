@@ -45,7 +45,7 @@ module gamedating.component {
 		private _mainView; ApiListJDB;
 		private _index: number;
 		private _game: Game;
-		private _data: any = [{ strName: "bjl" }, { strName: "lh" }, { strName: "lp" }, { strName: "tb" }];
+		private _data: any = [{ gameType: 21, strName: "bjl" }, { gameType: 23, strName: "lh" }, { gameType: 25, strName: "lp" }, { gameType: 27, strName: "tb" }];
 
 		constructor() {
 			super();
@@ -107,6 +107,8 @@ module gamedating.component {
 			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
 				page && page.playAni()
 			})
+			let data = "about:blank" + "&" + this._data.gameType;
+			this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, data)
 		}
 
 		destroy() {
