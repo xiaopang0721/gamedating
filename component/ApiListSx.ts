@@ -45,7 +45,7 @@ module gamedating.component {
 		private _mainView; ApiListJDB;
 		private _index: number;
 		private _game: Game;
-		private _data: any = [{ gameType: 21, strName: "bjl" }, { gameType: 23, strName: "lh" }, { gameType: 25, strName: "lp" }, { gameType: 27, strName: "tb" }];
+		private _data: any = [{ gameType: 22, strName: "bjl" }, { gameType: 24, strName: "lh" }, { gameType: 26, strName: "lp" }, { gameType: 27, strName: "tb" }];
 
 		constructor() {
 			super();

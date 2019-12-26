@@ -9,12 +9,12 @@ module gamedating.page {
 		static readonly TYPE_GRZX: number = 1;
 		//收支报表
 		static readonly TYPE_SZBB: number = 2;
-		//游戏设置
-		static readonly TYPE_YXSZ: number = 3;
 		//投注记录
-		static readonly TYPE_TZJL: number = 4;
+		static readonly TYPE_TZJL: number = 3;
 		//个人报表
-		static readonly TYPE_GRBB: number = 5;
+		static readonly TYPE_GRBB: number = 4;
+		//游戏设置
+		static readonly TYPE_YXSZ: number = 5;
 
 
 		private _viewUI: ui.ajqp.dating.GeRenUI;
@@ -26,7 +26,7 @@ module gamedating.page {
 		private _inputKey1: MyTextInput;
 		private _selectColor: string;	//选中颜色
 		private _unSelectColor: string;	//未选中颜色
-		private _api_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_YXSZ, GeRenXinXiPage.TYPE_TZJL, GeRenXinXiPage.TYPE_GRBB]	//api标题数据
+		private _api_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_TZJL, GeRenXinXiPage.TYPE_GRBB, GeRenXinXiPage.TYPE_YXSZ]	//api标题数据
 		private _api_bb: GeRenApiBaoBiao;
 		private _api_tz: GeRenApiTouZhu;
 		private _normal_data: Array<number> = [GeRenXinXiPage.TYPE_GRZX, GeRenXinXiPage.TYPE_SZBB, GeRenXinXiPage.TYPE_YXSZ]	//正常版数据
