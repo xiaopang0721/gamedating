@@ -587,11 +587,10 @@ module gamedating.page {
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
 				this.visible = true;
-				let x = this.x;
-				this.x = this.width + 10;
-				Laya.Tween.to(this, {
+				let x = this.width + data.index * 60;
+				Laya.Tween.from(this, {
 					x: x
-				}, 300, Laya.Ease.linearIn, null, data.index * 100)
+				}, x / 1.5, Laya.Ease.cubicInOut)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;
@@ -629,11 +628,10 @@ module gamedating.page {
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
 				this.visible = true;
-				let x = this.x;
-				this.x = this.width + 10;
-				Laya.Tween.to(this, {
+				let x = this.width + data.index * 60;
+				Laya.Tween.from(this, {
 					x: x
-				}, 300, Laya.Ease.linearIn, null, data.index * 100)
+				}, x / 1.5, Laya.Ease.cubicInOut)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;
@@ -666,11 +664,10 @@ module gamedating.page {
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
 				this.visible = true;
-				let x = this.x;
-				this.x = this.width + 10;
-				Laya.Tween.to(this, {
+				let x = this.width + data.index * 60;
+				Laya.Tween.from(this, {
 					x: x
-				}, 300, Laya.Ease.linearIn, null, data.index * 100)
+				}, x / 1.5, Laya.Ease.cubicInOut)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;
@@ -704,11 +701,10 @@ module gamedating.page {
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
 				this.visible = true;
-				let x = this.x;
-				this.x = this.width + 10;
-				Laya.Tween.to(this, {
+				let x = this.width + data.index * 60;
+				Laya.Tween.from(this, {
 					x: x
-				}, 300, Laya.Ease.linearIn, null, data.index * 100)
+				}, x / 1.5, Laya.Ease.cubicInOut)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;
@@ -742,11 +738,10 @@ module gamedating.page {
 			Laya.Tween.clearAll(this);
 			if (!this._isTween) {
 				this.visible = true;
-				let x = this.x;
-				this.x = this.width + 10;
-				Laya.Tween.to(this, {
+				let x = this.width + data.index * 60;
+				Laya.Tween.from(this, {
 					x: x
-				}, 300, Laya.Ease.linearIn, null, data.index * 100)
+				}, x / 1.5, Laya.Ease.cubicInOut)
 				this._isTween = true;
 			} else {
 				this.x = this._itemX;

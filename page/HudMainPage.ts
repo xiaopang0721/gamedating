@@ -348,19 +348,19 @@ module gamedating.page {
 				this._viewUI.box_btn_top_left.left = 56;
 				this._viewUI.box_btn_top.right = 56;
 				this._viewUI.box_bottomLeft.left = 56;
-				this._viewUI.box_bottomRight.right = 56 - 11;
+				this._viewUI.box_bottomRight.right = 56;
 				this._viewUI.box_tabs.left = -11;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
 				this._viewUI.box_btn_top.right = 0;
-				this._viewUI.box_bottomLeft.left = 17;
-				this._viewUI.box_bottomRight.right = 11;
+				this._viewUI.box_bottomLeft.left = 0;
+				this._viewUI.box_bottomRight.right = 0;
 				this._viewUI.box_tabs.left = -11;
 			}
 			this.judgeBtnShow();
 			this.updateFenXiangPos();
 			let childNum1 = this._viewUI.box_btn_top.numChildren;
-			let total_x1: number = 410;
+			let total_x1: number = 415;
 			for (let i = 0; i < childNum1; i++) {
 				let item;
 				if (!this._box_btn_top[i])//缓存下
@@ -369,8 +369,8 @@ module gamedating.page {
 				}
 				item = this._box_btn_top[i];
 				if (!item || !item.visible) continue;
-				// item.x = total_x1;
-				// total_x1 -= item.width + 30;
+				item.x = total_x1;
+				total_x1 -= i == 3 ? 100 : 80;
 			}
 		}
 
