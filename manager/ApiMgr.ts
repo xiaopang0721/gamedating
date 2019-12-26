@@ -21,6 +21,13 @@ module gamedating.managers {
         //敬请期待
         public static TYPE_QP_NONE: number = 2;
 
+        public static PTNAME: Array<any> = [
+            "AE棋牌",
+            "开元棋牌",
+            "JDB电子",
+            "AG视讯",
+        ]
+
         //是否处于api中
         public isApi: boolean = false;
         private _iframe: any;

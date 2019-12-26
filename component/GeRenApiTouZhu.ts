@@ -254,18 +254,7 @@ module gamedating.component {
 
         set dataSource(v: any) {
             this._data = v;
-            if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) {
-                this.txt_name.text = "AE棋牌";
-            }
-            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
-                this.txt_name.text = "开元棋牌";
-            }
-            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
-                this.txt_name.text = "JDB电子";
-            }
-            else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
-                this.txt_name.text = "AG视讯";
-            }
+            this.txt_name.text = ApiMgr.PTNAME[this._data - 1]
         }
     }
 

@@ -107,7 +107,7 @@ module gamedating.page {
 			this._viewUI.btn_select.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.list_bb.on(LEvent.CLICK, this, this.menuTween, [false]);
 			this._viewUI.list_bb.dataSource = [];
-			
+
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
 			this.initBaoBiaoUI();
@@ -258,6 +258,20 @@ module gamedating.page {
 					type_name = EnumToString.getLimitStr(data.game_name, 2) + Web_operation_fields.client_money_logtype_table[data.type];
 				} else {
 					type_name = data.game_name + Web_operation_fields.client_money_logtype_table[data.type];
+				}
+				if (data.params) {
+					let param = JSON.parse(data.params);
+					let pf_code = param.pf_code;
+					let pt_name = ""
+					if (pf_code) {
+						pt_name = ApiMgr.PTNAME[pf_code - 1]
+						if (data.type == Web_operation_fields.USE_MONEY_LOG_TYPE_API_DJ_ADD_SCORE) {
+							//api上下分
+							type_name = "转入" + pt_name;
+						} else if (data.type == Web_operation_fields.USE_MONEY_LOG_TYPE_API_DJ_SUB_SCORE) {
+							type_name = pt_name + "转出";
+						}
+					}
 				}
 				cell.txt_type.text = type_name;
 				cell.txt_time.text = Sync.getTimeShortStr(data.time * 1000);
@@ -547,8 +561,8 @@ module gamedating.page {
 				}
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
-				this._api_tz&&this._api_tz.close();
-				this._api_bb&&this._api_bb.close();
+				this._api_tz && this._api_tz.close();
+				this._api_bb && this._api_bb.close();
 			}
 			super.close();
 		}
