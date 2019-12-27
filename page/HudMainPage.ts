@@ -532,7 +532,7 @@ module gamedating.page {
 					this._apiPTList.visible = true;
 				} else if (index == ApiMgr.TYPE_BY - 1) {
 					//捕鱼游戏
-					if (!this._apiPTList)
+					if (!this._apiBYList)
 						this.addBYList()
 				} else if (index == ApiMgr.TYPE_DZYY - 1) {
 					//电子游艺
