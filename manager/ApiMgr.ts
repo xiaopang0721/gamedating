@@ -21,6 +21,13 @@ module gamedating.managers {
         //敬请期待
         public static TYPE_QP_NONE: number = 2;
 
+        public static PTNAME: Array<any> = [
+            "AE棋牌",
+            "开元棋牌",
+            "JDB电子",
+            "AG视讯",
+        ]
+
         //是否处于api中
         public isApi: boolean = false;
         private _iframe: any;
@@ -61,7 +68,7 @@ module gamedating.managers {
                                 url = json_rep.url
                             }
                             this._game.datingGame.apiMgr.isApi = true;
-                            this._game.uiRoot.showIframe(url, 0, 0, Laya.stage.width, Laya.stage.height);
+                            this._game.uiRoot.showIframe(url, 0, 0, Laya.stage.width, Laya.stage.height, json_data.type);
                         }
                         break
                     case Operation_Fields.OPRATE_API_API_ADD_SCORE_RESULT:

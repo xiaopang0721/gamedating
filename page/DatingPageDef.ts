@@ -102,6 +102,10 @@ module gamedating.page {
 		static PAGE_MIMA_TISHI: string = "104";
 		//输入取款密码
 		static PAGE_SHURU_MIMA: string = "105";
+		//洗码
+		static PAGE_XM: string = "106";
+		//洗码记录
+		static PAGE_XM_RECORD: string = "107";
 		//gm
 		static PAGE_GM: string = "999";
 
@@ -160,6 +164,8 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_HONGBAO] = HongBaoPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_CHONGZHI_RECORD] = ChongZhiRecordPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_XM_RECORD] = XiMaRecordPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_XM] = XiMaPage;
 
 
 			if (WebConfig.enterGameLocked) {

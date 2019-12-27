@@ -5,6 +5,12 @@ module gamedating.component {
 	export class ApiListRM extends ui.ajqp.dating.component.List_RM_APIUI {
 		private _game: Game;
 		public page: any;
+		// public rm_data = [{ gameType: 6, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, strName: "AG_byw", gameName: "AG捕鱼王" },
+		// { gameid: "buyu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "DZ_buyu", gameName: "AE捕鱼王" },
+		// { gTYPE: 7, mTYPE: 7004, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_wlby", gameName: "五龙捕鱼" },
+		// { gTYPE: 7, mTYPE: 7003, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_csby", gameName: "财神捕鱼" },
+		// { gTYPE: 7, mTYPE: 7001, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_lwby", gameName: "龙王捕鱼" },
+		// { gTYPE: 7, mTYPE: 7002, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_lwby2", gameName: "龙王捕鱼2" }];
 		constructor(game: Game, page: any) {
 			super();
 			this._game = game;
@@ -23,7 +29,7 @@ module gamedating.component {
 		}
 
 		setData(): void {
-			this.list_rm.dataSource = [];
+			// this.list_rm.dataSource = this.rm_data;
 		}
 
 		update() {

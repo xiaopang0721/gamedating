@@ -343,10 +343,8 @@ module gamedating.component {
 			let CLOSE_LIST = isDebug ? [] : [];
 			if (pageDef["__enterMapLv"]) {
 				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
-				this._page.saveListStatus();
 			}
 			else if (CLOSE_LIST.indexOf(data) == -1) {
-				this._page.saveListStatus();
 				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
 					this._game.uiRoot.HUD.closeAll([data + 1]);
 				}, (page: Page) => {

@@ -45,7 +45,7 @@ module gamedating.component {
 		private _mainView; ApiListJDB;
 		private _index: number;
 		private _game: Game;
-		private _data: any = [{ gameType: 21, strName: "bjl" }, { gameType: 23, strName: "lh" }, { gameType: 25, strName: "lp" }, { gameType: 27, strName: "tb" }];
+		private _data: any = [{ gameType: 22, strName: "bjl" }, { gameType: 24, strName: "lh" }, { gameType: 26, strName: "lp" }, { gameType: 27, strName: "tb" }];
 
 		constructor() {
 			super();
@@ -67,6 +67,16 @@ module gamedating.component {
 			this._mainView = mainView;
 			this._index = index;
 			this.img_sx.skin = DatingPath.sk_dating + "SX/SX_zr.png";
+			this.img_sx.on(LEvent.CLICK, this, this.onBtnClick);
+		}
+
+		//进入大厅
+		private onBtnClick(): void {
+			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+				page && page.playAni()
+			})
+			let data = "about:blank" + "&0";
+			this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, data)
 		}
 
 		private renderHandler(cell: HudSxApiRender, index: number) {

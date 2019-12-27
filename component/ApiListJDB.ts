@@ -28,12 +28,13 @@ module gamedating.component {
 
 		//gType_mType
 		public static GetGameName(gameid: string) {
-			let arr = gameid.split("_");
-			let gType = parseFloat(arr[0]);
-			let mType = parseFloat(arr[1]);
+			// let arr = gameid.split("_");
+			// let gType = parseFloat(arr[0]);
+			// let mType = parseFloat(arr[1]);
+			let mType = parseFloat(gameid)
 			for (let i = 0; i < ApiListJDB.JBD_DATA.length; i++) {
 				let cur_data = ApiListJDB.JBD_DATA[i]
-				if (cur_data.gTYPE == gType && cur_data.mTYPE == mType) {
+				if ( cur_data.mTYPE == mType) {
 					return cur_data.gameName
 				}
 			}
