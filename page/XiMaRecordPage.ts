@@ -8,6 +8,9 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + 'xima.atlas',
+				DatingPath.atlas_dating_ui + 'tongyong/di.atlas',
+				DatingPath.atlas_dating_ui + 'tongyong.atlas',
+				DatingPath.atlas_dating_ui + 'tongyong/anniu.atlas',
 			];
 			this._isNeedBlack = true;
 			this._isNeedDuang = false;
@@ -20,7 +23,7 @@ module gamedating.page {
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
-			
+
 		}
 
 		// 页面打开时执行函数
