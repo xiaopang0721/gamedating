@@ -20,15 +20,19 @@ module gamedating.page {
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
-			this._game.uiRoot.general.open(DatingPageDef.PAGE_BINDPHONE, (page) => {
-				page.dataSource = 3;//绑定手机类型
-			})
-			this.close();
+			
 		}
 
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
+			this._viewUI.list_info.vScrollBarSkin = "";
+			this._viewUI.list_info.scrollBar.elasticDistance = 100;
+			this._viewUI.list_info.renderHandler = new Handler(this, this.renderHandler);
+		}
+
+		private renderHandler(cell: ui.ajqp.dating.component.XiMa_JiLuUI, index: number): void {
+
 		}
 
 		public close(): void {

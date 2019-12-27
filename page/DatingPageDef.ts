@@ -167,8 +167,8 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_PDK_JOIN_CARDROOM] = RpaodekuaiJoinRoomPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_HONGBAO] = HongBaoPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_CHONGZHI_RECORD] = ChongZhiRecordPage;
-			PageDef._pageClassMap[DatingPageDef.PAGE_XM_RECORD] = ChongZhiRecordPage;
-			PageDef._pageClassMap[DatingPageDef.PAGE_XM] = ChongZhiRecordPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_XM_RECORD] = XiMaRecordPage;
+			PageDef._pageClassMap[DatingPageDef.PAGE_XM] = XiMaPage;
 
 
 			if (WebConfig.enterGameLocked) {

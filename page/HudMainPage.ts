@@ -82,6 +82,7 @@ module gamedating.page {
 			this._viewUI.btn_vip.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_shouchong.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_guanwang.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.box_xm.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.img_copy_gw.on(LEvent.CLICK, this, this.onBtnClickHandle);
 			this._viewUI.btn_enterRoom.on(LEvent.CLICK, this, this.enTerClick);
 
@@ -476,6 +477,9 @@ module gamedating.page {
 					break;
 				case this._viewUI.btn_shouchong://首充
 					this._game.uiRoot.general.open(DatingPageDef.PAGE_FIRST_RECHARGE);
+					break;
+				case this._viewUI.box_xm://洗码
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_XM);
 					break;
 				case this._viewUI.btn_guanwang://官网
 					this.updatePos();
