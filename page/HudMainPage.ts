@@ -103,15 +103,15 @@ module gamedating.page {
 
 			this._game.playMusic(Path.music_bg);
 
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(60, -15), 1, null, [this._viewUI.btn_bangding]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(57, -15), 1, null, [this._viewUI.btn_vip]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_bangding, this, this.checkout, new Point(60, -10), 1, null, [this._viewUI.btn_bangding]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_vip, this, this.checkout, new Point(55, -15), 1, null, [this._viewUI.btn_vip]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_xiaoxi, this, this.checkout, new Point(67, -10), 1, null, [this._viewUI.btn_xiaoxi]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_fenxiang, this, this.checkout, new Point(67, -10), 1, null, [this._viewUI.btn_fenxiang]);
 
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_daili, this, this.checkout, new Point(70, -5), 1, null, [this._viewUI.btn_daili]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(82, -5), 1, null, [this._viewUI.btn_qiandao]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_zhuanpan, this, this.checkout, new Point(80, -5), 1, null, [this._viewUI.btn_zhuanpan]);
-			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(75, -5), 1, null, [this._viewUI.btn_shouchong]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(65, -10), 1, null, [this._viewUI.btn_shouchong]);
 
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
@@ -239,8 +239,8 @@ module gamedating.page {
 			}
 		}
 
-		private _clip_money: ClipUtil;
-		private _clip_vip: ClipUtil;
+		private _clip_money: DatingClip;
+		private _clip_vip: DatingClip;
 		private onUpdatePlayerInfo(first: boolean = false) {
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
@@ -250,7 +250,7 @@ module gamedating.page {
 			this._viewUI.txt_id.text = playerInfo.nickname;
 			this._viewUI.btn_bangding.visible = !playerInfo.mobile && FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_BASECONFIG_C, "reggivemoney") > 0;
 			if (!this._clip_money) {
-				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);
+				this._clip_money = new DatingClip(DatingClip.MONEY_WHITE);
 				this._clip_money.scale(0.9, 0.9);
 				this._clip_money.x = this._viewUI.clip_money.x;
 				this._clip_money.y = this._viewUI.clip_money.y;
@@ -258,7 +258,7 @@ module gamedating.page {
 				this._viewUI.clip_money.removeSelf();
 			}
 			if (!this._clip_vip) {
-				this._clip_vip = new ClipUtil(ClipUtil.DATING_VIP_FONT);
+				this._clip_vip = new DatingClip(DatingClip.DATING_VIP_FONT);
 				this._clip_vip.centerX = this._viewUI.clip_vip.centerX;
 				this._clip_vip.centerY = this._viewUI.clip_vip.centerY;
 				this._viewUI.clip_vip.parent && this._viewUI.clip_vip.parent.addChild(this._clip_vip);
@@ -360,7 +360,7 @@ module gamedating.page {
 			this.judgeBtnShow();
 			this.updateFenXiangPos();
 			let childNum1 = this._viewUI.box_btn_top.numChildren;
-			let total_x1: number = 415;
+			let total_x1: number = 471;
 			for (let i = 0; i < childNum1; i++) {
 				let item;
 				if (!this._box_btn_top[i])//缓存下
@@ -370,7 +370,8 @@ module gamedating.page {
 				item = this._box_btn_top[i];
 				if (!item || !item.visible) continue;
 				item.x = total_x1;
-				total_x1 -= i == 3 ? 100 : 80;
+				let space = i == 4 || i == 5 ? 100 : 80
+				total_x1 -= space;
 			}
 		}
 
@@ -948,7 +949,6 @@ module gamedating.page {
 			this.btn_box.y = 116;
 		}
 
-
 		setData(page: HudMainPage, game: Game, data: any, index: number) {
 			if (!data) {
 				this.visible = false;
@@ -962,6 +962,7 @@ module gamedating.page {
 			this._type = data[1];
 			this._index = index;
 			this.img.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + ".png";
+			this._game.datingGame.OnlineNumMgr.onUpdateNum(this._gameStr);
 		}
 
 		private onMouseHandle() {

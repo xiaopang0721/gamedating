@@ -684,6 +684,15 @@ module gamedating {
 			return this._vipMgr;
 		}
 
+		//在线人数管理器
+		private _onlineNumMgr: OnlineNumMgr;
+		public get OnlineNumMgr(): OnlineNumMgr {
+			if (!this._onlineNumMgr) {
+				this._onlineNumMgr = new OnlineNumMgr(this._game);
+			}
+			return this._onlineNumMgr;
+		}
+
 		//验证码管理器
 		private _codeMgr: CodeMgr;
 		public get codeMgr(): CodeMgr {
@@ -1136,6 +1145,11 @@ module gamedating {
 			if (this._vipMgr) {
 				this._vipMgr.clear(true);
 				this._vipMgr = null;
+			}
+
+			if (this._onlineNumMgr) {
+				this._onlineNumMgr.clear(true);
+				this._onlineNumMgr = null;
 			}
 
 			if (this._codeMgr) {

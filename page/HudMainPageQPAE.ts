@@ -57,7 +57,7 @@ module gamedating.page {
 			this._viewUI.btn_right.visible = v < this._viewUI.list.scrollBar.max;
 		}
 
-		private _clip_money: ClipUtil;
+		private _clip_money: DatingClip;
 		private onUpdatePlayerInfo() {
 			if (!this._viewUI) return;
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
@@ -66,7 +66,7 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
 			if (!this._clip_money) {
-				this._clip_money = new ClipUtil(ClipUtil.MONEY_WHITE);
+				this._clip_money = new DatingClip(DatingClip.MONEY_WHITE);
 				this._clip_money.scale(0.9, 0.9);
 				this._clip_money.x = this._viewUI.clip_money.x;
 				this._clip_money.y = this._viewUI.clip_money.y;

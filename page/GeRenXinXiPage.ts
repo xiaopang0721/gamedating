@@ -107,7 +107,7 @@ module gamedating.page {
 			this._viewUI.btn_select.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.list_bb.on(LEvent.CLICK, this, this.menuTween, [false]);
 			this._viewUI.list_bb.dataSource = [];
-			
+
 			this._viewUI.btn_sound.on(LEvent.CLICK, this, this.onCheckClick);
 			this._viewUI.btn_music.on(LEvent.CLICK, this, this.onCheckClick);
 			this.initBaoBiaoUI();
@@ -517,16 +517,18 @@ module gamedating.page {
 			DatingGame.ins.jianPanMgr.openJianPan(textUI, viewUI, centerY);
 		}
 
-		//菜单栏
+		//时间栏
 		private menuTween(isOpen: boolean) {
 			if (isOpen) {
+				this._viewUI.panel_btn.visible = true;
 				this._viewUI.box_btn.visible = true;
 				this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
-				this._viewUI.box_btn.scale(0.2, 0.2);
+				this._viewUI.box_btn.y = 289;
 				this._viewUI.box_btn.alpha = 0;
-				Laya.Tween.to(this._viewUI.box_btn, { scaleX: 1, scaleY: 1, alpha: 1 }, 300, Laya.Ease.backInOut);
+				Laya.Tween.to(this._viewUI.box_btn, { y: 11, alpha: 1 }, 300, Laya.Ease.quartOut);
 			} else {
-				Laya.Tween.to(this._viewUI.box_btn, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 300, Laya.Ease.backInOut, Handler.create(this, () => {
+				Laya.Tween.to(this._viewUI.box_btn, { y: 289, alpha: 0 }, 300, Laya.Ease.quartOut, Handler.create(this, () => {
+					this._viewUI.panel_btn.visible = false;
 					this._viewUI.box_btn.visible = false;
 					this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
 				}));
@@ -547,8 +549,8 @@ module gamedating.page {
 				}
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
-				this._api_tz&&this._api_tz.close();
-				this._api_bb&&this._api_bb.close();
+				this._api_tz && this._api_tz.close();
+				this._api_bb && this._api_bb.close();
 			}
 			super.close();
 		}

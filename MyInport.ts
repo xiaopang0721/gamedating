@@ -14,6 +14,7 @@ import TopMgr = gamedating.managers.TopMgr;
 import NoticesMgr = gamedating.managers.NoticesMgr;
 import QiFuMgr = gamedating.managers.QiFuMgr;
 import VipMgr = gamedating.managers.VipMgr;
+import OnlineNumMgr = gamedating.managers.OnlineNumMgr;
 import CodeMgr = gamedating.managers.CodeMgr;
 import MyTextInput = gamedating.page.MyTextInput;
 import DatingGame = gamedating.DatingGame;
