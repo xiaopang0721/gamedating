@@ -261,15 +261,17 @@ module gamedating.page {
 				}
 				if (data.params) {
 					let param = JSON.parse(data.params);
-					let pf_code = param.pf_code;
-					let pt_name = ""
-					if (pf_code) {
-						pt_name = ApiMgr.PTNAME[pf_code - 1]
-						if (data.type == Web_operation_fields.USE_MONEY_LOG_TYPE_API_DJ_ADD_SCORE) {
-							//api上下分
-							type_name = "转入" + pt_name;
-						} else if (data.type == Web_operation_fields.USE_MONEY_LOG_TYPE_API_DJ_SUB_SCORE) {
-							type_name = pt_name + "转出";
+					if (param) {
+						let pf_code = param.pf_code;
+						let pt_name = ""
+						if (pf_code) {
+							pt_name = ApiMgr.PTNAME[pf_code - 1]
+							if (data.type == Web_operation_fields.USE_MONEY_LOG_TYPE_API_DJ_ADD_SCORE) {
+								//api上下分
+								type_name = "转入" + pt_name;
+							} else if (data.type == Web_operation_fields.USE_MONEY_LOG_TYPE_API_DJ_SUB_SCORE) {
+								type_name = pt_name + "转出";
+							}
 						}
 					}
 				}
