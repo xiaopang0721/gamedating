@@ -114,11 +114,8 @@ module gamedating.component {
 		}
 
 		private onClickHandle(e: LEvent) {
-			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
-				page && page.playAni()
-			})
-			let data = "about:blank" + "&" + this._data.gameType;
-			this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, data)
+			this._data.pfCode = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP;
+			this._game.datingGame.apiMgr.GoGameByPFCode(this._data, this.btn_box);
 		}
 
 		destroy() {

@@ -5,12 +5,25 @@ module gamedating.component {
 	export class ApiListRM extends ui.ajqp.dating.component.List_RM_APIUI {
 		private _game: Game;
 		public page: any;
-		// public rm_data = [{ gameType: 6, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, strName: "AG_byw", gameName: "AG捕鱼王" },
-		// { gameid: "buyu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "DZ_buyu", gameName: "AE捕鱼王" },
-		// { gTYPE: 7, mTYPE: 7004, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_wlby", gameName: "五龙捕鱼" },
-		// { gTYPE: 7, mTYPE: 7003, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_csby", gameName: "财神捕鱼" },
-		// { gTYPE: 7, mTYPE: 7001, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_lwby", gameName: "龙王捕鱼" },
-		// { gTYPE: 7, mTYPE: 7002, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "JDB_lwby2", gameName: "龙王捕鱼2" }];
+		public rm_data = [
+			{ gameid: "wxsaoleihb", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "wxsaoleihb", gameName: "微信红包扫雷" },
+			{ gameid: "mpniuniu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "mpniuniu", gameName: "看牌抢庄牛牛" },
+			{ gameid: "longhu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "longhu", gameName: "龙虎斗" },
+			{ gameid: "niuniu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "niuniu", gameName: "抢庄牛牛" },
+			{ gameType: 6, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, strName: "byw", gameName: "AG捕鱼王" },
+			{ gameid: "buyu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "buyu", gameName: "AE捕鱼王" },
+			{ gTYPE: 7, mTYPE: 7004, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "wlby", gameName: "五龙捕鱼" },
+			{ gTYPE: 7, mTYPE: 7003, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "csby", gameName: "财神捕鱼" },
+			{ gTYPE: 7, mTYPE: 7001, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "lwby", gameName: "龙王捕鱼" },
+			{ gTYPE: 7, mTYPE: 7002, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "lwby2", gameName: "龙王捕鱼2" },
+			{ gameid: "zjh", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "zjh", gameName: "炸金花" },
+			{ gameid: "blackjack", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "blackjack", gameName: "21点" },
+			{ gameid: "baijiale", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "baijiale", gameName: "百家乐" },
+			{ gameid: "shuiguoji", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "shuiguoji", gameName: "水果机" },
+			{ kindID: 920, strName: "slwh", gameName: "森林舞会", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 610, strName: "ddz", gameName: "斗地主", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP },
+			{ kindID: 740, strName: "ermj", gameName: "二人麻将", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 620, strName: "dzpk", gameName: "德州扑克", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP },
+			{ kindID: 630, strName: "sss", gameName: "十三水", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 1940, strName: "jsys", gameName: "金鲨银鲨", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }
+		];
 		constructor(game: Game, page: any) {
 			super();
 			this._game = game;
@@ -29,7 +42,7 @@ module gamedating.component {
 		}
 
 		setData(): void {
-			// this.list_rm.dataSource = this.rm_data;
+			this.list_rm.dataSource = this.rm_data;
 		}
 
 		update() {
@@ -52,9 +65,9 @@ module gamedating.component {
 		}
 		set dataSource(v: any) {
 			if (v) {
-				let strSkin = DatingPath.sk_dating + "JDB/JDB_" + v.strName + ".png";
-				this.img.skin = strSkin;
 				this._data = v;
+				let strSkin = ApiMgr.GetSteSkinByPFCode(this._data.pfCode, this._data.strName);
+				this.img.skin = strSkin;
 			}
 		}
 
@@ -63,15 +76,17 @@ module gamedating.component {
 			this._mainView = mainView;
 			this._index = index;
 			this._game = game;
+			this.img_bz.visible = false;
 			this.on(LEvent.CLICK, this, this.onBtnClick);
 		}
 
 		private onBtnClick(): void {
-			// this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
-			// 	page && page.playAni()
-			// })
-			// let data = this._data.gTYPE + "&" + this._data.mTYPE + "&" + "about:blank";
-			// this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)
+			this._game.datingGame.apiMgr.GoGameByPFCode(this._data, this.btn_box);
+		}
+
+		private openPage(gameid): void {
+			let pageDef = getPageDef(gameid);
+			this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
 		}
 	}
 }
