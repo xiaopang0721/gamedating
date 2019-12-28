@@ -63,7 +63,6 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.Hud_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
-			this._viewUI.list_btns.dataSource = [];
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
