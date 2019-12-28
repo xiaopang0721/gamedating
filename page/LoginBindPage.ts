@@ -142,8 +142,9 @@ module gamedating.page {
                 this._viewUI.txt_account.on(LEvent.FOCUS, this, this.onFocus);
                 this._viewUI.txt_psd.on(LEvent.BLUR, this, this.onBlur);
                 this._viewUI.txt_account.on(LEvent.BLUR, this, this.onBlur);
-                this._notStageClickUI = [this._inputPhone, this._inputCode, this._inputSetPsd, this._inputSetNewPsd];
                 this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._viewUI.txt_account.text.length > 0;
+                this._notStageClickUI = [this._inputPhone, this._inputCode, this._inputSetPsd, this._inputSetNewPsd,
+                this._viewUI.btn_see_psd, this._viewUI.btn_see_newpsd, this._viewUI.btn_see_newpsd1];
             } else {
                 let pname: string = localGetItem("txt_account");
                 if (!pname || pname.toLowerCase() == "null") pname = "";
@@ -152,11 +153,12 @@ module gamedating.page {
 
                 this._inputAccount.settext(this._game, this._promptColor, "请输入手机号/账户...", this._inputColor, 26, 20, MyTextInput.TYPE_INPUT_ENGLISH);
                 this._inputPsd.settext(this._game, this._promptColor, "请输入密码...", this._inputColor, 26, 20, MyTextInput.TYPE_INPUT_ENGLISH, true);
-                this._notStageClickUI = [this._inputPhone, this._inputCode, this._inputAccount, this._inputPsd, this._inputSetPsd, this._inputSetNewPsd];
                 this._inputAccount.input.on(LEvent.INPUT, this, this.onChange);
                 this._inputAccount.on(LEvent.CLICK, this, this.onClickHandle);
                 this._inputPsd.on(LEvent.CLICK, this, this.onClickHandle);
                 this._viewUI.btn_account_clear.visible = this._type == LoginBindPage.TYPE_LOGIN_PASSWORD && this._inputAccount.input.text.length > 0;
+                this._notStageClickUI = [this._inputPhone, this._inputCode, this._inputAccount, this._inputPsd, this._inputSetPsd, this._inputSetNewPsd,
+                this._viewUI.btn_see_psd, this._viewUI.btn_see_newpsd, this._viewUI.btn_see_newpsd1];
             }
             this._inputPhone.settext(this._game, this._promptColor, "请输入手机号...", this._inputColor, 26, 11, MyTextInput.TYPE_INPUT_NUMBER, false, null, true);
             this._inputCode.settext(this._game, this._promptColor, "请输入验证码...", this._inputColor, 26, 6, MyTextInput.TYPE_INPUT_NUMBER);

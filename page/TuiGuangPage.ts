@@ -164,7 +164,7 @@ module gamedating.page {
 			this._viewUI.box_no_4.visible = !count;
 			this._viewUI.box_huizong.visible = count > 0;
 			this._viewUI.list_yonghu.visible = count > 0;
-			let colorHtml = this._viewUI.txt_total.color;
+			// let colorHtml = this._viewUI.txt_total.color;
 			let innerHtml = "";
 			if (!count) {
 				!data && this._game.datingGame.dailiyonghuMgr.getData(this._timeSelectIndex);
@@ -381,9 +381,9 @@ module gamedating.page {
 					this._viewUI.box3_1.visible = this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI;
 					if (data.msg && data.msg.list) {
 						if (this._curAgencytype == TuiGuangPage.TYPE_QUANMIN_DAILI) {
-							this._viewUI.txt_name.text = data.msg.list.account;
-							data.msg.list.fsvalue && (this._viewUI.txt_validBet.text = data.msg.list.fsvalue.toString());
-							data.msg.list.fs && (this._viewUI.txt_fanshui.text = data.msg.list.fs.toString());
+							// this._viewUI.txt_name.text = data.msg.list.account;
+							// data.msg.list.fsvalue && (this._viewUI.txt_validBet.text = data.msg.list.fsvalue.toString());
+							// data.msg.list.fs && (this._viewUI.txt_fanshui.text = data.msg.list.fs.toString());
 							this._viewUI.list_child.dataSource = data.msg.list.child;
 						} else {
 							this._viewUI.txt_name1.text = data.msg.list.account;
@@ -489,7 +489,7 @@ module gamedating.page {
 				totalList[i] = EnumToString.getPointBackNum(money, 2);
 			}
 			let total = totalList[0] + totalList[1] + totalList[2] + totalList[3] + totalList[4]; //全部代理返佣总金额
-			this._viewUI.txt_total.text = StringU.substitute("返佣总合计：{0}+{1}+{2}+{3}+{4}={5}", totalList[0], totalList[1], totalList[2], totalList[3], totalList[4], total);
+			// this._viewUI.txt_total.text = StringU.substitute("返佣总合计：{0}+{1}+{2}+{3}+{4}={5}", totalList[0], totalList[1], totalList[2], totalList[3], totalList[4], total);
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {

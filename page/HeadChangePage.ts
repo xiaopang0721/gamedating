@@ -31,6 +31,8 @@ module gamedating.page {
 				}
 			}
 			this._viewUI.list.vScrollBarSkin = "";
+			this._viewUI.list.scrollBar.autoHide = true;
+			this._viewUI.list.scrollBar.elasticDistance = 100;
 			this._viewUI.list.itemRender = HeadItemRender;
 			this._viewUI.list.spaceY = 0;
 			this._viewUI.list.renderHandler = new Handler(this, this.renderHandler);

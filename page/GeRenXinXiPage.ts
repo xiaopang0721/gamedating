@@ -531,16 +531,18 @@ module gamedating.page {
 			DatingGame.ins.jianPanMgr.openJianPan(textUI, viewUI, centerY);
 		}
 
-		//菜单栏
+		//时间栏
 		private menuTween(isOpen: boolean) {
 			if (isOpen) {
+				this._viewUI.panel_btn.visible = true;
 				this._viewUI.box_btn.visible = true;
 				this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
-				this._viewUI.box_btn.scale(0.2, 0.2);
+				this._viewUI.box_btn.y = 289;
 				this._viewUI.box_btn.alpha = 0;
-				Laya.Tween.to(this._viewUI.box_btn, { scaleX: 1, scaleY: 1, alpha: 1 }, 300, Laya.Ease.backInOut);
+				Laya.Tween.to(this._viewUI.box_btn, { y: 11, alpha: 1 }, 300, Laya.Ease.quartOut);
 			} else {
-				Laya.Tween.to(this._viewUI.box_btn, { scaleX: 0.2, scaleY: 0.2, alpha: 0 }, 300, Laya.Ease.backInOut, Handler.create(this, () => {
+				Laya.Tween.to(this._viewUI.box_btn, { y: 289, alpha: 0 }, 300, Laya.Ease.quartOut, Handler.create(this, () => {
+					this._viewUI.panel_btn.visible = false;
 					this._viewUI.box_btn.visible = false;
 					this._viewUI.btn_jiantou.rotation = this._viewUI.box_btn.visible ? 0 : -180;
 				}));

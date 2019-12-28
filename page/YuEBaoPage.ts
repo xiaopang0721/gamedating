@@ -260,6 +260,12 @@ module gamedating.page {
 			}
 		}
 
+		private _mousedownTarget: any;
+		protected onMouseDown(e: LEvent) {
+			this._mousedownTarget = e.target;
+			return true;
+		}
+
 		protected onBtnTweenEnd(e: any, target: any) {
 			let money;
 			switch (target) {
@@ -337,21 +343,12 @@ module gamedating.page {
 			}
 			if (this._viewUI == this._game.datingGame.jianPanMgr.pageUI) {
 				this._game.datingGame.jianPanMgr.closeJianPan();
-			} else if (e.target instanceof Box && e.target.parent == this._viewUI) {
-				this.onBlackSpriteClick();
 			}
-		}
-
-		/**
-		 * 黑底点击事件
-		 */
-		protected onBlackSpriteClick(): void {
-			if (this._isClickBlack) {
-				if (this._view == this._game.datingGame.jianPanMgr.pageUI) {
-					this._game.datingGame.jianPanMgr.closeJianPan();
-				} else {
-					super.onBlackSpriteClick();
-				}
+			else if (this._mousedownTarget != e.target) {
+				return false;
+			}
+			else if (e.target instanceof Box && e.target.parent == this._viewUI) {
+				super.onBlackSpriteClick();
 			}
 		}
 	}

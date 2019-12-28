@@ -2,27 +2,45 @@
 * name 转盘
 */
 module gamedating.page {
+	const enum ZHUANPAN {
+		TYPE_BOJIN = 0,	    //铂金盘
+		TYPE_ZUANSHI = 1,  //钻石盘
+	}
 	export class ZhuanPanPage extends game.gui.base.Page {
 		private _viewUI: ui.ajqp.dating.ZhuanPanUI;
+		private _zhongjiang: Array<ui.ajqp.dating.component.ZhuanPan_JiLuUI> = [];
+
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "zhuanpan.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
+				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
 			this._isNeedDuang = false;
 			this._isNeedBlack = true;
 			this._isClickBlack = false;
+			this._delta = 3000;
 		}
 
 		// 页面初始化函数
 		protected init(): void {
 			this._viewUI = this.createView("dating.ZhuanPanUI");
 			this.addChild(this._viewUI);
+			this._viewUI.list_record.vScrollBarSkin = "";
+			this._viewUI.list_record.scrollBar.autoHide = false;
+			this._viewUI.list_record.scrollBar.elasticDistance = 100;
+			this._viewUI.list_record.itemRender = this.createChildren("dating.component.ZhuanPanT2UI", ZhuanPanT2);
+			this._viewUI.list_record.renderHandler = new Handler(this, this.renderHandler1);
+			this._viewUI.list_record.dataSource = [];
 
 			this.initList();
 			this._viewUI.img_get_zs.alpha = 0;
 			this._viewUI.img_get_bojin.alpha = 0;
+			for (let i = 0; i < 4; i++) {
+				this._zhongjiang[i] = this._viewUI["zhongjiang" + i];
+			}
 		}
 
 		private initList(): void {
@@ -32,6 +50,11 @@ module gamedating.page {
 			this._viewUI.list_bojin.dataSource = [0, 0, 0, 0, 0, 0, 0, 0];
 		}
 
+		private renderHandler1(cell: any, index: number) {
+			if (cell) {
+				cell.setData(this._game, cell.dataSource, index);
+			}
+		}
 		private renderHandler(cell: ui.ajqp.dating.component.ZhuanPanTUI, index: number) {
 			if (cell) {
 				cell.txt_num.text = cell.dataSource.award_value;
@@ -45,41 +68,28 @@ module gamedating.page {
 		// 页面打开时执行函数
 		protected onOpen(): void {
 			super.onOpen();
-			this.initClip();
-			this._viewUI.guanbi.zOrder = 3;
-			this._viewUI.bojin.zOrder = 0;
 			this._viewUI.box_info.zOrder = 3;
-			this._viewUI.bojin_click.zOrder = 3;
 			//获取昨天可用来转盘积分
-			this._viewUI.guanbi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.bojin_click.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.btn_help.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_seemore.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.clip_bojin.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.clip_zuanshi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_go_zuanshi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_go_bojin.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.box_info1.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.box_info2.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._viewUI.ani1.addLabel(ZhuanPanPage.LABEL_CHANGE1, 75);
-			this._viewUI.ani1.addLabel(ZhuanPanPage.LABEL_CHANGE2, 30);
-			this._viewUI.ani1.on(LEvent.LABEL, this, this.updateLunBo);
-			this._viewUI.lb_underline1.y = 25;
-			this._viewUI.lb_underline2.y = 25;
+
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
-			this._game.network.call_get_turntablelist();
-			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.updateTunrPoint);
+			this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+
+			this._game.network.call_get_turntablelist();
 			this.getTurneConfig();
 			this.updateTunrPoint();
 			//当前显示的转盘
-			if (this._zuanShiData) {
-				if (this._total_turn_point >= this._zuanShiData[0].turn_point) {
-					this.clickChangePan();
-				};
+			if (this._zuanShiData && this._total_turn_point >= this._zuanShiData[0].turn_point) {
+				this.clickChangePan(1);
+			} else {
+				this.clickChangePan(0);
 			}
-
 		}
-
-		private static LABEL_CHANGE1;
-		private static LABEL_CHANGE2;
 
 		private getTurneConfig(): void {
 			if (!this._turnConfig)
@@ -110,33 +120,16 @@ module gamedating.page {
 			if (msg.type == Operation_Fields.OPRATE_GAME) {//游戏操作错误类型
 				switch (msg.reason) {
 					case Operation_Fields.OPRATE_GAME_SCORE_LUCKY_DRAW:             // 开始旋转
-						//旋转
 						this._isTurn = true;
 						let curData = this._turnConfig[this._curSelectIndex];
 						this._finalIndex = Number(msg.data) - 1;
 						let getView = this._curSelectIndex == 2 ? this._viewUI.img_get_bojin : this._viewUI.img_get_zs;
 						getView.alpha = 0;
+						this._viewUI.ani5.play(0, false);
 						this.startTurn(this._curSelectIndex, this._finalIndex);
 						this._game.playSound(Path.music_zhuanpan);
 						break;
 				}
-			}
-		}
-
-		private initClip(): void {
-			if (!this._clipNum1) {
-				this._clipNum1 = new DatingClip(DatingClip.TURANBLE_FONT);
-				this._clipNum1.x = this._viewUI.clip_num1.x;
-				this._clipNum1.y = this._viewUI.clip_num1.y;
-				this._viewUI.clip_num1.parent.addChild(this._clipNum1);
-				this._viewUI.clip_num1.removeSelf();
-			}
-			if (!this._clipNum2) {
-				this._clipNum2 = new DatingClip(DatingClip.TURANBLE_FONT);
-				this._clipNum2.x = this._viewUI.clip_num2.x;
-				this._clipNum2.y = this._viewUI.clip_num2.y;
-				this._viewUI.clip_num2.parent.addChild(this._clipNum2);
-				this._viewUI.clip_num2.removeSelf();
 			}
 		}
 
@@ -166,70 +159,37 @@ module gamedating.page {
 			}
 		}
 
-		private _isBoJinUp: boolean = true;
-		private _isCompleteAniUp: boolean = true;
-		private _isCompleteAniDown: boolean = true;
 		private _curSelectIndex: number = 1;
-		//转盘动画
-		private playZhuanPanAni(upView: Box, downView: Box): void {
-			let flag: boolean = downView == this._viewUI.zuanshipan;
-			this._curSelectIndex = flag ? 2 : 1;
-			//上面盘-下面
-			Laya.Tween.to(upView, { x: 584 }, 200, null, Handler.create(this, () => {
-				Laya.Tween.to(upView, { x: 500, alpha: 0, scaleX: 0.8, scaleY: 0.8 }, 200, null, Handler.create(this, () => {
-					this._viewUI.ani4.on(LEvent.COMPLETE, this, this.ani4Complete, [flag]);
-					Laya.Tween.to(upView, { x: 819, alpha: 1 }, 350, null, Handler.create(this, () => {
-						this._isCompleteAniUp = true;
-					}));
-				}));
-			}));
-			//下面盘->上面
-			Laya.Tween.to(downView, { x: 897, scaleX: 1, scaleY: 1, alpha: 0.8 }, 300, null, Handler.create(this, () => {
-				upView.zOrder = 1;
-				downView.zOrder = 2;
-				Laya.Tween.to(downView, { x: 640, scaleX: 1.05, scaleY: 1.05, alpha: 1 }, 300, null, Handler.create(this, () => {
-					Laya.Tween.to(downView, { scaleX: 1, scaleY: 1 }, 50, null, Handler.create(this, () => {
-						this._isCompleteAniDown = true;
-					}));
-				}));
-			}));
-			//ani4点击放隐藏动画,ani5轮盘到出来
-			this._viewUI.ani4.play(0, false);
-			//下面盘-上面边框显示，上面盘-下面盘边框隐藏
-			let dowmViewBorder;
-			let upViewBorder
-			if (downView == this._viewUI.bojinpan) {
-				dowmViewBorder = this._viewUI.box_border_bojin;
-				upViewBorder = this._viewUI.box_zs_border;
-			} else if (downView == this._viewUI.zuanshipan) {
-				dowmViewBorder = this._viewUI.box_zs_border;
-				upViewBorder = this._viewUI.box_border_bojin;
-			}
-			Laya.Tween.to(dowmViewBorder, { alpha: 1 }, 650);
-			Laya.Tween.to(upViewBorder, { alpha: 0 }, 750);
-
-			this.updateTunrPoint();
-		};
-
-		private ani4Complete(flag: boolean): void {
-			//按钮图片
-			this._viewUI.btn_pan_name.skin = DatingPath.ui_dating + "zhuanpan/" + (flag ? "tu_baijin01.png" : "tu_zuanshi01.png");
-			this._viewUI.img_pan_di.skin = DatingPath.ui_dating + "zhuanpan/" + (flag ? "tu_bj.png" : "tu_qh.png");
-			// this._viewUI.btn_pan_name.x = flag ? 69 : 63;
-			//按钮显示动画
-			this._viewUI.ani5.play(0, false);
-			this._viewUI.ani4.off(LEvent.COMPLETE, this, this.ani4Complete);
-		}
-
 		private _total_turn_point: number = 0;
 		private _turnConfig: any;
-		private _rewardRecords: any;
+		private _data: any;
 		protected onSucessHandler(data: any) {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_TURNTABLELIST) {//积分抽奖获奖记录
 				if (data && data.success == 0) {
-					this._rewardRecords = data;
+					this._data = data;
+					this.updateRecord();
 					this.updateText();
 				}
+			}
+		}
+
+		private _selfData: any;
+		private _allData: any;
+		private updateRecord() {
+			if (!this._data) return;
+			this._selfData = this._data.msg && this._data.msg.self ? this._data.msg.self.list : [];
+			//仅自己
+			let curData: Array<any> = this._selfData;
+			this._viewUI.list_record.dataSource = this._selfData;
+			if (curData && curData.length > 0) {
+				this._viewUI.img_norecord.visible = false;
+				this._viewUI.list_record.visible = !this._viewUI.img_norecord.visible;
+				this._viewUI.btn_seemore.visible = !this._viewUI.img_norecord.visible;
+				this._viewUI.list_record.dataSource = curData;
+			} else {
+				this._viewUI.img_norecord.visible = true;
+				this._viewUI.list_record.visible = !this._viewUI.img_norecord.visible;
+				this._viewUI.btn_seemore.visible = !this._viewUI.img_norecord.visible;
 			}
 		}
 
@@ -245,88 +205,102 @@ module gamedating.page {
 					this._viewUI.lb_have.color = this._total_turn_point >= turn_point ? "#0aff00" : "#ff0400";
 					this._viewUI.lb_total.text = StringU.substitute("/ {0}", curDatas[0] ? curDatas[0].turn_point : 0);
 					this._viewUI.lb_total.x = this._viewUI.lb_have.x + this._viewUI.lb_have.width + 10;
-					this._viewUI.btn_help.x = this._viewUI.lb_total.x + this._viewUI.lb_total.width + 35;
 				}
 			}
 			this.updateLunBo(true);
 		}
 
+		deltaUpdate() {
+			this.updateLunBo(false);
+		}
+
+		private _posConfig: number[] = [-30, 0, 30, 60, 90];
+		private _index: number = 0;
+		private _curReward: any;
 		private updateLunBo(isFirst: boolean): void {
-			if (!this._rewardRecords) return;
-			let index: number = this._viewUI.ani1.index;
-			let curOtherReward: any = this._rewardRecords.msg && this._rewardRecords.msg.all ? this._rewardRecords.msg.all.list : [];
-			if (!curOtherReward) return;
-			let randomIndex: number = isFirst ? 0 : MathU.randomRange(0, curOtherReward.length - 1);
-			let curReward = curOtherReward[randomIndex];
-			let name = EnumToString.getLimitStr(curReward.account, 4);
-			//轮播文本
-			if (index == 75 || isFirst) {
-				this._viewUI.lb_name1.text = StringU.substitute("「{0}」", name);
-				this._clipNum1.setText(curReward.award_value, true);
-				//左对齐
-				this._viewUI.lb_name1.x = this._viewUI.lb_one_1.x + this._viewUI.lb_one_1.width;
-				this._viewUI.lb_one_2.x = this._viewUI.lb_name1.x + this._viewUI.lb_name1.width;
-				this._clipNum1.x = this._viewUI.lb_one_2.x + this._viewUI.lb_one_2.width;
-				this._viewUI.lb_underline1.width = this._clipNum1.x + this._clipNum1.width - 40;
-			} else if (index == 30) {
-				randomIndex = isFirst ? 1 : MathU.randomRange(0, curOtherReward.length - 1);
-				curReward = curOtherReward[randomIndex];
-				name = EnumToString.getLimitStr(curReward.account, 4);
-				this._viewUI.lb_name2.text = StringU.substitute("「{0}」", name);
-				this._clipNum2.setText(curReward.award_value, true);
-				this._viewUI.lb_name2.x = this._viewUI.lb_two_1.x + this._viewUI.lb_two_1.width;
-				this._viewUI.lb_two_2.x = this._viewUI.lb_name2.x + this._viewUI.lb_name2.width;
-				this._clipNum2.x = this._viewUI.lb_two_2.x + this._viewUI.lb_two_2.width;
-				this._viewUI.lb_underline2.width = this._clipNum2.x + this._clipNum2.width - 40;
+			if (!this._data) return;
+			let alldata: any = this._data.msg && this._data.msg.all ? this._data.msg.all.list : [];
+			if (!alldata) return;
+			if (!isFirst) {
+				for (let i = 0; i < this._zhongjiang.length; i++) {
+					Laya.Tween.to(this._zhongjiang[i], { y: this._posConfig[i + 1] }, 500);
+				}
+				if (this._index > alldata.length - 1) this._index = 0;
+				this._curReward = alldata[this._index];
+				this._index++;
+				Laya.timer.once(500, this, () => {
+					//把第一个元素取出放到数组最后，并改变位置
+					this._zhongjiang.unshift(this._zhongjiang.pop());
+					this._zhongjiang[0].y = this._posConfig[0];
+					//给下一条数据赋值
+					this._zhongjiang[0].txt_name.text = EnumToString.getLimitStr(this._curReward.account, 6);
+					this._zhongjiang[0].txt_num.text = this._curReward.award_value;
+				})
+			} else {
+				this._index = MathU.randomRange(0, alldata.length - 1);
+				for (let i = 0; i < this._zhongjiang.length; i++) {
+					if (this._index > alldata.length - 1) this._index = 0;
+					this._curReward = alldata[this._index];
+					this._index++;
+					this._zhongjiang[i].txt_name.text = EnumToString.getLimitStr(this._curReward.account, 6);
+					this._zhongjiang[i].txt_num.text = this._curReward.award_value;
+				}
 			}
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
 			switch (target) {
-				case this._viewUI.box_info1://轮盘记录
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_ZHUANPAN_RECORD);
-					break;
-				case this._viewUI.box_info2://轮盘记录
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_ZHUANPAN_RECORD);
+				case this._viewUI.btn_seemore://查看更多记录
+					if (this._viewUI.txt_seemore.text == "查看更多") {
+						this._viewUI.txt_seemore.text = "点击收起"
+						this._viewUI.btn_seemore.y = 310;
+						this._viewUI.list_record.height = 220;
+						this._viewUI.panel_zhongjiang.visible = false;
+					} else {
+						this._viewUI.txt_seemore.text = "查看更多"
+						this._viewUI.btn_seemore.y = 210;
+						this._viewUI.list_record.height = 120;
+						this._viewUI.panel_zhongjiang.visible = true;
+					}
 					break;
 				case this._viewUI.btn_go_zuanshi://钻石盘开始
 					if (!this.judegeTurnCondition(this._zuanShiData)) return;
 					this._viewUI.btn_go_zuanshi.disabled = true;
-					this._viewUI.ani12.stop();
 					this._game.network.call_score_lucky_draw(2);
 					break;
 				case this._viewUI.btn_go_bojin://铂金盘开始
 					if (!this.judegeTurnCondition(this._boJinData)) return;
 					this._viewUI.btn_go_bojin.disabled = true;
-					this._viewUI.ani6.stop();
 					this._game.network.call_score_lucky_draw(1);
 					break;
-				case this._viewUI.guanbi:
-					this.close();
-					break;
-				case this._viewUI.bojin_click:
+				case this._viewUI.clip_bojin://点击铂金盘
 					if (this._isTurn) return;
-					this.clickChangePan();
+					this.clickChangePan(0);
 					break
-				case this._viewUI.btn_help://帮助
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_ZHUANPAN_HELP);
+				case this._viewUI.clip_zuanshi://点击钻石盘
+					if (this._isTurn) return;
+					this.clickChangePan(1);
 					break;
 			}
 		}
 
-		private clickChangePan(): void {
-			if (this._isCompleteAniUp && this._isCompleteAniDown) {
-				this._isCompleteAniUp = false;
-				this._isCompleteAniDown = false;
-				let bojinpan: Box = this._viewUI.bojinpan;
-				let zuanshipan: Box = this._viewUI.zuanshipan;
-				if (this._isBoJinUp) {
-					this.playZhuanPanAni(bojinpan, zuanshipan);
-					this._isBoJinUp = false;
-				} else {
-					this.playZhuanPanAni(zuanshipan, bojinpan);
-					this._isBoJinUp = true;
-				}
+		private clickChangePan(type: number): void {
+			if (type == ZHUANPAN.TYPE_BOJIN) {
+				this._curSelectIndex = 1;
+				this._viewUI.clip_bojin.disabled = true;
+				this._viewUI.bojinpan.visible = true;
+				this._viewUI.clip_zuanshi.disabled = false;
+				this._viewUI.zuanshipan.visible = false;
+				this._viewUI.ani3.play(0, true);
+				this._viewUI.ani4.stop();
+			} else {
+				this._curSelectIndex = 2;
+				this._viewUI.clip_zuanshi.disabled = true;
+				this._viewUI.zuanshipan.visible = true;
+				this._viewUI.clip_bojin.disabled = false;
+				this._viewUI.bojinpan.visible = false;
+				this._viewUI.ani4.play(0, true);
+				this._viewUI.ani3.stop();
 			}
 		}
 
@@ -343,72 +317,114 @@ module gamedating.page {
 
 		private _gridNum: number = 8;
 		private _finalIndex: number;
-		private _effectStartTime: number = 1000;	//转动开始后的动画开始播放时间
-		private _effectEndTime: number = 1000;  //转动停止前的动画停止播放时间
 		private _isTurn: boolean = false;
+		private _viewRunBox: Box;
 		private startTurn(type: number, index: number): void {
 			let viewRunBox;
 			let curData: any;
-			let aniBorder: Laya.FrameAnimation;
-			let aniGet: Laya.FrameAnimation;
-			let aniGo: Laya.FrameAnimation;
 			let imgGet;
 			let img_effect;
 			switch (type) {
 				case 1:
-					viewRunBox = this._viewUI.box_run_bojin;
+					this._viewRunBox = this._viewUI.box_run_bojin;
 					curData = this._boJinData;
-					aniGet = this._viewUI.ani10;
 					imgGet = this._viewUI.img_get_bojin;
-					aniGo = this._viewUI.ani6;
+					this._viewUI.ani3.stop();
 					break
 				case 2:
-					viewRunBox = this._viewUI.box_run_zuanshi;
+					this._viewRunBox = this._viewUI.box_run_zuanshi;
 					curData = this._zuanShiData;
-					aniGet = this._viewUI.ani11;
 					imgGet = this._viewUI.img_get_zs;
-					aniGo = this._viewUI.ani12;
+					this._viewUI.ani4.stop();
 					break
 			}
 			imgGet.alpha = 0;
 			//开始转
-			let r = MathU.randomRange(3, 6);
-			let curRotation: number = viewRunBox.rotation;
+			let r = 4;
+			this._curRotation = this._viewRunBox.rotation;
 			//圈数
-			let rotation: number = curRotation + ((360 - curRotation) + (360 - (360 / this._gridNum * index)) + 360 * r);
-			let time: number = r * 1200;
-			//转动动画控制
-			// Laya.timer.once(this._effectStartTime, this, () => {
-			// img_effect.alpha = 1;
-			// aniBorder.play(0, true);
-			// Laya.timer.once(time - this._effectStartTime - this._effectEndTime, this, () => {
-			// aniBorder.stop();
-
-			// img_effect.alpha = 0;
-			// 	})
-			// })
+			this._rotation = this._curRotation + ((360 - this._curRotation) + (360 - (360 / this._gridNum * index)) + 360 * r);
+			let time: number = r * 1750;
+			// this._time = 3000;
+			// this._curtime = 0;
+			// Laya.timer.once(5000, this, () => {
+			// 	this._curtime = 0;
+			// 	this._time = 3001;
+			// });
 			//时间
-			Laya.Tween.to(viewRunBox, { rotation: rotation }, time, Laya.Ease.strongInOut, Handler.create(this, this.completeTurnAni, [viewRunBox, aniGo, imgGet, aniGet, curData, index]))
+			Laya.Tween.to(this._viewRunBox, { rotation: this._rotation }, time, Laya.Ease.circInOut, Handler.create(this, this.completeTurnAni))
 		}
 
-		private completeTurnAni(viewRunBox, aniGo, imgGet, aniGet, curData, index): void {
+		//更新转盘角度
+		private _time: number = 3000;
+		private _curtime: number = 0;
+		private _rotation: number = 0;
+		private _curRotation: number = 0;
+		// update(diff: number) {
+		// 	super.update(diff);
+		// 	if (!this._isTurn) return;
+		// 	if (this._rotation <= 0) {
+		// 		this.completeTurnAni();
+		// 		return;
+		// 	}
+		// 	let v: number = 0;
+		// 	let v_max: number = 16;
+		// 	let p: number = this._curtime / this._time;
+		// 	if (this._time == 3001) {
+		// 		v = v_max * (1 - p * p);
+		// 		if (v <= 1) v = 1;
+		// 	} else {
+		// 		v = v_max * p * p;
+		// 		if (v >= v_max) v = v_max;
+		// 	}
+		// 	this._curtime += diff;
+		// 	console.log("v", v)
+		// 	console.log("this._curtime", this._curtime)
+		// 	this._viewRunBox.rotation += v;
+		// 	this._rotation -= v;
+		// }
+
+		private completeTurnAni(): void {
+			let viewRunBox;
+			let curData: any;
+			let imgGet;
+			let img_effect;
+			switch (this._curSelectIndex) {
+				case 1:
+					viewRunBox = this._viewUI.box_run_bojin;
+					curData = this._boJinData;
+					imgGet = this._viewUI.img_get_bojin;
+					img_effect = this._viewUI.ani1;
+					this._viewUI.ani3.play(0, true);
+					break
+				case 2:
+					viewRunBox = this._viewUI.box_run_zuanshi;
+					curData = this._zuanShiData;
+					imgGet = this._viewUI.img_get_zs;
+					img_effect = this._viewUI.ani1;
+					this._viewUI.ani4.play(0, true);
+					break
+			}
 			this._isTurn = false;
-			aniGo.play(0, true);
 			imgGet.alpha = 1;
-			aniGet.play(0, false);
 			this._viewUI.btn_go_zuanshi.disabled = false;
 			this._viewUI.btn_go_bojin.disabled = false;
-			let data = curData[index];
+			let data = curData[this._finalIndex];
 			viewRunBox.rotation = viewRunBox.rotation % 360;
+			img_effect.on(LEvent.COMPLETE, this, this.aniPlayOver, [img_effect, data]);
+			img_effect.play(0, false);
 			//发送协议重新获取数据
 			this._game.network.call_get_turntablelist();
+		}
+
+		private aniPlayOver(img_effect, data) {
+			img_effect.off(LEvent.COMPLETE, this, this.aniPlayOver);
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: RewardPage) => {
 				let icon = data.award_icon;
 				let skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", icon);
 				page.setData(data.award_value, skin);
 			})
 		}
-
 		public close(): void {
 			if (this._viewUI) {
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
@@ -420,4 +436,15 @@ module gamedating.page {
 		}
 	}
 
+	class ZhuanPanT2 extends ui.ajqp.dating.component.ZhuanPanT2UI {
+		private _game: Game;
+		private _data: any;
+		setData(game: Game, data: any, index: number) {
+			this._game = game;
+			this._data = data;
+			this.txt_time.text = Sync.getTimeShortStr(data.turn_time * 1000);
+			this.txt_type.text = (data.turn_name as string).substring(0, 2);
+			this.txt_money.text = data.award_value;
+		}
+	}
 }
