@@ -2,8 +2,15 @@
 * name 主界面
 */
 module gamedating.page {
-	export class HudMainPageQPAE extends game.gui.base.Page {
-		private _viewUI: ui.qpae.dating.DaTingUI;
+	export class HudMainPageQPAPI extends game.gui.base.Page {
+		private _viewUI: ui.qpapi.dating.DaTingUI;
+		private _avatar: AvatarUIShow;
+		private _boxItems: any[] = [];
+		private _clipItems: any[] = [];
+		//sk龙骨位置
+		private _avatarName: any = ["fmqq", "zrdz", "wrzx", "jddw"];
+		private _avatarPos: any = [[134, 272], [154, 327], [156, 287], [155, 329]];
+
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -31,13 +38,36 @@ module gamedating.page {
 			this._viewUI.list.itemRender = GameItemRender;
 			this._viewUI.list.renderHandler = new Handler(this, this.renderHandler);
 			this._viewUI.list.scrollBar.changeHandler = new Handler(this, this.onScrollChange);
-
+			if (!this._avatar) {
+				this._avatar = new AvatarUIShow();
+				this._viewUI.box_sk.addChild(this._avatar);
+			}
+			this._viewUI.btn_back.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			//标签页按钮
+			for (let index = 0; index < 4; index++) {
+				this._clipItems[index] = this._viewUI["clip_item" + index];
+				this._boxItems[index] = this._viewUI["box_item" + index];
+				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
+			}
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
-			this.onUpdateGameList();
 			this.onUpdatePlayerInfo();
-			this._viewUI.btn_back.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this.onSelectItem(0);
 			this._game.playMusic(Path.music_bg);
+		}
+
+		protected layout(): void {
+			super.layout();
+			if (this._viewUI) {
+				//重新调节tab按钮宽度和x位置
+				let x = 0;
+				let tabWidth = this._clientRealWidth / 4;
+				for (let i = 0; i < this._boxItems.length; i++) {
+					this._boxItems[i].width = tabWidth;
+					this._boxItems[i].x = x;
+					x += tabWidth;
+				}
+			}
 		}
 
 		protected onBtnTweenEnd(e: any, target: any) {
@@ -45,6 +75,37 @@ module gamedating.page {
 				case this._viewUI.btn_back:
 					this.exitGame();
 					break;
+			}
+		}
+
+		private _selectIndex: number = -1;
+		public onSelectItem(index: number = -1) {
+			if (!WebConfig.gamelist || this._selectIndex == index)
+				return;
+			this._selectIndex = index;
+			this.selectBoxItems(index, true);
+			this._avatar.loadSkeleton(DatingPath.sk_dating + this._avatarName[index], this._avatarPos[index][0], this._avatarPos[index][1]);
+			let b = this.onDealGameData(index);
+			if (b)
+				return;
+		}
+
+		private selectBoxItems(index: number, isplay: boolean = true) {
+			for (let i = 0; i < this._boxItems.length; i++) {
+				if (i == index) {
+					isplay && this._boxItems[i].ani1.play(0, false);
+					isplay && this._boxItems[i].ani2.play(0, true);
+					this._boxItems[i].clip.index = 2;
+					this._boxItems[i].img1.visible = true;
+					this._boxItems[i].img2.visible = true;
+					this._clipItems[i].index = 2;
+				} else {
+					this._boxItems[i].ani2.gotoAndStop(0);
+					this._boxItems[i].clip.index = 1;
+					this._boxItems[i].img1.visible = false;
+					this._boxItems[i].img2.visible = false;
+					this._clipItems[i].index = 1;
+				}
 			}
 		}
 
@@ -79,16 +140,80 @@ module gamedating.page {
 			this._viewUI.btn_gren.skin = this._game.datingGame.getHeadUrl(playerInfo.headimg, 1);
 		}
 
-		private onUpdateGameList() {
-			let data = WebConfig.gamelist;
+		private _gameNoNeed: string[] = ["zoo", "shisanshui"];
+		private onDealGameData(index: number) {
+			let game_list: any[] = []
+			let webPower: number = 0;
+			let enterGameInfo = this._game.sceneObjectMgr.mainPlayer ? this._game.sceneObjectMgr.mainPlayer.getEnterGameInfo() : {};
+			if (!WebConfig.gamelist) {
+				this._viewUI.list.dataSource = [];
+				return true;
+			}
+			// 先筛选有用信息
+			for (let i = 0; i < WebConfig.gamelist.length; i++) {
+				let dz_str: any = WebConfig.gamelist[i];
+				if (typeof dz_str === "number") continue;
+				if (!dz_str) continue;
+				let str: string = dz_str.replace("DZ_", "");
+				let str1 = str.replace("r_", "");
+				let times = enterGameInfo[str] ? enterGameInfo[str] : 0;
+				let type = -1;
+				let d;
+				if (str.indexOf("r_") == -1) {
+					d = DatingPageDef.GAME_TYPE_LIST[str1];
+				}
+				type = d && d.length != 0 ? d[0] : -1;
+				if (type > -1) {
+					//热门游戏 或 对应类型的游戏
+					if (index == DatingPageDef.TYPE_HOT || index == type) {
+						if (this._gameNoNeed.indexOf(str1) != -1) continue;
+						game_list.push([str.replace('_', ''), type, webPower, times]);
+						webPower++;
+					}
+				}
+			}
+			if (!game_list.length) {
+				this._viewUI.list.dataSource = [];
+				return true;
+			}
+
+			// 后台 + 玩家操作习惯排序
+			game_list.sort(this.onSortList);
+
+			// 按类整理
+			let gl = [];
+			for (let index = 0; index < game_list.length; index++) {
+				let arr = game_list[index];
+				gl.push([arr[0], arr[1]]);
+			}
+
+			this.onUpdateGameList(gl);
+		}
+
+		/**
+	   * 初始化排序列表
+	   */
+		private onSortList(a, b): number {
+			let v1: number = 0;
+			let v2: number = 0;
+			let a_power: number = 10000 - a[2];
+			let b_power: number = 10000 - b[2];
+			let a_times: number = a[3];
+			let b_times: number = b[3];
+			v1 = a_power + (a_times > 5 ? a_times + 100000 : 0);
+			v2 = b_power + (b_times > 5 ? b_times + 100000 : 0);
+			return v2 - v1;
+		}
+
+		private onUpdateGameList(gameList) {
+			let data = gameList;
 			if (!data || !data.length) {
 				this._viewUI.list.dataSource = [];
 			} else {
 				let list = [];
-				let jqqdGames = ['zoo', 'rshisanshui', 'mpniuniu', 'wxsaoleihb'];
 				for (let index = 0; index < data.length; index++) {
 					let element = data[index];
-					if (!element || element.indexOf("r_") != -1 || jqqdGames.indexOf(element) != -1) continue;
+					if (!element) continue;
 					list.push(element);
 				}
 				this._viewUI.list.dataSource = list;
@@ -139,8 +264,8 @@ module gamedating.page {
 	}
 
 	/**
-	 * 大厅入口 
-	 */
+	  * 大厅入口 
+	  */
 	class GameItemRender extends ui.qpae.dating.component.Hud_TUI {
 		private _game: Game;
 		private _data: string;

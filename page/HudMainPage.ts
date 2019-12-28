@@ -350,13 +350,15 @@ module gamedating.page {
 				this._viewUI.box_btn_top.right = 56;
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56;
-				this._viewUI.box_tabs.left = -11;
+				this._viewUI.box_tabs.left = -11 + 56;
+				this._viewUI.list_btns.left = 229 + 56;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
 				this._viewUI.box_btn_top.right = 0;
 				this._viewUI.box_bottomLeft.left = 0;
 				this._viewUI.box_bottomRight.right = 0;
 				this._viewUI.box_tabs.left = -11;
+				this._viewUI.list_btns.left = 229;
 			}
 			this.judgeBtnShow();
 			this.updateFenXiangPos();
@@ -854,6 +856,10 @@ module gamedating.page {
 		private _updateTip: ui.ajqp.dating.component.Effect_gxUI;
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.ajqp.dating.component.Effect_dengdaiUI;
+		private _hotSign: ui.ajqp.dating.component.Effect_huoreUI;
+		private _recommendSign: ui.ajqp.dating.component.Effect_tjUI;
+		private _hotList: string[] = ["wxsaoleihb", "mpniuniu"];
+		private _recommendList: string[] = ["longhu", "niuniu"];
 		constructor() {
 			super();
 			this.btn_box.on(LEvent.CLICK, this, this.onMouseHandle);
@@ -899,6 +905,46 @@ module gamedating.page {
 			}
 		}
 
+		//显示火热
+		private showHotSign() {
+			if (!this._hotSign) {
+				this._hotSign = new ui.ajqp.dating.component.Effect_huoreUI();
+				this._hotSign.centerX = 0;
+				this._hotSign.centerY = 0;
+				this._hotSign.ani1.play(0, true);
+				this.box_sign.addChild(this._hotSign);
+			}
+		}
+
+		//清理火热
+		private clearHotSign() {
+			if (this._hotSign) {
+				this._hotSign.removeSelf();
+				this._hotSign.destroy();
+				this._hotSign = null;
+			}
+		}
+
+		//显示推荐
+		private showRecommendSign() {
+			if (!this._recommendSign) {
+				this._recommendSign = new ui.ajqp.dating.component.Effect_tjUI();
+				this._recommendSign.centerX = 0;
+				this._recommendSign.centerY = 0;
+				this._recommendSign.ani1.play(0, true);
+				this.box_sign.addChild(this._recommendSign);
+			}
+		}
+
+		//清理推荐
+		private clearRecommendSign() {
+			if (this._recommendSign) {
+				this._recommendSign.removeSelf();
+				this._recommendSign.destroy();
+				this._recommendSign = null;
+			}
+		}
+
 		//显示进度
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
@@ -924,7 +970,14 @@ module gamedating.page {
 			return LoadingMgr.ins.getProgress(this._gameStr) || JsLoader.ins.getProgress(this._gameStr);
 		}
 
+		private _time: number = 60000;
 		update() {
+			if (this._time <= 0) {
+				this._time = 60000;
+				this.updateOnline();
+			} else {
+				this._time -= 100;
+			}
 			if (LoadingMgr.ins.isLoaded(this._gameStr)) {
 				this.clearUpdate();
 				this.clearProgress();
@@ -966,7 +1019,29 @@ module gamedating.page {
 			this._type = data[1];
 			this._index = index;
 			this.img.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + ".png";
-			this._game.datingGame.OnlineNumMgr.onUpdateNum(this._gameStr);
+			this.updateOnline();
+			//添加火爆标志
+			if (this._hotList.indexOf(this._gameStr) != -1) {
+				this.showHotSign();
+			} else {
+				this.clearHotSign();
+			}
+			//添加推荐标志
+			if (this._recommendList.indexOf(this._gameStr) != -1) {
+				this.showRecommendSign();
+			} else {
+				this.clearRecommendSign();
+			}
+		}
+
+		private updateOnline() {
+			//在线人数显示
+			if (this._type != DatingPageDef.TYPE_CARD) {
+				this.box_online.visible = true;
+				this.txt_online.text = this._game.datingGame.OnlineNumMgr.getOnlineNum(this._gameStr);
+			} else {
+				this.box_online.visible = false;
+			}
 		}
 
 		private onMouseHandle() {
@@ -1033,6 +1108,8 @@ module gamedating.page {
 			this.clearUpdate();
 			this.clearProgress();
 			this.clearWait();
+			this.clearHotSign();
+			this.clearRecommendSign();
 			super.destroy();
 		}
 
