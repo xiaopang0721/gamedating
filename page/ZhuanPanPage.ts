@@ -125,7 +125,6 @@ module gamedating.page {
 						this._finalIndex = Number(msg.data) - 1;
 						let getView = this._curSelectIndex == 2 ? this._viewUI.img_get_bojin : this._viewUI.img_get_zs;
 						getView.alpha = 0;
-						this._viewUI.ani5.play(0, false);
 						this.startTurn(this._curSelectIndex, this._finalIndex);
 						this._game.playSound(Path.music_zhuanpan);
 						break;
@@ -287,20 +286,30 @@ module gamedating.page {
 		private clickChangePan(type: number): void {
 			if (type == ZHUANPAN.TYPE_BOJIN) {
 				this._curSelectIndex = 1;
-				this._viewUI.clip_bojin.disabled = true;
 				this._viewUI.bojinpan.visible = true;
-				this._viewUI.clip_zuanshi.disabled = false;
 				this._viewUI.zuanshipan.visible = false;
+				this._viewUI.img_bojin.visible = true;
+				this._viewUI.clip_bojin.mouseEnabled = false;
+				this._viewUI.clip_zuanshi.mouseEnabled = true;
+				//待机特效
 				this._viewUI.ani3.play(0, true);
-				this._viewUI.ani4.stop();
+				this._viewUI.ani4.gotoAndStop(0);
+				//选中特效
+				this._viewUI.ani7.play(0, true);
+				this._viewUI.ani8.gotoAndStop(0);
 			} else {
 				this._curSelectIndex = 2;
-				this._viewUI.clip_zuanshi.disabled = true;
 				this._viewUI.zuanshipan.visible = true;
-				this._viewUI.clip_bojin.disabled = false;
 				this._viewUI.bojinpan.visible = false;
+				this._viewUI.img_zuanshi.visible = true;
+				this._viewUI.clip_bojin.mouseEnabled = true;
+				this._viewUI.clip_zuanshi.mouseEnabled = false;
+				//待机特效
 				this._viewUI.ani4.play(0, true);
-				this._viewUI.ani3.stop();
+				this._viewUI.ani3.gotoAndStop(0);
+				//选中特效
+				this._viewUI.ani8.play(0, true);
+				this._viewUI.ani7.gotoAndStop(0);
 			}
 		}
 
@@ -329,13 +338,17 @@ module gamedating.page {
 					this._viewRunBox = this._viewUI.box_run_bojin;
 					curData = this._boJinData;
 					imgGet = this._viewUI.img_get_bojin;
-					this._viewUI.ani3.stop();
+					this._viewUI.ani5.play(0, false);
+					this._viewUI.ani3.gotoAndStop(0);
+					this._viewUI.img_bojin.visible = false;
 					break
 				case 2:
 					this._viewRunBox = this._viewUI.box_run_zuanshi;
 					curData = this._zuanShiData;
 					imgGet = this._viewUI.img_get_zs;
-					this._viewUI.ani4.stop();
+					this._viewUI.ani6.play(0, false);
+					this._viewUI.ani4.gotoAndStop(0);
+					this._viewUI.img_zuanshi.visible = false;
 					break
 			}
 			imgGet.alpha = 0;
@@ -395,14 +408,12 @@ module gamedating.page {
 					curData = this._boJinData;
 					imgGet = this._viewUI.img_get_bojin;
 					img_effect = this._viewUI.ani1;
-					this._viewUI.ani3.play(0, true);
 					break
 				case 2:
 					viewRunBox = this._viewUI.box_run_zuanshi;
 					curData = this._zuanShiData;
 					imgGet = this._viewUI.img_get_zs;
-					img_effect = this._viewUI.ani1;
-					this._viewUI.ani4.play(0, true);
+					img_effect = this._viewUI.ani2;
 					break
 			}
 			this._isTurn = false;
@@ -419,6 +430,13 @@ module gamedating.page {
 
 		private aniPlayOver(img_effect, data) {
 			img_effect.off(LEvent.COMPLETE, this, this.aniPlayOver);
+			if (this._curSelectIndex == 1) {
+				this._viewUI.img_bojin.visible = true;
+				this._viewUI.ani3.play(0, true);
+			} else {
+				this._viewUI.img_zuanshi.visible = true;
+				this._viewUI.ani4.play(0, true);
+			}
 			this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: RewardPage) => {
 				let icon = data.award_icon;
 				let skin = StringU.substitute(DatingPath.ui_dating_tongyong + "{0}.png", icon);
