@@ -14,10 +14,6 @@ module gamedating.managers {
         //真人视讯
         public static TYPE_ZRSX: number = 5;
 
-        //AE棋牌
-        public static TYPE_QP_AE: number = 0;
-        //开元棋牌
-        public static TYPE_QP_KY: number = 1;
         //敬请期待
         public static TYPE_QP_NONE: number = 2;
 
@@ -81,6 +77,97 @@ module gamedating.managers {
                         msg.data;
                         break
                 }
+            }
+        }
+
+        public static GetSteSkinByPFCode(pfCode: number, strName: string): string {
+            let strSkin = ""
+            if (pfCode == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+                strSkin = DatingPath.sk_dating + "KY/KY_" + strName + ".png";
+            } else if (pfCode == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) {
+                strSkin = DatingPath.sk_dating + "DZ_" + strName.replace("r_", "r") + ".png";
+            } else if (pfCode == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+                strSkin = DatingPath.sk_dating + 'JDB/JDB_' + strName + ".png";
+            } else if (pfCode == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
+                strSkin = DatingPath.sk_dating + "SX/SX_" + strName + ".png";
+            }
+            return strSkin;
+        }
+
+        public GoGameByPFCode(data: any, btn_box: any) {
+            this._game.uiRoot.btnTween(btn_box, this, () => {
+                switch (data.pfCode) {
+                    case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP:
+                        this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+                            page && page.playAni()
+                        })
+                        data = "about:blank" + "&" + data.gameType;
+                        this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, data)
+                        break
+                    case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP:
+                        this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+                            page && page.playAni()
+                        })
+                        this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, data.kindID.toString())
+                        break
+                    case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP:
+                        this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
+                            page && page.playAni()
+                        })
+                        data = data.gTYPE + "&" + data.mTYPE + "&" + "about:blank";
+                        this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)
+                        break
+                    case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP:
+                        let gameid = data.gameid.replace("r_", "r").toString();
+                        if (LoadingMgr.ins.isLoaded(gameid)) {
+                            JsLoader.ins.startLoad(gameid, false, Handler.create(this, (assets) => {
+                                this.openPage(gameid);
+                            }))
+                        } else {
+                            JsLoader.ins.startLoad(gameid, true);
+                            this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameid)));
+                        }
+                        break
+                }
+            })
+        }
+
+        private openPage(gameId: string) {
+            //房卡类型打开创建房间界面
+            if (gameId.indexOf("r") > -1) {
+                if (gameId == "r" + "paodekuai") {
+                    this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: any) => {
+                        page.game_id = gameId;
+                        page.dataSource = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;// 等于type
+                    });
+                } else {
+                    this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: any) => {
+                        page.game_id = gameId;
+                        page.dataSource = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;// 等于type
+                    });
+                }
+                return;
+            }
+            //非房卡类型打开游戏场次界面
+            let pageDef = getPageDef(gameId);
+            //調試模式
+            let CLOSE_LIST = isDebug ? [] : [];
+            if (pageDef["__enterMapLv"]) {
+                this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
+            }
+            else if (CLOSE_LIST.indexOf(gameId) == -1) {
+                this._game.uiRoot.HUD.open(gameId + 1, (page: Page) => {
+                    this._game.uiRoot.HUD.closeAll([gameId + 1]);
+                }, (page: Page) => {
+                    // 场次返回大厅回调
+                    if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
+                        this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+                            this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
+                        }, null, 0);
+                    }
+                });
+            } else {
+                this._game.showTips("开发中,敬请期待!");
             }
         }
 

@@ -6,12 +6,12 @@ module gamedating.component {
 		private _game: Game;
 		public page: any;
 		public static KY_DATA =
-		[{ kindID: 600, strName: "21dian", gameName: "21点" }, { kindID: 1960, strName: "bcbm", gameName: "奔驰宝马" }, { kindID: 910, strName: "bjl", gameName: "百家乐" }, { kindID: 930, strName: "brnn", gameName: "百人牛牛" },
-		{ kindID: 610, strName: "ddz", gameName: "斗地主" }, { kindID: 620, strName: "dzpk", gameName: "德州扑克" }, { kindID: 720, strName: "ebg", gameName: "二八杠" }, { kindID: 740, strName: "ermj", gameName: "二人麻将" }
-			, { kindID: 1940, strName: "jsys", gameName: "金鲨银鲨" }, { kindID: 230, strName: "jszjh", gameName: "极速炸金花" }, { kindID: 890, strName: "kpqznn", gameName: "看牌抢庄牛牛" }, { kindID: 830, strName: "qznn", gameName: "抢庄牛牛" }
-			, { kindID: 730, strName: "qzpj", gameName: "抢庄牌九" }, { kindID: 860, strName: "sg", gameName: "三公" }, { kindID: 920, strName: "slwh", gameName: "森林舞会" }, { kindID: 630, strName: "sss", gameName: "十三水" }
-			, { kindID: 870, strName: "tbnn", gameName: "通比牛牛" }, { kindID: 1950, strName: "wrzjh", gameName: "万人炸金花" }, { kindID: 650, strName: "xlch", gameName: "血流成河" }, { kindID: 900, strName: "yzlh", gameName: "押注龙虎" }
-			, { kindID: 220, strName: "zjh", gameName: "炸金花" }]
+		[{ kindID: 600, strName: "21dian", gameName: "21点", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 1960, strName: "bcbm", gameName: "奔驰宝马", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 910, strName: "bjl", gameName: "百家乐", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 930, strName: "brnn", gameName: "百人牛牛", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP },
+		{ kindID: 610, strName: "ddz", gameName: "斗地主", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 620, strName: "dzpk", gameName: "德州扑克", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 720, strName: "ebg", gameName: "二八杠", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 740, strName: "ermj", gameName: "二人麻将", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }
+			, { kindID: 1940, strName: "jsys", gameName: "金鲨银鲨", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 230, strName: "jszjh", gameName: "极速炸金花", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 890, strName: "kpqznn", gameName: "看牌抢庄牛牛", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 830, strName: "qznn", gameName: "抢庄牛牛", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }
+			, { kindID: 730, strName: "qzpj", gameName: "抢庄牌九", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 860, strName: "sg", gameName: "三公", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 920, strName: "slwh", gameName: "森林舞会", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 630, strName: "sss", gameName: "十三水", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }
+			, { kindID: 870, strName: "tbnn", gameName: "通比牛牛", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 1950, strName: "wrzjh", gameName: "万人炸金花", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 650, strName: "xlch", gameName: "血流成河", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }, { kindID: 900, strName: "yzlh", gameName: "押注龙虎", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }
+			, { kindID: 220, strName: "zjh", gameName: "炸金花", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_KYQP }]
 
 		constructor(game: Game, page: any) {
 			super();
@@ -38,7 +38,17 @@ module gamedating.component {
 		}
 
 		setData(): void {
-			let pt_data = [WebConfig.gamelist, ApiListPT.KY_DATA, []]
+			let ae_data = []
+			for (let index = 0; index < WebConfig.gamelist.length; index++) {
+				let element = WebConfig.gamelist[index];
+				let obj = {
+					pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP,
+					strName: element,
+					gameid: element,
+				}
+				ae_data.push(obj)
+			}
+			let pt_data = [ae_data, ApiListPT.KY_DATA, []]
 			this.list_qp.dataSource = pt_data;
 		}
 
@@ -245,13 +255,13 @@ module gamedating.component {
 
 		private updateUI(): void {
 			let strSkin = "";
-			if (this.index == ApiMgr.TYPE_QP_AE) {
+			if (this.index == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP - 1) {
 				strSkin = DatingPath.sk_dating + "QP/QP_ae.png";
-				this._type = ApiMgr.TYPE_QP_AE;
-			} else if (this.index == ApiMgr.TYPE_QP_KY) {
+				this._type = Web_operation_fields.GAME_PLATFORM_TYPE_AEQP - 1;
+			} else if (this.index == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP - 1) {
 				strSkin = DatingPath.sk_dating + "QP/QP_ky.png";
-				this._type = ApiMgr.TYPE_QP_KY;
-			} else if (this.index == ApiMgr.TYPE_QP_NONE) {
+				this._type = Web_operation_fields.GAME_PLATFORM_TYPE_KYQP - 1;
+			} else {
 				strSkin = DatingPath.sk_dating + "QP/QP_qd.png";
 				this._type = ApiMgr.TYPE_QP_NONE;
 			}
@@ -272,8 +282,9 @@ module gamedating.component {
 		}
 
 		set dataSource(v) {
-
-			this._data = v;
+			if (v) {
+				this._data = v;
+			}
 		}
 
 		set setAlpha(v: number) {
@@ -289,75 +300,12 @@ module gamedating.component {
 			this._game = game;
 			this._page = page;
 			this._type = type;
-			let strSkin = ""
-			if (this._type == ApiMgr.TYPE_QP_KY) {
-				strSkin = DatingPath.sk_dating + "KY/KY_" + this._data.strName + ".png";
-			} else if (this._type == ApiMgr.TYPE_QP_AE) {
-				this._data = this._data.replace("r_", "r");
-				strSkin = DatingPath.sk_dating + "DZ_" + this._data + ".png";
-			}
+			let strSkin = ApiMgr.GetSteSkinByPFCode(this._data.pfCode, this._data.strName);
 			this.img.skin = strSkin;
 		}
 
 		private onMouseHandle() {
-			if (this._type == ApiMgr.TYPE_QP_KY) {
-				this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
-					page && page.playAni()
-				})
-				this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, this._data.kindID.toString())
-			} else if (this._type == ApiMgr.TYPE_QP_AE) {
-				if (!this._data) return;
-				this._game.uiRoot.btnTween(this.btn_box, this, () => {
-					let data = this._data;
-					if (LoadingMgr.ins.isLoaded(data)) {
-						JsLoader.ins.startLoad(data, false, Handler.create(this, (assets) => {
-							this.openPage(data);
-						}))
-					} else {
-						JsLoader.ins.startLoad(data, true);
-						this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data)));
-					}
-				});
-			}
-		}
-
-		private openPage(data) {
-			//房卡类型打开创建房间界面
-			if (this._data.indexOf("r") > -1) {
-				if (this._data == "r" + "paodekuai") {
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: any) => {
-						page.game_id = this._data;
-						page.dataSource = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;// 等于type
-					});
-				} else {
-					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: any) => {
-						page.game_id = this._data;
-						page.dataSource = WebConfig.hudgametype = DatingPageDef.TYPE_CARD;// 等于type
-					});
-				}
-				return;
-			}
-			//非房卡类型打开游戏场次界面
-			let pageDef = getPageDef(data);
-			//調試模式
-			let CLOSE_LIST = isDebug ? [] : [];
-			if (pageDef["__enterMapLv"]) {
-				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
-			}
-			else if (CLOSE_LIST.indexOf(data) == -1) {
-				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
-					this._game.uiRoot.HUD.closeAll([data + 1]);
-				}, (page: Page) => {
-					// 场次返回大厅回调
-					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
-						this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
-							this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
-						}, null, 0);
-					}
-				});
-			} else {
-				this._game.showTips("开发中,敬请期待!");
-			}
+			this._game.datingGame.apiMgr.GoGameByPFCode(this._data,this.btn_box);
 		}
 	}
 }

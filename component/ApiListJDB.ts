@@ -34,7 +34,7 @@ module gamedating.component {
 			let mType = parseFloat(gameid)
 			for (let i = 0; i < ApiListJDB.JBD_DATA.length; i++) {
 				let cur_data = ApiListJDB.JBD_DATA[i]
-				if ( cur_data.mTYPE == mType) {
+				if (cur_data.mTYPE == mType) {
 					return cur_data.gameName
 				}
 			}
@@ -127,11 +127,8 @@ module gamedating.component {
 		}
 
 		private onBtnClick(): void {
-			this._game.uiRoot.general.open(PageDef.PAGE_WAITEFFECT, (page: WaitEffectPage) => {
-				page && page.playAni()
-			})
-			let data = this._data.gTYPE + "&" + this._data.mTYPE + "&" + "about:blank";
-			this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)
+			this._data.pfCode = Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP;
+			this._game.datingGame.apiMgr.GoGameByPFCode(this._data, this.btn_box);
 		}
 	}
 }
