@@ -133,16 +133,17 @@ module gamedating.page {
 
 		private _isUpdated: boolean;
 		private selectHandler(index: number) {
+			let v = this._viewUI.list_tab.dataSource[index];
 			this._viewUI.list_tab.selectedIndex = index;
-			this._viewUI.box0.visible = index == GeRenXinXiPage.TYPE_GRZX - 1;
-			this._viewUI.box1.visible = index == GeRenXinXiPage.TYPE_SZBB - 1;
+			this._viewUI.box0.visible = v == GeRenXinXiPage.TYPE_GRZX;
+			this._viewUI.box1.visible = v == GeRenXinXiPage.TYPE_SZBB;
 			if (index == 1) {
 				this._isUpdated = false;
 				this.onUpdateDataInfo();
 			}
-			this._viewUI.box2.visible = index == GeRenXinXiPage.TYPE_YXSZ - 1;
-			this._viewUI.box3.visible = index == GeRenXinXiPage.TYPE_TZJL - 1;
-			this._viewUI.box4.visible = index == GeRenXinXiPage.TYPE_GRBB - 1;
+			this._viewUI.box2.visible = v == GeRenXinXiPage.TYPE_YXSZ;
+			this._viewUI.box3.visible = v == GeRenXinXiPage.TYPE_TZJL;
+			this._viewUI.box4.visible = v == GeRenXinXiPage.TYPE_GRBB;
 			if (this._viewUI.box3.visible) {
 				if (!this._api_tz) {
 					this.addApiTZUI();
