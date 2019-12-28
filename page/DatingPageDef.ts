@@ -118,11 +118,11 @@ module gamedating.page {
 			PageDef._pageClassMap[DatingPageDef.PAGE_TIPS] = TipsPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GUEST_TIP] = GuestTipPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_QUIT_TIPS] = TipsQuit;
-			// if (WebConfig.enterGameLocked) {
+			if (WebConfig.enterGameLocked) {
 				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPageQPAPI;
-			// } else {
-			// 	PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
-			// }
+			} else {
+				PageDef._pageClassMap[DatingPageDef.PAGE_HUD] = HudMainPage;
+			}
 			PageDef._pageClassMap[DatingPageDef.PAGE_XIAOXI] = MessagePage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GENGGAINC] = GengGaiNCPage;
 			PageDef._pageClassMap[DatingPageDef.PAGE_GET_REWARD] = RewardPage;
