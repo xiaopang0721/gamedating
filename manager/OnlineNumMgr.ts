@@ -3,7 +3,6 @@
 */
 module gamedating.managers {
 	export class OnlineNumMgr extends gamecomponent.managers.BaseMgr {
-		static readonly EVENT_ONLINE_NUM_CHANGE: string = "OnlineNumMgr.change";
 		//游戏类别热门等级-超热门类
 		static readonly GAME_TYPE_HOT_1 = ["buyu"];
 		//游戏类别热门等级-热门类
