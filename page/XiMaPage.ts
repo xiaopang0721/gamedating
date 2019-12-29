@@ -158,11 +158,11 @@ module gamedating.page {
 			let mainVip: number = this._mainPlayer.GetVipLevel();
 			for (let i = 0; i < this._curInfo.length; i++) {
 				let curData = this._curInfo[i];
-				if (curData.viplv == mainVip) {
+				if (curData && curData.viplv == mainVip) {
 					return curData.fs_prec
 				}
 			}
-			return this._curInfo[this._curInfo.length - 1].viplv
+			return 0
 		}
 
 		public close(): void {
