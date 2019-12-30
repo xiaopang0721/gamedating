@@ -187,7 +187,7 @@ module gamedating.page {
 					this._clip_vip.destroy();
 					this._clip_vip = null;
 				}
-				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
+				// this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
 				this._box_btn_top = null;
 				this._box_btn_bottom = null;
 				this._apiPTList && this._apiPTList.close();
@@ -341,8 +341,8 @@ module gamedating.page {
 		private _box_btn_top: { [key: number]: Button } = {};
 		private _box_btn_bottom: { [key: number]: Button } = {};
 		updatePos() {
-			// if (this._viewUI.list_btns.dataSource)
-			// 	this._viewUI.list_btns.scrollBar.max = this._listBarMax;
+			if (this._viewUI.list_btns.dataSource)
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 			this._viewUI.list_btns.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
 			if (this._game.isFullScreen) {
 				this._viewUI.box_btn_top_left.left = 56;
@@ -397,11 +397,11 @@ module gamedating.page {
 		private updateFenXiangPos(): void {
 			//分享位置重设
 			this._viewUI.btn_qifu.x = this._viewUI.btn_shouchong.x;
-			if (this._viewUI.btn_qifu.visible) {
-				this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_qifu);
-			} else {
-				this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
-			}
+			// if (this._viewUI.btn_qifu.visible) {
+			// 	this._game.sceneGame.scaleEffectFactory.add(this._viewUI.btn_qifu);
+			// } else {
+			// 	this._game.sceneGame.scaleEffectFactory.remove(this._viewUI.btn_qifu);
+			// }
 		}
 
 		private onBtnClickHandle(e: LEvent): void {
@@ -673,18 +673,18 @@ module gamedating.page {
 
 		public isOpenPage: boolean;
 		private _isFromRoom: boolean;
-		// private _listBarMax: number = 0;
+		private _listBarMax: number = 0;
 
 		private onUpdateGameList(gameList) {
 			let data = gameList;
 			let listItemCount = Math.ceil(data.length / 2);
-			// this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
-			// this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
+			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
 			// 如果从房间出来，不播放入场动画
 			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
-				// this._viewUI.list_btns.scrollBar.max = this._listBarMax;
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.scrollTo(WebConfig.scrollBarValue || 0);
 				this._isFromRoom = false;
 				return;
@@ -694,7 +694,7 @@ module gamedating.page {
 			Laya.timer.frameOnce(3, this, () => {
 				let i = 0;
 				this._viewUI.list_btns.visible = true;
-				// this._viewUI.list_btns.scrollBar.max = this._listBarMax;
+				this._viewUI.list_btns.scrollBar.max = this._listBarMax;
 				this._viewUI.list_btns.cells.forEach(element => {
 					let cell = element as GameItemRender;
 					cell.setAlpha = 0;

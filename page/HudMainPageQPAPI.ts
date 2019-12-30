@@ -8,6 +8,7 @@ module gamedating.page {
 		private _boxItems: any[] = [];
 		private _viewItems: any[] = [];
 		private _clipItems: any[] = [];
+		private _imgKong: any[] = [];
 		//sk龙骨位置
 		private _avatarName: any = ["fmqq", "zrdz", "wrzx", "jddw"];
 		private _avatarPos: any = [[136, 292], [151, 331], [146, 375], [145, 298]];
@@ -16,10 +17,17 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
-				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "tongyong.atlas",
 				DatingPath.atlas_dating_ui + "anniu.atlas",
+				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "datinggg.atlas",
+				DatingPath.atlas_dating_ui + "gxz.atlas",
+				DatingPath.atlas_dating_ui + "huore.atlas",
+				DatingPath.atlas_dating_ui + "new.atlas",
+				DatingPath.atlas_dating_ui + "tj.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
 				DatingPath.atlas_dating_ui + "zt.atlas",
+				DatingPath.atlas_dating_ui + "dd.atlas",
+				DatingPath.atlas_dating_ui + "update.atlas",
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -54,6 +62,7 @@ module gamedating.page {
 			for (let index = 0; index < 4; index++) {
 				this._viewItems[index] = this._viewUI["view" + index];
 				this._clipItems[index] = this._viewUI["clip" + index];
+				this._imgKong[index] = this._viewUI["img_kong" + index];
 				this._boxItems[index] = this._viewUI["box_item" + index];
 				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
 			}
@@ -75,14 +84,25 @@ module gamedating.page {
 
 		//重新调节tab按钮宽度和x位置
 		private onUpdateTab() {
-			let x = 0;
-			let tabWidth = Laya.stage.width / 4;
-			let scale_new = tabWidth / 323;
+			let x: number = 0;
+			let widthKong: number = 4; //空隙宽度
+			let tabWidth = (Laya.stage.width - widthKong * 3) / 4; //tab宽度
+			let scaleX_new = tabWidth / 317; //组件缩放比
+			console.log("Laya.stage.width", Laya.stage.width)
+			console.log("tabWidth", tabWidth)
+			console.log("scaleX_new", scaleX_new)
+			console.log("scale", Laya.stage.width / this._clientWidth)
 			for (let i = 0; i < this._boxItems.length; i++) {
-				this._boxItems[i].tabWidth;
-				this._viewItems[i].scale(scale_new, 1);
+				this._viewItems[i].scaleX = scaleX_new;
 				this._boxItems[i].x = x;
+				console.log("this._boxItems[i].x", this._boxItems[i].x)
+				this._boxItems[i].width = tabWidth;
 				x += tabWidth;
+				if (i < 3) {
+					this._imgKong[i].x = x;
+					console.log("this._imgKong[i].x", this._imgKong[i].x)
+					x += 4;
+				}
 			}
 		}
 
@@ -92,6 +112,7 @@ module gamedating.page {
 					this.exitGame();
 					break;
 				case this._viewUI.btn_set:
+					this._game.uiRoot.HUD.open(DatingPageDef.PAGE_API_SETTING);
 					break;
 				case this._viewUI.btn_full:
 					break;
@@ -253,9 +274,17 @@ module gamedating.page {
 			}
 		}
 
+		saveListStatus() {
+			let listData = this._game.datingGame.createHudTabScrollData();
+			if (listData) {
+				listData.tabIndex = this._selectIndex;
+				listData.value = this._viewUI.list.scrollBar.value;
+			}
+		}
+
 		private renderHandler(cell: GameItemRender, index: number) {
 			if (!cell) return;
-			cell.setData(this._game, cell.dataSource, index);
+			cell.setData(this, this._game, cell.dataSource, index);
 		}
 
 		public close(): void {
@@ -284,26 +313,31 @@ module gamedating.page {
 	}
 
 	/**
-	  * 大厅入口 
+	  * 大厅入口
 	  */
 	class GameItemRender extends ui.qpapi.dating.component.Hud_TUI {
 		private _game: Game;
-		private _data: string;
+		private _page: HudMainPageQPAPI;
+		private _gameStr: string;
+		private _type: string;
 		private _index: number;
 		private _updateTip: ui.qpapi.dating.component.Effect_gxUI;
 		private _loadingTip: HudLoadingTip;
 		private _waitingTip: ui.qpapi.dating.component.Effect_dengdaiUI;
+		private _hotSign: ui.qpapi.dating.component.Effect_huoreUI;
+		private _recommendSign: ui.qpapi.dating.component.Effect_tjUI;
+		private _hotList: string[] = ["wxsaoleihb", "mpniuniu"];
+		private _recommendList: string[] = ["longhu", "niuniu"];
 		constructor() {
 			super();
 			this.btn_box.on(LEvent.CLICK, this, this.onMouseHandle);
 		}
 
-
 		//显示等待
 		private showWait() {
 			if (!this._waitingTip) {
 				this._waitingTip = new ui.qpapi.dating.component.Effect_dengdaiUI();
-				this._waitingTip.x = 208;
+				this._waitingTip.x = 175;
 				this._waitingTip.y = 23;
 				this.addChild(this._waitingTip);
 			}
@@ -324,8 +358,8 @@ module gamedating.page {
 			if (this._waitingTip || this._loadingTip) return;
 			if (!this._updateTip) {
 				this._updateTip = new ui.qpapi.dating.component.Effect_gxUI();
-				this._updateTip.x = 195;
-				this._updateTip.y = -2;
+				this._updateTip.x = 161;
+				this._updateTip.y = -3;
 				this.addChild(this._updateTip);
 			}
 		}
@@ -339,12 +373,52 @@ module gamedating.page {
 			}
 		}
 
+		//显示火热
+		private showHotSign() {
+			if (!this._hotSign) {
+				this._hotSign = new ui.qpapi.dating.component.Effect_huoreUI();
+				this._hotSign.centerX = 0;
+				this._hotSign.centerY = 0;
+				this._hotSign.ani1.play(0, true);
+				this.box_sign.addChild(this._hotSign);
+			}
+		}
+
+		//清理火热
+		private clearHotSign() {
+			if (this._hotSign) {
+				this._hotSign.removeSelf();
+				this._hotSign.destroy();
+				this._hotSign = null;
+			}
+		}
+
+		//显示推荐
+		private showRecommendSign() {
+			if (!this._recommendSign) {
+				this._recommendSign = new ui.qpapi.dating.component.Effect_tjUI();
+				this._recommendSign.centerX = 0;
+				this._recommendSign.centerY = 0;
+				this._recommendSign.ani1.play(0, true);
+				this.box_sign.addChild(this._recommendSign);
+			}
+		}
+
+		//清理推荐
+		private clearRecommendSign() {
+			if (this._recommendSign) {
+				this._recommendSign.removeSelf();
+				this._recommendSign.destroy();
+				this._recommendSign = null;
+			}
+		}
+
 		//显示进度
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this._loadingTip.x = 208;
-				this._loadingTip.y = 22;
+				this._loadingTip.x = 179;
+				this._loadingTip.y = 9;
 				this.addChild(this._loadingTip);
 			}
 
@@ -361,55 +435,88 @@ module gamedating.page {
 		}
 
 		private getProgress(gameid: string) {
-			return LoadingMgr.ins.getProgress(this._data) || JsLoader.ins.getProgress(this._data);
+			return LoadingMgr.ins.getProgress(this._gameStr) || JsLoader.ins.getProgress(this._gameStr);
 		}
 
+		private _time: number = 60000;
 		update() {
-			if (LoadingMgr.ins.isLoaded(this._data)) {
+			if (this._time <= 0) {
+				this._time = 60000;
+				this.updateOnline();
+			} else {
+				this._time -= 100;
+			}
+			if (LoadingMgr.ins.isLoaded(this._gameStr)) {
 				this.clearUpdate();
 				this.clearProgress();
 				this.clearWait();
 			} else {
-				let progress = this.getProgress(this._data);
+				let progress = this.getProgress(this._gameStr);
 				if (progress > 0) {
 					this.showProgress(progress);
 					this.clearUpdate();
 					this.clearWait();
 				}
 				else {
-					if (JsLoader.ins.isWaitLoad(this._data)) {
+					if (JsLoader.ins.isWaitLoad(this._gameStr)) {
 						this.showWait();
 						this.clearUpdate();
 						this.clearProgress();
 					} else {
+						this.showUpdate();
 						this.clearProgress();
 						this.clearWait();
-						this.clearUpdate();
 					}
 				}
 			}
-			this.btn_box.x = 143;
-			this.btn_box.y = 116;
+
+			// this.btn_box.x = 143;
+			// this.btn_box.y = 116;
 		}
 
-
-		setData(game: Game, data: any, index: number) {
+		setData(page: HudMainPageQPAPI, game: Game, data: any, index: number) {
 			if (!data) {
 				this.visible = false;
 				return;
 			}
-			if (this._data == data) return;
+			if (this._gameStr == data[0]) return;
 			this.visible = true;
+			this._page = page;
 			this._game = game;
-			this._data = data;
+			this._gameStr = data[0];
+			this._type = data[1];
 			this._index = index;
-			this.img.skin = StringU.substitute("dating_ui/dating/DZ_{0}.png", data);
+			this.img.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + ".png";
+			this.updateOnline();
+			//添加火爆标志
+			if (this._hotList.indexOf(this._gameStr) != -1) {
+				this.showHotSign();
+			} else {
+				this.clearHotSign();
+			}
+			//添加推荐标志
+			if (this._recommendList.indexOf(this._gameStr) != -1) {
+				this.showRecommendSign();
+			} else {
+				this.clearRecommendSign();
+			}
+		}
+
+		private updateOnline() {
+			if (!this._game || !this._game.datingGame) return;
+			//在线人数显示
+			this.box_online.y = 205;
+			this.txt_online.text = this._game.datingGame.OnlineNumMgr.getOnlineNum(this._gameStr);
 		}
 
 		private onMouseHandle() {
-			if (!this._data) return;
+			if (!this._gameStr) return;
+			if (this._loadingTip) {
+				this._game.showTips("正在更新中...")
+				return;
+			}
 			this._game.uiRoot.btnTween(this.btn_box, this, () => {
-				let data = this._data;
+				let data = this._gameStr;
 				if (LoadingMgr.ins.isLoaded(data)) {
 					JsLoader.ins.startLoad(data, false, Handler.create(this, (assets) => {
 						this.openPage(data);
@@ -422,13 +529,31 @@ module gamedating.page {
 		}
 
 		private openPage(data) {
+			//房卡类型打开创建房间界面
+			if (this._type == DatingPageDef.TYPE_CARD) {
+				if (this._gameStr == "r" + "paodekuai") {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: CreadRoomPDKPage) => {
+						page.game_id = this._gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
+					});
+				} else {
+					this._game.uiRoot.general.open(DatingPageDef.PAGE_CREATE_CARD_ROOM, (page: CreateCardRoomBase) => {
+						page.game_id = this._gameStr;
+						page.dataSource = WebConfig.hudgametype = this._type;// 等于type
+					});
+				}
+				return;
+			}
+			//非房卡类型打开游戏场次界面
 			let pageDef = getPageDef(data);
 			//調試模式
 			let CLOSE_LIST = isDebug ? [] : [];
 			if (pageDef["__enterMapLv"]) {
 				this._game.sceneObjectMgr.intoStory(pageDef.GAME_NAME, pageDef["__enterMapLv"], true);
+				this._page.saveListStatus();
 			}
 			else if (CLOSE_LIST.indexOf(data) == -1) {
+				this._page.saveListStatus();
 				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
 					this._game.uiRoot.HUD.closeAll([data + 1]);
 				}, (page: Page) => {
@@ -448,51 +573,43 @@ module gamedating.page {
 			this.clearUpdate();
 			this.clearProgress();
 			this.clearWait();
+			this.clearHotSign();
+			this.clearRecommendSign();
 			super.destroy();
+		}
+
+		set setAlpha(v: number) {
+			this.alpha = v;
+			if (this._updateTip) {
+				this._updateTip.visible = v != 0;
+			}
+			if (this._loadingTip) {
+				this._loadingTip.visible = v != 0;
+			}
+		}
+
+		get setAlpha(): number {
+			return this.alpha;
 		}
 	}
 
-	class HudLoadingTip extends ui.qpae.dating.component.LoadingTipTUI {
-		private _updateEffect: AnimationFrame;
-
+	class HudLoadingTip extends ui.qpapi.dating.component.LoadingTipTUI {
 		constructor() {
 			super();
-			if (!this._updateEffect) {
-				this._updateEffect = new AnimationFrame({
-					source: 'loading',
-					fileName: '',
-					interval: 12,
-					frameCount: 24,
-					start: 10000
-				});
-			}
-			this.box.addChild(this._updateEffect);
-			this._updateEffect.play(true);
-			this._updateEffect.x = -3
-			this._updateEffect.y = 30;
 			this.img.y = 30;
 			this.txt.text = "0%";
 		}
 
 		set progress(value: number) {
 			this.txt.text = Math.round(value * 100) + "%";
-			this.img.y = (1 - value) * 30 + 3;
-			this._updateEffect.y = (1 - value) * 30 - 10;
+			this.img.y = (1 - value) * 31 + 30;
 		}
 
 		destroy(): void {
-			if (this._updateEffect) {
-				this._updateEffect.destroy();
-				this._updateEffect = null;
-			}
 			this.removeSelf();
 			super.destroy();
 		}
-
-		update(): void {
-			if (this._updateEffect) {
-				this._updateEffect.onDraw();
-			}
-		}
 	}
+
+
 }
