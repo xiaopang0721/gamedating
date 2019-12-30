@@ -54,7 +54,7 @@ module gamedating.component {
 		}
 	}
 
-	class DBDZ_Item extends ui.ajqp.dating.component.Hud_Jbd1_APIUI {
+	class DBDZ_Item extends ui.ajqp.dating.component.Hud_rm1UI {
 		private _page: any;
 		private _mainView; ApiListRM;
 		private _index: number;
@@ -76,7 +76,6 @@ module gamedating.component {
 			this._mainView = mainView;
 			this._index = index;
 			this._game = game;
-			this.img_bz.visible = false;
 			this.on(LEvent.CLICK, this, this.onBtnClick);
 		}
 
