@@ -350,14 +350,14 @@ module gamedating.page {
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56;
 				this._viewUI.box_tabs.left = -11 + 56;
-				this._viewUI.list_btns.left = 229 + 56;
+				this._viewUI.box_jdb.left = this._viewUI.box_qp.left = this._viewUI.box_sx.left = this._viewUI.box_by.left = this._viewUI.box_rm.left = this._viewUI.list_btns.left = 229 + 56;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
 				this._viewUI.box_btn_top.right = 0;
 				this._viewUI.box_bottomLeft.left = 0;
 				this._viewUI.box_bottomRight.right = 0;
 				this._viewUI.box_tabs.left = -11;
-				this._viewUI.list_btns.left = 229;
+				this._viewUI.box_jdb.left = this._viewUI.box_qp.left = this._viewUI.box_sx.left = this._viewUI.box_by.left = this._viewUI.box_rm.left = this._viewUI.list_btns.left = 229;
 			}
 			this.judgeBtnShow();
 			this.updateFenXiangPos();
