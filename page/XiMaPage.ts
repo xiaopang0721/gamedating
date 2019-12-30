@@ -60,6 +60,12 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.initData);
 			this.initData();
 			this._viewUI.list_tab.selectedIndex = 0;
+			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
+		}
+
+		private onUpdatePlayerInfo(): void {
+			//刷新下数据
+			this.selectHandler(this._curPt - 1);
 		}
 
 		protected onOptHandler(optcode: number, msg: any) {
@@ -69,8 +75,6 @@ module gamedating.page {
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: RewardPage) => {
 							page.setData(msg.data);
 						})
-						//刷新下数据
-						this.selectHandler(this._curPt - 1);
 						break;
 				}
 			}
@@ -113,6 +117,13 @@ module gamedating.page {
 			if (cell) {
 				let curData = this._viewUI.list_info.dataSource[index];
 				if (curData) {
+					if (curData.viplv == this._mainPlayer.GetVipLevel()) {
+						cell.img_bg.visible = true
+						cell.lb_vip.color = cell.lb_bl.color = '#ff9000';
+					} else {
+						cell.img_bg.visible = false
+						cell.lb_vip.color = cell.lb_bl.color = '#cfbf9b';
+					}
 					cell.lb_vip.text = "VIP" + curData.viplv;
 					cell.lb_bl.text = curData.fs_prec + "%";
 				}
@@ -128,7 +139,6 @@ module gamedating.page {
 		}
 
 		private selectHandler(index: number) {
-			this._viewUI.list_tab.selectedIndex = index;
 			this._curPt = index + 1;
 			this._viewUI.list_info.dataSource = this._curInfo = this._totlaData[index];
 			let xm_liang: number = 0;
@@ -148,7 +158,7 @@ module gamedating.page {
 					break
 			}
 			let xm_je: number = xm_liang * xm_bl;
-			this._viewUI.lb_xmje.text = xm_je.toString();
+			this._viewUI.lb_xmje.text = xm_je > 0 ? xm_je.toFixed(2) : '0';
 			this._viewUI.lb_xml.text = xm_liang.toString();
 		}
 
@@ -169,6 +179,7 @@ module gamedating.page {
 
 		public close(): void {
 			if (this._viewUI) {
+				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.list_info, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
@@ -208,6 +219,7 @@ module gamedating.page {
 				skinStr = DatingPath.ui_dating + "xima/btn_AGshixun.png"
 			}
 			this.clip_name.skin = skinStr;
+
 		}
 	}
 }

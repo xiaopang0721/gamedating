@@ -334,6 +334,12 @@ module gamedating.page {
 					DatingPath.ui_dating + "vip/tu_vip10.png",
 					DatingPath.ui_dating + "vip/tu_vip11.png",
 
+					DatingPath.ui_dating + "sk/tu_jiazai.png",
+					DatingPath.ui_dating + "sk/JDB/tu_jiazai3.png",
+					DatingPath.ui_dating + "sk/QP/tu_jiazai1.png",
+					DatingPath.ui_dating + "sk/SX/tu_jiazai2.png",
+					DatingPath.ui_dating + "sk/SX/tu_jiazai4.png",
+
 					//龙骨相关添加
 					DatingPath.sk_dating + "DZ_baijiale.png",
 					DatingPath.sk_dating + "DZ_bairendezhou.png",
