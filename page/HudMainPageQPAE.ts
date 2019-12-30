@@ -80,10 +80,13 @@ module gamedating.page {
 			this._game.playMusic(Path.music_bg);
 		}
 
+		private _listBarMax: number = 0;
 		protected layout(): void {
 			super.layout();
 			if (this._viewUI) {
-				this._viewUI.list.width = this._game.isFullScreen ? this._clientWidth - 350 : this._clientWidth - 300;
+				if (this._viewUI.list.dataSource)
+					this._viewUI.list.scrollBar.max = this._listBarMax;
+				this._viewUI.list.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
 				Laya.timer.frameOnce(1, this, this.onUpdateTab);
 			}
 		}
@@ -115,6 +118,11 @@ module gamedating.page {
 					this._game.uiRoot.HUD.open(DatingPageDef.PAGE_API_SETTING);
 					break;
 				case this._viewUI.btn_full:
+					if(this._game.uiRoot.checkFullScreen()){
+						this._game.uiRoot.exitFullScreen();
+					}else{
+						this._game.uiRoot.requestFullScreen();
+					}
 					break;
 			}
 		}
@@ -248,6 +256,9 @@ module gamedating.page {
 
 		private onUpdateGameList(gameList) {
 			let data = gameList;
+			let listItemCount = Math.ceil(data.length / 2);
+			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
+			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			if (!data || !data.length) {
 				this._viewUI.list.dataSource = [];
 			} else {
@@ -258,6 +269,7 @@ module gamedating.page {
 					list.push(element);
 				}
 				this._viewUI.list.dataSource = list;
+				this._viewUI.list.scrollBar.max = this._listBarMax;
 				this._viewUI.list.scrollTo(WebConfig.scrollBarValue || 0);
 			}
 		}
@@ -317,7 +329,7 @@ module gamedating.page {
 	  */
 	class GameItemRender extends ui.qpapi.dating.component.Hud_TUI {
 		private _game: Game;
-		private _page: HudMainPageQPAPI;
+		private _page: HudMainPageQPAE;
 		private _gameStr: string;
 		private _type: string;
 		private _index: number;
@@ -469,12 +481,9 @@ module gamedating.page {
 					}
 				}
 			}
-
-			// this.btn_box.x = 143;
-			// this.btn_box.y = 116;
 		}
 
-		setData(page: HudMainPageQPAPI, game: Game, data: any, index: number) {
+		setData(page: HudMainPageQPAE, game: Game, data: any, index: number) {
 			if (!data) {
 				this.visible = false;
 				return;
