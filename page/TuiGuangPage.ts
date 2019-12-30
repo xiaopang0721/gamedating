@@ -386,10 +386,10 @@ module gamedating.page {
 							// data.msg.list.fs && (this._viewUI.txt_fanshui.text = data.msg.list.fs.toString());
 							this._viewUI.list_child.dataSource = data.msg.list.child;
 						} else {
-							this._viewUI.txt_name1.text = data.msg.list.account;
-							data.msg.list.allyj && (this._viewUI.txt_yj.text = data.msg.list.allyj.toString());
-							data.msg.list.allfy && (this._viewUI.txt_allfy.text = data.msg.list.allfy.toString());
-							data.msg.list.fy && (this._viewUI.txt_selffy.text = data.msg.list.fy.toString());
+							// this._viewUI.txt_name1.text = data.msg.list.account;
+							// data.msg.list.allyj && (this._viewUI.txt_yj.text = data.msg.list.allyj.toString());
+							// data.msg.list.allfy && (this._viewUI.txt_allfy.text = data.msg.list.allfy.toString());
+							// data.msg.list.fy && (this._viewUI.txt_selffy.text = data.msg.list.fy.toString());
 							let list = this.onFilterList(data.msg.list.child);
 							this._viewUI.list3.dataSource = list;
 						}
