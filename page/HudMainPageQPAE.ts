@@ -2,13 +2,15 @@
 * name 主界面
 */
 module gamedating.page {
-	export class HudMainPageQPAPI extends game.gui.base.Page {
+	export class HudMainPageQPAE extends game.gui.base.Page {
 		private _viewUI: ui.qpapi.dating.DaTingUI;
 		private _avatar: AvatarUIShow;
 		private _boxItems: any[] = [];
 		private _viewItems: any[] = [];
 		private _clipItems: any[] = [];
 		private _imgKong: any[] = [];
+		private _tabWidth: number = 0;//tab组件宽度
+		private _lineWidth: number = 0;//间隔线宽度
 		//sk龙骨位置
 		private _avatarName: any = ["fmqq", "zrdz", "wrzx", "jddw"];
 		private _avatarPos: any = [[136, 292], [151, 331], [146, 375], [145, 298]];
@@ -65,6 +67,10 @@ module gamedating.page {
 				this._imgKong[index] = this._viewUI["img_kong" + index];
 				this._boxItems[index] = this._viewUI["box_item" + index];
 				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
+				if (index == 0) {
+					this._tabWidth = this._viewUI["view" + index].width;
+					this._lineWidth = this._viewUI["img_kong" + index].width;
+				}
 			}
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
@@ -78,30 +84,24 @@ module gamedating.page {
 			super.layout();
 			if (this._viewUI) {
 				this._viewUI.list.width = this._game.isFullScreen ? this._clientWidth - 350 : this._clientWidth - 300;
-				this.onUpdateTab();
+				Laya.timer.frameOnce(1, this, this.onUpdateTab);
 			}
 		}
 
 		//重新调节tab按钮宽度和x位置
 		private onUpdateTab() {
-			let x: number = 0;
-			let widthKong: number = 4; //空隙宽度
-			let tabWidth = (Laya.stage.width - widthKong * 3) / 4; //tab宽度
-			let scaleX_new = tabWidth / 317; //组件缩放比
-			console.log("Laya.stage.width", Laya.stage.width)
-			console.log("tabWidth", tabWidth)
-			console.log("scaleX_new", scaleX_new)
-			console.log("scale", Laya.stage.width / this._clientWidth)
+			let total_x: number = 0;
+			let tabcount = this._boxItems.length;
+			let tabWidth = (this._view.width - this._lineWidth * 3) / tabcount; //tab新宽度
+			let scale_x = tabWidth / this._tabWidth; //tab组件缩放比
 			for (let i = 0; i < this._boxItems.length; i++) {
-				this._viewItems[i].scaleX = scaleX_new;
-				this._boxItems[i].x = x;
-				console.log("this._boxItems[i].x", this._boxItems[i].x)
+				this._viewItems[i].scaleX = scale_x;
+				this._boxItems[i].x = total_x;
 				this._boxItems[i].width = tabWidth;
-				x += tabWidth;
+				total_x += tabWidth;
 				if (i < 3) {
-					this._imgKong[i].x = x;
-					console.log("this._imgKong[i].x", this._imgKong[i].x)
-					x += 4;
+					this._imgKong[i].x = total_x;
+					total_x += this._lineWidth;
 				}
 			}
 		}

@@ -11,7 +11,7 @@ module gamedating.page {
 			this._isNeedBlack = true;
 			this._isClickBlack = true;
 			this._asset = [
-				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui + "dating.atlas",
 			];
 		}
 
