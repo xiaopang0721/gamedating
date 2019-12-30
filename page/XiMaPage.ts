@@ -69,6 +69,8 @@ module gamedating.page {
 						this._game.uiRoot.general.open(DatingPageDef.PAGE_GET_REWARD, (page: RewardPage) => {
 							page.setData(msg.data);
 						})
+						//刷新下数据
+						this.selectHandler(this._curPt - 1);
 						break;
 				}
 			}
@@ -131,22 +133,22 @@ module gamedating.page {
 			this._viewUI.list_info.dataSource = this._curInfo = this._totlaData[index];
 			let xm_liang: number = 0;
 			let xm_bl = this.getBLByVip() / 100;
-			let xm_je: number = xm_liang * xm_bl;
-			this._viewUI.lb_xmje.text = xm_je.toString();
 			switch (this._curPt) {
 				case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP:
-					xm_liang = this._mainPlayer.GetXiMaLiangAE();
+					xm_liang = this._mainPlayer.GetXiMaLiangAE() / 100;
 					break
 				case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP:
-					xm_liang = this._mainPlayer.GetXiMaLiangKY();
+					xm_liang = this._mainPlayer.GetXiMaLiangKY() / 100;
 					break
 				case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP:
-					xm_liang = this._mainPlayer.GetXiMaLiangJDB();
+					xm_liang = this._mainPlayer.GetXiMaLiangJDB() / 100;
 					break
 				case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP:
-					xm_liang = this._mainPlayer.GetXiMaLiangAG();
+					xm_liang = this._mainPlayer.GetXiMaLiangAG() / 100;
 					break
 			}
+			let xm_je: number = xm_liang * xm_bl;
+			this._viewUI.lb_xmje.text = xm_je.toString();
 			this._viewUI.lb_xml.text = xm_liang.toString();
 		}
 
