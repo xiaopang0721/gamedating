@@ -6,16 +6,20 @@ module gamedating.page {
 		private _viewUI: ui.qpapi.dating.DaTingUI;
 		private _avatar: AvatarUIShow;
 		private _boxItems: any[] = [];
+		private _viewItems: any[] = [];
 		private _clipItems: any[] = [];
 		//sk龙骨位置
 		private _avatarName: any = ["fmqq", "zrdz", "wrzx", "jddw"];
-		private _avatarPos: any = [[134, 272], [154, 327], [156, 287], [155, 329]];
+		private _avatarPos: any = [[136, 292], [151, 331], [146, 375], [145, 298]];
+		private _avatarScale: any = [0.9, 0.75, 0.9, 0.9];
 
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "dating.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui + "anniu.atlas",
+				DatingPath.atlas_dating_ui + "zt.atlas",
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -40,12 +44,16 @@ module gamedating.page {
 			this._viewUI.list.scrollBar.changeHandler = new Handler(this, this.onScrollChange);
 			if (!this._avatar) {
 				this._avatar = new AvatarUIShow();
+				this._avatar.zOrder = -1;
 				this._viewUI.box_sk.addChild(this._avatar);
 			}
 			this._viewUI.btn_back.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_set.on(LEvent.CLICK, this, this.onBtnClickWithTween);
+			this._viewUI.btn_full.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			//标签页按钮
 			for (let index = 0; index < 4; index++) {
-				this._clipItems[index] = this._viewUI["clip_item" + index];
+				this._viewItems[index] = this._viewUI["view" + index];
+				this._clipItems[index] = this._viewUI["clip" + index];
 				this._boxItems[index] = this._viewUI["box_item" + index];
 				this._boxItems[index].on(LEvent.CLICK, this, this.onSelectItem, [index]);
 			}
@@ -53,20 +61,28 @@ module gamedating.page {
 			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
 			this.onUpdatePlayerInfo();
 			this.onSelectItem(0);
+			this.onUpdateTab();
 			this._game.playMusic(Path.music_bg);
 		}
 
 		protected layout(): void {
 			super.layout();
 			if (this._viewUI) {
-				//重新调节tab按钮宽度和x位置
-				let x = 0;
-				let tabWidth = this._clientRealWidth / 4;
-				for (let i = 0; i < this._boxItems.length; i++) {
-					this._boxItems[i].width = tabWidth;
-					this._boxItems[i].x = x;
-					x += tabWidth;
-				}
+				this._viewUI.list.width = this._game.isFullScreen ? this._clientWidth - 350 : this._clientWidth - 300;
+				this.onUpdateTab();
+			}
+		}
+
+		//重新调节tab按钮宽度和x位置
+		private onUpdateTab() {
+			let x = 0;
+			let tabWidth = Laya.stage.width / 4;
+			let scale_new = tabWidth / 323;
+			for (let i = 0; i < this._boxItems.length; i++) {
+				this._boxItems[i].tabWidth;
+				this._viewItems[i].scale(scale_new, 1);
+				this._boxItems[i].x = x;
+				x += tabWidth;
 			}
 		}
 
@@ -75,35 +91,39 @@ module gamedating.page {
 				case this._viewUI.btn_back:
 					this.exitGame();
 					break;
+				case this._viewUI.btn_set:
+					break;
+				case this._viewUI.btn_full:
+					break;
 			}
 		}
 
 		private _selectIndex: number = -1;
 		public onSelectItem(index: number = -1) {
-			if (!WebConfig.gamelist || this._selectIndex == index)
-				return;
+			if (!WebConfig.gamelist || this._selectIndex == index) return;
 			this._selectIndex = index;
 			this.selectBoxItems(index, true);
+			this._viewUI.eff_type.ani1.play(0, true);
+			this._viewUI.eff_type.img_type.skin = DatingPath.ui_dating + "zt/tu_" + this._avatarName[index] + ".png";
 			this._avatar.loadSkeleton(DatingPath.sk_dating + this._avatarName[index], this._avatarPos[index][0], this._avatarPos[index][1]);
+			this._avatar.scale(this._avatarScale[index], this._avatarScale[index]);
 			let b = this.onDealGameData(index);
-			if (b)
-				return;
 		}
 
 		private selectBoxItems(index: number, isplay: boolean = true) {
-			for (let i = 0; i < this._boxItems.length; i++) {
+			for (let i = 0; i < this._viewItems.length; i++) {
 				if (i == index) {
-					isplay && this._boxItems[i].ani1.play(0, false);
-					isplay && this._boxItems[i].ani2.play(0, true);
-					this._boxItems[i].clip.index = 2;
-					this._boxItems[i].img1.visible = true;
-					this._boxItems[i].img2.visible = true;
+					isplay && this._viewItems[i].ani1.play(0, false);
+					isplay && this._viewItems[i].ani2.play(0, true);
+					this._viewItems[i].clip.index = 2;
+					this._viewItems[i].img1.visible = true;
+					this._viewItems[i].img2.visible = true;
 					this._clipItems[i].index = 2;
 				} else {
-					this._boxItems[i].ani2.gotoAndStop(0);
-					this._boxItems[i].clip.index = 1;
-					this._boxItems[i].img1.visible = false;
-					this._boxItems[i].img2.visible = false;
+					this._viewItems[i].ani2.gotoAndStop(0);
+					this._viewItems[i].clip.index = 1;
+					this._viewItems[i].img1.visible = false;
+					this._viewItems[i].img2.visible = false;
 					this._clipItems[i].index = 1;
 				}
 			}
@@ -266,28 +286,28 @@ module gamedating.page {
 	/**
 	  * 大厅入口 
 	  */
-	class GameItemRender extends ui.qpae.dating.component.Hud_TUI {
+	class GameItemRender extends ui.qpapi.dating.component.Hud_TUI {
 		private _game: Game;
 		private _data: string;
 		private _index: number;
-		private _gengXingTip: AnimationFrame;
+		private _updateTip: ui.qpapi.dating.component.Effect_gxUI;
 		private _loadingTip: HudLoadingTip;
-		private _waitingTip: ui.qpae.dating.component.Effect_dengdaiUI;
+		private _waitingTip: ui.qpapi.dating.component.Effect_dengdaiUI;
 		constructor() {
 			super();
 			this.btn_box.on(LEvent.CLICK, this, this.onMouseHandle);
 		}
 
+
 		//显示等待
 		private showWait() {
 			if (!this._waitingTip) {
-				this._waitingTip = new ui.qpae.dating.component.Effect_dengdaiUI();
-				this._waitingTip.x = 215;
-				this._waitingTip.y = 11;
+				this._waitingTip = new ui.qpapi.dating.component.Effect_dengdaiUI();
+				this._waitingTip.x = 208;
+				this._waitingTip.y = 23;
 				this.addChild(this._waitingTip);
 			}
-			if (this._waitingTip.ani1.isPlaying) return;
-			this._waitingTip.ani1.play(0, true);
+			this.clearUpdate();
 		}
 
 		//清理等待
@@ -300,28 +320,22 @@ module gamedating.page {
 		}
 
 		//显示更新
-		private showGengXing() {
-			if (!this._gengXingTip) {
-				this._gengXingTip = new AnimationFrame({
-					source: 'update',
-					fileName: '',
-					interval: 12,
-					frameCount: 12,
-					start: 10000
-				});
-				this._gengXingTip.x = 200;
-				this._gengXingTip.y = 5;
-				this.addChild(this._gengXingTip);
-				this._gengXingTip.play(true);
+		private showUpdate() {
+			if (this._waitingTip || this._loadingTip) return;
+			if (!this._updateTip) {
+				this._updateTip = new ui.qpapi.dating.component.Effect_gxUI();
+				this._updateTip.x = 195;
+				this._updateTip.y = -2;
+				this.addChild(this._updateTip);
 			}
 		}
 
 		//清理更新
-		private clearGengXing() {
-			if (this._gengXingTip) {
-				this._gengXingTip.removeSelf();
-				this._gengXingTip.destroy();
-				this._gengXingTip = null;
+		private clearUpdate() {
+			if (this._updateTip) {
+				this._updateTip.removeSelf();
+				this._updateTip.destroy();
+				this._updateTip = null;
 			}
 		}
 
@@ -329,8 +343,8 @@ module gamedating.page {
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this._loadingTip.x = 215;
-				this._loadingTip.y = 11;
+				this._loadingTip.x = 208;
+				this._loadingTip.y = 22;
 				this.addChild(this._loadingTip);
 			}
 
@@ -352,36 +366,28 @@ module gamedating.page {
 
 		update() {
 			if (LoadingMgr.ins.isLoaded(this._data)) {
-				this.clearGengXing();
+				this.clearUpdate();
 				this.clearProgress();
 				this.clearWait();
 			} else {
 				let progress = this.getProgress(this._data);
 				if (progress > 0) {
 					this.showProgress(progress);
-					this.clearGengXing();
+					this.clearUpdate();
 					this.clearWait();
 				}
 				else {
 					if (JsLoader.ins.isWaitLoad(this._data)) {
 						this.showWait();
-						this.clearGengXing();
+						this.clearUpdate();
 						this.clearProgress();
 					} else {
 						this.clearProgress();
 						this.clearWait();
-						this.showGengXing();
+						this.clearUpdate();
 					}
 				}
 			}
-
-			if (this._gengXingTip) {
-				this._gengXingTip.onDraw();
-			}
-			if (this._loadingTip) {
-				this._loadingTip.update();
-			}
-
 			this.btn_box.x = 143;
 			this.btn_box.y = 116;
 		}
@@ -439,7 +445,7 @@ module gamedating.page {
 		}
 
 		destroy() {
-			this.clearGengXing();
+			this.clearUpdate();
 			this.clearProgress();
 			this.clearWait();
 			super.destroy();
