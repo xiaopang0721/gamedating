@@ -151,7 +151,7 @@ module gamedating.page {
 						this._gameid = msg.data;
 						if (LoadingMgr.ins.isLoaded(this._gameid)) {
 							JsLoader.ins.startLoad(this._gameid, false, Handler.create(this, (assets) => {
-								let page = this._game.uiRoot.general.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
+								let page = this._game.uiRoot.HUD.getPage(DatingPageDef.PAGE_HUD) as HudMainPage;
 								if (page.isOpened){
 									page.saveListStatus();
 								}
