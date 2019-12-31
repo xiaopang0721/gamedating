@@ -335,6 +335,11 @@ module gamedating.page {
 				this._apiRMList && this._apiRMList.layout(this._clientRealWidth)
 				this._apiBYList && this._apiBYList.layout(this._clientRealWidth)
 				this._viewUI.list_btns.width = this._clientRealWidth;
+				this._viewUI.box_jdb.width = this._clientRealWidth;
+				this._viewUI.box_qp.width = this._clientRealWidth;
+				this._viewUI.box_sx.width = this._clientRealWidth;
+				this._viewUI.box_by.width = this._clientRealWidth;
+				this._viewUI.box_rm.width = this._clientRealWidth;
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
 				Laya.timer.frameOnce(1, this, () => {
 					this.updatePos();
@@ -536,25 +541,27 @@ module gamedating.page {
 					//热门
 					if (!this._apiRMList)
 						this.addRMList()
+					this._apiRMList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_QP - 1) {
 					//棋牌
 					if (!this._apiPTList)
 						this.addPTList()
-					this._apiPTList.visible = true;
+					this._apiPTList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_BY - 1) {
 					//捕鱼游戏
 					if (!this._apiBYList)
 						this.addBYList()
+					this._apiBYList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_DZYY - 1) {
 					//电子游艺
 					if (!this._apiJDBList)
 						this.addJDBList()
-					this._apiJDBList.visible = true;
+					this._apiJDBList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_ZRSX - 1) {
 					//真人视讯
 					if (!this._apiSXList)
 						this.addSXList()
-					this._apiSXList.visible = true;
+					this._apiSXList.layout(this._clientRealWidth);
 				}
 			} else {
 				// 如果有值，说明该干活了

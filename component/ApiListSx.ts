@@ -15,6 +15,7 @@ module gamedating.component {
 
 		layout(clientRealWidth: number): void {
 			this.list_ag.width = clientRealWidth
+			this.width = clientRealWidth;
 		}
 
 		private init(): void {

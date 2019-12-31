@@ -204,7 +204,7 @@ module gamedating {
 			let apiData = apiDataStr ? apiDataStr.split("&") : [];
 			if (apiData.length > 0) {
 				if (parseFloat(apiData[0]) == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
-					this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, parseFloat(apiData[1]))
+					this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, apiData[1])
 				} else if (parseFloat(apiData[0]) == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
 					let data = parseFloat(apiData[1]) + "&" + parseFloat(apiData[2]) + "&" + "about:blank";
 					this._game.network.call_api_login_game(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, data)

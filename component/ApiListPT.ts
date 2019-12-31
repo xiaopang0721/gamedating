@@ -22,6 +22,7 @@ module gamedating.component {
 
 		layout(clientRealWidth: number): void {
 			this.list_qp.width = clientRealWidth
+			this.width = clientRealWidth;
 		}
 
 		public static GetGameName(gameid: string) {
@@ -168,12 +169,14 @@ module gamedating.component {
 			this.view_pt.list_yx.dataSource = v;
 			this.view_pt.list_yx.repeatX = Math.ceil(this.view_pt.list_yx.dataSource.length / 2)
 			this.view_pt.list_yx.width = 225 * this.view_pt.list_yx.repeatX;
+			let list_count = Math.ceil(v.length / this.view_pt.list_yx.repeatY);
 			this._selfWidthList = 23 + 332 + 5 + this.view_pt.list_yx.width;
 			this._selfWidth = 23 + 332 + 5;
 			this.view_pt.list_yx.visible = false;
 
 			this.width = this._selfWidth;
 			this.view_pt.width = this.width;
+			this.panel_pt.hScrollBar.max = this._selfWidthList;
 			this.view_pt.btn_box.on(LEvent.CLICK, this, this.onBtnClick);
 		}
 

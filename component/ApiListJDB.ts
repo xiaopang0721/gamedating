@@ -23,11 +23,15 @@ module gamedating.component {
 			, { gTYPE: 9, mTYPE: 9002, strName: "xnkl", gameName: "新年快乐" }, { gTYPE: 0, mTYPE: 14015, strName: "xqdz", gameName: "星球大战" }, { gTYPE: 0, mTYPE: 8035, strName: "xyf", gameName: "幸运凤" }, { gTYPE: 0, mTYPE: 15005, strName: "xyfw", gameName: "幸运福娃" }, { gTYPE: 0, mTYPE: 8001, strName: "xyl", gameName: "幸运龙" }, { gTYPE: 0, mTYPE: 8007, strName: "xys", gameName: "幸运麟" }
 			, { gTYPE: 0, mTYPE: 14025, strName: "xysc", gameName: "幸运赛车" }, { gTYPE: 0, mTYPE: 8028, strName: "xytjs", gameName: "幸运淘金鼠" }, { gTYPE: 0, mTYPE: 8051, strName: "xyy", gameName: "喜洋洋" }, { gTYPE: 0, mTYPE: 8015, strName: "ygmb", gameName: "月光秘宝" }, { gTYPE: 0, mTYPE: 14011, strName: "yhhwd", gameName: "银河护卫队" }
 			, { gTYPE: 0, mTYPE: 15006, strName: "yjdg", gameName: "印加帝国" }, { gTYPE: 0, mTYPE: 14007, strName: "yqcr", gameName: "一拳超人" }, { gTYPE: 0, mTYPE: 14006, strName: "ywfw", gameName: "亿万富翁" }, { gTYPE: 0, mTYPE: 8014, strName: "zcs", gameName: "招财狮" }
-			, { gTYPE: 0, mTYPE: 8020, strName: "zmkm", gameName: "芝麻开门" }, { gTYPE: 0, mTYPE: 8048, strName: "zmkm2", gameName: "芝麻开门2" },{},{}
+			, { gTYPE: 0, mTYPE: 8020, strName: "zmkm", gameName: "芝麻开门" }, { gTYPE: 0, mTYPE: 8048, strName: "zmkm2", gameName: "芝麻开门2" }
 		];
 
 		layout(clientRealWidth: number): void {
-			this.list_jdb.width = clientRealWidth
+			this.list_jdb.width = clientRealWidth;
+			this.width = clientRealWidth;
+			let list_count = Math.ceil(ApiListJDB.JBD_DATA.length / this.list_jdb.repeatY);
+			//单个item*列数-两列之间的间距-当前的宽度
+			this.list_jdb.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_jdb.spaceX - clientRealWidth;
 		}
 
 		//gType_mType

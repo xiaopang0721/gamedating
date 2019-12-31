@@ -21,6 +21,7 @@ module gamedating.component {
 
 		layout(clientRealWidth: number): void {
 			this.list_by.width = clientRealWidth
+			this.width = clientRealWidth;
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {
