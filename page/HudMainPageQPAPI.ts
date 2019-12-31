@@ -31,6 +31,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "zt.atlas",
 				DatingPath.atlas_dating_ui + "dd.atlas",
 				DatingPath.atlas_dating_ui + "update.atlas",
+				DatingPath.atlas_dating_ui_dating_effect + "anniu.atlas",
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -140,6 +141,20 @@ module gamedating.page {
 		private _selectIndex: number = -1;
 		public onSelectItem(index: number = -1) {
 			if (!WebConfig.gamelist || this._selectIndex == index) return;
+			// 如果有值，说明该干活了
+			let listData = this._game.datingGame.hudTabScrollData;
+			if (listData) {
+				let value: number = listData.value;
+				let tabIndex: number = listData.tabIndex;
+				this._game.datingGame.clearHudTabScrollData();
+				Laya.timer.once(100, this, () => {
+					this._viewUI.list.scrollBar.value = value;
+				})
+				if (tabIndex != index) {
+					this.onSelectItem(tabIndex);
+					return;
+				}
+			}
 			this._selectIndex = index;
 			this.selectBoxItems(index, true);
 			this._viewUI.eff_type.ani1.play(0, true);
@@ -173,8 +188,8 @@ module gamedating.page {
 		}
 
 		private onScrollChange(v) {
-			this._viewUI.btn_left.visible = v > this._viewUI.list.scrollBar.min;
-			this._viewUI.btn_right.visible = v < this._viewUI.list.scrollBar.max;
+			this._viewUI.btn_right.visible = v > this._viewUI.list.scrollBar.min;
+			this._viewUI.btn_left.visible = v < this._viewUI.list.scrollBar.max;
 		}
 
 		private _clip_money: DatingClip;
@@ -603,20 +618,6 @@ module gamedating.page {
 			this.clearHotSign();
 			this.clearRecommendSign();
 			super.destroy();
-		}
-
-		set setAlpha(v: number) {
-			this.alpha = v;
-			if (this._updateTip) {
-				this._updateTip.visible = v != 0;
-			}
-			if (this._loadingTip) {
-				this._loadingTip.visible = v != 0;
-			}
-		}
-
-		get setAlpha(): number {
-			return this.alpha;
 		}
 	}
 

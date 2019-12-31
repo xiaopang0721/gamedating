@@ -139,7 +139,7 @@ module gamedating.page {
 			let turn_point = this._boJinData[0].turn_point;
 			//可转次数
 			this._viewUI.lb_bj_times.text = (~~(this._total_turn_point / turn_point)).toString();
-			this._viewUI.lb_bj_times.color = this._total_turn_point >= turn_point ? "#0aff00" : "#ff0400";
+			// this._viewUI.lb_bj_times.color = this._total_turn_point >= turn_point ? "#0aff00" : "#ff0400";
 			if (this._boJinData) {
 				this._viewUI.list_bojin.dataSource = this._boJinData;
 			}
@@ -152,7 +152,7 @@ module gamedating.page {
 			//可转次数
 			let turn_point = this._zuanShiData[0].turn_point;
 			this._viewUI.lb_zs_times.text = (~~(this._total_turn_point / turn_point)).toString();
-			this._viewUI.lb_zs_times.color = this._total_turn_point >= turn_point ? "#0aff00" : "#ff0400";
+			// this._viewUI.lb_zs_times.color = this._total_turn_point >= turn_point ? "#0aff00" : "#ff0400";
 			if (this._zuanShiData) {
 				this._viewUI.list_zuanshi.dataSource = this._zuanShiData;
 			}
