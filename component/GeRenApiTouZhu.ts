@@ -45,7 +45,7 @@ module gamedating.component {
             if (!data) {
                 return;
             }
-            cell.txt_time.text = Sync.getTimeShortStr(data.end_time);
+            cell.txt_time.text = Sync.getTimeShortStr(data.end_time*1000);
             cell.lb_zd.text = data.battle_id;
             cell.lb_money.text = data.all_bet;
             cell.lb_num.text = data.profit;
@@ -57,6 +57,9 @@ module gamedating.component {
         private getGameName(pf_code, gameId: string): string {
             let gameName = ""
             switch (pf_code) {
+                case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP:
+                    gameName = PageDef.getNameById(gameId)
+                    break
                 case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP:
                     gameName = ApiListPT.GetGameName(gameId)
                     break
@@ -73,6 +76,28 @@ module gamedating.component {
         //----------------中间数据end-----------
 
         //------------------日期start---------
+        isCurDayHaveNum(strDay: string, sevenList: any): number {
+            if (sevenList && sevenList.length > 0) {
+                for (let i = 0; i < sevenList.length; i++) {
+                    let curDayObj: any = sevenList[i];
+                    if (curDayObj) {
+                        if (strDay == curDayObj.days) {
+                            return Number(curDayObj.num);
+                        }
+                    }
+                }
+            }
+            return 0;
+        }
+
+        private updateDaysUI(sevenList: any): void {
+            for (let i = 0; i < 7; i++) {
+                let curTimeStr = Sync.getTimeStr3(this._timeList[i]);
+                this["btn_day" + i].visible = this.isCurDayHaveNum(curTimeStr, sevenList) ? true : false;
+            }
+
+        }
+
         private onUpdateDataInfo(data?: any) {
             //如果是当天的话，取今天零点到当前时间，如果是别的，就去那天零点，到下一天的零点
             let isToday = Sync.getIsToday(this._selectTime, this._game.sceneGame.sync.serverTimeBys)
@@ -212,6 +237,7 @@ module gamedating.component {
                     this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP;
                     break
             }
+            this.menuTween(false, this.box_btn, this.btn_jiantou);
             this.onUpdateDataInfo();
         }
 
@@ -227,6 +253,7 @@ module gamedating.component {
                         this.list_bb.visible = true;
                     }
                     this.list_bb.dataSource = this._data;
+                    this.updateDaysUI(data.seven_list);
                 }
             }
         }

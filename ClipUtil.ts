@@ -32,6 +32,8 @@ module gamedating {
         public static SHOUCHONG_FONT0: any;
         //大厅VIP
         public static DATING_VIP_FONT: any;
+        //个人
+        public static DATING_GEREN_FONT: any;
 
         static init(): void {
             this.LUNPAN_FONT = {
@@ -149,6 +151,15 @@ module gamedating {
                 clipWidth: 39,
                 clipHeight: 36,
                 clipX: 10,
+                space: -15,
+            };
+
+            this.DATING_GEREN_FONT = {
+                source: DatingPath.atlas_dating_ui + "geren.atlas",
+                url: DatingPath.ui_dating + 'geren/clip_1-9.png',
+                clipWidth: 70,
+                clipHeight: 85,
+                clipX: 12,
                 space: -15,
             };
         }

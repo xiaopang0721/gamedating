@@ -16,7 +16,7 @@ module gamedating.component {
         private _clipMoney: DatingClip;
         protected init(): void {
             if (!this._clipMoney) {
-                this._clipMoney = new DatingClip(DatingClip.YUEBAO_FONT);
+                this._clipMoney = new DatingClip(DatingClip.DATING_GEREN_FONT);
                 this._clipMoney.centerX = this.clip_num.centerX;
                 this._clipMoney.centerY = this.clip_num.centerY;
                 this.clip_num.parent.addChild(this._clipMoney);
@@ -175,6 +175,7 @@ module gamedating.component {
                     this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP
                     break
             }
+            this.menuTween(false);
             this.onUpdateDataInfo();
         }
 
