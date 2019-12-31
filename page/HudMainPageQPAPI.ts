@@ -2,7 +2,7 @@
 * name 主界面
 */
 module gamedating.page {
-	export class HudMainPageQPAE extends game.gui.base.Page {
+	export class HudMainPageQPAPI extends game.gui.base.Page {
 		private _viewUI: ui.qpapi.dating.DaTingUI;
 		private _avatar: AvatarUIShow;
 		private _boxItems: any[] = [];
@@ -330,7 +330,6 @@ module gamedating.page {
 				}
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
-				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FULLSCREEN_UPDATE, this, this.onUpdateFullScreen);
 				if (this._clip_money) {
 					this._clip_money.removeSelf();
 					this._clip_money.destroy();
@@ -347,7 +346,7 @@ module gamedating.page {
 	  */
 	class GameItemRender extends ui.qpapi.dating.component.Hud_TUI {
 		private _game: Game;
-		private _page: HudMainPageQPAE;
+		private _page: HudMainPageQPAPI;
 		private _gameStr: string;
 		private _type: string;
 		private _index: number;
@@ -501,7 +500,7 @@ module gamedating.page {
 			}
 		}
 
-		setData(page: HudMainPageQPAE, game: Game, data: any, index: number) {
+		setData(page: HudMainPageQPAPI, game: Game, data: any, index: number) {
 			if (!data) {
 				this.visible = false;
 				return;
