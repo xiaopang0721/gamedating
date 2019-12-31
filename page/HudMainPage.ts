@@ -63,6 +63,7 @@ module gamedating.page {
 			this._viewUI.list_btns.scrollBar.elasticDistance = 100;
 			this._viewUI.list_btns.itemRender = this.createChildren("dating.component.Hud_TUI", GameItemRender);
 			this._viewUI.list_btns.renderHandler = new Handler(this, this.renderHandler);
+			this._viewUI.list_btns.scrollBar.changeHandler = new Handler(this, this.onScrollChange);
 
 			this._viewUI.btn_xiaoxi.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_kefu.on(LEvent.CLICK, this, this.onBtnClickWithTween);
@@ -239,6 +240,11 @@ module gamedating.page {
 			}
 		}
 
+		private onScrollChange(v) {
+			this._viewUI.btn_left.visible = v > this._viewUI.list_btns.scrollBar.min;
+			this._viewUI.btn_right.visible = v < this._viewUI.list_btns.scrollBar.max;
+		}
+
 		private _clip_money: DatingClip;
 		private _clip_vip: DatingClip;
 		private onUpdatePlayerInfo(first: boolean = false) {
@@ -355,6 +361,7 @@ module gamedating.page {
 				this._viewUI.box_bottomLeft.left = 56;
 				this._viewUI.box_bottomRight.right = 56;
 				this._viewUI.box_tabs.left = -11 + 56;
+				this._viewUI.btn_left.left = 271 + 56;
 				this._viewUI.box_jdb.left = this._viewUI.box_qp.left = this._viewUI.box_sx.left = this._viewUI.box_by.left = this._viewUI.box_rm.left = this._viewUI.list_btns.left = 229 + 56;
 			} else {
 				this._viewUI.box_btn_top_left.left = 0;
@@ -362,6 +369,7 @@ module gamedating.page {
 				this._viewUI.box_bottomLeft.left = 0;
 				this._viewUI.box_bottomRight.right = 0;
 				this._viewUI.box_tabs.left = -11;
+				this._viewUI.btn_left.left = 271;
 				this._viewUI.box_jdb.left = this._viewUI.box_qp.left = this._viewUI.box_sx.left = this._viewUI.box_by.left = this._viewUI.box_rm.left = this._viewUI.list_btns.left = 229;
 			}
 			this.judgeBtnShow();

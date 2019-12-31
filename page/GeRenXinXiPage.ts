@@ -278,9 +278,9 @@ module gamedating.page {
 				}
 				cell.txt_type.text = type_name;
 				cell.txt_time.text = Sync.getTimeShortStr(data.time * 1000);
-				cell.txt_money.text = data.shouzhi.toString();
+				cell.txt_money.text = data.shouzhi ? data.shouzhi.toString() : "0";
 				cell.txt_money.color = data.shouzhi > 0 ? "#41fe69" : "#ff0000";
-				cell.txt_earn.text = data.money.toString();
+				cell.txt_earn.text = data.money ? data.money.toString() : "0";
 				let page = Math.floor((index + 10) / BaoBiaoMgr.PAGE_MAX) + 1;
 				let curData = DatingGame.ins.baobiaoMgr.getDataInfo(this._timeSelectIndex)[page]
 				if (!curData) {
