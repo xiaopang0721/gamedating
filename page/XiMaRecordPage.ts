@@ -25,10 +25,11 @@ module gamedating.page {
 		protected onSucessHandler(data: any) {
 			if (data.code == Web_operation_fields.CLIENT_IRCODE_GETXIMARECORD) {//游戏记录返回
 				if (data && data.success == 0) {
-					if (data.list.lenght > 0) {
-						this._viewUI.img_no.visible = true;
-						this._viewUI.list_info.visible = false;
-						this._viewUI.list_info.dataSource = data.list;
+					let msg = data.msg;
+					if (msg.list.length > 0) {
+						this._viewUI.img_no.visible = false;
+						this._viewUI.list_info.visible = true;
+						this._viewUI.list_info.dataSource = msg.list;
 					}
 				}
 			}
@@ -55,10 +56,15 @@ module gamedating.page {
 			if (cell) {
 				let curData = this._viewUI.list_info.dataSource[index];
 				if (curData) {
-					cell.lb_tm;
-					cell.lb_xml;
-					cell.lb_xmje;
-					cell.lb_pt;
+					let params = curData.params;
+					let json_params
+					if (params) {
+						json_params = JSON.parse(params);
+						cell.lb_xml.text = (json_params.xmliang / 100).toString();
+						cell.lb_xmje.text = json_params.xmje;
+						cell.lb_pt.text = ApiMgr.PTNAME[json_params.pf_code - 1];
+					}
+					cell.lb_tm.text = Sync.getTimeStr(curData.time * 1000);
 				}
 			}
 		}
