@@ -200,7 +200,7 @@ module gamedating.page {
 		setData(game: Game, index: number, selectIndex: number) {
 			this.visible = true;
 			this.index = index;
-			this.clip_name.index = this.index == selectIndex ? 2 : 0;
+			this.clip_name.index = this.index == selectIndex ? 1 : 0;
 		}
 
 		set dataSource(v: any) {

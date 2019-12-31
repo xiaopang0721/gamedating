@@ -13,6 +13,10 @@ module gamedating.component {
 			this.init()
 		}
 
+		layout(clientRealWidth: number): void {
+			this.list_ag.width = clientRealWidth
+		}
+
 		private init(): void {
 			this.list_ag.hScrollBarSkin = "";
 			this.list_ag.scrollBar.autoHide = true;

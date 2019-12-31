@@ -19,6 +19,10 @@ module gamedating.component {
 			this.init();
 		}
 
+		layout(clientRealWidth: number): void {
+			this.list_by.width = clientRealWidth
+		}
+
 		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {
 			cell.setData(this.page, this, index, this._game);
 		}
@@ -69,7 +73,7 @@ module gamedating.component {
 		}
 
 		private onBtnClick(): void {
-			this._game.datingGame.apiMgr.GoGameByPFCode(this._data,this.btn_box);
+			this._game.datingGame.apiMgr.GoGameByPFCode(this._data, this.btn_box);
 		}
 	}
 }

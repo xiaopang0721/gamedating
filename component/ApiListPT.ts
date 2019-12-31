@@ -20,6 +20,10 @@ module gamedating.component {
 			this.init();
 		}
 
+		layout(clientRealWidth: number): void {
+			this.list_qp.width = clientRealWidth
+		}
+
 		public static GetGameName(gameid: string) {
 			let game_id = parseFloat(gameid);
 			for (let i = 0; i < ApiListPT.KY_DATA.length; i++) {
@@ -106,7 +110,7 @@ module gamedating.component {
 							this.isMoveAni = false
 						}))
 					} else {
-						Laya.Tween.to(myCell, { x: 0 }, 500, null, Handler.create(this, () => {
+						Laya.Tween.to(myCell, { x: 0 }, 300, null, Handler.create(this, () => {
 							this.isMoveAni = false
 						}))
 					}
@@ -118,7 +122,7 @@ module gamedating.component {
 					let cell = element as QPLB_Item_One
 					for (let i = 0; i < this._moveCellPos.length; i++) {
 						if (cell.index == this._moveCellPos[i].index) {
-							Laya.Tween.to(cell, { x: this._moveCellPos[i].x, alpha: 1 }, 500, null, Handler.create(this, () => {
+							Laya.Tween.to(cell, { x: this._moveCellPos[i].x, alpha: 1 }, 300, null, Handler.create(this, () => {
 								this.isMoveAni = false
 							}))
 							break
@@ -205,9 +209,9 @@ module gamedating.component {
 				this.view_pt.list_yx.cells.forEach(element => {
 					this._mainView.isMoveAni = true
 					let cell = element as QPLB_Item_Two;
-					cell.x += 200;
+					cell.x += 1000;
 					Laya.timer.once(100, this, () => {
-						Laya.Tween.to(cell, { setAlpha: 1, x: cell.x - 200 }, 500, null, Handler.create(this, () => {
+						Laya.Tween.to(cell, { setAlpha: 1, x: cell.x - 1000 }, 300, null, Handler.create(this, () => {
 							this._mainView.isMoveAni = false
 						}));
 					});
@@ -223,7 +227,7 @@ module gamedating.component {
 			} else {
 				let curListX = this.view_pt.list_yx.x;
 				this._mainView.isMoveAni = true
-				Laya.Tween.to(this.view_pt.list_yx, { alpha: 0, x: 1280 }, 500, null, Handler.create(this, () => {
+				Laya.Tween.to(this.view_pt.list_yx, { alpha: 0, x: 1280 }, 300, null, Handler.create(this, () => {
 					this.view_pt.list_yx.x = curListX;
 					this.view_pt.list_yx.alpha = 1;
 					this.view_pt.list_yx.visible = false;
@@ -305,7 +309,7 @@ module gamedating.component {
 		}
 
 		private onMouseHandle() {
-			this._game.datingGame.apiMgr.GoGameByPFCode(this._data,this.btn_box);
+			this._game.datingGame.apiMgr.GoGameByPFCode(this._data, this.btn_box);
 		}
 	}
 }

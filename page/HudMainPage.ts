@@ -329,6 +329,11 @@ module gamedating.page {
 		protected layout(): void {
 			super.layout();
 			if (this._viewUI) {
+				this._apiPTList && this._apiPTList.layout(this._clientRealWidth)
+				this._apiJDBList && this._apiJDBList.layout(this._clientRealWidth)
+				this._apiSXList && this._apiSXList.layout(this._clientRealWidth)
+				this._apiRMList && this._apiRMList.layout(this._clientRealWidth)
+				this._apiBYList && this._apiBYList.layout(this._clientRealWidth)
 				this._viewUI.list_btns.width = this._clientRealWidth;
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
 				Laya.timer.frameOnce(1, this, () => {
