@@ -21,6 +21,7 @@ module gamedating.page {
 			this._asset = [
 				DatingPath.atlas_dating_ui + "anniu.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
+				DatingPath.atlas_dating_ui + "aeqp.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				DatingPath.atlas_dating_ui + "gxz.atlas",
 				DatingPath.atlas_dating_ui + "huore.atlas",
@@ -84,6 +85,7 @@ module gamedating.page {
 		protected layout(): void {
 			super.layout();
 			if (this._viewUI) {
+				this.onUpdateFullScreen();
 				if (this._viewUI.list.dataSource)
 					this._viewUI.list.scrollBar.max = this._listBarMax;
 				this._viewUI.list.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
@@ -118,12 +120,20 @@ module gamedating.page {
 					this._game.uiRoot.HUD.open(DatingPageDef.PAGE_API_SETTING);
 					break;
 				case this._viewUI.btn_full:
-					if(this._game.uiRoot.checkFullScreen()){
+					if (this._game.uiRoot.checkFullScreen()) {
 						this._game.uiRoot.exitFullScreen();
-					}else{
+					} else {
 						this._game.uiRoot.requestFullScreen();
 					}
 					break;
+			}
+		}
+
+		private onUpdateFullScreen() {
+			if (this._game.uiRoot.checkFullScreen()) {
+				this._viewUI.btn_full.skin = DatingPath.ui_dating + "dating/btn_quanpingOFF.png";
+			} else {
+				this._viewUI.btn_full.skin = DatingPath.ui_dating + "dating/btn_quanping.png";
 			}
 		}
 
@@ -274,7 +284,14 @@ module gamedating.page {
 			}
 		}
 
+		private _aniPlayTime: number = 0;
 		deltaUpdate() {
+			if (this._aniPlayTime <= 0) {
+				this._viewUI.ani_logo.ani1.play(0, false);
+				this._aniPlayTime = 5000;
+			} else {
+				this._aniPlayTime -= this._delta;
+			}
 			if (this._viewUI.list) {
 				if (this._viewUI.list.dataSource) {
 					let cells = this._viewUI.list.cells;
@@ -313,6 +330,7 @@ module gamedating.page {
 				}
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_GAMELIST_UPDATE, this, this.onUpdateGameList);
+				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FULLSCREEN_UPDATE, this, this.onUpdateFullScreen);
 				if (this._clip_money) {
 					this._clip_money.removeSelf();
 					this._clip_money.destroy();
@@ -515,6 +533,7 @@ module gamedating.page {
 			if (!this._game || !this._game.datingGame) return;
 			//在线人数显示
 			this.box_online.y = 205;
+			this.box_online.visible = true;
 			this.txt_online.text = this._game.datingGame.OnlineNumMgr.getOnlineNum(this._gameStr);
 		}
 
