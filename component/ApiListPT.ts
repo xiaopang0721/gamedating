@@ -67,6 +67,13 @@ module gamedating.component {
 					}
 				}
 			}
+			if (this.isShow) {
+				// this.page.viewUI.btn_left.visible = true
+				// this.page.viewUI.btn_right.visible = true
+			} else {
+				this.page.viewUI.btn_left.visible = false
+				this.page.viewUI.btn_right.visible = false
+			}
 		}
 
 		//是否在展示子游戏状态中
@@ -247,7 +254,19 @@ module gamedating.component {
 					this.panel_pt.hScrollBar.touchScrollEnable = false
 				} else {
 					this.view_pt.btn_box.mouseEnabled = true
-					this.panel_pt.hScrollBar.touchScrollEnable = true
+					if (this._mainView.isShow) {
+						this.panel_pt.hScrollBar.touchScrollEnable = true
+						if (this.view_pt.list_yx.visible) {
+							//列表显示中
+							let cur_value = this.panel_pt.hScrollBar.value;
+							let max_value = this.panel_pt.hScrollBar.max;
+							let min_value = this.panel_pt.hScrollBar.min;
+							this._page.viewUI.btn_left.visible = cur_value > min_value;
+							this._page.viewUI.btn_right.visible = cur_value < max_value;
+						}
+					} else {
+						this.panel_pt.hScrollBar.touchScrollEnable = false
+					}
 				}
 			}
 		}

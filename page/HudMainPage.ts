@@ -756,7 +756,9 @@ module gamedating.page {
 					}
 				}
 			}
-			this._apiPTList && this._apiPTList.update()
+			if (WebConfig.isApiDJ) {
+				this.updataeAPIJT()
+			}
 		}
 
 		private _beforeArr = [];
@@ -827,6 +829,43 @@ module gamedating.page {
 			for (let i = 0; i < this._boxItems.length; i++) {
 				let data: any = this.tabData[i];
 				this._boxItems[i].clip.skin = DatingPath.ui_dating + "dating/effect/anniu/" + data.skin + ".png";
+			}
+		}
+
+		private updataeAPIJT(): void {
+			let cur_value;
+			let max_value;
+			let min_value;
+			this._viewUI.btn_left.visible = false;
+			this._viewUI.btn_right.visible = false;
+			switch (this._selectIndex) {
+				case ApiMgr.TYPE_DZYY - 1:
+					cur_value = this._apiJDBList.list_jdb.scrollBar.value;
+					max_value = this._apiJDBList.list_jdb.scrollBar.max;
+					min_value = this._apiJDBList.list_jdb.scrollBar.min;
+					break
+				case ApiMgr.TYPE_QP - 1:
+					this._apiPTList.update();
+					break
+				case ApiMgr.TYPE_ZRSX - 1:
+					cur_value = this._apiSXList.list_ag.scrollBar.value;
+					max_value = this._apiSXList.list_ag.scrollBar.max;
+					min_value = this._apiSXList.list_ag.scrollBar.min;
+					break
+				case ApiMgr.TYPE_BY - 1:
+					cur_value = this._apiBYList.list_by.scrollBar.value;
+					max_value = this._apiBYList.list_by.scrollBar.max;
+					min_value = this._apiBYList.list_by.scrollBar.min;
+					break
+				case ApiMgr.TYPE_HOT - 1:
+					cur_value = this._apiRMList.list_rm.scrollBar.value;
+					max_value = this._apiRMList.list_rm.scrollBar.max;
+					min_value = this._apiRMList.list_rm.scrollBar.min;
+					break
+			}
+			if ((cur_value == 0 || cur_value) && max_value) {
+				this._viewUI.btn_left.visible = cur_value > min_value;
+				this._viewUI.btn_right.visible = cur_value < max_value;
 			}
 		}
 

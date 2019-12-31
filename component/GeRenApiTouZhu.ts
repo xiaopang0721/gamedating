@@ -45,7 +45,7 @@ module gamedating.component {
             if (!data) {
                 return;
             }
-            cell.txt_time.text = Sync.getTimeShortStr(data.end_time*1000);
+            cell.txt_time.text = Sync.getTimeShortStr(data.end_time * 1000);
             cell.lb_zd.text = data.battle_id;
             cell.lb_money.text = data.all_bet;
             cell.lb_num.text = data.profit;
@@ -252,6 +252,9 @@ module gamedating.component {
                         this.txt_no.visible = false;
                         this.list_bb.visible = true;
                     }
+                    this._data.sort((a: any, b: any) => {
+                        return b.end_time - a.end_time
+                    })
                     this.list_bb.dataSource = this._data;
                     this.updateDaysUI(data.seven_list);
                 }
