@@ -136,6 +136,15 @@ module gamedating.page {
 			} else {
 				this._viewUI.btn_full.skin = DatingPath.ui_dating + "dating/btn_quanping.png";
 			}
+			if (this._game.isFullScreen) {
+				this._viewUI.box_btn_top_left.left = 56;
+				this._viewUI.box_btn_top.right = 56;
+				this._viewUI.list.left = 229 + 56;
+			} else {
+				this._viewUI.box_btn_top_left.left = 0;
+				this._viewUI.box_btn_top.right = 0;
+				this._viewUI.list.left = 229;
+			}
 		}
 
 		private _selectIndex: number = -1;
