@@ -968,7 +968,7 @@ module ui.ajqp.dating.component {
 		public img_bz:Laya.Image;
 		public list_yx:Laya.List;
 
-        public static  uiView:any ={"type":"View","props":{"width":545,"height":479},"child":[{"type":"Box","props":{"y":240,"x":181,"width":332,"var":"btn_box","scaleY":1.1,"scaleX":1.1,"height":381,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"y":0,"x":0,"width":332,"var":"img_pt","skin":"dating_ui/sk/QP/tu_jiazai1.png","height":381}},{"type":"Image","props":{"y":23,"x":91,"var":"img_bz","skin":"dating_ui/sk/QP/tu_fh.png","scaleY":0.9,"scaleX":0.9,"anchorY":0.5,"anchorX":0.5}}]},{"type":"List","props":{"y":21,"x":334,"var":"list_yx","spaceY":-15,"spaceX":0,"repeatY":2,"renderType":"render"},"child":[{"type":"Hud_T_API","props":{"renderType":"render","runtime":"ui.ajqp.dating.component.Hud_T_APIUI"}}]}]};
+        public static  uiView:any ={"type":"View","props":{"width":545,"height":479},"child":[{"type":"Box","props":{"y":240,"x":181,"width":332,"var":"btn_box","scaleY":1.1,"scaleX":1.1,"height":381,"anchorY":0.5,"anchorX":0.5},"child":[{"type":"Image","props":{"y":0,"x":0,"width":332,"var":"img_pt","skin":"dating_ui/sk/QP/tu_jiazai1.png","height":381}},{"type":"Image","props":{"y":23,"x":91,"var":"img_bz","skin":"dating_ui/sk/QP/tu_fh.png","scaleY":0.9,"scaleX":0.9,"anchorY":0.5,"anchorX":0.5}}]},{"type":"List","props":{"y":21,"x":334,"var":"list_yx","spaceY":-15,"spaceX":0,"repeatY":2},"child":[{"type":"Hud_T_API","props":{"renderType":"render","runtime":"ui.ajqp.dating.component.Hud_T_APIUI"}}]}]};
         constructor(){ super()}
         createChildren():void {
         			View.regComponent("ui.ajqp.dating.component.Hud_T_APIUI",ui.ajqp.dating.component.Hud_T_APIUI);
