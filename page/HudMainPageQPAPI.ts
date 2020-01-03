@@ -199,8 +199,8 @@ module gamedating.page {
 		}
 
 		private onScrollChange(v) {
-			this._viewUI.btn_right.visible = v > this._viewUI.list.scrollBar.min;
-			this._viewUI.btn_left.visible = v < this._viewUI.list.scrollBar.max;
+			this._viewUI.btn_left.visible = v > this._viewUI.list.scrollBar.min;
+			this._viewUI.btn_right.visible = v < this._viewUI.list.scrollBar.max;
 		}
 
 		private _clip_money: DatingClip;
@@ -212,7 +212,7 @@ module gamedating.page {
 			if (!playerInfo) return;
 			this._viewUI.txt_id.text = playerInfo.nickname;
 			if (!this._clip_money) {
-				this._clip_money = new DatingClip(DatingClip.MONEY_WHITE);
+				this._clip_money = new DatingClip(DatingClip.MONEY_FONT2);
 				this._clip_money.scale(0.9, 0.9);
 				this._clip_money.x = this._viewUI.clip_money.x;
 				this._clip_money.y = this._viewUI.clip_money.y;

@@ -5,8 +5,6 @@ module gamedating {
     export class ClipUtil extends Laya.Box {
         //货币 金色
         public static MONEY_FONT2: any;
-        //金币 白色
-        public static MONEY_WHITE: any;
         //分享大字
         public static FENXIANG_FONT: any;
         //积分轮盘
@@ -48,19 +46,10 @@ module gamedating {
             this.MONEY_FONT2 = {
                 source: DatingPath.atlas_dating_ui + "tongyong.atlas",
                 url: DatingPath.ui_dating + 'tongyong/clip_money1.png',
-                clipWidth: 22,
+                clipWidth: 20,
                 clipHeight: 28,
                 clipX: 11,
-                space: 0
-            };
-
-            this.MONEY_WHITE = {
-                source: DatingPath.atlas_dating_ui + "tongyong.atlas",
-                url: DatingPath.ui_dating + 'tongyong/clip_money1.png',
-                clipWidth: 20,
-                clipHeight: 27,
-                clipX: 11,
-                space: -2
+                space: -5
             };
 
             this.FENXIANG_FONT = {
