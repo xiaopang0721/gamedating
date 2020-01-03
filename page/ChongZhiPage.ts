@@ -25,7 +25,8 @@ module gamedating.page {
 			this.addChild(this._viewUI);
 
 			if (!this._clip_money) {
-				this._clip_money = new DatingClip(DatingClip.MONEY_WHITE);
+				this._clip_money = new DatingClip(DatingClip.MONEY_FONT2);
+				this._clip_money.scale(0.9, 0.9);
 				this._clip_money.x = this._viewUI.clip_money.x;
 				this._clip_money.y = this._viewUI.clip_money.y;
 				this._viewUI.clip_money.parent && this._viewUI.clip_money.parent.addChild(this._clip_money);
