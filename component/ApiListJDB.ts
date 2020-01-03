@@ -27,27 +27,29 @@ module gamedating.component {
 		];
 
 		layout(clientRealWidth: number): void {
-			this.list_jdb.width = clientRealWidth;
-			this.width = clientRealWidth;
-			let list_count = Math.ceil(ApiListJDB.JBD_DATA.length / this.list_jdb.repeatY);
-			//单个item*列数-两列之间的间距-当前的宽度
-			this.list_jdb.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_jdb.spaceX - clientRealWidth;
+			Laya.timer.frameOnce(1, this, () => {
+				this.list_jdb.width = clientRealWidth;
+				this.width = clientRealWidth;
+				let list_count = Math.ceil(ApiListJDB.JBD_DATA.length / this.list_jdb.repeatY);
+				//单个item*列数-两列之间的间距-当前的宽度
+				this.list_jdb.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_jdb.spaceX - clientRealWidth;
+			})
 		}
 
 		//gType_mType
-		public static GetGameName(gameid: string) {
-			// let arr = gameid.split("_");
-			// let gType = parseFloat(arr[0]);
-			// let mType = parseFloat(arr[1]);
-			let mType = parseFloat(gameid)
-			for (let i = 0; i < ApiListJDB.JBD_DATA.length; i++) {
-				let cur_data = ApiListJDB.JBD_DATA[i]
-				if (cur_data.mTYPE == mType) {
-					return cur_data.gameName
-				}
-			}
-			return ""
-		}
+		// public static GetGameName(gameid: string) {
+		// 	// let arr = gameid.split("_");
+		// 	// let gType = parseFloat(arr[0]);
+		// 	// let mType = parseFloat(arr[1]);
+		// 	let mType = parseFloat(gameid)
+		// 	for (let i = 0; i < ApiListJDB.JBD_DATA.length; i++) {
+		// 		let cur_data = ApiListJDB.JBD_DATA[i]
+		// 		if (cur_data.mTYPE == mType) {
+		// 			return cur_data.gameName
+		// 		}
+		// 	}
+		// 	return ""
+		// }
 		constructor(game: Game, page: any) {
 			super();
 			this._game = game;
@@ -61,6 +63,7 @@ module gamedating.component {
 
 		private init(): void {
 			this.list_jdb.hScrollBarSkin = ""
+			this.list_jdb.scrollBar.elasticDistance = 100
 			this.list_jdb.itemRender = DBDZ_Item
 			this.list_jdb.renderHandler = new Handler(this, this.renderHandlerDBMain)
 		}

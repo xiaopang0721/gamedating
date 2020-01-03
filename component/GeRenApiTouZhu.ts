@@ -55,21 +55,7 @@ module gamedating.component {
         }
 
         private getGameName(pf_code, gameId: string): string {
-            let gameName = ""
-            switch (pf_code) {
-                case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP:
-                    gameName = PageDef.getNameById(gameId)
-                    break
-                case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP:
-                    gameName = ApiListPT.GetGameName(gameId)
-                    break
-                case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP:
-                    gameName = ApiListJDB.GetGameName(gameId)
-                    break
-                case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP:
-                    gameName
-                    break
-            }
+            let gameName = PageDef.getNameById(gameId,pf_code)
             return gameName
         }
 

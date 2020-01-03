@@ -21,23 +21,26 @@ module gamedating.component {
 		}
 
 		layout(clientRealWidth: number): void {
-			this.list_qp.width = clientRealWidth
-			this.width = clientRealWidth;
+			Laya.timer.frameOnce(1, this, () => {
+				this.list_qp.width = clientRealWidth
+				this.width = clientRealWidth;
+			})
 		}
 
-		public static GetGameName(gameid: string) {
-			let game_id = parseFloat(gameid);
-			for (let i = 0; i < ApiListPT.KY_DATA.length; i++) {
-				let cur_data = ApiListPT.KY_DATA[i]
-				if (cur_data.kindID == game_id) {
-					return cur_data.gameName
-				}
-			}
-			return ""
-		}
+		// public static GetGameName(gameid: string) {
+		// 	let game_id = parseFloat(gameid);
+		// 	for (let i = 0; i < ApiListPT.KY_DATA.length; i++) {
+		// 		let cur_data = ApiListPT.KY_DATA[i]
+		// 		if (cur_data.kindID == game_id) {
+		// 			return cur_data.gameName
+		// 		}
+		// 	}
+		// 	return ""
+		// }
 
 		private init(): void {
 			this.list_qp.hScrollBarSkin = ""
+			this.list_qp.scrollBar.elasticDistance = 100
 			this.list_qp.itemRender = QPLB_Item_One
 			this.list_qp.renderHandler = new Handler(this, this.renderHandlerQP);
 		}
