@@ -170,14 +170,16 @@ module ui.qpapi.dating.component {
 
 module ui.qpapi.dating.component {
     export class LoadingTipTUI extends View {
+		public ani2:Laya.FrameAnimation;
 		public box:Laya.Box;
-		public img:Laya.Image;
+		public img:ui.qpapi.dating.component.Effect_shuiUI;
 		public txt:Laya.Label;
 
-        public static  uiView:any ={"type":"View","props":{"width":68,"height":61},"child":[{"type":"Image","props":{"y":0,"x":-1,"skin":"dating_ui/dating/tu_kuang.png"}},{"type":"Box","props":{"y":9,"x":8,"var":"box"},"child":[{"type":"Image","props":{"y":0,"x":0,"skin":"dating_ui/dating/tu_man.png","renderType":"mask"}},{"type":"Image","props":{"y":0,"x":0,"var":"img","skin":"dating_ui/dating/tu_man.png"}}]},{"type":"Label","props":{"y":16,"x":10,"width":45,"var":"txt","text":"0%","italic":true,"height":19,"fontSize":16,"color":"#7bff57","bold":true,"align":"center"}}]};
+        public static  uiView:any ={"type":"View","props":{"width":74,"height":36},"child":[{"type":"Image","props":{"skin":"dating_ui/gxz/tu_kd.png","centerY":0,"centerX":0}},{"type":"Image","props":{"skin":"dating_ui/gxz/tu_kuang.png","centerY":0,"centerX":0}},{"type":"Box","props":{"width":74,"var":"box","height":36,"centerY":0,"centerX":0},"child":[{"type":"Image","props":{"y":0,"x":1.5,"skin":"dating_ui/gxz/tu_zz1.png","renderType":"mask"}},{"type":"Effect_shui","props":{"y":61,"x":34,"var":"img","anchorY":0.5,"anchorX":0.5,"runtime":"ui.qpapi.dating.component.Effect_shuiUI"}}]},{"type":"Label","props":{"y":8,"width":45,"var":"txt","text":"0%","italic":true,"height":19,"fontSize":16,"color":"#7bff57","centerX":0,"bold":true,"align":"center"}},{"type":"Image","props":{"x":37,"skin":"dating_ui/gxz/gx10000.png","centerY":0,"blendMode":"lighter","anchorY":0.5,"anchorX":0.5},"compId":7}],"animations":[{"nodes":[{"target":7,"keyframes":{"skin":[{"value":"dating_ui/gxz/gx10000.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":0},{"value":"dating_ui/gxz/gx10001.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":4},{"value":"dating_ui/gxz/gx10002.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":8},{"value":"dating_ui/gxz/gx10003.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":12},{"value":"dating_ui/gxz/gx10004.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":16},{"value":"dating_ui/gxz/gx10005.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":20},{"value":"dating_ui/gxz/gx10006.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":24},{"value":"dating_ui/gxz/gx10007.png","tweenMethod":"linearNone","tween":false,"target":7,"key":"skin","index":28}]}}],"name":"ani2","id":2,"frameRate":24,"action":2}]};
         constructor(){ super()}
         createChildren():void {
-        
+        			View.regComponent("ui.qpapi.dating.component.Effect_shuiUI",ui.qpapi.dating.component.Effect_shuiUI);
+
             super.createChildren();
             this.createView(ui.qpapi.dating.component.LoadingTipTUI.uiView);
         }
