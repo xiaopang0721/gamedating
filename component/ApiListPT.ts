@@ -180,7 +180,7 @@ module gamedating.component {
 			this._data = v;
 			this.view_pt.list_yx.dataSource = v;
 			this.view_pt.list_yx.repeatX = Math.ceil(v.length / 2)
-			this._listWidth = this.view_pt.list_yx.width = 245 * this.view_pt.list_yx.repeatX;
+			this._listWidth = this.view_pt.list_yx.width = 225 * this.view_pt.list_yx.repeatX;
 			let list_count = Math.ceil(v.length / this.view_pt.list_yx.repeatY);
 			this._selfWidthList = 23 + 332 + 5 + this._listWidth;
 			this._selfWidth = 23 + 332 + 5;

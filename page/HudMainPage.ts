@@ -356,11 +356,11 @@ module gamedating.page {
 					this._viewUI.box_sx.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
 					this._viewUI.box_by.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
 					this._viewUI.box_rm.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
-					this._apiPTList && this._apiPTList.layout(this._clientRealWidth)
-					this._apiJDBList && this._apiJDBList.layout(this._clientRealWidth)
-					this._apiSXList && this._apiSXList.layout(this._clientRealWidth)
-					this._apiBYList && this._apiBYList.layout(this._clientRealWidth)
-					this._apiRMList && this._apiRMList.layout(this._clientRealWidth)
+					this._apiPTList && this._apiPTList.layout(this._viewUI.box_qp.width)
+					this._apiJDBList && this._apiJDBList.layout(this._viewUI.box_jdb.width)
+					this._apiSXList && this._apiSXList.layout(this._viewUI.box_sx.width)
+					this._apiBYList && this._apiBYList.layout(this._viewUI.box_by.width)
+					this._apiRMList && this._apiRMList.layout(this._viewUI.box_rm.width)
 					this.updatePos();
 					this.onSelectItem(0);
 				});
