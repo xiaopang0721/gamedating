@@ -886,8 +886,8 @@ module gamedating.page {
 			this._viewUI.box_qp.addChild(this._apiPTList);
 			this._apiPTList.setData();
 			Laya.timer.frameOnce(1, this, () => {
-				// this._viewUI.box_qp.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
-				this._apiPTList.layout(this._clientRealWidth);
+				this._viewUI.box_qp.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+				this._apiPTList.layout(this._viewUI.box_qp.width);
 			})
 		}
 
