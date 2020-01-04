@@ -607,16 +607,33 @@ module gamedating.page {
 			}
 			else if (CLOSE_LIST.indexOf(data) == -1) {
 				this._page.saveListStatus();
-				this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
-					this._game.uiRoot.HUD.closeAll([data + 1]);
-				}, (page: Page) => {
-					// 场次返回大厅回调
-					if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
-						this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
-							this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
-						}, null, 0);
-					}
-				});
+				if (data == 'wxsaoleihb') {
+					this._game.uiRoot.general.open(data + 9, (page: any) => {
+						page.isInner = false;
+					}, () => {
+						this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
+							this._game.uiRoot.HUD.closeAll([data + 1]);
+						}, (page: Page) => {
+							// 场次返回大厅回调
+							if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
+								this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+									this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
+								}, null, 0);
+							}
+						});
+					})
+				} else {
+					this._game.uiRoot.HUD.open(data + 1, (page: Page) => {
+						this._game.uiRoot.HUD.closeAll([data + 1]);
+					}, (page: Page) => {
+						// 场次返回大厅回调
+						if (this._game.sceneObjectMgr.mainPlayer && !this._game.sceneGame.inScene) {
+							this._game.uiRoot.HUD.open(DatingPageDef.PAGE_HUD, () => {
+								this._game.uiRoot.HUD.closeAll([DatingPageDef.PAGE_HUD])
+							}, null, 0);
+						}
+					});
+				}
 			} else {
 				this._game.showTips("开发中,敬请期待!");
 			}
