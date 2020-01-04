@@ -183,6 +183,11 @@ module gamedating.page {
 					DatingPath.atlas_dating_ui + "zt.atlas",
 					DatingPath.atlas_dating_ui + "dd.atlas",
 					DatingPath.atlas_dating_ui + "update.atlas",
+					//美女龙骨相关添加
+					DatingPath.sk_dating + "fmqq.png",
+					DatingPath.sk_dating + "jddw.png",
+					DatingPath.sk_dating + "wrzx.png",
+					DatingPath.sk_dating + "zrdz.png",
 				]
 			} else {
 				this["__needLoadAsset"] = [
