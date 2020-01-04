@@ -174,9 +174,13 @@ module gamedating.page {
 				this["__needLoadAsset"] = [
 					//美女龙骨相关添加
 					DatingPath.sk_dating + "fmqq.png",
+					DatingPath.sk_dating + "fmqq.sk",
 					DatingPath.sk_dating + "jddw.png",
+					DatingPath.sk_dating + "jddw.sk",
 					DatingPath.sk_dating + "wrzx.png",
+					DatingPath.sk_dating + "wrzx.sk",
 					DatingPath.sk_dating + "zrdz.png",
+					DatingPath.sk_dating + "zrdz.sk",
 					//大厅资源相关添加
 					DatingPath.atlas_dating_ui + "dating.atlas",
 					DatingPath.atlas_dating_ui + "rk.atlas",
