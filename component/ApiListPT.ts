@@ -21,10 +21,17 @@ module gamedating.component {
 		}
 
 		layout(clientRealWidth: number): void {
-			Laya.timer.frameOnce(1, this, () => {
-				this.list_qp.width = clientRealWidth
-				this.width = clientRealWidth;
-			})
+			this.list_qp.width = clientRealWidth
+			this.width = clientRealWidth;
+			if (this.list_qp) {
+				if (this.list_qp.dataSource) {
+					let cells = this.list_qp.cells;
+					for (let index = 0; index < cells.length; index++) {
+						let element = cells[index] as QPLB_Item_One;
+						element && element.layout(clientRealWidth);
+					}
+				}
+			}
 		}
 
 		// public static GetGameName(gameid: string) {
@@ -169,18 +176,26 @@ module gamedating.component {
 		constructor() {
 			super()
 			this.panel_pt.hScrollBarSkin = ""
+			this.panel_pt.hScrollBar.elasticDistance = 100;
 			this.view_pt.list_yx.itemRender = QPLB_Item_Two
 			this.view_pt.list_yx.renderHandler = new Handler(this, this.renderHandlerQPYX);
 			this.view_pt.img_bz.visible = false;
 		}
 
+		layout(clientRealWidth:number): void {
+			this.panel_pt.width = clientRealWidth;
+			// this.width = this._selfWidth;
+			// this.view_pt.width = this.width;
+		}
+
+		private _listWidth: number = 0;
 		set dataSource(v) {
 			if (!v) return;
 			this.view_pt.list_yx.dataSource = v;
 			this.view_pt.list_yx.repeatX = Math.ceil(this.view_pt.list_yx.dataSource.length / 2)
-			this.view_pt.list_yx.width = 225 * this.view_pt.list_yx.repeatX;
+			this._listWidth = this.view_pt.list_yx.width = 225 * this.view_pt.list_yx.repeatX;
 			let list_count = Math.ceil(v.length / this.view_pt.list_yx.repeatY);
-			this._selfWidthList = 23 + 332 + 5 + this.view_pt.list_yx.width;
+			this._selfWidthList = 23 + 332 + 5 + this._listWidth;
 			this._selfWidth = 23 + 332 + 5;
 			this.view_pt.list_yx.visible = false;
 

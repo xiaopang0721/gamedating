@@ -150,7 +150,7 @@ module gamedating.page {
 					break
 			}
 			let xm_je: number = xm_liang * xm_bl;
-			this._viewUI.lb_xmje.text = xm_je > 0 ? xm_je.toFixed(2) : '0';
+			this._viewUI.lb_xmje.text = xm_je.toString();
 			this._viewUI.lb_xml.text = xm_liang.toString();
 		}
 

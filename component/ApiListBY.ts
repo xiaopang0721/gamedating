@@ -20,10 +20,8 @@ module gamedating.component {
 		}
 
 		layout(clientRealWidth: number): void {
-			Laya.timer.frameOnce(1, this, () => {
-				this.list_by.width = clientRealWidth
-				this.width = clientRealWidth;
-			})
+			this.list_by.width = clientRealWidth
+			this.width = clientRealWidth;
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {

@@ -349,19 +349,18 @@ module gamedating.page {
 		protected layout(): void {
 			super.layout();
 			if (this._viewUI) {
-				this._apiPTList && this._apiPTList.layout(this._clientRealWidth)
-				this._apiJDBList && this._apiJDBList.layout(this._clientRealWidth)
-				this._apiSXList && this._apiSXList.layout(this._clientRealWidth)
-				this._apiRMList && this._apiRMList.layout(this._clientRealWidth)
-				this._apiBYList && this._apiBYList.layout(this._clientRealWidth)
-				this._viewUI.list_btns.width = this._clientRealWidth;
-				this._viewUI.box_jdb.width = this._clientRealWidth;
-				this._viewUI.box_qp.width = this._clientRealWidth;
-				this._viewUI.box_sx.width = this._clientRealWidth;
-				this._viewUI.box_by.width = this._clientRealWidth;
-				this._viewUI.box_rm.width = this._clientRealWidth;
 				//因为异步调用，resize事件抛出后，当前帧还未全部改掉整体页面布局，只能延迟一帧去调用
 				Laya.timer.frameOnce(1, this, () => {
+					this._viewUI.box_jdb.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+					this._viewUI.box_qp.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+					this._viewUI.box_sx.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+					this._viewUI.box_by.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+					this._viewUI.box_rm.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+					this._apiPTList && this._apiPTList.layout(this._clientRealWidth)
+					this._apiJDBList && this._apiJDBList.layout(this._clientRealWidth)
+					this._apiSXList && this._apiSXList.layout(this._clientRealWidth)
+					this._apiBYList && this._apiBYList.layout(this._clientRealWidth)
+					this._apiRMList && this._apiRMList.layout(this._clientRealWidth)
 					this.updatePos();
 					this.onSelectItem(0);
 				});
@@ -882,20 +881,27 @@ module gamedating.page {
 			this._apiPTList = new ApiListPT(this._game, this);
 			this._viewUI.box_qp.addChild(this._apiPTList);
 			this._apiPTList.setData();
-			this._apiPTList.layout(this._clientRealWidth);
+			Laya.timer.frameOnce(1, this, () => {
+				// this._viewUI.box_qp.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+				this._apiPTList.layout(this._clientRealWidth);
+			})
 		}
 
 		private addJDBList() {
 			this._apiJDBList = new ApiListJDB(this._game, this);
 			this._viewUI.box_jdb.addChild(this._apiJDBList);
 			this._apiJDBList.setData();
-			this._apiJDBList.layout(this._clientRealWidth);
+			Laya.timer.frameOnce(1, this, () => {
+				this._viewUI.box_jdb.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+				this._apiJDBList.layout(this._viewUI.box_jdb.width);
+			})
 		}
 
 		private addSXList() {
 			this._apiSXList = new ApiListSx(this._game, this);
 			this._viewUI.box_sx.addChild(this._apiSXList);
 			this._apiSXList.setData();
+			this._viewUI.box_sx.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
 			this._apiSXList.layout(this._clientRealWidth);
 		}
 
@@ -903,6 +909,7 @@ module gamedating.page {
 			this._apiBYList = new ApiListBY(this._game, this);
 			this._viewUI.box_by.addChild(this._apiBYList);
 			this._apiBYList.setData();
+			this._viewUI.box_by.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
 			this._apiBYList.layout(this._clientRealWidth);
 		}
 
@@ -910,7 +917,10 @@ module gamedating.page {
 			this._apiRMList = new ApiListRM(this._game, this);
 			this._viewUI.box_rm.addChild(this._apiRMList);
 			this._apiRMList.setData();
-			this._apiRMList.layout(this._clientRealWidth);
+			Laya.timer.frameOnce(1, this, () => {
+				this._viewUI.box_rm.width = this._game.isFullScreen ? this._clientWidth - 279 : this._clientWidth - 229;
+				this._apiRMList.layout(this._viewUI.box_rm.width);
+			})
 		}
 
 		//--------------------API版本相关-----------end-------------

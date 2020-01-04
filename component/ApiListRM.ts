@@ -32,13 +32,20 @@ module gamedating.component {
 		}
 
 		layout(clientRealWidth: number): void {
-			Laya.timer.frameOnce(1, this, () => {
-				this.list_rm.width = clientRealWidth
-				this.width = clientRealWidth;
-				let list_count = Math.ceil(this.rm_data.length / this.list_rm.repeatY);
-				//单个item*列数-两列之间的间距-当前的宽度
-				this.list_rm.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_rm.spaceX - clientRealWidth;
-			})
+			this.list_rm.width = clientRealWidth
+			this.width = clientRealWidth;
+			let list_count = Math.ceil(this.rm_data.length / this.list_rm.repeatY);
+			//单个item*列数-两列之间的间距-当前的宽度
+			let is_max = false
+			let max = this.list_rm.scrollBar.max
+			let cur_value = this.list_rm.scrollBar.value
+			if (cur_value > max - 1 && cur_value < max + 1) {
+				is_max = true
+			}
+			this.list_rm.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_rm.spaceX - clientRealWidth;
+			if (is_max) {
+				this.list_rm.scrollBar.value == this.list_rm.scrollBar.max
+			}
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {
