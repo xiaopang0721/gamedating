@@ -172,17 +172,20 @@ module gamedating.page {
 
 			if (WebConfig.enterGameLocked) {
 				this["__needLoadAsset"] = [
-					DatingPath.atlas_dating_ui + "anniu.atlas",
 					DatingPath.atlas_dating_ui + "dating.atlas",
+					DatingPath.atlas_dating_ui + "rk.atlas",
 					DatingPath.atlas_dating_ui + "datinggg.atlas",
+					DatingPath.atlas_dating_ui + "aeqp.atlas",
+					DatingPath.atlas_dating_ui + "anniu.atlas",
+					DatingPath.atlas_dating_ui + "tongyong.atlas",
+					DatingPath.atlas_dating_ui + "update.atlas",
 					DatingPath.atlas_dating_ui + "gxz.atlas",
+					DatingPath.atlas_dating_ui + "dd.atlas",
+					DatingPath.atlas_dating_ui + "zt.atlas",
+					DatingPath.atlas_dating_ui + "fk.atlas",
+					DatingPath.atlas_dating_ui + "tj.atlas",
 					DatingPath.atlas_dating_ui + "huore.atlas",
 					DatingPath.atlas_dating_ui + "new.atlas",
-					DatingPath.atlas_dating_ui + "tj.atlas",
-					DatingPath.atlas_dating_ui + "tongyong.atlas",
-					DatingPath.atlas_dating_ui + "zt.atlas",
-					DatingPath.atlas_dating_ui + "dd.atlas",
-					DatingPath.atlas_dating_ui + "update.atlas",
 					//美女龙骨相关添加
 					DatingPath.sk_dating + "fmqq.png",
 					DatingPath.sk_dating + "jddw.png",

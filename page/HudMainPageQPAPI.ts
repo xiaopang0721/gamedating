@@ -19,19 +19,40 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
-				DatingPath.atlas_dating_ui + "anniu.atlas",
 				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "aeqp.atlas",
+				DatingPath.atlas_dating_ui + "rk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
+				DatingPath.atlas_dating_ui + "aeqp.atlas",
+				DatingPath.atlas_dating_ui + "anniu.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui + "update.atlas",
 				DatingPath.atlas_dating_ui + "gxz.atlas",
+				DatingPath.atlas_dating_ui + "dd.atlas",
+				DatingPath.atlas_dating_ui + "zt.atlas",
+				DatingPath.atlas_dating_ui + "fk.atlas",
+				DatingPath.atlas_dating_ui + "tj.atlas",
 				DatingPath.atlas_dating_ui + "huore.atlas",
 				DatingPath.atlas_dating_ui + "new.atlas",
-				DatingPath.atlas_dating_ui + "tj.atlas",
-				DatingPath.atlas_dating_ui + "tongyong.atlas",
-				DatingPath.atlas_dating_ui + "zt.atlas",
-				DatingPath.atlas_dating_ui + "dd.atlas",
-				DatingPath.atlas_dating_ui + "update.atlas",
+				DatingPath.sk_dating + "fmqq.png",
+				DatingPath.sk_dating + "jddw.png",
+				DatingPath.sk_dating + "wrzx.png",
+				DatingPath.sk_dating + "zrdz.png",
 				DatingPath.atlas_dating_ui_dating_effect + "anniu.atlas",
+				//通用预加载
+				Path.atlas_game_ui_tongyong + "dating.atlas",
+				Path.atlas_game_ui_tongyong + "general.atlas",
+				Path.atlas_game_ui_tongyong + "hud.atlas",
+				Path.atlas_game_ui_tongyong + "logo.atlas",
+				Path.atlas_game_ui_tongyong + "pai.atlas",
+				Path.atlas_game_ui_tongyong + "qz.atlas",
+				Path.atlas_game_ui_tongyong + "touxiang.atlas",
+				Path.atlas_game_ui_tongyong + "yq.atlas",
+				Path.atlas_game_ui_tongyong + "fk.atlas",
+				//游戏场景预加载
+				Path.custom_atlas_scene + 'card.atlas',
+				Path.custom_atlas_scene + 'chip.atlas',
+				Path.custom_atlas_scene + 'gupai.atlas',
+				Path.custom_atlas_scene + 'mahjong.atlas',
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
