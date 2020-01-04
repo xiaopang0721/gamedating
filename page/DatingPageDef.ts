@@ -172,6 +172,12 @@ module gamedating.page {
 
 			if (WebConfig.enterGameLocked) {
 				this["__needLoadAsset"] = [
+					//美女龙骨相关添加
+					DatingPath.sk_dating + "fmqq.png",
+					DatingPath.sk_dating + "jddw.png",
+					DatingPath.sk_dating + "wrzx.png",
+					DatingPath.sk_dating + "zrdz.png",
+					//大厅资源相关添加
 					DatingPath.atlas_dating_ui + "dating.atlas",
 					DatingPath.atlas_dating_ui + "rk.atlas",
 					DatingPath.atlas_dating_ui + "datinggg.atlas",
@@ -186,11 +192,7 @@ module gamedating.page {
 					DatingPath.atlas_dating_ui + "tj.atlas",
 					DatingPath.atlas_dating_ui + "huore.atlas",
 					DatingPath.atlas_dating_ui + "new.atlas",
-					//美女龙骨相关添加
-					DatingPath.sk_dating + "fmqq.png",
-					DatingPath.sk_dating + "jddw.png",
-					DatingPath.sk_dating + "wrzx.png",
-					DatingPath.sk_dating + "zrdz.png",
+					DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
 				]
 			} else {
 				this["__needLoadAsset"] = [

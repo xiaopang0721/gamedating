@@ -11,7 +11,6 @@ module gamedating.page {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
-				"tongyong_res/atlas/tongyong_ui/game_ui/tongyong/general/anniu.atlas",
 			];
 			this._isNeedDuang = false;
 		}
