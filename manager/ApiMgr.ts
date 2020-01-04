@@ -34,6 +34,7 @@ module gamedating.managers {
 
         init() {
             this._game.network.addHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+            this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.updateTotalXMData);
         }
 
         //api相关返回
@@ -76,8 +77,57 @@ module gamedating.managers {
                     case Operation_Fields.OPRATE_API_API_GET_RECODE_RESULT:
                         msg.data;
                         break
+                    case Operation_Fields.OPRATE_API_API_LOGIN_FAIL_RESULT:
+                        //api登陆失败
+                        this._game.showTips("连接对方平台超时，请稍后重试");
+                        this._game.uiRoot.general.close(PageDef.PAGE_WAITEFFECT);
+                        break
                 }
             }
+        }
+
+        private _totlaXMData: any
+        private updateTotalXMData(): void {
+            this._totlaXMData = [];
+            this._totlaXMData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_AEQP)));
+            this._totlaXMData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP)));
+            this._totlaXMData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP)));
+            this._totlaXMData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP)));
+        }
+
+        get totlaXMData(): void {
+            if (!this._totlaXMData) {
+                this.updateTotalXMData();
+            }
+            return this._totlaXMData;
+        }
+
+        private changeArr(curPtInfo): any {
+            let arr = []
+            for (let key in curPtInfo) {
+                if (curPtInfo.hasOwnProperty(key)) {
+                    let element = curPtInfo[key];
+                    if (element) {
+                        arr.push(element);
+                    }
+                }
+            }
+            return arr;
+        }
+
+        //根据当前vip等级获取对应平台的比例
+        public getPTBL(pf_code): any {
+            let curInfo = this.totlaXMData[pf_code - 1];
+            let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+            if (!mainPlayer) return;
+            let vip_level: number = mainPlayer.playerInfo.vip_level;
+            for (let i = 0; i < curInfo.length; i++) {
+                let curData = curInfo[i];
+                if (curData && curData.viplv == vip_level) {
+                    return curData.fs_prec
+                }
+            }
+            return 0;
         }
 
         public static GetSteSkinByPFCode(pfCode: number, strName: string): string {
@@ -125,7 +175,7 @@ module gamedating.managers {
                             }))
                         } else {
                             JsLoader.ins.startLoad(gameid, true);
-                            this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameid)));
+                            this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(gameid,Web_operation_fields.GAME_PLATFORM_TYPE_AEQP)));
                         }
                         break
                 }
@@ -210,6 +260,7 @@ module gamedating.managers {
             if (fource) super.clear(fource)
             Laya.timer.clearAll(this);
             this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
+            this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.updateTotalXMData);
         }
     }
 }

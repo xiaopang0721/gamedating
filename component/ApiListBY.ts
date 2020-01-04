@@ -20,8 +20,10 @@ module gamedating.component {
 		}
 
 		layout(clientRealWidth: number): void {
-			this.list_by.width = clientRealWidth
-			this.width = clientRealWidth;
+			Laya.timer.frameOnce(1, this, () => {
+				this.list_by.width = clientRealWidth
+				this.width = clientRealWidth;
+			})
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {
@@ -30,6 +32,7 @@ module gamedating.component {
 
 		private init(): void {
 			this.list_by.hScrollBarSkin = ""
+			this.list_by.scrollBar.elasticDistance = 100
 			this.list_by.itemRender = DBDZ_Item
 			this.list_by.renderHandler = new Handler(this, this.renderHandlerDBMain)
 		}

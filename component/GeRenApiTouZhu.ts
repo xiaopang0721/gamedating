@@ -21,11 +21,11 @@ module gamedating.component {
             this.list_title.renderHandler = new Handler(this, this.renderTabHandler);
             this.list_title.dataSource = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];
             this.list_title.selectHandler = new Handler(this, this.selectTitleTZHandler);
+            this.initMiddle();
 
             this.initDate();
             this.btn_select.on(LEvent.CLICK, this, this.onBtnClick);
             this.list_title.selectedIndex = 0;
-            this.initMiddle();
             this.box_pt.visible = false;
             this.box_select.visible = false;
             this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_OPRATE_SUCESS, this, this.onSucessHandler);
@@ -55,21 +55,7 @@ module gamedating.component {
         }
 
         private getGameName(pf_code, gameId: string): string {
-            let gameName = ""
-            switch (pf_code) {
-                case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP:
-                    gameName = PageDef.getNameById(gameId)
-                    break
-                case Web_operation_fields.GAME_PLATFORM_TYPE_KYQP:
-                    gameName = ApiListPT.GetGameName(gameId)
-                    break
-                case Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP:
-                    gameName = ApiListJDB.GetGameName(gameId)
-                    break
-                case Web_operation_fields.GAME_PLATFORM_TYPE_AGQP:
-                    gameName
-                    break
-            }
+            let gameName = PageDef.getNameById(gameId,pf_code)
             return gameName
         }
 
@@ -237,6 +223,8 @@ module gamedating.component {
                     this._curPt = Web_operation_fields.GAME_PLATFORM_TYPE_AGQP;
                     break
             }
+            this.txt_no.visible = false;
+            this.list_bb.visible = false;
             this.menuTween(false, this.box_btn, this.btn_jiantou);
             this.onUpdateDataInfo();
         }
@@ -245,6 +233,11 @@ module gamedating.component {
             if (data.code == Web_operation_fields.CLIENT_IRCODE_GETAPIGAMERECORD) {//游戏记录返回
                 if (data && data.success == 0) {
                     this._data = data.list;
+                    this._data.sort((a: any, b: any) => {
+                        return b.end_time - a.end_time
+                    })
+                    this.list_bb.dataSource = this._data;
+                    this.updateDaysUI(data.seven_list);
                     if (this._data.length <= 0) {
                         this.txt_no.visible = true;
                         this.list_bb.visible = false;
@@ -252,11 +245,6 @@ module gamedating.component {
                         this.txt_no.visible = false;
                         this.list_bb.visible = true;
                     }
-                    this._data.sort((a: any, b: any) => {
-                        return b.end_time - a.end_time
-                    })
-                    this.list_bb.dataSource = this._data;
-                    this.updateDaysUI(data.seven_list);
                 }
             }
         }

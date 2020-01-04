@@ -32,11 +32,13 @@ module gamedating.component {
 		}
 
 		layout(clientRealWidth: number): void {
-			this.list_rm.width = clientRealWidth
-			this.width = clientRealWidth;
-			let list_count = Math.ceil(this.rm_data.length / this.list_rm.repeatY);
-			//单个item*列数-两列之间的间距-当前的宽度
-			this.list_rm.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_rm.spaceX - clientRealWidth;
+			Laya.timer.frameOnce(1, this, () => {
+				this.list_rm.width = clientRealWidth
+				this.width = clientRealWidth;
+				let list_count = Math.ceil(this.rm_data.length / this.list_rm.repeatY);
+				//单个item*列数-两列之间的间距-当前的宽度
+				this.list_rm.scrollBar.max = 250 * (list_count + 1) + list_count * this.list_rm.spaceX - clientRealWidth;
+			})
 		}
 
 		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {
@@ -45,6 +47,7 @@ module gamedating.component {
 
 		private init(): void {
 			this.list_rm.hScrollBarSkin = ""
+			this.list_rm.scrollBar.elasticDistance = 100
 			this.list_rm.itemRender = DBDZ_Item
 			this.list_rm.renderHandler = new Handler(this, this.renderHandlerDBMain)
 		}

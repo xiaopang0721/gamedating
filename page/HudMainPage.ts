@@ -113,6 +113,7 @@ module gamedating.page {
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_qiandao, this, this.checkout, new Point(82, -5), 1, null, [this._viewUI.btn_qiandao]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_zhuanpan, this, this.checkout, new Point(80, -5), 1, null, [this._viewUI.btn_zhuanpan]);
 			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.btn_shouchong, this, this.checkout, new Point(65, -10), 1, null, [this._viewUI.btn_shouchong]);
+			this._game.datingGame.redPointCheckMgr.addCheckInfo(this, this._viewUI.box_xm, this, this.checkout, new Point(80, -10), 1, null, [this._viewUI.box_xm]);
 
 			this._game.qifuMgr.on(QiFuMgr.QIFU_FLY, this, this.qifuFly);
 		}
@@ -237,7 +238,20 @@ module gamedating.page {
 					return WebConfig.info.is_can_first_get;
 				case this._viewUI.btn_fenxiang:
 					return !WebConfig.info.is_shared;
+				case this._viewUI.box_xm:
+					return this.checkXMHD();
 			}
+		}
+
+		private checkXMHD(): boolean {
+			let is_show: boolean = false;
+			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			if (!mainPlayer) return;
+			is_show = mainPlayer.GetXiMaLiangAE() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) / 100) > 0;
+			is_show = mainPlayer.GetXiMaLiangKY() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) / 100) > 0;
+			is_show = mainPlayer.GetXiMaLiangJDB() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) / 100) > 0;
+			is_show = mainPlayer.GetXiMaLiangAG() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) / 100) > 0;
+			return is_show;
 		}
 
 		private onScrollChange(v) {
@@ -549,27 +563,22 @@ module gamedating.page {
 					//热门
 					if (!this._apiRMList)
 						this.addRMList()
-					this._apiRMList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_QP - 1) {
 					//棋牌
 					if (!this._apiPTList)
 						this.addPTList()
-					this._apiPTList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_BY - 1) {
 					//捕鱼游戏
 					if (!this._apiBYList)
 						this.addBYList()
-					this._apiBYList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_DZYY - 1) {
 					//电子游艺
 					if (!this._apiJDBList)
 						this.addJDBList()
-					this._apiJDBList.layout(this._clientRealWidth);
 				} else if (index == ApiMgr.TYPE_ZRSX - 1) {
 					//真人视讯
 					if (!this._apiSXList)
 						this.addSXList()
-					this._apiSXList.layout(this._clientRealWidth);
 				}
 			} else {
 				// 如果有值，说明该干活了
@@ -873,30 +882,35 @@ module gamedating.page {
 			this._apiPTList = new ApiListPT(this._game, this);
 			this._viewUI.box_qp.addChild(this._apiPTList);
 			this._apiPTList.setData();
+			this._apiPTList.layout(this._clientRealWidth);
 		}
 
 		private addJDBList() {
 			this._apiJDBList = new ApiListJDB(this._game, this);
 			this._viewUI.box_jdb.addChild(this._apiJDBList);
 			this._apiJDBList.setData();
+			this._apiJDBList.layout(this._clientRealWidth);
 		}
 
 		private addSXList() {
 			this._apiSXList = new ApiListSx(this._game, this);
 			this._viewUI.box_sx.addChild(this._apiSXList);
 			this._apiSXList.setData();
+			this._apiSXList.layout(this._clientRealWidth);
 		}
 
 		private addBYList() {
 			this._apiBYList = new ApiListBY(this._game, this);
 			this._viewUI.box_by.addChild(this._apiBYList);
 			this._apiBYList.setData();
+			this._apiBYList.layout(this._clientRealWidth);
 		}
 
 		private addRMList() {
 			this._apiRMList = new ApiListRM(this._game, this);
 			this._viewUI.box_rm.addChild(this._apiRMList);
 			this._apiRMList.setData();
+			this._apiRMList.layout(this._clientRealWidth);
 		}
 
 		//--------------------API版本相关-----------end-------------
@@ -1117,7 +1131,7 @@ module gamedating.page {
 					}))
 				} else {
 					JsLoader.ins.startLoad(data, true);
-					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data)));
+					this._game.showTips(StringU.substitute("{0}已加入更新队列", PageDef.getNameById(data, Web_operation_fields.GAME_PLATFORM_TYPE_AEQP)));
 				}
 			});
 		}

@@ -7,6 +7,7 @@ module gamedating.page {
 		private _curPt: number;
 		private _curInfo;
 		private _mainPlayer: PlayerData;
+		private _totlaData: any;
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
@@ -57,10 +58,23 @@ module gamedating.page {
 			this.initPTInfo();
 			this._viewUI.btn_record.on(LEvent.CLICK, this, this.onBtnClickWithTween);
 			this._viewUI.btn_xm.on(LEvent.CLICK, this, this.onBtnClickWithTween);
-			this._game.sceneObjectMgr.on(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.initData);
-			this.initData();
+
+			this._totlaData = this._game.datingGame.apiMgr.totlaXMData;
 			this._viewUI.list_tab.selectedIndex = 0;
 			this._game.sceneGame.sceneObjectMgr.on(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
+		}
+
+		update(diff: number): void {
+			super.update(diff);
+			if (this._viewUI.list_tab) {
+				if (this._viewUI.list_tab.dataSource) {
+					let cells = this._viewUI.list_tab.cells;
+					for (let index = 0; index < cells.length; index++) {
+						let element = cells[index] as TabItemRender;
+						element && element.update();
+					}
+				}
+			}
 		}
 
 		private onUpdatePlayerInfo(): void {
@@ -78,28 +92,6 @@ module gamedating.page {
 						break;
 				}
 			}
-		}
-
-		private _totlaData: any;
-		private initData(): void {
-			this._totlaData = []
-			this._totlaData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_AEQP)));
-			this._totlaData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP)));
-			this._totlaData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP)));
-			this._totlaData.push(this.changeArr(FreeStyle.getData(Web_operation_fields.FREE_STYLE_TYPES_GAMEFS_C, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP)));
-		}
-
-		changeArr(curPtInfo): any {
-			let arr = []
-			for (let key in curPtInfo) {
-				if (curPtInfo.hasOwnProperty(key)) {
-					let element = curPtInfo[key];
-					if (element) {
-						arr.push(element);
-					}
-				}
-			}
-			return arr;
 		}
 
 		private initPTInfo(): void {
@@ -135,14 +127,14 @@ module gamedating.page {
 		}
 
 		private renderTabHandler(cell: TabItemRender, index: number): void {
-			cell.setData(this._game, index, this._viewUI.list_tab.selectedIndex);
+			cell.setData(this._game, index, this._viewUI.list_tab.selectedIndex, this);
 		}
 
 		private selectHandler(index: number) {
 			this._curPt = index + 1;
 			this._viewUI.list_info.dataSource = this._curInfo = this._totlaData[index];
 			let xm_liang: number = 0;
-			let xm_bl = this.getBLByVip() / 100;
+			let xm_bl = this._game.datingGame.apiMgr.getPTBL(this._curPt) / 100;
 			switch (this._curPt) {
 				case Web_operation_fields.GAME_PLATFORM_TYPE_AEQP:
 					xm_liang = this._mainPlayer.GetXiMaLiangAE() / 100;
@@ -162,28 +154,12 @@ module gamedating.page {
 			this._viewUI.lb_xml.text = xm_liang.toString();
 		}
 
-		//获得当前比例根据vip等级
-		getBLByVip(): number {
-			if (!this._curInfo) {
-				return
-			}
-			let mainVip: number = this._mainPlayer.GetVipLevel();
-			for (let i = 0; i < this._curInfo.length; i++) {
-				let curData = this._curInfo[i];
-				if (curData && curData.viplv == mainVip) {
-					return curData.fs_prec
-				}
-			}
-			return 0
-		}
-
 		public close(): void {
 			if (this._viewUI) {
 				this._game.sceneGame.sceneObjectMgr.off(SceneObjectMgr.EVENT_PLAYER_INFO_UPDATE, this, this.onUpdatePlayerInfo);
 				this._game.network.removeHanlder(Protocols.SMSG_OPERATION_FAILED, this, this.onOptHandler);
 				DisplayU.onScrollChange(this._viewUI.list_tab, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
 				DisplayU.onScrollChange(this._viewUI.list_info, DisplayU.MASK_TYPE_NULL, DisplayU.SLIDE_H);
-				this._game.sceneObjectMgr.off(SceneObjectMgr.EVENT_FREE_STYLE_UPDATE, this, this.initData);
 			}
 			super.close();
 		}
@@ -192,14 +168,46 @@ module gamedating.page {
 		private _game: Game;
 		public index: number;
 		private _data: any;
+		private _mainPlayer: PlayerData;
+		private _page: XiMaPage;
+		constructor() {
+			super()
+
+		}
+
+		update() {
+			if (!this._data || !this._mainPlayer) return;
+			let xm_bl
+			if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) {
+				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) / 100;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangAE() * xm_bl) > 0;
+			}
+			else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
+				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) / 100;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangKY() * xm_bl) > 0;
+			}
+			else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
+				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) / 100;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangJDB() * xm_bl) > 0;
+			}
+			else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
+				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) / 100;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangAG() * xm_bl) > 0;
+			}
+		}
 		/**
 			* 
 			* @param game 
 			* @param data 
 			*/
-		setData(game: Game, index: number, selectIndex: number) {
+		setData(game: Game, index: number, selectIndex: number, page: XiMaPage) {
 			this.visible = true;
 			this.index = index;
+			this._game = game;
+			this._page = page;
+			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
+			if (!mainPlayer) return;
+			this._mainPlayer = mainPlayer;
 			this.clip_name.index = this.index == selectIndex ? 1 : 0;
 		}
 
@@ -219,7 +227,6 @@ module gamedating.page {
 				skinStr = DatingPath.ui_dating + "xima/btn_AGshixun.png"
 			}
 			this.clip_name.skin = skinStr;
-
 		}
 	}
 }
