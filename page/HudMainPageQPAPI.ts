@@ -25,7 +25,7 @@ module gamedating.page {
 				DatingPath.sk_dating + "wrzx.png",
 				DatingPath.sk_dating + "zrdz.png",
 				//大厅资源相关添加
-				DatingPath.ui_dating + "tu_bj.png",
+				DatingPath.ui_dating + "dating/tu_bj.png",
 				DatingPath.atlas_dating_ui + "dating.atlas",
 				DatingPath.atlas_dating_ui + "rk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
