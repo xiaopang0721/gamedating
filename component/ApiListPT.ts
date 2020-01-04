@@ -34,17 +34,6 @@ module gamedating.component {
 			}
 		}
 
-		// public static GetGameName(gameid: string) {
-		// 	let game_id = parseFloat(gameid);
-		// 	for (let i = 0; i < ApiListPT.KY_DATA.length; i++) {
-		// 		let cur_data = ApiListPT.KY_DATA[i]
-		// 		if (cur_data.kindID == game_id) {
-		// 			return cur_data.gameName
-		// 		}
-		// 	}
-		// 	return ""
-		// }
-
 		private init(): void {
 			this.list_qp.hScrollBarSkin = ""
 			this.list_qp.scrollBar.elasticDistance = 100
@@ -78,8 +67,6 @@ module gamedating.component {
 				}
 			}
 			if (this.isShow) {
-				// this.page.viewUI.btn_left.visible = true
-				// this.page.viewUI.btn_right.visible = true
 			} else {
 				this.page.viewUI.btn_left.visible = false
 				this.page.viewUI.btn_right.visible = false
@@ -173,6 +160,7 @@ module gamedating.component {
 		private _mainView: ApiListPT;
 		private _game: Game;
 		private _type: number;
+		private _data: any;
 		constructor() {
 			super()
 			this.panel_pt.hScrollBarSkin = ""
@@ -182,17 +170,16 @@ module gamedating.component {
 			this.view_pt.img_bz.visible = false;
 		}
 
-		layout(clientRealWidth:number): void {
+		layout(clientRealWidth: number): void {
 			this.panel_pt.width = clientRealWidth;
-			// this.width = this._selfWidth;
-			// this.view_pt.width = this.width;
 		}
 
 		private _listWidth: number = 0;
 		set dataSource(v) {
 			if (!v) return;
+			this._data = v;
 			this.view_pt.list_yx.dataSource = v;
-			this.view_pt.list_yx.repeatX = Math.ceil(this.view_pt.list_yx.dataSource.length / 2)
+			this.view_pt.list_yx.repeatX = Math.ceil(v.length / 2)
 			this._listWidth = this.view_pt.list_yx.width = 225 * this.view_pt.list_yx.repeatX;
 			let list_count = Math.ceil(v.length / this.view_pt.list_yx.repeatY);
 			this._selfWidthList = 23 + 332 + 5 + this._listWidth;
