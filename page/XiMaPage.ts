@@ -17,7 +17,7 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + 'tongyong/anniu.atlas',
 			];
 			this._isNeedBlack = true;
-			this._isNeedDuang = false;
+			this._isNeedDuang = true;
 		}
 
 		private _api_data = [Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, Web_operation_fields.GAME_PLATFORM_TYPE_KYQP, Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, Web_operation_fields.GAME_PLATFORM_TYPE_AGQP];

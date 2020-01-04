@@ -18,9 +18,9 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui_tongyong + "di.atlas",
 				DatingPath.atlas_dating_ui_tongyong + "anniu.atlas",
 			];
-			this._isNeedDuang = false;
+			this._isNeedDuang = true;
 			this._isNeedBlack = true;
-			this._isClickBlack = false;
+			this._isClickBlack = true;
 			this._delta = 3000;
 		}
 

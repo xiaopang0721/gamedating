@@ -19,19 +19,42 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
-				DatingPath.atlas_dating_ui + "anniu.atlas",
+				//美女龙骨相关添加
+				DatingPath.sk_dating + "fmqq.png",
+				DatingPath.sk_dating + "jddw.png",
+				DatingPath.sk_dating + "wrzx.png",
+				DatingPath.sk_dating + "zrdz.png",
+				//大厅资源相关添加
 				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "aeqp.atlas",
+				DatingPath.atlas_dating_ui + "rk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
+				DatingPath.atlas_dating_ui + "aeqp.atlas",
+				DatingPath.atlas_dating_ui + "anniu.atlas",
+				DatingPath.atlas_dating_ui + "tongyong.atlas",
+				DatingPath.atlas_dating_ui + "update.atlas",
 				DatingPath.atlas_dating_ui + "gxz.atlas",
+				DatingPath.atlas_dating_ui + "dd.atlas",
+				DatingPath.atlas_dating_ui + "zt.atlas",
+				DatingPath.atlas_dating_ui + "fk.atlas",
+				DatingPath.atlas_dating_ui + "tj.atlas",
 				DatingPath.atlas_dating_ui + "huore.atlas",
 				DatingPath.atlas_dating_ui + "new.atlas",
-				DatingPath.atlas_dating_ui + "tj.atlas",
-				DatingPath.atlas_dating_ui + "tongyong.atlas",
-				DatingPath.atlas_dating_ui + "zt.atlas",
-				DatingPath.atlas_dating_ui + "dd.atlas",
-				DatingPath.atlas_dating_ui + "update.atlas",
-				DatingPath.atlas_dating_ui_dating_effect + "anniu.atlas",
+				DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
+				//通用预加载
+				Path.atlas_game_ui_tongyong + "dating.atlas",
+				Path.atlas_game_ui_tongyong + "general.atlas",
+				Path.atlas_game_ui_tongyong + "hud.atlas",
+				Path.atlas_game_ui_tongyong + "logo.atlas",
+				Path.atlas_game_ui_tongyong + "pai.atlas",
+				Path.atlas_game_ui_tongyong + "qz.atlas",
+				Path.atlas_game_ui_tongyong + "touxiang.atlas",
+				Path.atlas_game_ui_tongyong + "yq.atlas",
+				Path.atlas_game_ui_tongyong + "fk.atlas",
+				//游戏场景预加载
+				Path.custom_atlas_scene + 'card.atlas',
+				Path.custom_atlas_scene + 'chip.atlas',
+				Path.custom_atlas_scene + 'gupai.atlas',
+				Path.custom_atlas_scene + 'mahjong.atlas',
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -307,6 +330,10 @@ module gamedating.page {
 				this._viewUI.list.dataSource = list;
 				this._viewUI.list.scrollBar.max = this._listBarMax;
 				this._viewUI.list.scrollTo(WebConfig.scrollBarValue || 0);
+				//重新设置左右箭头显示隐藏
+				let len = list.length;
+				this._viewUI.btn_left.visible = false;
+				this._viewUI.btn_right.visible = len > 10;
 			}
 		}
 
@@ -392,8 +419,8 @@ module gamedating.page {
 		private showWait() {
 			if (!this._waitingTip) {
 				this._waitingTip = new ui.qpapi.dating.component.Effect_dengdaiUI();
-				this._waitingTip.x = 175;
-				this._waitingTip.y = 23;
+				this._waitingTip.x = 170;
+				this._waitingTip.y = 33;
 				this.addChild(this._waitingTip);
 			}
 			this.clearUpdate();
@@ -413,8 +440,8 @@ module gamedating.page {
 			if (this._waitingTip || this._loadingTip) return;
 			if (!this._updateTip) {
 				this._updateTip = new ui.qpapi.dating.component.Effect_gxUI();
-				this._updateTip.x = 161;
-				this._updateTip.y = -3;
+				this._updateTip.x = 157;
+				this._updateTip.y = 8;
 				this.addChild(this._updateTip);
 			}
 		}
@@ -472,8 +499,8 @@ module gamedating.page {
 		private showProgress(value: number) {
 			if (!this._loadingTip) {
 				this._loadingTip = new HudLoadingTip();
-				this._loadingTip.x = 179;
-				this._loadingTip.y = 9;
+				this._loadingTip.x = 170;
+				this._loadingTip.y = 32;
 				this.addChild(this._loadingTip);
 			}
 

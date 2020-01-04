@@ -709,6 +709,10 @@ module gamedating.page {
 			this._listBarMax = 250 * listItemCount - (this._clientWidth - 370);
 			this._listBarMax = this._listBarMax < 0 ? 0 : this._listBarMax;
 			this._viewUI.list_btns.dataSource = data;
+			//重新设置左右箭头显示隐藏
+			let len = data.length;
+			this._viewUI.btn_left.visible = false;
+			this._viewUI.btn_right.visible = len > 10;
 			// 如果从房间出来，不播放入场动画
 			if (this._isFromRoom) {
 				//重新校正一下滚动条最大值
