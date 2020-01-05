@@ -1028,7 +1028,7 @@ module gamedating {
 							WebConfig.openUrl(download_url + "?isupdate=true");
 						}, (isclose) => {
 							!isclose && (WebConfig.after = true);
-						}, false, DatingPath.ui_dating_tongyong + "btn_liji.png", DatingPath.ui_dating_tongyong + "btn_shaohou.png")
+						}, false, DatingPath.ui_dating_tongyong + "tu_gengxin.png", DatingPath.ui_dating_tongyong + "tu_yihou.png")
 
 						return;
 					}
@@ -1064,7 +1064,7 @@ module gamedating {
 							location.reload(true);
 						}, (isclose) => {
 							!isclose && (WebConfig.yihou = true);
-						}, false, DatingPath.ui_dating_tongyong + "btn_gengxin.png", DatingPath.ui_dating_tongyong + "btn_yihou.png");
+						}, false, DatingPath.ui_dating_tongyong + "tu_gengxin.png", DatingPath.ui_dating_tongyong + "tu_yihou.png");
 						return;
 					}
 					else if (newbb < oldbb) {
@@ -1073,7 +1073,7 @@ module gamedating {
 							location.reload(true);
 						}, (isclose) => {
 							!isclose && (WebConfig.yihou = true);
-						}, false, DatingPath.ui_dating_tongyong + "btn_gengxin.png", DatingPath.ui_dating_tongyong + "btn_yihou.png");
+						}, false, DatingPath.ui_dating_tongyong + "tu_gengxin.png", DatingPath.ui_dating_tongyong + "tu_yihou.png");
 						return;
 					}
 				}
