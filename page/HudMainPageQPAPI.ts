@@ -592,7 +592,6 @@ module gamedating.page {
 		private updateOnline() {
 			if (!this._game || !this._game.datingGame) return;
 			//在线人数显示
-			this.box_online.y = 205;
 			this.box_online.visible = true;
 			this.txt_online.text = this._game.datingGame.OnlineNumMgr.getOnlineNum(this._gameStr);
 		}

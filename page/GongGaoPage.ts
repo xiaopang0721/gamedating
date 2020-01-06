@@ -31,7 +31,6 @@ module gamedating.page {
 			this.addChild(this._viewUI);
 			this._viewUI.mouseThrough = true;
 			this.addChild(this._viewUI);
-			this.initHtmlText();
 		}
 
 		private initHtmlText(): void {
@@ -41,12 +40,12 @@ module gamedating.page {
 				this._htmlText.style.valign = "middle";
 				this._htmlText.style.wordWrap = false;
 			}
-
 		}
 
 		protected onOpen(): void {
 			super.onOpen();
 			DatingGame.ins.noticeMgr.on(NoticesMgr.EVENT_CHANGE, this, this.onUpdateNotes);
+			this.initHtmlText();
 			this.onUpdateNotes();
 		}
 
