@@ -397,6 +397,11 @@ module gamedating.page {
 					this._clip_money.destroy();
 					this._clip_money = null;
 				}
+				if (this._avatar) {
+					this._avatar.clear();
+					this._avatar.destroy();
+					this._avatar = null;
+				}
 			}
 			super.close();
 		}
