@@ -136,7 +136,6 @@ module gamedating.page {
 					this._game.network.call_player_qifu_new(qftype, qfid, qfname);
 				}, () => {
 				}, true, Tips.TIPS_SKIN_STR["wyqf"], null, Tips.TIPS_SKIN_STR["title_qf"]);
-
 			}
 		}
 

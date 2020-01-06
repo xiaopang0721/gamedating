@@ -25,6 +25,7 @@ module gamedating.page {
 				DatingPath.sk_dating + "wrzx.png",
 				DatingPath.sk_dating + "zrdz.png",
 				//大厅资源相关添加
+				DatingPath.ui_dating + "dating/tu_bj.png",
 				DatingPath.atlas_dating_ui + "dating.atlas",
 				DatingPath.atlas_dating_ui + "rk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
@@ -38,23 +39,25 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "fk.atlas",
 				DatingPath.atlas_dating_ui + "tj.atlas",
 				DatingPath.atlas_dating_ui + "huore.atlas",
-				DatingPath.atlas_dating_ui + "new.atlas",
 				DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
 				//通用预加载
-				Path.atlas_game_ui_tongyong + "dating.atlas",
-				Path.atlas_game_ui_tongyong + "general.atlas",
-				Path.atlas_game_ui_tongyong + "hud.atlas",
-				Path.atlas_game_ui_tongyong + "logo.atlas",
-				Path.atlas_game_ui_tongyong + "pai.atlas",
-				Path.atlas_game_ui_tongyong + "qz.atlas",
-				Path.atlas_game_ui_tongyong + "touxiang.atlas",
-				Path.atlas_game_ui_tongyong + "yq.atlas",
-				Path.atlas_game_ui_tongyong + "fk.atlas",
-				//游戏场景预加载
-				Path.custom_atlas_scene + 'card.atlas',
-				Path.custom_atlas_scene + 'chip.atlas',
-				Path.custom_atlas_scene + 'gupai.atlas',
-				Path.custom_atlas_scene + 'mahjong.atlas',
+				// Path.atlas_game_ui_tongyong + "chongzhi.atlas",
+				// Path.atlas_game_ui_tongyong + "dating.atlas",
+				// Path.atlas_game_ui_tongyong + "fk.atlas",
+				// Path.atlas_game_ui_tongyong + "general.atlas",
+				// Path.atlas_game_ui_tongyong + "hud.atlas",
+				// Path.atlas_game_ui_tongyong + "jiaru.atlas",
+				// Path.atlas_game_ui_tongyong + "js.atlas",
+				// Path.atlas_game_ui_tongyong + "ksyx.atlas",
+				// Path.atlas_game_ui_tongyong + "logo.atlas",
+				// Path.atlas_game_ui_tongyong + "nyl.atlas",
+				// Path.atlas_game_ui_tongyong + "pai.atlas",
+				// Path.atlas_game_ui_tongyong + "qifu.atlas",
+				// Path.atlas_game_ui_tongyong + "qz.atlas",
+				// Path.atlas_game_ui_tongyong + "touxiang.atlas",
+				// Path.atlas_game_ui_tongyong + "yq.atlas",
+				// Path.atlas_game_ui_tongyong + "zjtp.atlas",
+				// Path.atlas_game_ui_tongyong + "zjts.atlas",
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -388,6 +391,11 @@ module gamedating.page {
 					this._clip_money.destroy();
 					this._clip_money = null;
 				}
+				if (this._avatar) {
+					this._avatar.clear();
+					this._avatar.destroy();
+					this._avatar = null;
+				}
 			}
 			super.close();
 		}
@@ -565,7 +573,7 @@ module gamedating.page {
 			this._gameStr = data[0];
 			this._type = data[1];
 			this._index = index;
-			this.img.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + ".png";
+			this.img.skin = DatingPath.ui_dating + "rk/DZ_" + this._gameStr + ".png";
 			this.updateOnline();
 			//添加火爆标志
 			if (this._hotList.indexOf(this._gameStr) != -1) {

@@ -8,8 +8,8 @@ module gamedating.page {
 			return {
 				"qd": DatingPath.ui_dating_tongyong + "tu_qd.png",		//确定
 				"qx": DatingPath.ui_dating_tongyong + "tu_qx.png",		//取消
-				"cz": DatingPath.ui_dating + "chongzhi/tu_ch.png",		//充值
-				"fh": DatingPath.ui_dating + "chongzhi/tu_fh.png",		//返回
+				"cz": DatingPath.ui_dating_tongyong + "tu_ch.png",		//充值
+				"fh": DatingPath.ui_dating_tongyong + "tu_fh.png",		//返回
 				"wyqf": DatingPath.ui_dating + "qifu/tu_wyqf.png",	//我要祈福
 				"title_qf": DatingPath.ui_dating + "qifu/tu_qf.png",	//祈福标题
 				"title_ts": DatingPath.ui_dating_tongyong + "tit_tishi.png",	//提示标题
@@ -20,7 +20,6 @@ module gamedating.page {
 		constructor(v: Game, onOpenFunc?: Function, onCloseFunc?: Function) {
 			super(v, onOpenFunc, onCloseFunc);
 			this._asset = [
-				DatingPath.atlas_dating_ui + 'chongzhi.atlas',
 				DatingPath.atlas_dating_ui + 'tongyong.atlas',
 				DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
 			];
