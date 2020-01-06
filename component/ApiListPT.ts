@@ -41,10 +41,13 @@ module gamedating.component {
 			this.list_qp.renderHandler = new Handler(this, this.renderHandlerQP);
 		}
 
+		private _gameNoNeed: string[] = ["zoo", "shisanshui"];
 		setData(): void {
 			let ae_data = []
 			for (let index = 0; index < WebConfig.gamelist.length; index++) {
-				let element = WebConfig.gamelist[index];
+				let element:string = WebConfig.gamelist[index];
+				if (element.indexOf('r_') >= 0) continue;
+				if (this._gameNoNeed.indexOf(element) != -1) continue;
 				let obj = {
 					pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP,
 					strName: element,
