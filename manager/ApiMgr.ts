@@ -184,7 +184,7 @@ module gamedating.managers {
 
         private openPage(gameId: string) {
             //房卡类型打开创建房间界面
-            if (gameId.indexOf("r") > -1) {
+            if (gameId.indexOf("r") == 0) {
                 if (gameId == "r" + "paodekuai") {
                     this._game.uiRoot.general.open(DatingPageDef.PAGE_PDK_CREATE_CARDROOM, (page: any) => {
                         page.game_id = gameId;
