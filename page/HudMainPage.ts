@@ -247,13 +247,13 @@ module gamedating.page {
 			let is_show: boolean = false;
 			let mainPlayer: PlayerData = this._game.sceneGame.sceneObjectMgr.mainPlayer;
 			if (!mainPlayer) return;
-			is_show = mainPlayer.GetXiMaLiangAE() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) / 100) > 0;
+			is_show = mainPlayer.GetXiMaLiangAE() / 100 * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) / 100) > 0.01;
 			if (!is_show)
-				is_show = mainPlayer.GetXiMaLiangKY() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) / 100) > 0;
+				is_show = mainPlayer.GetXiMaLiangKY() / 100 * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) / 100) > 0.01;
 			if (!is_show)
-				is_show = mainPlayer.GetXiMaLiangJDB() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) / 100) > 0;
+				is_show = mainPlayer.GetXiMaLiangJDB() / 100 * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) / 100) > 0.01;
 			if (!is_show)
-				is_show = mainPlayer.GetXiMaLiangAG() * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) / 100) > 0;
+				is_show = mainPlayer.GetXiMaLiangAG() / 100 * (this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) / 100) > 0.01;
 			return is_show;
 		}
 

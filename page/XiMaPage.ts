@@ -36,6 +36,11 @@ module gamedating.page {
 					break
 				case this._viewUI.btn_xm:
 					//手动洗码
+					let money = parseFloat(this._viewUI.lb_xmje.text);
+					if (!money || money <= 0) {
+						this._game.showTips("可洗码金额错误，请确认!");
+						return;
+					}
 					this._game.network.call_xm_opt(this._curPt);
 					break
 			}
@@ -150,7 +155,7 @@ module gamedating.page {
 					break
 			}
 			let xm_je: number = xm_liang * xm_bl;
-			this._viewUI.lb_xmje.text = xm_je.toString();
+			this._viewUI.lb_xmje.text = xm_je < 0.01 ? '0' : EnumToString.getPointBackNum(xm_je, 2).toString();
 			this._viewUI.lb_xml.text = xm_liang.toString();
 		}
 
@@ -180,19 +185,19 @@ module gamedating.page {
 			let xm_bl
 			if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) {
 				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AEQP) / 100;
-				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangAE() * xm_bl) > 0;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangAE() / 100 * xm_bl) > 0.01;
 			}
 			else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) {
 				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_KYQP) / 100;
-				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangKY() * xm_bl) > 0;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangKY() / 100 * xm_bl) > 0.01;
 			}
 			else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) {
 				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP) / 100;
-				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangJDB() * xm_bl) > 0;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangJDB() / 100 * xm_bl) > 0.01;
 			}
 			else if (this._data == Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) {
 				xm_bl = this._game.datingGame.apiMgr.getPTBL(Web_operation_fields.GAME_PLATFORM_TYPE_AGQP) / 100;
-				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangAG() * xm_bl) > 0;
+				this.img_hd.visible = (this._mainPlayer.GetXiMaLiangAG() / 100 * xm_bl) > 0.01;
 			}
 		}
 		/**
