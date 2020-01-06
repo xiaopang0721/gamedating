@@ -196,7 +196,6 @@ module gamedating.page {
 					DatingPath.atlas_dating_ui + "fk.atlas",
 					DatingPath.atlas_dating_ui + "tj.atlas",
 					DatingPath.atlas_dating_ui + "huore.atlas",
-					DatingPath.atlas_dating_ui + "new.atlas",
 					DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
 				]
 			} else {

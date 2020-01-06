@@ -39,7 +39,6 @@ module gamedating.page {
 				DatingPath.atlas_dating_ui + "fk.atlas",
 				DatingPath.atlas_dating_ui + "tj.atlas",
 				DatingPath.atlas_dating_ui + "huore.atlas",
-				DatingPath.atlas_dating_ui + "new.atlas",
 				DatingPath.atlas_dating_ui_tongyong + 'anniu.atlas',
 				//通用预加载
 				// Path.atlas_game_ui_tongyong + "chongzhi.atlas",
@@ -59,11 +58,6 @@ module gamedating.page {
 				// Path.atlas_game_ui_tongyong + "yq.atlas",
 				// Path.atlas_game_ui_tongyong + "zjtp.atlas",
 				// Path.atlas_game_ui_tongyong + "zjts.atlas",
-				// //游戏场景预加载
-				// Path.custom_atlas_scene + 'card.atlas',
-				// Path.custom_atlas_scene + 'chip.atlas',
-				// Path.custom_atlas_scene + 'gupai.atlas',
-				// Path.custom_atlas_scene + 'mahjong.atlas',
 			];
 			this._isNeedDuang = false;
 			this._delta = 100;
@@ -579,7 +573,7 @@ module gamedating.page {
 			this._gameStr = data[0];
 			this._type = data[1];
 			this._index = index;
-			this.img.skin = DatingPath.sk_dating + "DZ_" + this._gameStr + ".png";
+			this.img.skin = DatingPath.ui_dating + "rk/DZ_" + this._gameStr + ".png";
 			this.updateOnline();
 			//添加火爆标志
 			if (this._hotList.indexOf(this._gameStr) != -1) {
