@@ -39,6 +39,7 @@ module gamedating.page {
 				this._htmlText.style.lineHeight = 45;
 				this._htmlText.style.valign = "middle";
 				this._htmlText.style.wordWrap = false;
+				this._htmlText.visible = false;
 			}
 		}
 
@@ -67,7 +68,8 @@ module gamedating.page {
 				this._total = (this._txtW + this._htmlText.x) * 1000 / this._speed;
 				this._time = 0;
 				this._isShowNotice = true;
-				this._viewUI.box_notice.visible = true
+				this._htmlText.visible = true;
+				this._viewUI.box_notice.visible = true;
 			} else {
 				this._isShowNotice = false;
 				this._viewUI.box_notice.visible = false
