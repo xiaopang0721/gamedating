@@ -6,8 +6,8 @@ module gamedating.component {
 		private _game: Game;
 		public page: any;
 		public by_data = [
-			{ gameType: 6, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, strName: "byw", gameName: "AG捕鱼王" },
 			{ gameid: "buyu", pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AEQP, strName: "buyu", gameName: "AE捕鱼王" },
+			{ gameType: 6, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_AGQP, strName: "byw", gameName: "AG捕鱼王" },
 			{ gTYPE: 7, mTYPE: 7004, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "wlby", gameName: "五龙捕鱼" },
 			{ gTYPE: 7, mTYPE: 7003, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "csby", gameName: "财神捕鱼" },
 			{ gTYPE: 7, mTYPE: 7001, pfCode: Web_operation_fields.GAME_PLATFORM_TYPE_JDBQP, strName: "lwby", gameName: "龙王捕鱼" },
