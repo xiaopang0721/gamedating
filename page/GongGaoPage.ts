@@ -82,7 +82,7 @@ module gamedating.page {
 			this._htmlText && (this._from = this._htmlText.x);
 			this._to = -this._txtW;
 			if (this._viewUI) {
-				if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL) {
+				if (Laya.stage.screenMode == Stage.SCREEN_VERTICAL || Laya.stage.screenMode == Stage.SCREEN_NONE) {
 					this._viewUI.box_notice.scaleX = 1.67;
 					this._viewUI.box_notice.scaleY = 1.67;
 					if (this._game.isFullScreen) {
