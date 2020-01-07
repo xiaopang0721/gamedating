@@ -774,6 +774,8 @@ module gamedating.page {
 			if (WebConfig.isApiDJ) {
 				this.updataeAPIJT()
 			}
+			this._apiRMList&&this._apiRMList.update();
+			this._apiBYList&&this._apiBYList.update();
 		}
 
 		private _beforeArr = [];
@@ -1218,7 +1220,7 @@ module gamedating.page {
 		}
 	}
 
-	class HudLoadingTip extends ui.ajqp.dating.component.LoadingTipTUI {
+	 export class HudLoadingTip extends ui.ajqp.dating.component.LoadingTipTUI {
 		constructor() {
 			super();
 			this.img.y = 30;

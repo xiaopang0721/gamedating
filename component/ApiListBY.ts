@@ -24,14 +24,14 @@ module gamedating.component {
 			this.width = clientRealWidth;
 		}
 
-		private renderHandlerDBMain(cell: DBDZ_Item, index: number): void {
+		private renderHandlerDBMain(cell: ApiRender, index: number): void {
 			cell.setData(this.page, this, index, this._game);
 		}
 
 		private init(): void {
 			this.list_by.hScrollBarSkin = ""
 			this.list_by.scrollBar.elasticDistance = 100
-			this.list_by.itemRender = DBDZ_Item
+			this.list_by.itemRender = ApiRender
 			this.list_by.renderHandler = new Handler(this, this.renderHandlerDBMain)
 		}
 
@@ -40,42 +40,19 @@ module gamedating.component {
 		}
 
 		update() {
-
+			if (this.list_by) {
+				if (this.list_by.dataSource) {
+					let cells = this.list_by.cells;
+					for (let index = 0; index < cells.length; index++) {
+						let element = cells[index] as ApiRender;
+						element.update();
+					}
+				}
+			}
 		}
 
 		close(): void {
 
-		}
-	}
-
-	class DBDZ_Item extends ui.ajqp.dating.component.Hud_rm1UI {
-		private _page: any;
-		private _mainView; ApiListBY;
-		private _index: number;
-		private _game: Game;
-		private _data: any;
-		constructor() {
-			super()
-		}
-
-		set dataSource(v: any) {
-			if (v) {
-				this._data = v;
-				let strSkin = ApiMgr.GetSteSkinByPFCode(this._data.pfCode, this._data.strName);
-				this.img.skin = strSkin;
-			}
-		}
-
-		setData(page: any, mainView: ApiListBY, index: number, game: Game) {
-			this._page = page;
-			this._mainView = mainView;
-			this._index = index;
-			this._game = game;
-			this.on(LEvent.CLICK, this, this.onBtnClick);
-		}
-
-		private onBtnClick(): void {
-			this._game.datingGame.apiMgr.GoGameByPFCode(this._data, this.btn_box);
 		}
 	}
 }
