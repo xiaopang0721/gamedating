@@ -27,10 +27,10 @@ module gamedating.page {
 				//大厅资源相关添加
 				DatingPath.ui_dating + "dating/tu_bj.png",
 				DatingPath.atlas_dating_ui + "dating.atlas",
-				DatingPath.atlas_dating_ui + "rk.atlas",
 				DatingPath.atlas_dating_ui + "datinggg.atlas",
 				DatingPath.atlas_dating_ui + "aeqp.atlas",
 				DatingPath.atlas_dating_ui + "anniu.atlas",
+				DatingPath.atlas_dating_ui + "touxiang.atlas",
 				DatingPath.atlas_dating_ui + "tongyong.atlas",
 				DatingPath.atlas_dating_ui + "update.atlas",
 				DatingPath.atlas_dating_ui + "gxz.atlas",
